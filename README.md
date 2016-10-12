@@ -187,7 +187,7 @@ Conventions:
 - negative exponents 'x^(-n)' are simplified to '1/x^n'
 - x^(1/2) and x^(1/3) are simplified to square and cube roots
 - (-x)/y is simplified to -(x/y)
-- (x+y)/z is simplified to x/z/y/z
+- (x+y)/z is simplified to x/z+y/z
 
 Examples:
 
