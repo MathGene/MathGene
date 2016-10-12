@@ -1,0 +1,33 @@
+﻿<!DOCTYPE html>
+<html manifest="cache.manifest">
+<head>
+<meta name="viewport"/>
+
+<script type="text/javascript" src="mg_tests.js"></script>
+<script type="text/javascript" src="mg_translate.js"></script>
+<script type="text/javascript" src="mg_calculate.js"></script>
+<script type="text/javascript">
+function testLoad() {
+	mgConfig.fnFmt = "fn(x)";
+	var menu = "<table width='80%' align='center'><tr align='left'><td  align='center'><b>MathGene Test Menu</b></td></tr>";
+	for (var iTest in testList){
+		var xTest = 'execTest("'+iTest+'")';
+		menu = menu + "<tr align='left'><td  align='center'><button style='width:50%;' onmousedown='"+xTest+"'>"+iTest+"</button></td>";
+	}
+	menu = menu + "</table>";
+	document.getElementById('mgMenu').innerHTML = menu;
+}
+</script>
+
+<title>MathGene Test Suite</title>
+</head>
+
+<body onload="testLoad()">
+<div style="float:left; width:20%;" id="mgMenu"></div>
+<div style="display:block;float:right;width:80%;overflow:auto;height:1000px;" id="testDisplay" ></div>
+
+
+
+</body>
+
+</html>
