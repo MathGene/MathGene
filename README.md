@@ -3,7 +3,7 @@ The JavaScript symbolic math calculation and rendering engine!
 
 MathGene is a comprehensive JavaScript mathematics engine that delivers the ability to perform advanced numerical 
 and symbolic mathematics processing of LaTeX expressions and send the output to pure HTML for rendering on
-a conventional web browser. 
+a conventional web browser or via web server. 
 
 MathGene has two modules:
 - mg_translate.js, which translates between LaTeX, HTML, and native MG format.
@@ -34,15 +34,15 @@ MathGene is implemented entirely in JavaScript conforming to ECMAscript ECMA-262
 
 It is intended as either a client-side math processing engine for websites or a server-side/command-line driven engine for general purpose usage.
 
-MathGene utilizes a 'lexical' design which exploits the unique characteristics of JavaScript to provide fast and compact algorithms for translation and computation.
+MathGene utilizes a 'lexical' design which exploits the unique characteristics of JavaScript to enable fast and compact algorithms for translation and computation.
 For example, the entire derivative engine is a little over 100 lines of code.
 
 MathGene does not incorporate any 3rd party code or algorithms outside of conventional math techniques.
 
 Use the followng HTML statements to load MathGene into a web page:
 
-	"<script type="text/javascript" src="mg_translate.js"></script>"
-	"<script type="text/javascript" src="mg_calculate.js"></script>"
+	<script type="text/javascript" src="mg_translate.js"></script>
+	<script type="text/javascript" src="mg_calculate.js"></script>
 
 MathGene is compatible with Node.js version 4.6 for server-side implementations. 
 
@@ -68,34 +68,20 @@ Older browsers may or may not function correctly.
 
 - IE versions 10 and 11 have been tested and verified. Internet Explorer versions prior to version 10 will not operate properly with MathGene.
 - Firefox has been tested back to version 8.
-- Google Chrome has been tested to version 10.
+- Google Chrome has been tested back to version 10.
 - Apple Safari has been tested back to version 5. 
 
 There is some browser variablility in the implementation of math fonts in the Extended Character Set. HTML rendered math will not look identical on different
-browsers but the differences are typically marginal. Some older browsers may be missing some extended HTML symbols which will then render as blank squares.
+browsers but the differences are typically marginal. Some older browsers, particularly mobile browsers, 
+may be missing some extended HTML symbols which will then render as blank squares.
 
-There is also variablitiy in the implementation of IEEE754-2008 numeric math of different browsers. In some cases, integers are rendered as x.99999997 or similar. 
+There is also variablitiy in the implementation of IEEE754-2008 numeric math of different browsers. In some cases, integers are rendered as x.99999997 or similar.
+There will be variablitiy in decimal rounding for different JavaScript engines. This will be typically in the 8+ decimal place. The Numeric test suite rounds all
+tests to 8 decimal places to compensate for the different numeric rounding behavior.
 
 Javascript performance varies quite significanly between browsers. Chrome and IE are the fastest while Firefox appears about 50% slower in math computations. 
-HTML rendering performance is good on all tested browsers.
-
-
-## MathGene HTML
-
-MathGene renders pure HTML math output from a LaTeX input expression. 
-This has many advantages over the conventional image-based approach or MathML for web mathematics publishing:
-
-Advangages:
-- no image or font download, instant rendering using built-in HTML extended ASCII characters
-- fast rendering on mobile devices
-- fully scalable math rendering without pixelation, math stays razor sharp after zooming
-- easy insertion into HTML documents
-- simple and compact markup language compared to MathML
-- compatible with all modern browsers and mobile devices
-- Released under GPL. No fees or licensing!
-
-The 'mgTranslate(expression,scale).html' function is used to render HTML output from the input expression string in either LaTeX or native MG format.
-The optional scale parameter is in percent to change the rendered size of the HTML expression. Default is 100%.
+HTML math rendering performance is good on all tested browsers. Mobile devices are typically far slower at calculations than desktops, 
+particularly with advanced symbolic math such as evaluating integrals. Math rendering is fast on all supported mobile devices.
 
 
 ## MathGene LaTeX
@@ -103,7 +89,7 @@ The optional scale parameter is in percent to change the rendered size of the HT
 MathGene will input and output expressions in LaTeX format for both translation and computation.
 LaTeX is a mathematics computer markup language that is also used for computer algebra systems.
 
-A full LaTeX reference can be found at these links:
+LaTeX references can be found at these links:
 - https://en.wikibooks.org/wiki/LaTeX/Mathematics
 - https://oeis.org/wiki/List_of_LaTeX_mathematical_symbols
 
@@ -124,10 +110,11 @@ MathGene follows these conventions:
 - '\\pi' is interpreted as Archimedes Constant (3.14...)
 - '\\imath' is interpreted as the imaginary constant 'i'
 - d is interpreted as a differential when followed by a variable as in 'dx' or as in 'd/dx'
-- some functions like arg(x), erf(x), etc. lack LaTeX equivalents so they are handled as if they do: \\arg \\erf
+- some functions like arctanh(x), erf(x), etc. lack LaTeX equivalents so they are handled as if they do: \\arctanh \\erf
 - all plain variables are italicized
 
 Expressions are evaluated from left to right. Math operators have a precedence value that determines which operations are performed first.
+
 Operator precedence from first to last:
 - () → Operations inside parentheses and functions
 - x^n → Exponents
@@ -137,7 +124,16 @@ Operator precedence from first to last:
 - × → Multiply
 - +- → Add/Subtract
 
-NOTE: All inputs to MathGene are via Javascript strings. Javascript strings must escape the backslash with another backslash such as '\\\\pi'.
+NOTE: 
+	
+	All inputs to MathGene are via Javascript strings. 
+	Javascript strings must escape the LaTeX backslash with another backslash such as "\\pi".
+	
+	Conventional LaTeX without escaped strings can be inputed from a web page using the following HTML tag:
+	<textarea id='textareaID'></textarea> 
+	
+	Use this JavaScript statement to assign the <textarea> data expression to a variable:
+	texVar = document.getElementById('textareaID').value
 
 Examples of valid LaTeX expressions as JavaScript strings:
 
@@ -146,6 +142,39 @@ Examples of valid LaTeX expressions as JavaScript strings:
 	"\\int_{1}^{2} \\sin\\left(x\\right) dx"
 	"\\coth^{-1}{\\frac {x}{y}}"
 	"\\begin{ bmatrix}a&b&c \\\\ \\frac{\\pi}{2}&d&e  \\end{bmatrix}^{2}"
+
+
+## MathGene HTML
+
+MathGene renders pure HTML math output from a LaTeX input expression. 
+This has many advantages over the conventional image-based approach or MathML for web mathematics publishing:
+
+Advangages:
+- no image or font download, instant rendering using built-in HTML extended ASCII characters
+- fast rendering on mobile devices
+- fully scalable math rendering without pixelation, math stays razor sharp after zooming
+- easy insertion into HTML documents
+- simple and compact markup language compared to MathML
+- compatible with all modern browsers and mobile devices
+- Released under GPL. No fees or licensing!
+
+The following function is used to render HTML output from the input expression string in either LaTeX or native MG format:
+- mgTranslate(expression).html
+
+Example of embedding MathGene HTML in a web page:
+
+	<html>
+	<head>
+	<script type="text/javascript" src="mg_translate.js"></script>
+	</head>
+	<body>
+	<p>Here is a matrix:</p>
+	<script>document.write(mgTranslate("\\begin{ bmatrix}a&b&c \\\\ \\frac{\\pi}{2}&d&e  \\end{bmatrix}").html)</script>
+	<p>Here is an integral:</p>
+	<script>document.write(mgTranslate("\\int_{1}^{2} \\sin\\left(x\\right) dx").html)</script>
+	</body>
+	</html>
+
 
 ## MathGene Numeric Math
 
@@ -163,7 +192,7 @@ Examples can be seen in the test suite under 'Numeric' and 'Matrix'.
 - All uninitialized variables will be evaluated with a '0' value unless the varible value is set prior to the operation.
 - The returned value of mgNumeric() is an object containing the three output formats LaTex, HTML, and MG.
 - To output a computation in LaTex use: mgNumeric(expression).latex
-- To output a coimputation in HTMLuse: mgNumeric(expression).html.
+- To output a coimputation in HTML use: mgNumeric(expression).html.
 
 Examples:
 
@@ -242,7 +271,7 @@ Calcinator is a mobile-friendly set of specialized math applets for use on both 
 
 MathGene was designed by George J. Paulos, a US-based Software Engineer and "JavaScript Junkie" who has a keen interest in mathematics and math education.
 The MathGene project was initially just a hobby calculator project intended to learn Javascript and mobile web programming while brushing up on college math.
-Over several years the project evolved into a full-function mathematics engine which is now ready for release to the Open Source community.
+Over several years the project evolved into a full-function mathematics engine which is now released to the Open Source community under the GPL license.
 
 
 ## Future Enhancements
