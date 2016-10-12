@@ -39,8 +39,9 @@ MathGene utilizes a 'lexical' design which exploits the unique characteristics o
 MathGene does not incorporate any 3rd party code or algorithms outside of conventional math procedures.
 
 Use the followng HTML statements to load MathGene into a web page:
-	<script type="text/javascript" src="mg_translate.js"></script>
-	<script type="text/javascript" src="mg_calculate.js" ></script>
+
+	"<script type="text/javascript" src="mg_translate.js"></script>"
+	"<script type="text/javascript" src="mg_calculate.js"></script>"
 
 MathGene is compatible with Node.js version 4.6 for server-side implementations. 
 
@@ -49,9 +50,11 @@ MathGene requires no additional Node.js modules and can be used standalone for m
 The file node_demo.js shows the basic Node.js MathGene implementation.
 
 To run the Node.js demo:
+
 	node node_demo.js
 	
 For Node.js, use the following statements to link MathGene modules (view file 'node_demo.js for usage):
+
 	var translate = module.require('./mg_translate.js')
 	var calculate = module.require('./mg_calculate.js')
 
@@ -100,8 +103,8 @@ MathGene will input and output expressions in LaTeX format for both translation 
 LaTeX is a mathematics computer markup language that is also used for computer algebra systems.
 
 A full LaTeX reference can be found at these links:
-https://en.wikibooks.org/wiki/LaTeX/Mathematics
-https://oeis.org/wiki/List_of_LaTeX_mathematical_symbols
+- https://en.wikibooks.org/wiki/LaTeX/Mathematics
+- https://oeis.org/wiki/List_of_LaTeX_mathematical_symbols
 
 MathGene supports a large subset of LaTeX symbols and operators. 
 
@@ -160,6 +163,7 @@ The returned value of mgNumeric() is an object containing the three output forma
 To output a computation in LaTex: mgNumeric(expression).latex, or for HTML: mgNumeric(expression).html.
 
 Examples:
+
 	mgNumeric("\\frac{8-8 \\imath }{2+ \\imath }").latex    =>     "1.6-4.8 \\imath"
 	mgNumeric("\\begin{bmatrix}3&4&2 \\end{bmatrix} \\times \\begin{bmatrix}13&9&7&15 \\\\8&7&4&6 \\\\6&4&0&3 \\end{bmatrix}").latex  =>  "\\begin{bmatrix}3&4&2 \\end{bmatrix} \\times \\begin{bmatrix}13&9&7&15 \\\\8&7&4&6 \\\\6&4&0&3\\end{bmatrix}"
 
@@ -185,6 +189,7 @@ Conventions:
 - (-x)/y is simplified to -(x/y)
 
 Examples:
+
 	mgSimplify("\\int  \\sqrt{5+ \\sqrt{x}} d x").latex  =>  "\\frac{4 { \\sqrt{x}+5}^{ \\frac{3}{2}} \\sqrt{x}}{3}- \\frac{8 { \\sqrt{x}+5}^{ \\frac{5}{2}}}{15}+C"
 	mgSolve("\\frac{1}{ \\sigma  \\sqrt{2 \\pi }} e^{ \\frac{- \\left(x-m \\right)^{2}}{2 \\sigma^{2}}}=p","m").latex  =>  "m=x- \\sqrt{-2 { \\sigma }^{2} \\ln {p \\sigma  \\sqrt{2 \\pi }}}"
 
