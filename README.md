@@ -124,7 +124,7 @@ MathGene follows these conventions:
 - d is interpreted as a differential when followed by a variable as in 'dx' or as in 'd/dx'
 - all plain variables are italicized
 
-NOTE: All inputs to MathGene are via Javascript strings. Javascript strings must escape the backslash with another backslash such as '\\pi'.
+NOTE: All inputs to MathGene are via Javascript strings. Javascript strings must escape the backslash with another backslash such as '\\\\pi'.
 
 
 ## MathGene Expressions
@@ -248,7 +248,7 @@ The following is a (slightly) prioritized list of desired enhancements.
 - Advanced matrix functions
 - Deeper LaTeX support
 - Arbitrary precision arithmetic
-- Differetial equations
+- Differential equations
 - Real and complex roots
 - Inequalities
 - Vectors
