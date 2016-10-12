@@ -35,8 +35,9 @@ MathGene is implemented entirely in JavaScript conforming to ECMAscript ECMA-262
 It is intended as either a client-side math processing engine for websites or a server-side/command-line driven engine for general purpose usage.
 
 MathGene utilizes a 'lexical' design which exploits the unique characteristics of JavaScript to provide fast and compact algorithms for translation and computation.
+For example, the entire derivative engine is a little over 100 lines of code.
 
-MathGene does not incorporate any 3rd party code or algorithms outside of conventional math procedures.
+MathGene does not incorporate any 3rd party code or algorithms outside of conventional math techniques.
 
 Use the followng HTML statements to load MathGene into a web page:
 
@@ -45,7 +46,7 @@ Use the followng HTML statements to load MathGene into a web page:
 
 MathGene is compatible with Node.js version 4.6 for server-side implementations. 
 
-MathGene requires no additional Node.js modules and can be used standalone for math processing.
+MathGene requires no additional Node.js modules and can be used with Node.js as a complete math processing engine.
 
 The file node_demo.js shows the basic Node.js MathGene implementation.
 
@@ -106,42 +107,45 @@ A full LaTeX reference can be found at these links:
 - https://en.wikibooks.org/wiki/LaTeX/Mathematics
 - https://oeis.org/wiki/List_of_LaTeX_mathematical_symbols
 
-MathGene supports a large subset of LaTeX symbols and operators. 
+MathGene supports a large subset of LaTeX symbols and operators. MathGene will input and output expressions formatted in LaTeX using conventional math notation.
+Real numbers, complex numbers, constants, variables, and matrices are supported.
 
-Here are the exceptions:
-- MathGene does not support the LaTeX sizing features such as 'big'
+These exceptions apply to MathGene LaTeX:
+- MathGene does not support LaTeX sizing features such as 'big'
 - '\\usepackage' is not supported
 - All matrix formats are converted to '{bmatrix}' at output
 - {array} element is not supported
 - Newline '\\\\' is currently not supported except in the matrix object
 - all braces '{}' must be closed and terminated
-- '/' slash divide symbol is always interpreted as '\\frac'
+- '/' slash divide symbol is always interpreted as equivalent to '\\frac'
 
 MathGene follows these conventions:
-- 'e' is interpreted as Euler's Constant (2.73...)
+- 'e' is interpreted as Euler's Constant (2.718...)
 - '\\pi' is interpreted as Archimedes Constant (3.14...)
 - '\\imath' is interpreted as the imaginary constant 'i'
 - d is interpreted as a differential when followed by a variable as in 'dx' or as in 'd/dx'
+- some functions like arg(x), erf(x), etc. lack LaTeX equivalents so they are handled as if they do: \\arg \\erf
 - all plain variables are italicized
-
-NOTE: All inputs to MathGene are via Javascript strings. Javascript strings must escape the backslash with another backslash such as '\\\\pi'.
-
-
-## MathGene Expressions
-
-MathGene will input and output expressions formatted using conventional math notation.
-
-Real numbers, complex numbers, constants, variables, and matrices are currently supported in version 1.0.
 
 Expressions are evaluated from left to right. Math operators have a precedence value that determines which operations are performed first.
 Operator precedence from first to last:
-- () → Operations inside parentheses
+- () → Operations inside parentheses and functions
 - x^n → Exponents
 - -x → Negative numbers: -4^2 = -(4^2)
 - xN → Terms such as 2π: 2π/4<i>i</i> = (2π)/(4<i>i</i>)
 - / → Divide
 - × → Multiply
 - +- → Add/Subtract
+
+NOTE: All inputs to MathGene are via Javascript strings. Javascript strings must escape the backslash with another backslash such as '\\\\pi'.
+
+Examples of valid LaTeX expressions as JavaScript strings:
+
+	"\\frac {21}{b}"
+	"\\sqrt{\\frac{\\zeta}{\\mu}-\\frac{\\pi}{\\beta}}" 
+	"\\int_{1}^{2} \\sin\\left(x\\right) dx"
+	"\\coth^{-1}{\\frac {x}{y}}"
+	"\\begin{ bmatrix}a&b&c \\\\ \\frac{\\pi}{2}&d&e  \\end{bmatrix}^{2}"
 
 ## MathGene Numeric Math
 
@@ -156,11 +160,10 @@ The input expression can contain constants, real numbers, fractions, complex num
 
 Examples can be seen in the test suite under 'Numeric' and 'Matrix'.
 
-All variables will be evaluated with a '0' value unless the varible value is set prior to the operation.
-
-The returned value of mgNumeric() is an object containing the three output formats LaTex, HTML, and MG.
-
-To output a computation in LaTex: mgNumeric(expression).latex, or for HTML: mgNumeric(expression).html.
+- All uninitialized variables will be evaluated with a '0' value unless the varible value is set prior to the operation.
+- The returned value of mgNumeric() is an object containing the three output formats LaTex, HTML, and MG.
+- To output a computation in LaTex use: mgNumeric(expression).latex
+- To output a coimputation in HTMLuse: mgNumeric(expression).html.
 
 Examples:
 
@@ -206,7 +209,7 @@ The configuration object 'mgConfig' contains the following parameters which can 
 - mgConfig.cplxFmt		default = "Rect", 		complex number format "Rect" or "Polar" 	
 - mgConfig.pctFactor	default = 100, 			percent factor 100 for percent, 1 for n.nn decimal
 - mgConfig.dPrecision	default = 16, 			decimal precision 1-16
-- mgConfig.Domain		default = "Complex", 	number domain Complex or Real
+- mgConfig.Domain		default = "Complex", 	number domain "Complex" or "Real"
 - mgConfig.editMode		default = false, 		edit mode formatting
 - mgConfig.htmlFont		default = "Times,Serif",default HTML font-family
 
@@ -217,11 +220,12 @@ Inverse trig function style format in mgConfig.fnFmt can be either "asin" for 'a
 
 ## MathGene Tests
 
-MatGene has an extensive test suite containing over 1400 individual tests that cover both translations and computations.
+MathGene has an extensive test suite containing over 1400 individual tests that cover both translations and computations.
 The test suite provides use cases for each of the MathGene functions as well as test coverage. 
 Tests can be run either command-line via Node.js or via browser using a web interface.
 
 To run the test suite via command-line (Node.js required, typical runtime 100 seconds):
+	
 	node mg_tests.js
 
 To run the web interface, load 'test_suite.html' into a supported web browser.
@@ -237,8 +241,8 @@ Calcinator is a mobile-friendly set of specialized math applets for use on both 
 ## About the Author
 
 MathGene was designed by George J. Paulos, a US-based Software Engineer and "JavaScript Junkie" who has a keen interest in mathematics and math education.
-The MathGene project was initially just a calculator project intended to learn Javascript and mobile web programming while brushing up on college math.
-Over several years the project evolved into a full-function mathematics engine and is now ready for release to the Open Source community.
+The MathGene project was initially just a hobby calculator project intended to learn Javascript and mobile web programming while brushing up on college math.
+Over several years the project evolved into a full-function mathematics engine which is now ready for release to the Open Source community.
 
 
 ## Future Enhancements
@@ -259,19 +263,19 @@ The following is a (slightly) prioritized list of desired enhancements.
 
 ## MathGene GPL Licensing
 
-    Copyright (C) 2016  George J. Paulos
+Copyright (C) 2016  George J. Paulos
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    any later version.
+MathGene is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+MathGene is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
