@@ -1383,7 +1383,6 @@ Ct[8704] = "\\forall ";
 Ct[8707] = "\\exists ";
 Ct[8708] = "\\nexists ";
 Ct[8706] = "\\partial ";
-Ct[8710] = "\\Delta ";
 Ct[8711] = "\\nabla ";
 Ct[8727] = "\\ast ";
 Ct[8224] = "\\dagger ";
@@ -1694,12 +1693,19 @@ function texImport(xF) { //convert LaTeX to MG format
 		var asciiChar = xF.charAt(nXf).charCodeAt(0);
 		if (asciiTest(asciiChar)) {xF = xF.substr(0,nXf)+"Cv["+(asciiChar+10000)+"]"+xF.substr(nXf+1,xF.length);nXf = nXf+6}
 	}
-	xF = xF.replace(/Cv\[10100\] /g,"Cv[10100]").replace(/\(Cv\[10100\]\)/g,"Cv[10100]");
+	xF = xF.replace(/ /g,""); //cleanup spaces
+	xF = xF.replace(/\(Cv\[10100\]\)/g,"Cv[10100]");
 	var sCount = xF.split("Cv[10100]").length-1;//convert derivatives
 	for (var nXf=0;nXf<sCount;nXf++) {
-		xF = xF.replace(/\(Cv\[10100\]\/Cv\[10100\]Cv\[(\d+)\]\)/,"idr(Cv[$1])");
+		xF = xF.replace(/\(Cv\[10100\]\/Cv\[10100\]Cv\[(\d+)\]\)/,"tdr(Cv[$1])");
 		xF = xF.replace(/\(Cv\[10100\]Cv\[(\d+)\]\/Cv\[10100\]Cv\[(\d+)\]\)/,"sdr(Cv[$1],Cv[$2])");
 	}
+	xF = xF.replace(/\(Cv\[8706\]\)/g,"Cv[8706]");
+	var sCount = xF.split("Cv[8706]").length-1;//convert partial derivatives
+	for (var nXf=0;nXf<sCount;nXf++) {
+		xF = xF.replace(/\(Cv\[8706\]\/Cv\[8706\]Cv\[(\d+)\]\)/,"idr(Cv[$1])");
+		xF = xF.replace(/\(Cv\[8706\]Cv\[(\d+)\]\/Cv\[8706\]Cv\[(\d+)\]\)/,"psd(Cv[$1],Cv[$2])");
+	}	
 	var sCount = xF.split("Cv[10100]").length-1;//convert differentials
 	for (var nXf=0;nXf<sCount;nXf++) {
 		xF = xF.replace(/\{Cv\[10100\]\}/,"Cv[10100]").replace(/Cv\[10100\]Cv\[(\d+)\]/,"Cv[8748]Cv[$1]");
