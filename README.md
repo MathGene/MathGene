@@ -1,4 +1,4 @@
-# MathGene Version 1.0
+# MathGene
 The JavaScript Open Source symbolic math calculation and rendering engine!
 
 MathGene is a comprehensive JavaScript mathematics engine that delivers the ability to perform advanced numerical 
@@ -34,12 +34,12 @@ MathGene is implemented entirely in JavaScript conforming to ECMAscript ECMA-262
 
 It is intended as either a client-side math processing engine for websites or a server-side/command-line driven engine for general purpose usage.
 
-MathGene utilizes a 'lexical' design which exploits the unique characteristics of JavaScript to enable fast and compact algorithms for translation and computation.
+MathGene utilizes an unconventional 'lexical' design which exploits the unique characteristics of JavaScript to enable fast and compact algorithms for translation and computation.
 For example, the entire derivative engine is a little over 100 lines of code.
 
 MathGene does not incorporate any 3rd party code or algorithms outside of conventional math techniques.
 
-Use the followng HTML statements to load MathGene into a web page:
+Use the followng HTML statements to load MathGene into a web page (view file 'web_demo.html' for usage):
 
 	<script type="text/javascript" src="mg_translate.js"></script>
 	<script type="text/javascript" src="mg_calculate.js"></script>
@@ -54,7 +54,7 @@ To run the Node.js demo:
 
 	node node_demo.js
 	
-For Node.js, use the following statements to link MathGene modules (view file 'node_demo.js for usage):
+For Node.js, use the following statements to link MathGene modules (view file 'node_demo.js' for usage):
 
 	var translate = module.require('./mg_translate.js')
 	var calculate = module.require('./mg_calculate.js')
@@ -75,7 +75,7 @@ There is some browser variablility in the implementation of math fonts in the Ex
 browsers but the differences are typically marginal. Some older browsers, particularly mobile browsers, 
 may be missing some extended HTML symbols which will then render as blank squares.
 
-There is also variablitiy in the implementation of IEEE754-2008 numeric math of different browsers. In some cases, integers are rendered as x.99999997 or similar.
+There is also variablitiy in the implementation of IEEE754-2008 numeric math within different browsers. In some cases, integers are rendered as x.99999997 or similar.
 There will be variablitiy in decimal rounding for different JavaScript engines. This will be typically in the 8+ decimal place. The Numeric test suite rounds all
 tests to 8 decimal places to compensate for the different numeric rounding behavior.
 
@@ -134,6 +134,8 @@ NOTE:
 	
 	Use this JavaScript statement to assign the <textarea> data expression to a variable:
 	texVar = document.getElementById('textareaID').value
+	
+	View file 'web_demo.html' for <textarea> LaTeX input examples.
 
 Examples of valid LaTeX expressions as JavaScript strings:
 
@@ -190,8 +192,8 @@ The input expression can contain constants, real numbers, fractions, complex num
 Examples can be seen in the test suite under 'Numeric' and 'Matrix'.
 
 - All uninitialized variables will be evaluated with a '0' value unless the varible value is set prior to the operation.
-- The returned value of mgNumeric() is an object containing the three output formats LaTex, HTML, and MG.
-- To output a computation in LaTex use: mgNumeric(expression).latex
+- The returned value of mgNumeric() is an object containing the three output formats LaTeX, HTML, and MG.
+- To output a computation in LaTeX use: mgNumeric(expression).latex
 - To output a coimputation in HTML use: mgNumeric(expression).html.
 
 Examples:
