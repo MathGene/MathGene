@@ -1348,12 +1348,13 @@ var mgCalc = (function() {
 	function sbtS(xU)  {return "sbt("+xU+")"}
 	function difS(xU)  {return "dif("+xU+")"}
 	function cBndS(xU,xL) {return "cBnd("+xU+","+xL+")"}
+	function cEqlS(xU,xL) {return "cEql("+xU+","+xL+")"}
 	function sdrS(xU,xL) {return "tdv("+xU+","+xL+")"}
 	function ddrS(xU,xL) {return "drv("+xU+","+xL+")"}
 	function idrS(xU,xL) {return "idr("+xU+","+xL+")"}
 	function tdrS(xU,xL) {return "tdr("+xU+","+xL+")"}
-	function psdS(xU,xL) {return "tdv(tdv("+xU+"),"+xL+")"}
-	function pddS(xU,xL) {return "drv(drv("+xU+"),"+xL+")"}
+	function psdS(xU,xL) {return "tdv("+xU+","+xL+")"}
+	function pddS(xU,xL) {return "drv("+xU+","+xL+")"}
 	function matS() {return "mat(" + Array.prototype.slice.call(arguments) + ")"}
 	function piReduce(xAng) {
 		var xTractD = opExtract(xAng);
