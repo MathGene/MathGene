@@ -1,9 +1,9 @@
 # MathGene
 The JavaScript Open Source symbolic math calculation and rendering engine!
 
-MathGene is a comprehensive JavaScript mathematics engine that delivers the ability to perform advanced numerical 
-and symbolic mathematics processing of LaTeX expressions and send the output to pure HTML for rendering on
-a conventional web browser or via web server. 
+MathGene is a comprehensive JavaScript mathematics engine that delivers the power to perform advanced numerical 
+and symbolic mathematics processing of LaTeX expressions and send the output to pure HTML for rendering publishing quality 
+mathematics on a conventional web browser. 
 
 MathGene has two modules:
 - mg_translate.js, which translates between LaTeX, HTML, and native MG format.
@@ -34,8 +34,8 @@ MathGene is implemented entirely in JavaScript conforming to ECMAscript ECMA-262
 
 It is intended as either a client-side math processing engine for websites or a server-side/command-line driven engine for general purpose usage.
 
-MathGene utilizes an unconventional 'lexical' design which exploits the unique characteristics of JavaScript to enable fast and compact algorithms for translation and computation.
-For example, the entire derivative engine is a little over 100 lines of code.
+MathGene utilizes an unconventional 'lexical' design which exploits the unique characteristics of JavaScript to enable fast and compact algorithms
+for translation and computation. For example, the entire derivative engine is a little over 100 lines of code.
 
 MathGene does not incorporate any 3rd party code or algorithms outside of conventional math techniques.
 
@@ -66,7 +66,7 @@ MathGene supports any modern browser that implements ECMAscript(JavaScript) ECMA
 
 Older browsers may or may not function correctly. 
 
-- IE versions 10 and 11 have been tested and verified. Internet Explorer versions prior to version 10 will not operate properly with MathGene.
+- Internet Explorer versions 10 and 11 have been tested and verified. IE versions prior to version 10 will not operate properly with MathGene.
 - Firefox has been tested back to version 8.
 - Google Chrome has been tested back to version 10.
 - Apple Safari has been tested back to version 5. 
@@ -87,7 +87,7 @@ particularly with advanced symbolic math such as evaluating integrals. Math rend
 ## MathGene LaTeX
 
 MathGene will input and output expressions in LaTeX format for both translation and computation.
-LaTeX is a mathematics computer markup language that is also used for computer algebra systems.
+LaTeX is a computer mathematics publishing language that is also used for computer algebra systems.
 
 LaTeX references can be found at these links:
 - https://en.wikibooks.org/wiki/LaTeX/Mathematics
@@ -106,8 +106,8 @@ These exceptions apply to MathGene LaTeX:
 - '/' slash divide symbol is always interpreted as equivalent to '\\frac'
 
 MathGene follows these conventions:
-- 'e' is interpreted as Euler's Constant (2.718...)
-- '\\pi' is interpreted as Archimedes Constant (3.14...)
+- 'e' is interpreted as Euler's number (2.718...)
+- '\\pi' is interpreted as Archimedes constant (3.14...)
 - '\\imath' is interpreted as the imaginary constant 'i'
 - d is interpreted as a differential when followed by a variable as in 'dx' or as in 'd/dx'
 - some functions like arctanh(x), erf(x), etc. lack LaTeX equivalents so they are handled as if they do: \\arctanh \\erf
@@ -148,7 +148,7 @@ Examples of valid LaTeX expressions as JavaScript strings:
 
 ## MathGene HTML
 
-MathGene renders pure HTML math output from a LaTeX input expression. 
+MathGene has the unique ability to render pure HTML math output from a LaTeX input expression. 
 This has many advantages over the conventional image-based approach or MathML for web mathematics publishing:
 
 Advangages:
@@ -191,10 +191,10 @@ The input expression can contain constants, real numbers, fractions, complex num
 
 Examples can be seen in the test suite under 'Numeric' and 'Matrix'.
 
-- All uninitialized variables will be evaluated with a '0' value unless the varible value is set prior to the operation.
+- All uninitialized variables will be evaluated with a '0' value unless the variable value is set prior to the operation.
 - The returned value of mgNumeric() is an object containing the three output formats LaTeX, HTML, and MG.
 - To output a computation in LaTeX use: mgNumeric(expression).latex
-- To output a coimputation in HTML use: mgNumeric(expression).html.
+- To output a computation in HTML use: mgNumeric(expression).html.
 
 Examples:
 
