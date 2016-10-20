@@ -97,7 +97,6 @@ var mgCalc = (function() {
 		"azh":{"solverU":"cthS(lExpr)"},
 		"sqt":{"solverU":"cPowS(lExpr,2)"},
 		"cbt":{"solverU":"cPowS(lExpr,3)"},
-		"nrt":{"solverU":""},
 		"log":{"solverU":"cPowS(10,lExpr)"},
 		"lne":{"solverU":"cPowS('Cv[8]',lExpr)"},
 		"int":{"solverU":""},
@@ -118,19 +117,11 @@ var mgCalc = (function() {
 		"imx":{"solverU":""},
 		"sbr":{"solverU":""},
 		"cbr":{"solverU":""},
-		"lgn":{"solverU":""},
 		"cei":{"solverU":""},
 		"sum":{"solverU":""},
 		"prd":{"solverU":""},
 		"lim":{"solverU":""},
-		"itg":{"solverU":"ntgS(lExpr,deeVarP)"},
-		"sdr":{"solverU":"ntgS(lExpr,deeVarP)"},
-		"ddr":{"solverU":""},
-		"psd":{"solverU":""},
-		"pdd":{"solverU":""},
 		"fac":{"solverU":"undefined"},
-		"idr":{"solverU":""},
-		"tdr":{"solverU":""},
 		"sbt":{"solverU":"sbtS(rExpr)"},
 		"cup":{"solverU":"cupS(rExpr)"},
 		"cap":{"solverU":"capS(rExpr)"},
@@ -140,7 +131,6 @@ var mgCalc = (function() {
 		"udt":{"solverU":"udtS(rExpr)"},
 		"tld":{"solverU":"tldS(rExpr)"},
 		"cnt":{"solverU":"cntS(rExpr)"},
-		"dif":{"solverU":""},
 		"drv":{"solverU":"ntgS(lExpr,deeVarP)"},
 		"tdv":{"solverU":"ntgS(lExpr,deeVarP)"},
 		"nrt":{"solverU":"cDivS(lneS(strgI),lneS(lExpr))","solverL":"cPowS(lExpr,strgI)"},
@@ -1350,11 +1340,11 @@ var mgCalc = (function() {
 	function cBndS(xU,xL) {return "cBnd("+xU+","+xL+")"}
 	function cEqlS(xU,xL) {return "cEql("+xU+","+xL+")"}
 	function sdrS(xU,xL) {return "tdv("+xU+","+xL+")"}
-	function ddrS(xU,xL) {return "drv("+xU+","+xL+")"}
+	function ddrS(xU,xL) {return "drs("+xU+","+xL+")"}
 	function idrS(xU,xL) {return "idr("+xU+","+xL+")"}
 	function tdrS(xU,xL) {return "tdr("+xU+","+xL+")"}
-	function psdS(xU,xL) {return "tdv("+xU+","+xL+")"}
-	function pddS(xU,xL) {return "drv("+xU+","+xL+")"}
+	function psdS(xU,xL) {return "drv("+xU+","+xL+")"}
+	function pddS(xU,xL) {return "drs("+xU+","+xL+")"}
 	function matS() {return "mat(" + Array.prototype.slice.call(arguments) + ")"}
 	function piReduce(xAng) {
 		var xTractD = opExtract(xAng);
@@ -1377,8 +1367,8 @@ var mgCalc = (function() {
 		iIterations = 0;
 		sIterations = 0;
 		pIterations = 0;
-		var calcOpsIn  = ["idr(","tdr(","lim(","sum(","prd("]
-		var calcOpsOut = ["drv(","tdv(","lmt(","smm(","pmm("]
+		var calcOpsIn  = ["idr(","idd(","tdr(","tdd(","lim(","sum(","prd("]
+		var calcOpsOut = ["drv(","drs(","tdv(","tds(","lmt(","smm(","pmm("]
 		var dV = "";
 		var sCount = dExp.split("Cv[8748]").length-1; //differential
 		for (var nC=0;nC<sCount;nC++) {
@@ -1450,7 +1440,9 @@ var mgCalc = (function() {
 		}
 		return drvS(dXpr,deeVar)
 	}
+	function tdsS(dXpr,deeVar) {return tdvS(tdvS(dXpr,deeVar),deeVar)} //total second derivative
 	function drvQ(qXpr,deeVar) {qFlag = true;qXpr= drvS(qXpr,deeVar);qFlag = false; return qXpr} //quick derivative
+	function drsS(dXpr,deeVar) {return drvS(drvS(dXpr,deeVar),deeVar) } //partial second derivative
 	function drvS(dXpr,deeVar) { //partial derivative
 		function cPowD(xU,xL) {
 			xU += "";xL += "";
