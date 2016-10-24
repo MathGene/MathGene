@@ -670,6 +670,18 @@ var funcMap =
 		"latexL1":"matX(parm)",						"latexR1":"''",
 		"latexL2":"matX(parm)",						"latexR2":"''",
 		},
+"det":{ "htmlL1":"'det'",							"htmlR1":"''", //matrix determinant
+		"htmlL2":"'det'",							"htmlR2":"''",
+		"texfunc":"\\det",
+		"latexL1":"'\\\\det{'",						"latexR1":"'}'",
+		"latexL2":"'\\\\det{'",						"latexR2":"'}'",
+		},
+"trc":{ "htmlL1":"'tr'",							"htmlR1":"''", //matrix trace
+		"htmlL2":"'tr'",							"htmlR2":"''",
+		"texfunc":"\\tr",
+		"latexL1":"'\\\\tr{'",						"latexR1":"'}'",
+		"latexL2":"'\\\\tr{'",						"latexR2":"'}'",
+		},
 "cAdd":{"htmlL1":"mA+'+'+mB",						"htmlR1":"''",
 		"htmlL2":"mA+'+'+mB",						"htmlR2":"''",
 		"texfunc":"\\XXX",
