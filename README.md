@@ -278,15 +278,13 @@ Over several years the project evolved into a full-function mathematics engine w
 
 ## Future Enhancements
 
-The following is a (slightly) prioritized list of desired enhancements.
+The following is a prioritized list of desired enhancements.
 
 - Statistical functions
-- Advanced matrix functions
 - Deeper LaTeX support
 - Arbitrary precision arithmetic
 - Differential equations
 - Real and complex roots
-- Inequalities
 - Vectors
 - Tensors
 - Line and contour integrals

@@ -1,5 +1,5 @@
 /*
-	MathGene Math Library- Version 1.00
+	MathGene Math Library - Version 1.00
     Copyright (C) 2016  George J. Paulos
 
     MathGene is free software: you can redistribute it and/or modify
@@ -71,126 +71,152 @@ var mgCalc = (function() {
 	function xprSolve(xSol,cVar) {//solve equation xSol in MG format for variable cVar
 		var solverMap = 
 		{
-		"sin":{"solverU":"asnS(lExpr)"},
-		"cos":{"solverU":"acsS(lExpr)"},
-		"tan":{"solverU":"atnS(lExpr)"},
-		"sec":{"solverU":"ascS(lExpr)"},
-		"csc":{"solverU":"accS(lExpr)"},
-		"cot":{"solverU":"actS(lExpr)"},
-		"snh":{"solverU":"ashS(lExpr)"},
-		"csh":{"solverU":"achS(lExpr)"},
-		"tnh":{"solverU":"athS(lExpr)"},
-		"sch":{"solverU":"axhS(lExpr)"},
-		"cch":{"solverU":"ayhS(lExpr)"},
-		"cth":{"solverU":"azhS(lExpr)"},
-		"asn":{"solverU":"sinS(lExpr)"},
-		"acs":{"solverU":"cosS(lExpr)"},
-		"atn":{"solverU":"tanS(lExpr)"},
-		"asc":{"solverU":"secS(lExpr)"},
-		"acc":{"solverU":"cscS(lExpr)"},
-		"act":{"solverU":"cotS(lExpr)"},
-		"ash":{"solverU":"snhS(lExpr)"},
-		"ach":{"solverU":"cshS(lExpr)"},
-		"ath":{"solverU":"tnhS(lExpr)"},
-		"axh":{"solverU":"schS(lExpr)"},
-		"ayh":{"solverU":"cchS(lExpr)"},
-		"azh":{"solverU":"cthS(lExpr)"},
-		"sqt":{"solverU":"cPowS(lExpr,2)"},
-		"cbt":{"solverU":"cPowS(lExpr,3)"},
-		"log":{"solverU":"cPowS(10,lExpr)"},
-		"lne":{"solverU":"cPowS('Cv[8]',lExpr)"},
-		"int":{"solverU":""},
-		"abs":{"solverU":""},
-		"erf":{"solverU":"efcS(lExpr)"},
-		"efc":{"solverU":"erfS(lExpr)"},
-		"arg":{"solverU":""},
-		"exp":{"solverU":"lneS(lExpr)"},
-		"con":{"solverU":"conS(rExpr)"},
-		"gam":{"solverU":""},
-		"cdf":{"solverU":""},
-		"pdf":{"solverU":""},
-		"lcf":{"solverU":""},
-		"lpf":{"solverU":""},
-		"rou":{"solverU":""},
-		"rnd":{"solverU":""},
-		"rex":{"solverU":""},
-		"imx":{"solverU":""},
-		"sbr":{"solverU":""},
-		"cbr":{"solverU":""},
-		"cei":{"solverU":""},
-		"sum":{"solverU":""},
-		"prd":{"solverU":""},
-		"lim":{"solverU":""},
-		"fac":{"solverU":"undefined"},
-		"sbt":{"solverU":"sbtS(rExpr)"},
-		"cup":{"solverU":"cupS(rExpr)"},
-		"cap":{"solverU":"capS(rExpr)"},
-		"vec":{"solverU":"vecS(rExpr)"},
-		"hat":{"solverU":"hatS(rExpr)"},
-		"und":{"solverU":"undS(rExpr)"},
-		"udt":{"solverU":"udtS(rExpr)"},
-		"tld":{"solverU":"tldS(rExpr)"},
-		"cnt":{"solverU":"cntS(rExpr)"},
-		"drv":{"solverU":"ntgS(lExpr,deeVarP)"},
-		"tdv":{"solverU":"ntgS(lExpr,deeVarP)"},
-		"nrt":{"solverU":"cDivS(lneS(strgI),lneS(lExpr))","solverL":"cPowS(lExpr,strgI)"},
-		"lgn":{"solverU":"cDivS(lneS(strgI),lneS(lExpr))","solverL":"cPowS(lExpr,strgI)"},
-		"cPow":{"solverU":"cPowS(lExpr,(cDivS(1,strgI)))","solverL":"lgnS(strgI,lExpr)"},
-		"cMul":{"solverU":"cDivS(lExpr,strgI)","solverL":"cDivS(lExpr,strgI)"},
-		"cTms":{"solverU":"cDivS(lExpr,strgI)","solverL":"cDivS(lExpr,strgI)"},
-		"cDiv":{"solverU":"cMulS(lExpr,strgI)","solverL":"cDivS(strgI,lExpr)"},
-		"cAdd":{"solverU":"cSubS(lExpr,strgI)","solverL":"cSubS(lExpr,strgI)"},
-		"cSub":{"solverU":"cAddS(lExpr,strgI)","solverL":"cSubS(strgI,lExpr)"},
+		sin:{solverU:"asnS(lExpr)",ineqU:0},
+		cos:{solverU:"acsS(lExpr)",ineqU:0},
+		tan:{solverU:"atnS(lExpr)",ineqU:0},
+		sec:{solverU:"ascS(lExpr)",ineqU:0},
+		csc:{solverU:"accS(lExpr)",ineqU:0},
+		cot:{solverU:"actS(lExpr)",ineqU:0},
+		snh:{solverU:"ashS(lExpr)",ineqU:0},
+		csh:{solverU:"achS(lExpr)",ineqU:0},
+		tnh:{solverU:"athS(lExpr)",ineqU:0},
+		sch:{solverU:"axhS(lExpr)",ineqU:0},
+		cch:{solverU:"ayhS(lExpr)",ineqU:0},
+		cth:{solverU:"azhS(lExpr)",ineqU:0},
+		asn:{solverU:"sinS(lExpr)",ineqU:0},
+		acs:{solverU:"cosS(lExpr)",ineqU:0},
+		atn:{solverU:"tanS(lExpr)",ineqU:0},
+		asc:{solverU:"secS(lExpr)",ineqU:0},
+		acc:{solverU:"cscS(lExpr)",ineqU:0},
+		act:{solverU:"cotS(lExpr)",ineqU:0},
+		ash:{solverU:"snhS(lExpr)",ineqU:0},
+		ach:{solverU:"cshS(lExpr)",ineqU:0},
+		ath:{solverU:"tnhS(lExpr)",ineqU:0},
+		axh:{solverU:"schS(lExpr)",ineqU:0},
+		ayh:{solverU:"cchS(lExpr)",ineqU:0},
+		azh:{solverU:"cthS(lExpr)",ineqU:0},
+		sqt:{solverU:"cPowS(lExpr,2)",ineqU:0},
+		cbt:{solverU:"cPowS(lExpr,3)",ineqU:0},
+		log:{solverU:"cPowS(10,lExpr)",ineqU:0},
+		lne:{solverU:"cPowS('Cv[8]',lExpr)",ineqU:0},
+		int:{solverU:"",ineqU:0},
+		abs:{solverU:"",ineqU:0},
+		erf:{solverU:"efcS(lExpr)",ineqU:0},
+		efc:{solverU:"erfS(lExpr)",ineqU:0},
+		arg:{solverU:"",ineqU:0},
+		exp:{solverU:"lneS(lExpr)",ineqU:0},
+		con:{solverU:"conS(rExpr)",ineqU:0},
+		gam:{solverU:"",ineqU:0},
+		cdf:{solverU:"",ineqU:0},
+		pdf:{solverU:"",ineqU:0},
+		lcf:{solverU:"",ineqU:0},
+		lpf:{solverU:"",ineqU:0},
+		rou:{solverU:"",ineqU:0},
+		rnd:{solverU:"",ineqU:0},
+		rex:{solverU:"",ineqU:0},
+		imx:{solverU:"",ineqU:0},
+		sbr:{solverU:"",ineqU:0},
+		cbr:{solverU:"",ineqU:0},
+		cei:{solverU:"",ineqU:0},
+		sum:{solverU:"",ineqU:0},
+		prd:{solverU:"",ineqU:0},
+		lim:{solverU:"",ineqU:0},
+		fac:{solverU:"undefined",ineqU:0},
+		sbt:{solverU:"sbtS(rExpr)",ineqU:1},
+		cup:{solverU:"cupS(rExpr)",ineqU:1},
+		cap:{solverU:"capS(rExpr)",ineqU:1},
+		vec:{solverU:"vecS(rExpr)",ineqU:1},
+		hat:{solverU:"hatS(rExpr)",ineqU:1},
+		und:{solverU:"undS(rExpr)",ineqU:1},
+		udt:{solverU:"udtS(rExpr)",ineqU:1},
+		tld:{solverU:"tldS(rExpr)",ineqU:1},
+		cnt:{solverU:"cntS(rExpr)",ineqU:1},
+		drv:{solverU:"ntgS(lExpr,deeVarP)",ineqU:0},
+		tdv:{solverU:"ntgS(lExpr,deeVarP)",ineqU:0},
+		nrt:{solverU:"cDivS(lneS(strgI),lneS(lExpr))",solverL:"cPowS(lExpr,strgI)",ineqU:0,ineqL:0},
+		lgn:{solverU:"cDivS(lneS(strgI),lneS(lExpr))",solverL:"cPowS(lExpr,strgI)",ineqU:0,ineqL:0},
+		cPow:{solverU:"cPowS(lExpr,(cDivS(1,strgI)))",solverL:"lgnS(strgI,lExpr)",ineqU:0,ineqL:0},
+		cNeg:{solverU:"cNegS(lExpr)",ineqU:-1},
+		cMul:{solverU:"cDivS(lExpr,strgI)",solverL:"cDivS(lExpr,strgI)",ineqU:"strgI",ineqL:"strgI"},
+		cTms:{solverU:"cDivS(lExpr,strgI)",solverL:"cDivS(lExpr,strgI)",ineqU:"strgI",ineqL:"strgI"},
+		cDiv:{solverU:"cMulS(lExpr,strgI)",solverL:"cDivS(strgI,lExpr)",ineqU:"strgI",ineqL:"strgI"},
+		cAdd:{solverU:"cSubS(lExpr,strgI)",solverL:"cSubS(lExpr,strgI)",ineqU:1,ineqL:1},
+		cSub:{solverU:"cAddS(lExpr,strgI)",solverL:"cSubS(strgI,lExpr)",ineqU:1,ineqL:-1},
 		};
 		function cCrawl(lExpr,rExpr,xVar) {
-			if (rExpr.split(")").length-1 != rExpr.split("(").length-1) {return cError("<span style='color:red'>Unmatched parentheses/brackets</span>")}
+			if (rExpr.split(")").length-1 != rExpr.split("(").length-1) {return cError("Unmatched parentheses/brackets")}
 			rExpr = cReduce(rExpr);
+			var ineqSwap = 1; //-1 swap inequality, 1 no change, 0 or other undefined
 			while (strTest(rExpr,"(")) {
 				var getOp = opExtract(rExpr);
-				if (getOp.func == "cNeg") {
-					lExpr = cNegS(lExpr);
-					rExpr = getOp.upper;
-				}
-				else if (typeof eval("solverMap."+getOp.func+".solverL") != "undefined") {
+				if (typeof solverMap[getOp.func]["solverL"] != "undefined") {
 					if (strTest(getOp.upper,xVar) && strTest(getOp.lower,xVar)) {break}
 					else if (strTest(getOp.upper,xVar)) {
 						rExpr = getOp.upper;
 						var strgI = getOp.lower;
-						lExpr = eval(eval("solverMap."+getOp.func+".solverU"));
+						lExpr = eval(solverMap[getOp.func]["solverU"]);
+						ineqSwap = cMulS(ineqSwap,eval(solverMap[getOp.func]["ineqU"]))
 					}
 					else if (strTest(getOp.lower,xVar)) {		
 						rExpr = getOp.lower;
 						var strgI = getOp.upper;
-						lExpr = eval(eval("solverMap."+getOp.func+".solverL"));
+						lExpr = eval(solverMap[getOp.func]["solverL"]);
+						ineqSwap = cMulS(ineqSwap,eval(solverMap[getOp.func]["ineqL"]))
 					}
 					else {break}
 				}
 				else {
-					if (eval(eval("solverMap."+getOp.func+".solverU")) == "") {break}
-					else {lExpr = eval(eval("solverMap."+getOp.func+".solverU"));rExpr = getOp.upper}
+					lExpr = eval(solverMap[getOp.func]["solverU"]);
+					rExpr = getOp.upper;
+					ineqSwap = cMulS(ineqSwap,eval(solverMap[getOp.func]["ineqU"]))
 				}
 			}
 			lExpr += "";
-			return [rExpr,lExpr];
+			return {lExpr:lExpr,rExpr:rExpr,ineqSwap:ineqSwap};
 		}
 		//
-		xSol = xSol.replace("Cv[10032]","");//remove spaces
-		if (!strTest(xSol,"=")) {return mgExport(cReduce(cFunc(parseCalculus(xSol))))}
-		var xSplit = xSol.split("=");
-		if (xSplit.length > 2) {return cError("<span style='color:red'>Too many ='s</span>")}
-		if (xSplit[0] == "" || xSplit[1] == "") {return cError("<span style='color:red'>Missing operand(s)</span>")}
+		var sXtract = relExtract(xSol);
+		if (sXtract.lower == "" || sXtract.upper == "") {return cReduce(xSol)}
 		solverFlag = true;
-		var rightXpr = cReduce(cSubS(cFunc(parseCalculus(xSplit[1])),cFunc(parseCalculus(xSplit[0]))));
-		var cRet = cCrawl("0",rightXpr,cVar);
+		if (strTest(sXtract.lower,cVar)) {
+			var cRet = cCrawl("0",cReduce(cSubS(sXtract.upper,sXtract.lower)),cVar);
+		}
+		else {
+			var cRet = cCrawl("0",cReduce(cSubS(sXtract.lower,sXtract.upper)),cVar);
+			cRet.ineqSwap = cNegS(cRet.ineqSwap);
+		}
 		solverFlag = false;
-		var sReturn = mgExport(cReduce(cRet[0]))+"="+mgExport(cReduce(cRet[1]));
-		if (cInventory(rightXpr).length != cInventory(sReturn).length && deeVarP == cVar) {return "undefined"}
-		if (strTest(sReturn,"Cv[9998]")) {return "undefined"}
+		
+		if (!nbrTest(cRet.ineqSwap)) {cRet.ineqSwap = 0}
+		var sReturn = "";
+		if (sXtract.func == "cEql") {sReturn = cEqlS(cRet.rExpr,cReduce(cRet.lExpr))}
+		if (sXtract.func == "cNql") {sReturn = cNqlS(cRet.rExpr,cReduce(cRet.lExpr))}
+		if (sXtract.func == "cGth" && cRet.ineqSwap > 0) {sReturn = cGthS(cRet.rExpr,cReduce(cRet.lExpr))}
+		if (sXtract.func == "cGth" && cRet.ineqSwap < 0) {sReturn = cLthS(cRet.rExpr,cReduce(cRet.lExpr))}
+		if (sXtract.func == "cLth" && cRet.ineqSwap > 0) {sReturn = cLthS(cRet.rExpr,cReduce(cRet.lExpr))}
+		if (sXtract.func == "cLth" && cRet.ineqSwap < 0) {sReturn = cGthS(cRet.rExpr,cReduce(cRet.lExpr))}
+		if (sXtract.func == "cGeq" && cRet.ineqSwap > 0) {sReturn = cGeqS(cRet.rExpr,cReduce(cRet.lExpr))}
+		if (sXtract.func == "cGeq" && cRet.ineqSwap < 0) {sReturn = cLeqS(cRet.rExpr,cReduce(cRet.lExpr))}
+		if (sXtract.func == "cLeq" && cRet.ineqSwap > 0) {sReturn = cLeqS(cRet.rExpr,cReduce(cRet.lExpr))}
+		if (sXtract.func == "cLeq" && cRet.ineqSwap < 0) {sReturn = cGeqS(cRet.rExpr,cReduce(cRet.lExpr))}
+		if (sReturn == "") {return "undefined"}
+		if (strTest(sReturn,"Cv[9998]")) {return "Cv[9998]"}
 		return sReturn
+	}
+	function relExtract(fExt) { //extract relational operators in FUNC format, returns func,upper,lower
+		var rOps = ["cEql","cGth","cGeq","cLth","cLeq","cNql"];
+		fExt += "";
+		for (var cI=0;cI<rOps.length;cI++) {
+			if (fExt.indexOf(rOps[cI]) == 0 ) {
+				var strg = parseParens(fExt,fExt.indexOf("("))
+				return {func:rOps[cI],upper:strg.upper,lower:strg.lower}
+			}
+		}
+		return {func:"",upper:"",lower:""}
 	}
 	function opExtract(fExt) {//extract inside function in FUNC format, returns func,upper,lower
 		function fTest(tFunc) {if (typeof eval("funcMap."+tFunc) == "undefined") {return false}; return true} //test for valid function key
-		var fOps = ["cNeg","cPow","cMul","cTms","cDiv","cAdd","cSub"];
+		var fOps = ["cNeg","cPow","cMul","cTms","cDiv","cAdd","cSub","cEql"];
 		fExt += "";
 		for (var cI=0;cI<fOps.length;cI++) {//operators
 			if (fExt.indexOf(fOps[cI]) == 0 ) {
@@ -287,7 +313,7 @@ var mgCalc = (function() {
 	function cIterate(xIter) {
 		xIter += "";
 		if (strTest(xIter,"undefined")) {return "undefined"}
-		if (xIter.search(/,,/) > -1 || xIter.search(/,\)/) > -1 || xIter.search(/\(,/) > -1 || xIter.search(/\(\)/) > -1) {return cError("<span style='color:red'>Missing operand(s)</span>")}
+		if (xIter.search(/,,/) > -1 || xIter.search(/,\)/) > -1 || xIter.search(/\(,/) > -1 || xIter.search(/\(\)/) > -1) {return cError("Missing operand(s)")}
 		return eval(xIter.replace(/([a-z])\(/g,"$1S(").replace(/(Cv\[\d+\])/g,"'$1'").replace(/(Pv\[\d+\])/g,"'$1'").replace(/(Sv\[\d+\])/g,"'$1'"))+"";
 	}
 	function cReduce(cRdce) {return iReduce(xReduce(cIterate(cRdce)))} //full expression reduction
@@ -1330,14 +1356,28 @@ var mgCalc = (function() {
 		if (xTractU.func == "cPow" && +xTractU.lower/2 == Math.floor(+xTractU.lower/2)) {return xU}
 		return "abs("+xU+")"
 	}
-	function sbrS(xU)  {return "("+xU+")"}
-	function cbrS(xU)  {return "("+xU+")"}
-	function prnS(xU)  {return "("+xU+")"}
-	function conS(xU)  {return "con("+xU+")"}
 	function facS(xU)  {
 		if (+xU == 0 || +xU == 1) {return 1}
 		return "fac("+xU+")"
 	}
+	function gamS(xU)  {
+		if (+xU == 0 || +xU == 1) {return 1}
+		return "gam("+xU+")"
+	}		
+	function sdrS(xU,xL) {return "tdv("+xU+","+xL+")"}
+	function ddrS(xU,xL) {return "tds("+xU+","+xL+")"}
+	function psdS(xU,xL) {return "drv("+xU+","+xL+")"}
+	function pddS(xU,xL) {return "drs("+xU+","+xL+")"}
+	function matS() {return "mat(" + Array.prototype.slice.call(arguments) + ")"}
+	//passthru
+	function idrS(xU) {return "idr("+xU+")"}
+	function iddS(xU) {return "idd("+xU+")"}
+	function tdrS(xU) {return "tdr("+xU+")"}
+	function tddS(xU) {return "tdd("+xU+")"}
+	function sbrS(xU)  {return "("+xU+")"}
+	function cbrS(xU)  {return "("+xU+")"}
+	function prnS(xU)  {return "("+xU+")"}
+	function conS(xU)  {return "con("+xU+")"}
 	function vecS(xU)  {return "vec("+xU+")"}
 	function hatS(xU)  {return "hat("+xU+")"}
 	function undS(xU)  {return "und("+xU+")"}
@@ -1346,15 +1386,24 @@ var mgCalc = (function() {
 	function cntS(xU)  {return "cnt("+xU+")"}
 	function sbtS(xU)  {return "sbt("+xU+")"}
 	function difS(xU)  {return "dif("+xU+")"}
+	function cdfS(xU)  {return "cdf("+xU+")"}
+	function pdfS(xU)  {return "pdf("+xU+")"}
+	function lcfS(xU)  {return "lcf("+xU+")"}
+	function lpfS(xU)  {return "lpf("+xU+")"}
+	function rouS(xU)  {return "rou("+xU+")"}
+	function rndS(xU)  {return "rnd("+xU+")"}
+	function rexS(xU)  {return "rex("+xU+")"}
+	function frcS(xU)  {return "frc("+xU+")"}
+	function ceiS(xU)  {return "cei("+xU+")"}
 	function cBndS(xU,xL) {return "cBnd("+xU+","+xL+")"}
 	function cEqlS(xU,xL) {return "cEql("+xU+","+xL+")"}
-	function sdrS(xU,xL) {return "tdv("+xU+","+xL+")"}
-	function ddrS(xU,xL) {return "drs("+xU+","+xL+")"}
-	function idrS(xU,xL) {return "idr("+xU+","+xL+")"}
-	function tdrS(xU,xL) {return "tdr("+xU+","+xL+")"}
-	function psdS(xU,xL) {return "drv("+xU+","+xL+")"}
-	function pddS(xU,xL) {return "drs("+xU+","+xL+")"}
-	function matS() {return "mat(" + Array.prototype.slice.call(arguments) + ")"}
+	function cNqlS(xU,xL) {return "cNql("+xU+","+xL+")"}
+	function cGthS(xU,xL) {return "cGth("+xU+","+xL+")"}
+	function cLthS(xU,xL) {return "cLth("+xU+","+xL+")"}
+	function cGeqS(xU,xL) {return "cGeq("+xU+","+xL+")"}
+	function cLeqS(xU,xL) {return "cLeq("+xU+","+xL+")"}
+	//
+
 	function piReduce(xAng) {
 		var xTractD = opExtract(xAng);
 		var xTractT = opExtract(xTractD.upper);
@@ -1373,6 +1422,12 @@ var mgCalc = (function() {
 	//Calculus
 	function parseCalculus(dExp) { //parse calculus in MG format to FUNC: d/dx(x^2) = idr(x)x^2 -> drv(x^2,x)
 		dExp += "";
+		var dSplit = dExp.split("=");
+		if (dSplit.length > 1) {
+			var dReturn = ""
+			for (var cI=0;cI<dSplit.length-1;cI++) {dReturn = dReturn+parseCalculus(dSplit[cI])+"="}
+			return dReturn+parseCalculus(dSplit[dSplit.length-1])
+		}
 		iIterations = 0;
 		sIterations = 0;
 		pIterations = 0;
@@ -1384,14 +1439,14 @@ var mgCalc = (function() {
 			dExp = dExp.replace(/Cv\[8748\]Cv\[(\d+)\]\/Cv\[8748\]Cv\[(\d+)\]/,"sdr(Cv[$1],Cv[$2])")
 			dExp = dExp.replace(/Cv\[8748\]Cv\[(\d+)\]/,"dif(Cv[$1])")
 		}
-		if (strTest(dExp,"Cv[8748]")) {return cError("<span style='color:#880000'>Illegal differential</span>")}
+		if (strTest(dExp,"Cv[8748]")) {return cError("Illegal differential")}
 		var sCount = dExp.split("Cv[8747]").length-1; //indefinite integral
 		iConstant = 11100;
 		for (var nC=0;nC<sCount;nC++) {
 			if (!strTest(dExp,"dif(")) {
 				var invTemp = cInventory(dExp);
 				if (invTemp.length == 1) {dExp = dExp + "dif(Cv[" + invTemp[0] +"])"}
-				else {return cError("<span style='color:#880000'>Missing <i>dx</i></span>")}
+				else {return cError("Missing dx")}
 			}
 			dExp = dExp.replace(/Cv\[8747\]/,"tmp(");
 			var lPar = 1,rPar = 0;
@@ -1410,10 +1465,10 @@ var mgCalc = (function() {
 			if (!strTest(dExp,"dif(")) {
 				var invTemp = cInventory(dExp);
 				if (invTemp.length == 1) {dExp = dExp + "dif(Cv[" + invTemp[0] +"])"}
-				else {return cError("<span style='color:#880000'>Missing <i>dx</i></span>")}
+				else {return cError("Missing dx")}
 			}
 			dV = parseParens(dExp,dExp.indexOf("itg(")+3)
-			if (strTest(dExp,"(,") || strTest(dExp,",)")) {return cError("<span style='color:#880000'>Missing integral limit(s)</span>")}
+			if (strTest(dExp,"(,") || strTest(dExp,",)")) {return cError("Missing integral limit(s)")}
 			dExp = dExp.substr(0,dExp.indexOf("itg("))+"ntg("+dExp.substr(dV.end+1,dExp.length);
 			dExp = dExp.replace(/dif\(Cv\[(\d+)\]\)/,",Cv[$1],"+dV.inside+")");
 		}
@@ -1428,7 +1483,7 @@ var mgCalc = (function() {
 			dV = parseParens(lIndex,lIndex.indexOf("tmp(")+3).inside;
 			dExp = dExp.replace(lIndex,"tmp("+lIndex.replace("tmp("+dV+")",""));
 			var strg = parseParens(dExp,dExp.lastIndexOf("tmp(")+3)
-			if (strg.inside.charAt(strg.inside.length-1) == "," || strg.inside == "") {return cError("<span style='color:#880000'>Missing operand(s)</span>")}
+			if (strg.inside.charAt(strg.inside.length-1) == "," || strg.inside == "") {return cError("Missing operand(s)")}
 			dExp = dExp.substr(0,dExp.lastIndexOf("tmp("))+calcOpsOut[rFunc]+strg.inside+","+dV+")"+dExp.substr(strg.end,dExp.length);
 			if (strTest(dExp,"smm(") || strTest(dExp,"pmm(")) {dExp = dExp.replace("Cv[61]",",")}
 		}
@@ -1489,6 +1544,7 @@ var mgCalc = (function() {
 			return 0
 		}
 		function cTmsD(xU,xL) {return cMulD(xU,xL) }
+		function cEqlD(xU,xL) {return cEqlS(xU,xL) }
 		function nrtD(xU,xL) {return drvS(cPowD(xL,cDivS(1,xU)),deeVar) }
 		function lgnD(xU,xL) {return drvS(cDivS(lneS(xL),lneS(xU)),deeVar) }
 		function cNegD(xU)   {return cNegS(drvS(xU,deeVar)) }
@@ -1539,6 +1595,7 @@ var mgCalc = (function() {
 		function tldD(xU)  {return "tld("+xU+")"}
 		function cntD(xU)  {return "cnt("+xU+")"}
 		function sbtD(xU)  {return "sbt("+xU+")"}
+		function difD(xU)  {return "dif("+xU+")"}
 		function ntpD(nXpr,dV,iU,iL) {
 			if (dV == deeVar && typeof iU == "undefined" && typeof iL == "undefined") {return nXpr}
 			return "drv(ntp("+nXpr+","+dV+","+iU+","+iL+"),"+deeVar+")"
@@ -1901,10 +1958,11 @@ var mgCalc = (function() {
 			return "undefined"
 		}
 		function uSubst(xU) { //integration by u substitution
+			iIterations = 0;
 			var xTractU = opExtract(xU);
 			if (xTractU.func == "") {return "undefined"}
 			if (strTest(xTractU.upper,deeVar) && strTest(xTractU.lower,deeVar)) {return "undefined"}	
-			var xVar = cFunc(xprSolve(mgExport(xU)+"="+"Cv[9999]",deeVar).split("=")[1]);
+			var xVar = relExtract(xprSolve(cEqlS("Cv[9999]",xU),deeVar)).lower;
 			var uReturn = cSubst(ntgS(cMulS("Cv[9999]",drvS(xVar,"Cv[9999]")),"Cv[9999]"),"Cv[9999]",xU);
 			if (xU == drvS(uReturn,deeVar)) {return uReturn}
 			return "undefined"
@@ -2284,9 +2342,8 @@ var mgCalc = (function() {
 				var termsL = parseTerms(pFac);
 				if (termsL.length == 2 && (pVariable(xTract.upper) == "" || pVariable(xTract.upper) == pVariable(xTract.lower)) ) {
 					var termsU = parsePoly(xTract.upper);
-					var Z1 = cFunc(xprSolve("0="+mgExport(termsL[0]),fVar).split("=")[1]);
-					var Z2 = cFunc(xprSolve("0="+mgExport(termsL[1]),fVar).split("=")[1]);
-					
+					var Z1 = relExtract(xprSolve(cEqlS("0",termsL[0]),fVar)).lower;
+					var Z2 = relExtract(xprSolve(cEqlS("0",termsL[1]),fVar)).lower;
 					var A1 = xReduce(cSubst(xTract.upper,fVar,Z1));
 					var A2 = xReduce(cSubst(xTract.upper,fVar,Z2));
 					var B1 = xReduce(cSubst(termsL[0],fVar,Z2));
@@ -2340,7 +2397,7 @@ var mgCalc = (function() {
 			var zString = "";
 			var zVars = cInventory(nZ+"+"+nC);
 			if (zVars.length == 0) {return ""}
-			for (var iZ=0;iZ<zVars.length;iZ++) {zArray[iZ] = xprSolve(nZ+"="+nC,"Cv["+zVars[iZ]+"]")}
+			for (var iZ=0;iZ<zVars.length;iZ++) {zArray[iZ] = mgExport(xprSolve(cFunc(nZ+"="+nC),"Cv["+zVars[iZ]+"]"))}
 			for (var iZ=0;iZ<zVars.length;iZ++) {
 				if (!strTest(zArray[iZ],"Cv[8734]")) {
 					zString = zString+zArray[iZ].split("=")[0]+"Cv[8800]"+zArray[iZ].split("=")[1];
@@ -2357,6 +2414,11 @@ var mgCalc = (function() {
 		function cSubR(xU,xL) {return "cSub("+xU+","+xL+")"}
 		function cBndR(xU,xL) {return "cBnd("+xU+","+xL+")"}
 		function cEqlR(xU,xL) {return "cEql("+xU+","+xL+")"}
+		function cNqlR(xU,xL) {return "cNql("+xU+","+xL+")"}
+		function cGthR(xU,xL) {return "cGth("+xU+","+xL+")"}
+		function cLthR(xU,xL) {return "cLth("+xU+","+xL+")"}
+		function cGeqR(xU,xL) {return "cGeq("+xU+","+xL+")"}
+		function cLeqR(xU,xL) {return "cLeq("+xU+","+xL+")"}
 		function cNegR(xU)    {return "cNeg("+xU+")"}
 		function itgR(xU,xL)  {return "itg("+xU+","+xL+")"}
 		function nrtR(xU,xL)  {dArray.push(nEqual(xU,"0"));return "nrt("+xU+")"}
@@ -3499,7 +3561,7 @@ var mgCalc = (function() {
 
 	var Numeric    = function(xprA) {return mgExport(fmtResult(eval(cFunc(xprA))))};
 	var	Simplify   = function(xprA) {return cReduce(cFunc(parseCalculus(xprA)))	};
-	var Solve      = function(xprA,xprB) {return xprSolve(xprA,xprB)			};
+	var Solve      = function(xprA,xprB) {return xprSolve(cFunc(parseCalculus(xprA)),xprB)};
 	var Substitute = function(xprA,xprB,xprC) {return cSubst(xprA,xprB,xprC)	};
 	var Factor     = function(xprA) {return cFactor(cFunc(parseCalculus(xprA)))	};
 	var Expand     = function(xprA) {return cExpand(cFunc(parseCalculus(xprA)))	};
