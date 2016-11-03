@@ -215,7 +215,7 @@ var mgCalc = (function() {
 		return {func:"",upper:"",lower:""}
 	}
 	function opExtract(fExt) {//extract inside function in FUNC format, returns func,upper,lower
-		function fTest(tFunc) {if (typeof eval("funcMap."+tFunc) == "undefined") {return false}; return true} //test for valid function key
+		function fTest(tFunc) {if (typeof funcMap[tFunc] == "undefined") {return false}; return true} //test for valid function key
 		var fOps = ["cNeg","cPow","cMul","cTms","cDiv","cAdd","cSub","cEql"];
 		fExt += "";
 		for (var cI=0;cI<fOps.length;cI++) {//operators
