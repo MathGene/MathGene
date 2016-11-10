@@ -700,6 +700,12 @@ cTms:{	htmlL1:"mA+'&times;'+mB",					htmlR1:"''", //multiply by x
 		latexL1:"mA+'\\\\times '+mB",				latexR1:"''",
 		latexL2:"mA+'\\\\times '+mB",				latexR2:"''",
 		},
+cDot:{	htmlL1:"mA+'&#8226;'+mB",					htmlR1:"''", //multiply by dot
+		htmlL2:"mA+'&#8226;'+mB",					htmlR2:"''",
+		texfunc:"\\XXX",
+		latexL1:"mA+'\\\\cdot '+mB",				latexR1:"''",
+		latexL2:"mA+'\\\\cdot '+mB",				latexR2:"''",
+		},
 cMul:{	htmlL1:"cMulL(mA,mB)",						htmlR1:"''", //multiply
 		htmlL2:"cMulL(mA,mB)",						htmlR2:"''",
 		texfunc:"\\XXX",
@@ -916,6 +922,13 @@ function htmlExport(htmlXpr) { //convert MG format to HTML
 			else {htmlXpr = htmlXpr.substr(0,bSym)+"("+strg+")"+htmlXpr.substr(iXs.end+1,lSym)}
 		}
 	}
+	// format arrays
+	htmlXpr = htmlXpr.replace(/\<Xcel\>/g,"").replace(/\<Xrow\>/g,"{").replace(/\<Xrwe\>/g,"}");
+	var sCount = strCount(htmlXpr,"<Xcle>");
+	for (var nXs=0;nXs<sCount;nXs++) {
+		if (nXs <sCount-1) {htmlXpr = htmlXpr.replace("<Xcle>",", ")}
+		else {htmlXpr = htmlXpr.replace("<Xcle>","")}
+	}
 	htmlXpr = htmlXpr.replace(/\<X\w\w\w\>/g,"");//cleanup tags
 	return htmlXpr
 }
@@ -1085,7 +1098,7 @@ function mgExport(xFn) { //convert from FUNC format to MG format
 //
 function cFunc(cXpr) { //convert from MG format to FUNC format: a+bc/d -> cAdd(a,cDiv(cMul(b,c),d)))
 	function cParse(xInp,xOp,xFunc) {//parse operators
-		var zDelim = ["^","-","#","*","/","+",",","~","@","=","<",">",String.fromCharCode(8800),String.fromCharCode(8804),String.fromCharCode(8805)];
+		var zDelim = ["^","-","#","*","/","+",",","~","@","=","<",">",String.fromCharCode(8800),String.fromCharCode(8804),String.fromCharCode(8805),String.fromCharCode(8226)];
 		var ztmp = "";
 		var lPar = 0,rPar = 0;
 		if (xOp == "^") {var bSym = xInp.lastIndexOf(xOp)+1}
@@ -1111,7 +1124,7 @@ function cFunc(cXpr) { //convert from MG format to FUNC format: a+bc/d -> cAdd(a
 		return xInp;
 	}
 	function nParse(xInp,xOp) {//parse negatives as cNeg()
-		var zDelim = ["(",")","^","-","#","*","/","+",",","~","@","=","<",">",String.fromCharCode(8800),String.fromCharCode(8804),String.fromCharCode(8805)];
+		var zDelim = ["(",")","^","-","#","*","/","+",",","~","@","=","<",">",String.fromCharCode(8800),String.fromCharCode(8804),String.fromCharCode(8805),String.fromCharCode(8226)];
 		var ztmp = "";
 		var iNp = 0,lPar = 0,rPar = 0;
 		var bSym = xInp.indexOf(xOp)+xOp.length;
@@ -1139,6 +1152,7 @@ function cFunc(cXpr) { //convert from MG format to FUNC format: a+bc/d -> cAdd(a
 	var sCount = strCount(cXpr,"Cv[8748]");//differential
 	for (var nCf=0;nCf<sCount;nCf++) {cXpr = cXpr.replace(/Cv\[8748\]Cv\[(\d+)\]\/Cv\[8748\]Cv\[(\d+)\]/,"sdr(Cv[$1],Cv[$2])")}	
 	cXpr = cXpr.replace(/!/g,"Cv[45]"); //factorial
+	cXpr = cXpr.replace(/Cv\[8226\]/g,String.fromCharCode(8226)); //dot operator
 	var relOperators = {"Cv[60]":"<","Cv[61]":"=","Cv[62]":">","Cv[8800]":String.fromCharCode(8800),"Cv[8804]":String.fromCharCode(8804),"Cv[8805]":String.fromCharCode(8805)};//relational operators
 	for (var key in relOperators) {
 		var sCount = strCount(cXpr,key);
@@ -1169,7 +1183,8 @@ function cFunc(cXpr) { //convert from MG format to FUNC format: a+bc/d -> cAdd(a
 	if (cXpr.charAt(0) == "-") {cXpr = nParse(cXpr,"-")}	
 	var sCount = strCount(cXpr,"-");//parse negatives to cNeg()
 	var nCases = ["~-","~|-","+-","*-","/-","(-",",-","+|-","*|-","/|-","(|-",",|-","=-","=|-","@-","@|-","e|-",">-","<-",">|-","<|-",
-				  String.fromCharCode(8804)+"-",String.fromCharCode(8804)+"|-",String.fromCharCode(8805)+"-",String.fromCharCode(8805)+"|-",String.fromCharCode(8800)+"-",String.fromCharCode(8800)+"|-"];
+				  String.fromCharCode(8804)+"-",String.fromCharCode(8804)+"|-",String.fromCharCode(8805)+"-",String.fromCharCode(8805)+"|-",
+				  String.fromCharCode(8800)+"-",String.fromCharCode(8800)+"|-",String.fromCharCode(8226)+"-",String.fromCharCode(8226)+"|-"];
 	for (nCf=0;nCf<sCount;nCf++) {
 		for (var iXX=0;iXX<nCases.length;iXX++) {
 			if (cXpr.indexOf(nCases[iXX]) > -1) {cXpr = nParse(cXpr,nCases[iXX])}
@@ -1183,6 +1198,8 @@ function cFunc(cXpr) { //convert from MG format to FUNC format: a+bc/d -> cAdd(a
 	for (nCf=0;nCf<sCount;nCf++) {cXpr = cParse(cXpr,"/","cDiv")}
 	var sCount = strCount(cXpr,"*");//convert * to cTms()
 	for (nCf=0;nCf<sCount;nCf++) {cXpr = cParse(cXpr,"*","cTms")}
+	var sCount = strCount(cXpr,String.fromCharCode(8226));//convert dot to cDot()
+	for (nCf=0;nCf<sCount;nCf++) {cXpr = cParse(cXpr,String.fromCharCode(8226),"cDot")}
 	sCount = strCount(cXpr,"-") + strCount(cXpr,"+");//convert +- to cAdd() or cSub()
 	var cIdx = 0;
 	var aIdx = 0;
@@ -1288,8 +1305,9 @@ function dFunc(dXpr, prefix) { //map FUNC format to export format
 		var dScale = xA.length;
 		var prefix = "";
 		var suffix = "";
-		if (typeof xA[0] == "string" && xA[0].substr(0,3) == "<td"){
+		if (typeof xA[0] == "string" && xA[0].substr(0,6) == "<Xrow>"){
 			for (var iM=0;iM<xA.length;iM++) {
+				xA[iM] = xA[iM].replace(/\<Xrow\>/g,"").replace(/\<Xrwe\>/g,"").replace(/\<Xcel\>/g,"<td>").replace(/\<Xcle\>/g,"</td>");
 				dScale = dScale + dNest(xA+"")*(mgConfig.divScale/100)
 				mReturn = mReturn + "<tr>" + xA[iM] + "</tr>"
 				prefix = prefix+"<Xdiv>";
@@ -1298,8 +1316,8 @@ function dFunc(dXpr, prefix) { //map FUNC format to export format
 			return prefix+" <table style='text-align:center;display:inline-table;vertical-align:middle'><tr><td style='border-left:2px solid black;border-top:2px solid black;border-bottom:2px solid black'>&nbsp;</td><td><table>" + mReturn + "</table><td style='border-right:2px solid black;border-top:2px solid black;border-bottom:2px solid black'>&nbsp;</td></tr></table> "+suffix
 		}
 		else {
-			for (var iM=0;iM<xA.length;iM++) {mReturn = mReturn + "<td>" + xA[iM] + "</td>"}
-			return mReturn
+			for (var iM=0;iM<xA.length;iM++) {mReturn = mReturn + "<Xcel>" + xA[iM] + "<Xcle>"}
+			return "<Xrow>" + mReturn + "<Xrwe>"
 		}
 	}
 	//latex handlers
@@ -1310,15 +1328,17 @@ function dFunc(dXpr, prefix) { //map FUNC format to export format
 	}
 	function matX(xA) {
 		var mReturn = "";
-		if (xA[0].search("&") == -1) {
+		if (xA[0].search("<Xrow>") == -1) {
 			for (var iC=0;iC<xA.length;iC++) {
 				mReturn = mReturn + xA[iC];
-				if (iC < xA.length-1) {mReturn = mReturn + "&"}
+				if (iC < xA.length-1) {mReturn = mReturn + "<Xcel>"}
 			}
+			mReturn = "<Xrow>" + mReturn + "<Xrwe>"
 		}
 		else {
-			mReturn = mReturn + "\\begin{bmatrix}"
+			mReturn = mReturn + "\\begin{bmatrix}";
 			for (var iR=0;iR<xA.length;iR++) {
+				xA[iR] = xA[iR].replace(/\<Xcel\>/g,"&").replace(/\<Xrow\>/g,"").replace(/\<Xrwe\>/g,"");
 				mReturn = mReturn + xA[iR];
 				if (iR < xA.length-1) {mReturn = mReturn + "\\\\"}
 			}
@@ -1569,6 +1589,7 @@ function texExport(latXpr) { //convert MG format to LaTeX
 			latXpr = latXpr.substr(0,bSym-1)+"("+strg+")"+latXpr.substr(iXs+1,lSym);	
 		}
 	}
+	latXpr = latXpr.replace(/\<Xcel\>/g,",&").replace(/\<Xrow\>/g,"\\left\\{\\begin{array}{1}").replace(/\<Xrwe\>/g,"\\end{array}\\right\\}"); //resolve arrays
 	latXpr = latXpr.replace(/\<X\w\w\w\>/g,"").replace(/\%/g,"("); //clean up tags
 	//resolve symbols
 	sCount = strCount(latXpr,"Cv[");
@@ -1602,9 +1623,9 @@ function texImport(mgXpr) { //convert LaTeX to MG format
 	mgXpr = mgXpr.replace(/\s+\{/g,"{").replace(/\s+\}/g,"}").replace(/\{\s+/g,"{").replace(/\}\s+/g,"}"); //fix brace whitespaces
 	var sCount = strCount(mgXpr,"\\begin{bmatrix}"); //convert matrices
 	for (var nXf=0;nXf<sCount;nXf++) {
-		var rTemp = mgXpr.split("\\begin{bmatrix}");
-		var mTemp = rTemp[1].split("\\end{bmatrix}");
-		mgXpr = mgXpr.replace("\\begin{bmatrix}"+mTemp[0]+"\\end{bmatrix}",matI(mTemp[0]));
+		var rTemp = mgXpr.substr(mgXpr.lastIndexOf("\\begin{bmatrix}")+"\\begin{bmatrix}".length,mgXpr.length);
+		var mTemp = rTemp.substr(0,rTemp.indexOf("\\end{bmatrix}"));
+		mgXpr = mgXpr.replace("\\begin{bmatrix}"+mTemp+"\\end{bmatrix}",matI(mTemp));
 	}
 	mgXpr = mgXpr.replace(/\s+/g," ").replace(/\\/g," \\").replace(/ _/g,"_").replace(/_ /g,"_").replace(/ \^/g,"^").replace(/\^ /g,"^").replace(/ \[/g,"[").replace(/ \(/g,"(").replace(/\\left /g,"\\left").replace(/\\right /g,"\\right");//fix whitespaces
 	var sCount = strCount(mgXpr,"\\\\");//convert line breaks
