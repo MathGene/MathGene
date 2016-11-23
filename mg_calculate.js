@@ -696,10 +696,10 @@ var mgCalc = (function() {
 		var xTractU = opExtract(xU);
 		var xTractL = opExtract(xL);
 		if (xTractU.func == "mat") {
-			if (+xL < -1)  {return "undefined"} //undefined
-			if (+xL == -1) {return invS(xU)} //inverse matrix M^-1
-			if (+xL == 0)  {return matFunc(matIdentity(matArray(xU)))} //identity matrix M^0
 			if (xL == "Cv[84]" || xL == "Cv[10084]") {return matFunc(trn(matArray(xU)))} //transpose matrix M^T
+			if (+xL != int(xL)) {return "undefined"}
+			if (+xL <= -1) {return cPowS(invS(xU),cNegS(xL))} //inverse matrix M^-n
+			if (+xL == 0)  {return matFunc(matIdentity(matArray(xU)))} //identity matrix M^0
 			var mReturn = xU
 			for (var iM=1;iM<xL;iM++) {mReturn = cMulS(mReturn,xU)}
 			return mReturn
@@ -2989,8 +2989,8 @@ var mgCalc = (function() {
 		if (getType(xL) == "complex" && +xL.i == 0) {xL = +xL.r}
 		if (+xU == Math.floor(+xU) && +xL == Math.floor(+xL)) {return Math.pow(+xU,+xL)}
 		if (getType(xU) == "matrix" && getType(xL) == "real") {
-			if (+xL < -1)  {return "undefined"} //undefined
-			if (+xL == -1) {return inv(xU)} //inverse matrix
+			if (+xL != int(xL)) {return "undefined"}
+			if (+xL <= -1) {return cPow(inv(xU),cNeg(xL))} //inverse matrix powers
 			if (+xL == 0)  {return matIdentity(xU)} //identity matrix
 			var mReturn = xU;
 			for (var iM=1;iM<xL;iM++) {mReturn = cMul(mReturn,xU)}
