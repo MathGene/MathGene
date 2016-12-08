@@ -935,20 +935,16 @@ function htmlExport(htmlXpr) { //convert MG format to HTML
 //
 function mgExport(xFn) { //convert from FUNC format to MG format
 	function oprExtract(fExt) {//extract inside function in FUNC format, returns func,upper,lower
-		var fOps = ["cNeg","cPow","cMul","cTms","cDiv","cAdd","cSub"];
+		function fTest(tFunc) {if (typeof funcMap[tFunc] == "undefined") {return false}; return true} //test for valid function key
 		fExt += "";
-		for (var cI=0;cI<fOps.length;cI++) {//operators
-			if (fExt.indexOf(fOps[cI]) == 0 ) {
-				var strg = parseParens(fExt,fExt.indexOf("("))
-				if (fOps[cI] == "cNeg") {return  {func:fOps[cI],upper:(strg.inside),lower:""}}
-				return {func:fOps[cI],upper:(strg.upper),lower:(strg.lower)}
-			}
+		var opReturn = {func:"",upper:"",lower:""};
+		var funcKey = fExt.substr(0,fExt.indexOf("("))
+		if (funcKey != "" && fTest(funcKey)) {
+			var strg = parseParens(fExt,fExt.indexOf("("));
+			if (strg.upper != "") {opReturn = {func:funcKey,upper:strg.upper,lower:strg.lower}} //two operands
+			else {opReturn = {func:funcKey,upper:strg.inside,lower:""}} //single operand
 		}
-		if (fExt.charAt(3) == "(") {
-			var funcKey = fExt.substr(0,3) //functions
-			if (funcTest(funcKey)) {return {func:funcKey,upper:(parseParens(fExt,3).inside),lower:""}}
-		}
-		return {func:"",upper:"",lower:""}
+		return opReturn
 	}
 	function numTest(xT) {if (+xT == +xT*1) {return true}; return false} //test for numerical string
 	function toSciNot(xU) {xU+="";return xU.replace(/(\d+)e(\d+)/g,"$1*10^$2").replace(/(\d+)e\-(\d+)/g,"$1*10^-$2").replace(/(\d+)e\+(\d+)/g,"$1*10^$2")} //convert N.NNe+-NN notation to scientific
