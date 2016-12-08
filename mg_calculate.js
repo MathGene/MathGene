@@ -217,20 +217,15 @@ var mgCalc = (function() {
 	}
 	function opExtract(fExt) {//extract inside function in FUNC format, returns func,upper,lower
 		function fTest(tFunc) {if (typeof funcMap[tFunc] == "undefined") {return false}; return true} //test for valid function key
-		var fOps = ["cNeg","cPow","cMul","cTms","cDot","cDiv","cAdd","cSub","cEql"];
 		fExt += "";
-		for (var cI=0;cI<fOps.length;cI++) {//operators
-			if (fExt.indexOf(fOps[cI]) == 0 ) {
-				var strg = parseParens(fExt,fExt.indexOf("("));
-				if (fOps[cI] == "cNeg") {return  {func:fOps[cI],upper:cIterate(strg.inside),lower:""}}
-				return {func:fOps[cI],upper:cIterate(strg.upper),lower:cIterate(strg.lower)}
-			}
+		var opReturn = {func:"",upper:"",lower:""};
+		var funcKey = fExt.substr(0,fExt.indexOf("("))
+		if (funcKey != "" && fTest(funcKey)) {
+			var strg = parseParens(fExt,fExt.indexOf("("));
+			if (strg.upper != "") {opReturn = {func:funcKey,upper:cIterate(strg.upper),lower:cIterate(strg.lower)}} //two operands
+			else {opReturn = {func:funcKey,upper:cIterate(strg.inside),lower:""}} //single operand
 		}
-		if (fExt.charAt(3) == "(") {
-			var funcKey = fExt.substr(0,3) //functions
-			if (fTest(funcKey)) {return {func:funcKey,upper:cIterate(parseParens(fExt,3).inside),lower:""}}
-		}
-		return {func:"",upper:"",lower:""}
+		return opReturn
 	}
 
 	function cDissect(xDsect) { //return array of all components of expression
