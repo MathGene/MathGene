@@ -41,7 +41,7 @@ function mgCalculate(expression) { //calculate numerical (deprecated)
 	return mgOutput(mgCalc.Numeric(texImport(expression)));
 }
 function mgSolve(equation,variable) { //solve equation for variable
-	return mgOutput(mgCalc.Solve(texImport(equation),texImport(variable)));
+	return mgOutput(mgExport(mgCalc.Solve(texImport(equation),texImport(variable))));
 }
 function mgSimplify(expression) { //simplify or reduce expression and evaluate all calculus
 	return mgOutput(mgExport(mgCalc.Simplify(texImport(expression))))
@@ -285,7 +285,7 @@ var mgCalc = (function() {
 		}
 	}
 	function cError(cE) {Cs[9998] = cE;return "Cv[9998]"} //error message return symbol
-	function cSubst(sXpr,xI,xO) {sXpr+="";var sCount = sXpr.split(xI).length-1;for (var nXs=0;nXs<sCount;nXs++) {sXpr = sXpr.replace(xI,xO)};return sXpr} //substitution in MG format
+	function cSubst(sXpr,xI,xO) {sXpr+="";var sCount = sXpr.split(xI).length-1;for (var nXs=0;nXs<sCount;nXs++) {sXpr = sXpr.replace(xI,xO)};return sXpr} //substitution
 	function nbrTest(xT) {if (+xT == +xT*1) {return true}; return false} //test for numerical string
 	function nbrEven(xE) {if (+xE/2 == Math.floor(+xE/2)) {return true};return false} //test for even number
 	function strTest(xTarget,xSearch) { //test if xSearch string is in xTarget
