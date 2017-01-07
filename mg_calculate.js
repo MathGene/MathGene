@@ -1230,6 +1230,8 @@ var mgCalc = (function() {
 	}
 	function asnS(xU) {
 		var xTractU = opExtract(xU);
+		if (xU == 1) {return "cDiv(Cv[29],2)"}
+		if (xU == -1) {return "cNeg(cDiv(Cv[29],2))"}
 		if (strTest(sinAngle,xU)) {return cMulS(invMult,iAngle[sinAngle.indexOf(xU)])}
 		if (nbrTest(xU)) {return cFunc(fmtResult(asn(xU)))}
 		if (xTractU.func == "sin") {return xTractU.upper}
@@ -1237,6 +1239,8 @@ var mgCalc = (function() {
 	}
 	function acsS(xU) {
 		var xTractU = opExtract(xU);
+		if (xU == 0) {return "cDiv(Cv[29],2)"}
+		if (xU == -1) {return "Cv[29]"}
 		if (strTest(cosAngle,xU)) {return cMulS(invMult,iAngle[cosAngle.indexOf(xU)])}
 		if (nbrTest(xU)) {return cFunc(fmtResult(acs(xU)))}
 		if (xTractU.func == "cos") {return xTractU.upper}
@@ -1244,6 +1248,7 @@ var mgCalc = (function() {
 	}
 	function atnS(xU) {
 		var xTractU = opExtract(xU);
+		if (xU == 1) {return "cDiv(Cv[29],4)"}
 		if (strTest(tanAngle,xU)) {return cMulS(invMult,iAngle[tanAngle.indexOf(xU)])}
 		if (nbrTest(xU)) {return cFunc(fmtResult(atn(xU)))}
 		if (xTractU.func == "tan") {return xTractU.upper}
@@ -1258,6 +1263,7 @@ var mgCalc = (function() {
 	}
 	function accS(xU) {
 		var xTractU = opExtract(xU);
+		if (xU == 1) {return "cDiv(Cv[29],2)"}
 		if (strTest(cscAngle,xU)) {return cMulS(invMult,iAngle[cscAngle.indexOf(xU)])}
 		if (nbrTest(xU)) {return cFunc(fmtResult(acc(xU)))}
 		if (xTractU.func == "csc") {return xTractU.upper}
@@ -1265,6 +1271,8 @@ var mgCalc = (function() {
 	}
 	function actS(xU) {
 		var xTractU = opExtract(xU);
+		if (xU == 0) {return "cDiv(Cv[29],2)"}
+		if (xU == 1) {return "cDiv(Cv[29],4)"}
 		if (strTest(cotAngle,xU)) {return cMulS(invMult,iAngle[cotAngle.indexOf(xU)])}
 		if (nbrTest(xU)) {return cFunc(fmtResult(act(xU)))}
 		if (xTractU.func == "cot") {return xTractU.upper}
