@@ -322,8 +322,10 @@ var mgCalc = (function() {
 		pxpFlag = true;
 		xRdce = cIterate(xRdce);
 		Pv = [""];
-		xRdce = cIterate(cIterate(xRdce.replace(/cMul\(/g,"vMul(").replace(/cDiv\(/g,"vDiv(").replace(/cNeg\(/g,"vNeg(")).replace(/Pv\[(\d+)\]/g,"pxp($1)")); //reduce product-quotient-exponent terms
-		pxpFlag = false;Sv = [""];
+		xRdce = cIterate(xRdce.replace(/cMul\(/g,"vMul(").replace(/cDiv\(/g,"vDiv(").replace(/cNeg\(/g,"vNeg(")).replace(/Pv\[(\d+)\]/g,"pxp($1)"); //reduce product-quotient-exponent terms
+		pxpFlag = false;
+		xRdce = cIterate(xRdce);
+		Sv = [""];
 		xRdce = cIterate(cIterate(xRdce.replace(/cAdd\(/g,"vAdd(").replace(/cSub\(/g,"vSub(")).replace(/Sv\[(\d+)\]/g,"smx($1)")); //reduce sum-difference terms
 		Pv = [""];
 		xRdce = cIterate(cIterate(xRdce.replace(/cMul\(/g,"vMul(").replace(/cDiv\(/g,"vDiv(").replace(/cNeg\(/g,"vNeg(")).replace(/Pv\[(\d+)\]/g,"pxp($1)")); //reduce product-quotient-exponent terms (slight return)
@@ -334,9 +336,9 @@ var mgCalc = (function() {
 		if (strTest(iRdce,"undefined")) {return "undefined"}
 		var iInv = cDissect(iRdce);
 		var iCount = [""];
-		var xFlag = 0;
-		for (var iC=0;iC<iInv.length;iC++) {if (nbrTest(iInv[iC]) || iInv[iC] == "" || !varTest(iInv[iC])) {iCount[iC] = 0} else {iCount[iC] = iRdce.split(iInv[iC]).length-1};if (iCount[iC] > 1) {xFlag = 1}}
-		if (xFlag == 0) {return iRdce}
+		var xFlag = true;
+		for (var iC=0;iC<iInv.length;iC++) {if (nbrTest(iInv[iC]) || iInv[iC] == "" || !varTest(iInv[iC])) {iCount[iC] = 0} else {iCount[iC] = iRdce.split(iInv[iC]).length-1};if (iCount[iC] > 1) {xFlag = false}}
+		if (xFlag) {return iRdce}
 		var iTemp = iExpand(iRdce);
 		if (iTemp == iRdce || strTest(iTemp,"undefined")) {return iRdce}
 		var iTempTmp = xReduce(iTemp);
@@ -1230,8 +1232,8 @@ var mgCalc = (function() {
 	}
 	function asnS(xU) {
 		var xTractU = opExtract(xU);
-		if (xU == 1) {return "cDiv(Cv[29],2)"}
-		if (xU == -1) {return "cNeg(cDiv(Cv[29],2))"}
+		if (xU == 1) {return cDivS(invMult,2)}
+		if (xU == -1) {return cNegS(cDivS(invMult,2))}
 		if (strTest(sinAngle,xU)) {return cMulS(invMult,iAngle[sinAngle.indexOf(xU)])}
 		if (nbrTest(xU)) {return cFunc(fmtResult(asn(xU)))}
 		if (xTractU.func == "sin") {return xTractU.upper}
@@ -1239,8 +1241,8 @@ var mgCalc = (function() {
 	}
 	function acsS(xU) {
 		var xTractU = opExtract(xU);
-		if (xU == 0) {return "cDiv(Cv[29],2)"}
-		if (xU == -1) {return "Cv[29]"}
+		if (xU == 0) {return cDivS(invMult,2)}
+		if (xU == -1) {return invMult}
 		if (strTest(cosAngle,xU)) {return cMulS(invMult,iAngle[cosAngle.indexOf(xU)])}
 		if (nbrTest(xU)) {return cFunc(fmtResult(acs(xU)))}
 		if (xTractU.func == "cos") {return xTractU.upper}
@@ -1248,7 +1250,7 @@ var mgCalc = (function() {
 	}
 	function atnS(xU) {
 		var xTractU = opExtract(xU);
-		if (xU == 1) {return "cDiv(Cv[29],4)"}
+		if (xU == 1) {return cDivS(invMult,4)}
 		if (strTest(tanAngle,xU)) {return cMulS(invMult,iAngle[tanAngle.indexOf(xU)])}
 		if (nbrTest(xU)) {return cFunc(fmtResult(atn(xU)))}
 		if (xTractU.func == "tan") {return xTractU.upper}
@@ -1263,7 +1265,7 @@ var mgCalc = (function() {
 	}
 	function accS(xU) {
 		var xTractU = opExtract(xU);
-		if (xU == 1) {return "cDiv(Cv[29],2)"}
+		if (xU == 1) {return cDivS(invMult,2)}
 		if (strTest(cscAngle,xU)) {return cMulS(invMult,iAngle[cscAngle.indexOf(xU)])}
 		if (nbrTest(xU)) {return cFunc(fmtResult(acc(xU)))}
 		if (xTractU.func == "csc") {return xTractU.upper}
@@ -1271,8 +1273,8 @@ var mgCalc = (function() {
 	}
 	function actS(xU) {
 		var xTractU = opExtract(xU);
-		if (xU == 0) {return "cDiv(Cv[29],2)"}
-		if (xU == 1) {return "cDiv(Cv[29],4)"}
+		if (xU == 0) {return cDivS(invMult,2)}
+		if (xU == 1) {return cDivS(invMult,4)}
 		if (strTest(cotAngle,xU)) {return cMulS(invMult,iAngle[cotAngle.indexOf(xU)])}
 		if (nbrTest(xU)) {return cFunc(fmtResult(act(xU)))}
 		if (xTractU.func == "cot") {return xTractU.upper}
