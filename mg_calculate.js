@@ -694,13 +694,14 @@ var mgCalc = (function() {
 		if (+xL == -.5 || (xTractL.func == "cDiv" && +xTractL.upper == -1 && +xTractL.lower == 2) || (xTractL.func == "cDiv" && +xTractL.upper == 1 && +xTractL.lower == -2)) {return cDivS(1,sqtS(xU))}
 		if (!pxpFlag && +xL == 1.5 && nbrTest(xU)) {return cMulS(xU,sqtS(xU))}
 		if (!pxpFlag && +xL*2 == Math.floor(+xL*2) && +xL != Math.floor(+xL)) {return cPowS(xU,cDivS(+xL*2,2))}
+		if (!pxpFlag && +xL == -1) {return cDivS(1,xU)}
+		if (!pxpFlag && xTractL.func == "cNeg") {return cDivS(1,cPowS(xU,xTractL.upper))}
+		if (!pxpFlag && +xL < 0 && +xU != 0) {return cDivS(1,cPowS(xU,cNegS(xL)))}
+		if (nbrTest(xU) && nbrTest(xL) && cPow(xU,xL) == int(cPow(xU,xL))) {return (cFunc(fmtResult(cPow(xU,xL))))}
+		if (!pxpFlag && xTractL.func == "cDiv" && +xTractL.upper < 0 && +xTractL.lower != 0) {return cDivS(1,cPowS(xU,cDivS(cNegS(xTractL.upper),xTractL.lower)))}
 		if (xU == "Cv[46]" && +xL == Math.floor(+xL) && mgConfig.Domain == "Complex") {return (cFunc(fmtResult(cPow(eval(xU),xL))))}
 		if (xU == "Cv[8]" && xTractL.func == "lne") {return xTractL.upper}
 		if (xU == "Cv[8]" && cIterate(xL) == "cMul(Cv[46],Cv[29])") {return -1}
-		if (nbrTest(xU) && nbrTest(xL) && cPow(xU,xL) == int(cPow(xU,xL))) {return (cFunc(fmtResult(cPow(xU,xL))))}
-		if (!pxpFlag && +xL < 0 && +xU != 0) {return cDivS(1,cPowS(xU,cNegS(xL)))}
-		if (!pxpFlag && xTractL.func == "cNeg") {return cDivS(1,cPowS(xU,xTractL.upper))}//
-		if (!pxpFlag && xTractL.func == "cDiv" && +xTractL.upper < 0 && +xTractL.lower != 0) {return cDivS(1,cPowS(xU,cDivS(cNegS(xTractL.upper),xTractL.lower)))}
 		if (xTractU.func == "cMul" && nbrTest(xL)) {return "cMul(cPow("+xTractU.upper+","+xL+"),cPow("+xTractU.lower+","+xL+"))" }
 		if (xTractU.func == "cDiv" && nbrTest(xL)) {return "cDiv(cPow("+xTractU.upper+","+xL+"),cPow("+xTractU.lower+","+xL+"))" }
 		if (xTractU.func == "abs" && nbrTest(xL) && +xL/2 == Math.floor(+xL/2)) {return cPowS(xTractU.upper,xL)}
@@ -1974,7 +1975,7 @@ var mgCalc = (function() {
 			return "undefined"
 		}
 		function uSubst(xU) { //integration by u substitution for single operand functions
-			iIterations = 0;
+			iIterations = iIterations-10;
 			var xTractU = opExtract(xU);
 			if (xTractU.func != "" && xTractU.lower == "") {
 				var xVar = relExtract(xprSolve(cEqlS("Cv[9999]",xU),deeVar)).lower;
@@ -2034,7 +2035,7 @@ var mgCalc = (function() {
 		}
 
 		//
-		if (iIterations > 30) {return "undefined"} //break infinite loop
+		if (iIterations > 20) {return "undefined"} //break infinite loop
 		iIterations++;
 		nXpr = strConvert(nXpr);
 		if (strTest(nXpr,"ntp")) {return nXpr}
