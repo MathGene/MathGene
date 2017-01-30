@@ -1,0 +1,98 @@
+<html>
+	<head>
+		<title>Statistics MathGene Test</title>
+		<style type="text/css">table{font-size:inherit}</style> <!--required CSS setting for scaling HTML -->
+		<script type="text/javascript" src="mg_translate.js"></script>
+		<script type="text/javascript" src="mg_calculate.js"></script>
+	</head>
+	
+	<body>
+		<h1>To Translate:</h1>
+		<textarea id = "toConvert">\begin{bmatrix} 3&9&27\end{bmatrix}</textarea>
+		<textarea id = "scale">250</textarea>
+		<button id = "transButton">Translate</button>
+		<h1>Test:</h1>
+		<h3 id = "testArea"></h3>
+		<h1>Matrix Sum<h1>
+		<h3 id = "sumArea"></h3>
+		<h1>Matrix Arithmetic Mean</h1>
+		<h3 id = "meanArea"></h3>
+		<h1>Range<h1>
+		<h3 id = "rangeArea"></h3>
+		<h1>High Value</h1>
+		<h3 id = "highArea"></h3>
+		<h1>Median</h1>
+		<h3 id = "medianArea"></h3>
+		<h1>Low Value</h1>
+		<h3 id = "lowArea"></h3>
+		<h1>Geometric Mean</h1>
+		<h3 id = "geoMeanArea"></h3>
+		<h1>Harmonic Mean</h1>
+		<h3 id = "harMeanArea"></h3>
+		<h1>Root Mean Square</h1>
+		<h3 id = "rmsMeanArea"></h3>
+		
+		<script type = "text/javascript">
+			var testTranslate = document.getElementById("toConvert").value;
+			var transScale = document.getElementById("scale").value;
+
+			var sum = mgMatrixSum(testTranslate);
+			var mean = mgMatrixArthMean(testTranslate);
+			var range = mgMatrixRange(testTranslate);
+			var highLow = mgMatrixHighLow(testTranslate);
+			var high = highLow[0];
+			var low = highLow[1];
+			var median = mgMatrixMedian(testTranslate);
+			var geoMean = mgGeometricMean(testTranslate);
+			var harmMean = mgHarmonicMean(testTranslate);
+			var rmsMean = mgRmsMean(testTranslate);
+			
+			testTranslate = mgTranslate(testTranslate, transScale);
+		
+			document.getElementById("testArea").innerHTML = testTranslate.html;
+			document.getElementById("sumArea").innerHTML = sum;
+			document.getElementById("meanArea").innerHTML = mean;
+			document.getElementById("rangeArea").innerHTML = range;
+			document.getElementById("highArea").innerHTML = high;
+			document.getElementById("lowArea").innerHTML = low;
+			document.getElementById("medianArea").innerHTML = median;
+			document.getElementById("geoMeanArea").innerHTML = geoMean;
+			document.getElementById("harMeanArea").innerHTML = harmMean;
+			document.getElementById("rmsMeanArea").innerHTML = rmsMean;
+		</script>
+		
+		<!--What to do when button is pressed...-->
+		<script type="text/javascript">		
+			document.getElementById("transButton").addEventListener("click",
+				function(event)
+				{
+					var testTranslate = document.getElementById("toConvert").value;
+					var transScale = document.getElementById("scale").value;
+
+					var sum = mgMatrixSum(testTranslate);
+					var mean = mgMatrixArthMean(testTranslate);
+					var range = mgMatrixRange(testTranslate);
+					var highLow = mgMatrixHighLow(testTranslate);
+					var high = highLow[0];
+					var low = highLow[1];
+					var median = mgMatrixMedian(testTranslate);
+					var geoMean = mgGeometricMean(testTranslate);
+					var harmMean = mgHarmonicMean(testTranslate);
+					var rmsMean = mgRmsMean(testTranslate);
+					
+					testTranslate = mgTranslate(testTranslate, transScale);
+					
+					document.getElementById("testArea").innerHTML = testTranslate.html;
+					document.getElementById("sumArea").innerHTML = sum;
+					document.getElementById("meanArea").innerHTML = mean;
+					document.getElementById("rangeArea").innerHTML = range;
+					document.getElementById("highArea").innerHTML = high;
+					document.getElementById("lowArea").innerHTML = low;
+					document.getElementById("geoMeanArea").innerHTML = geoMean;
+					document.getElementById("harMeanArea").innerHTML = harmMean;
+					document.getElementById("rmsMeanArea").innerHTML = rmsMean;
+					document.getElementById("medianArea").innerHTML = median;
+				});
+		</script>
+	</body>
+</html>
