@@ -65,6 +65,42 @@ function mgDomain(expression) { //find domain of expression
 	return mgOutput(mgCalc.Domain(texImport(expression)));
 }
 
+/*******************************************
+			My Stats Functions
+*******************************************/
+function mgMatrixSum(expression){ //calculate sum of list of numbers given as bmatrix
+	return mgCalc.MatrixSum(mgTranslate(expression, 100).mg);
+}
+
+function mgMatrixArthMean(expression){//calculate arithmetic mean of numbers given as bmatrix
+	return mgCalc.ArithmeticMean(mgTranslate(expression, 100).mg);
+}
+
+function mgMatrixRange(expression){//find the range between high and low values given as bmatrix
+	return mgCalc.ArrayRange(mgTranslate(expression, 100).mg);
+}
+
+function mgMatrixHighLow(expression){//returns the high and low value from a list of numbers given as a bmatrix as n array [high, low]
+	return mgCalc.ArrayHighLow(mgTranslate(expression, 100).mg);
+}
+
+function mgMatrixMedian(expression){//returns the median value of a list of numbers given as a bmatrix
+	return mgCalc.ArrayMedian(mgTranslate(expression, 100).mg);
+}
+
+function mgGeometricMean(expression){//returns the geometric mean of a list of numbers given as a bmatrix
+	return mgCalc.GeometricMean(mgTranslate(expression, 100).mg);
+}
+
+function mgHarmonicMean(expression){//returns the harmonic mean of a list of numbers given as a bmatrix
+	return mgCalc.HarmonicMean(mgTranslate(expression, 100).mg);
+}
+
+function mgRmsMean(expression){ //returns the rms mean of a list of numbers given as a bmatrix
+	return mgCalc.RmsMean(mgTranslate(expression, 100).mg);
+}
+/******************************************/
+
 //internal functions-objects
 var mgCalc = (function() {
 
@@ -3536,6 +3572,83 @@ var mgCalc = (function() {
 		}
 		return "undefined"
 	}
+	
+	function cMatrixConvert(xpr) {//convert matrix to a sorted array of numeric values
+		
+		while(xpr.includes("),mat("))
+			xpr = xpr.replace("),mat(", ", ");	//remove mat between rows of matrix
+		while(xpr.includes("mat("))
+			xpr = xpr.replace("mat(", "");		//remove remaining mat
+		xpr = xpr.slice(0, xpr.length - 2);		//remove ending ))
+		var elements = xpr.split(",");			//array containing elements of the matrix as strings
+		
+		for(var i = 0; i < elements.length; i++)
+			elements[i] = eval(elements[i]);		//array is now numeric values
+		
+		elements = elements.sort(function compareNumbers(a,b){return a-b;});
+		
+		return elements;
+	}
+	
+	function cArraySum(arr){//sum the entries of an array
+		var sum = 0;
+		
+		for(var i = 0; i < arr.length; i++)
+			sum += arr[i];
+		
+		return sum;
+	}
+	
+	function cArithmeticMean(arr){//calculate arithmetic mean of an array
+		return cArraySum(arr) / arr.length;
+	}
+	
+	function cArrayRange(arr){//find range between hi and low value of a sorted array
+		return Math.abs(arr[arr.length - 1] - arr[0]);
+	}
+	
+	function cArrayHighLow(arr){//returns the high and low value of a sorted array in an array [high, low]
+		return [arr[arr.length - 1], arr[0]];
+	}
+	
+	function cArrayMedian(arr){//returns the median of a sorted array
+		if(arr.length % 2 != 0)
+			return arr[(arr.length / 2) - .5];
+		else
+			return (arr[arr.length / 2] + arr[(arr.length / 2) - 1]) / 2;
+	}
+	
+	function cGeoMean(arr){//returns the geometric mean of an array
+		var prod = 1;
+		var size = arr.length;
+		
+		for(var i = 0; i < size; i++)
+			prod *= arr[i];
+		
+		return Math.pow(prod, (1/size));
+	}
+	
+	function cHarmMean(arr){//returns the harmonic mean of an array
+		var recipSum = 0;
+		var size = arr.length;
+		
+		for(var i = 0; i < size; i++)
+			if(arr[i] != 0)
+				recipSum += 1 / arr[i];
+		
+		return size / recipSum;
+	}
+	
+	function cRmsMean(arr){//returns the rms mean of an array
+		var squareSum = 0;
+		var size = arr.length;
+		
+		for(var i = 0; i < size; i++)
+			squareSum += Math.pow(arr[i], 2);
+		
+		return Math.pow((1 / size) * squareSum, 0.5);
+	}
+	
 	// dummy arithmetic handlers
 	function ntg(xU,xL) {return "ntg("+xU+","+xL+")"} //integral
 	function drv(xU,xL) {return "drv("+xU+","+xL+")"} //derivative
@@ -3574,7 +3687,18 @@ var mgCalc = (function() {
 	var invMult = "Cv[29]";
 	if (mgConfig.trigBase == Math.PI/180) {invMult = "180"}
 	if (mgConfig.trigBase == Math.PI/200) {invMult = "200"}
-
+	
+	/***************************/
+	var MatrixSum  	= function(xprA) {return cArraySum(cMatrixConvert(xprA))};
+	var ArithmeticMean	= function(xprA) {return cArithmeticMean(cMatrixConvert(xprA))};
+	var ArrayRange 	= function(xprA) {return cArrayRange(cMatrixConvert(xprA))};
+	var ArrayHighLow	= function(xprA) {return cArrayHighLow(cMatrixConvert(xprA))};
+	var ArrayMedian	= function(xprA) {return cArrayMedian(cMatrixConvert(xprA))};
+	var GeometricMean = function(xprA) {return cGeoMean(cMatrixConvert(xprA))};
+	var HarmonicMean = function(xprA) {return cHarmMean(cMatrixConvert(xprA))};
+	var RmsMean	= function(xprA) {return cRmsMean(cMatrixConvert(xprA))};
+	/***************************/
+	
 	var Numeric    = function(xprA) {return mgExport(fmtResult(eval(cFunc(xprA))))};
 	var	Simplify   = function(xprA) {return cReduce(cFunc(parseCalculus(xprA)))	};
 	var Solve      = function(xprA,xprB) {return xprSolve(cFunc(parseCalculus(xprA)),xprB)};
@@ -3633,6 +3757,14 @@ var mgCalc = (function() {
 		OptionVega:OptionVega,
 		irSolver:irSolver,
 		GCF:GCF,
+		MatrixSum:MatrixSum,
+		ArithmeticMean:ArithmeticMean,
+		ArrayRange:ArrayRange,
+		ArrayHighLow:ArrayHighLow,
+		ArrayMedian:ArrayMedian,
+		GeometricMean:GeometricMean,
+		HarmonicMean:HarmonicMean,
+		RmsMean:RmsMean,
 	}
 }) ();
 // node.js export
