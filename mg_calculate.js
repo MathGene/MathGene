@@ -335,7 +335,7 @@ var mgCalc = (function() {
 		if (xFlag) {return iRdce}
 		var iTemp = xReduce(iExpand(iRdce));
 		for (var iC=0;iC<iInv.length;iC++) {
-			if (iTemp.split(iInv[iC]).length-1 > iCount[iC] && iCount[iC] != 0) {return iRdce} //if element count is greater then return unchanged
+			if (iTemp.split(iInv[iC]).length-1 > iCount[iC] && iCount[iC] != 0) {break} //if element count is greater then return unchanged
 			if (iTemp.split(iInv[iC]).length-1 < iCount[iC] && iCount[iC] != 0) {return iTemp} //if element count is smaller then return expanded result
 		}
 		return iRdce
@@ -549,6 +549,7 @@ var mgCalc = (function() {
 			if (xTractU.func == "cMul") {nTerms.push("-1"),pTrmS(xTractU.upper,xTractU.lower)}
 			if (typeof xU != "undefined") {nTerms.push("-1"),nTerms.push(xU)}
 		}
+		xP = strConvert(xP);
 		var nTerms = [];
 		var xTractU = opExtract(xP);
 		if (xTractU.func != "cMul" && xTractU.func != "cNeg") {return [xP]}
@@ -564,6 +565,7 @@ var mgCalc = (function() {
 			if (!strTest(xP,"cAdd") && !strTest(xP,"cSub")) {nTerms.push(xP)}
 			else {return [xP]}
 		}
+		xP = strConvert(xP);
 		eval(xP.replace(/cAdd\(/g,"pAdd(").replace(/cSub\(/g,"pSub(").replace(/([a-z])\(/g,"$1S(").replace(/(Cv\[\d+\])/g,"'$1'").replace(/(Sv\[\d+\])/g,"'$1'").replace(/(Pv\[\d+\])/g,"'$1'"));
 		return nTerms
 	}
@@ -592,7 +594,7 @@ var mgCalc = (function() {
 					else if (xTractD.func == "cPow" && xTractD.upper == pVar) {break}
 					else if (xTractD.func == "cPow" && strTest(xTractD.upper,pVar)) {return [pN]}
 					else if (xTractD.func == "cPow" && strTest(xTractD.lower,pVar)) {return [pN]}
-					else if (xTractD.upper == pVar || xTractD.lower == pVar) 	{xTractD = pVar;break}
+					else if (xTractD.upper == pVar || xTractD.lower == pVar)  {xTractD = pVar;break}
 					else if (xTractD.func == "cMul" && xTractD.upper == pVar) {xTractD = pVar;break}
 					else if (xTractD.func == "cMul" && xTractD.lower == pVar) {xTractD = pVar;break}
 					else if (xTractD.func == "cMul" && strTest(xTractD.upper,pVar)) {xTractD = opExtract(xTractD.upper)}
@@ -669,10 +671,7 @@ var mgCalc = (function() {
 			xTractU = opExtract(uTemp);
 			if (+uTemp == 0 || !strTest(uTemp,pVar) || strTest(uTemp,"cDiv(")) {break}
 		}
-		dReturn = xReduce(cAddS(dReturn,cDivS(uTemp,xL)));
-		if (dReturn == "undefined") {return "cDiv("+xU+","+xL+")"}
-		
-		return dReturn
+		return xReduce(cAddS(dReturn,cDivS(uTemp,xL)))
 	}
 
 	//Algebra
@@ -752,17 +751,17 @@ var mgCalc = (function() {
 		if (xL == "Cv[45]") {return facS(xU)} //factorial
 		if (xU == "Cv[45]") {return facS(xL)} //factorial
 		if (xL == "Cv[46]" && !nbrTest(xU)) {return cMulS(xL,xU)}
-		if (xU == "Cv[46]" && nbrTest(xL)) {return cMulS(xL,xU)}
+		if (xU == "Cv[46]" && nbrTest(xL))  {return cMulS(xL,xU)}
 		if (xTractU.func == "fac" && xTractL.func == "fac" && nbrTest(xTractU.upper) && nbrTest(xTractL.upper)) {return cMulS(fac(xTractU.upper),fac(xTractL.upper))}
 		if (+xL == 0 || +xU == 0) {return 0}
 		if (xU == "Cv[8734]" || xL == "Cv[8734]" ) {return "Cv[8734]"}
 		if (nbrTest(xU) && nbrTest(xL)) {return cMul(xU,xL)}
 		if (nbrTest(xU) && xTractL.func == "cPow" && nbrTest(xTractL.upper)) {xL = "("+xL+")"}
-		if (+xL == 1) {return xU}
-		if (+xU == 1) {return xL}
+		if (+xL == 1)  {return xU}
+		if (+xU == 1)  {return xL}
 		if (+xL == -1) {return cNegS(xU)}
 		if (+xU == -1) {return cNegS(xL)}
-		if (xU == xL) {return cPowS(xU,2)}
+		if (xU == xL)  {return cPowS(xU,2)}
 		if (!pxpFlag && xTractU.func == "sqt" && xTractL.func == "sqt") {return "sqt(cMul("+xTractU.upper+","+xTractL.upper+"))"}
 		if (!pxpFlag && +xU == .5)  {return cDivS(xL,2)}
 		if (xTractU.func == "cPow" && xTractL.func == "cPow" && xTractU.upper == xTractL.upper)  {return cPowS(xTractU.upper,cAddS(xTractU.lower,xTractL.lower))}
@@ -771,9 +770,9 @@ var mgCalc = (function() {
 		if (xTractU.func == "cNeg") {return cNegS(cMulS(xTractU.upper,xL))}
 		if (xTractL.func == "cNeg") {return cNegS(cMulS(xU,xTractL.upper))}
 		if (xTractU.func == "abs" && xTractL.func == "abs") {return absS(cMulS(xTractU.upper,xTractL.upper))}
-		if (xTractU.func == "cDiv" && xTractL.func != "cDiv") {return cDivS(cMulS(xL,xTractU.upper),xTractU.lower)}
-		if (xTractL.func == "cDiv" && xTractU.func != "cDiv") {return cDivS(cMulS(xU,xTractL.upper),xTractL.lower)}
-		if (xTractU.func == "cDiv" && xTractL.func == "cDiv") {return cDivS(cMulS(xTractU.upper,xTractL.upper),cMulS(xTractU.lower,xTractL.lower))}
+		if (!pxpFlag && xTractU.func == "cDiv" && xTractL.func == "cDiv") {return cDivS(cMulS(xTractU.upper,xTractL.upper),cMulS(xTractU.lower,xTractL.lower))}
+		if (!pxpFlag && xTractU.func == "cDiv" && xTractL.func != "cDiv") {return cDivS(cMulS(xL,xTractU.upper),xTractU.lower)}
+		if (!pxpFlag && xTractL.func == "cDiv" && xTractU.func != "cDiv") {return cDivS(cMulS(xU,xTractL.upper),xTractL.lower)}
 		if (!factorFlag && xTractL.func == "cAdd" && nbrTest(xU)) {return cAddS(cMulS(xU,xTractL.upper),cMulS(xU,xTractL.lower))}
 		if (!factorFlag && xTractL.func == "cSub" && nbrTest(xU)) {return cSubS(cMulS(xU,xTractL.upper),cMulS(xU,xTractL.lower))}
 		if (xTractU.func == "cMul") {return "cMul("+xTractU.upper+",cMul("+xTractU.lower+","+xL+"))"}
@@ -800,7 +799,7 @@ var mgCalc = (function() {
 		if (+xU == 0) {return 0}
 		if (+xL == 1) {return xU}
 		if (xU == xL) {return 1}
-		if (+xL < 0) {return cDivS(cNegS(xU),cNegS(xL))}
+		if (+xL < 0)  {return cDivS(cNegS(xU),cNegS(xL))}
 		if (nbrTest(xU) && nbrTest(xL) && cDiv(xU,xL) == int(cDiv(xU,xL))) {return cDiv(xU,xL)}
 		if (nbrTest(xU) && nbrTest(xL)) {var gTmp = cGcf(+xU,+xL);if (gTmp > 1) {return cDivS(cDiv(+xU,gTmp),cDiv(+xL,gTmp))}}		
 		if (xTractU.func == "cMul" && nbrTest(xTractU.upper) && nbrTest(xL)) {
@@ -808,7 +807,7 @@ var mgCalc = (function() {
 			if (gTmp > 1) {return cDivS(cMulS(cDiv(+xTractU.upper,gTmp),xTractU.lower),cDiv(+xL,gTmp))}
 		}
 		if (xTractL.func == "cPow" && xTractU.func == "cPow" && xTractL.lower == xTractU.lower && !nbrTest(xTractL.lower)) {return cPowS(cDivS(xTractL.upper,xTractU.upper),xTractU.lower)}
-		if (xTractU.func == "cDiv") {return cDivS(xTractU.upper,cMulS(xTractU.lower,xL))}
+		if (!pxpFlag && xTractU.func == "cDiv") {return cDivS(xTractU.upper,cMulS(xTractU.lower,xL))}
 		if (xTractU.func == "sin" && xTractL.func == "cos" && xTractU.upper == xTractL.upper) {return tanS(xTractU.upper)}
 		if (xTractU.func == "cos" && xTractL.func == "sin" && xTractU.upper == xTractL.upper) {return cotS(xTractU.upper)}
 		if (xTractU.func == "sin" && xTractL.func == "tan" && xTractU.upper == xTractL.upper) {return cosS(xTractU.upper)}
@@ -832,9 +831,11 @@ var mgCalc = (function() {
 		if (+xL == 2 && xprMatch(xU,"cSub(csh(cMul(2,Cv[9999])),1)")) {return cPowS(snhS(xprMatch(xU,"cSub(csh(cMul(2,Cv[9999])),1)")),2)}
 		if (+xL == 2 && xprMatch(xU,"cAdd(csh(cMul(2,Cv[9999])),1)")) {return cPowS(cshS(xprMatch(xU,"cAdd(csh(cMul(2,Cv[9999])),1)")),2)}
 		if (xTractU.func == "fac" && xTractL.func == "fac" && nbrTest(xTractU.upper) && nbrTest(xTractL.upper)) {return cDivS(fac(xTractU.upper),fac(xTractL.upper))}
-		if (pxpFlag && xTractU.func == "cSub" && (pNomial(xL).length < 2 || factorFlag || limitFlag)) {return cSubS(cDivS(xTractU.upper,xL),cDivS(xTractU.lower,xL))}
-		if (xTractU.func == "cAdd" && (pNomial(xL).length < 2 || factorFlag || limitFlag)) {return cAddS(cDivS(xTractU.upper,xL),cDivS(xTractU.lower,xL))}
-		if ((xTractL.func == "cAdd" || xTractL.func == "cSub") && !limitFlag && !pxpFlag) {return pDivide(xU,xL)}
+		if (xTractU.func == "cAdd" && (factorFlag || limitFlag)) {return cAddS(cDivS(xTractU.upper,xL),cDivS(xTractU.lower,xL))}
+		if (pxpFlag && xTractU.func == "cSub" && (factorFlag || limitFlag)) {return cSubS(cDivS(xTractU.upper,xL),cDivS(xTractU.lower,xL))}
+		if (xTractU.func == "cAdd" && (pNomial(xL).length < 2 || xTractL.func == "cMul")) {return cAddS(pDivide(xTractU.upper,xL),pDivide(xTractU.lower,xL))}
+		if (pxpFlag && xTractU.func == "cSub" && (pNomial(xL).length < 2 || xTractL.func == "cMul")) {return cSubS(cDivS(xTractU.upper,xL),cDivS(xTractU.lower,xL))}
+		if ((xTractL.func == "cAdd" || xTractL.func == "cSub") && !pxpFlag && !factorFlag) {return pDivide(xU,xL)}
 		return "cDiv("+xU+","+xL+")"
 	}
 	function cAddS(xU,xL) {
@@ -974,10 +975,6 @@ var mgCalc = (function() {
 		if (xTractU.func == "cMul" && nbrTest(xTractU.upper)) {return cMulS(-xTractU.upper,xTractU.lower)}
 		if (xTractU.func == "cMul" && nbrTest(xTractU.lower)) {return cMulS(-xTractU.lower,xTractU.upper)}
 		if (xTractU.func == "cNeg") {return xTractU.upper}
-		if (xTractU.func == "cDiv") {
-			var xTractT = opExtract(xTractU.upper);
-			if (xTractT.func == "cSub") {return cDivS(cNegS(cSubS(xTractT.upper,xTractT.lower)),xTractU.lower)}
-		}
 		if (nbrTest(xU)) {return -(xU)}
 		return "cNeg("+xU+")"
 	}
@@ -1006,10 +1003,9 @@ var mgCalc = (function() {
 	}
 	function sqtS(xU) {
 		var xTractU = opExtract(xU);
-		if (+xU < 0 && mgConfig.Domain == "Complex") {return cFunc(fmtResult(sqt(xU)))} //calculate complex roots
+		if (+xU < 0 && mgConfig.Domain == "Complex" && !factorFlag) {return cFunc(fmtResult(sqt(xU)))} //calculate complex roots
 		if (+xU < 0 && mgConfig.Domain != "Complex") {return "undefined"}
-		if ( (nbrTest(xU) && sqt(xU) == int(sqt(xU))) || (nbrTest(xU) && +xU != int(+xU)) ){return cFunc(fmtResult(sqt(xU)))} //calculate numerical roots
-		if (xTractU.func == "cDiv" && (nbrTest(xTractU.upper) || nbrTest(xTractU.lower))) {return cDivS(sqtS(xTractU.upper),sqtS(xTractU.lower))}
+		if (nbrTest(xU) && sqt(xU) == int(sqt(xU))){return cFunc(fmtResult(sqt(xU)))} //calculate integer roots
 		if (pxpFlag && xTractU.func == "cDiv") {return cDivS(sqtS(xTractU.upper),sqtS(xTractU.lower))}
 		if (pxpFlag && xTractU.func == "cMul") {return cMulS(sqtS(xTractU.upper),sqtS(xTractU.lower))}
 		if (pxpFlag) {return "cPow("+xU+",0.5)"}
@@ -1025,7 +1021,7 @@ var mgCalc = (function() {
 	}
 	function cbtS(xU) {
 		var xTractU = opExtract(xU);
-		if (nbrTest(xU) && cbt(xU) == int(cbt(xU)) ) {return cFunc(fmtResult(cbt(xU)))} //calculate numerical roots
+		if (nbrTest(xU) && cbt(xU) == int(cbt(xU)) ) {return cFunc(fmtResult(cbt(xU)))} //calculate integer roots
 		if (xTractU.func == "cPow") {return cPowS(xTractU.upper,cDivS(xTractU.lower,3))}
 		if (pxpFlag) {return "cPow("+xU+",cDiv(1,3))"}
 		return "cbt("+xU+")"
@@ -1044,7 +1040,7 @@ var mgCalc = (function() {
 		if (xU == "Cv[8]") {return 1}
 		if (xTractU.func == "cNeg" && xTractU.upper == "Cv[8]" && mgConfig.Domain == "Complex") {return "cAddS(1,cMul(Cv[29],Cv[46]))"}
 		if (+xU == -1 && mgConfig.Domain == "Complex") {return "cMul(Cv[29],Cv[46])"} 
-		if (nbrTest(xU) && lne(xU) == int(lne(xU)) ) {return cFunc(fmtResult(lne(xU)))}
+		if (nbrTest(xU) && lne(xU) == int(lne(xU)) ) {return cFunc(fmtResult(lne(xU)))} //calculate integer logs
 		if (xTractU.func == "cPow" && xTractU.upper == "Cv[8]") {return xTractU.lower}
 		if (xTractU.func == "cDiv" && +xTractU.upper == 1) {return cNegS(lneS(xTractU.lower))}
 		if (xTractU.func == "cPow") {return cMulS(xTractU.lower,lneS(xTractU.upper))}
@@ -1053,7 +1049,7 @@ var mgCalc = (function() {
 	function logS(xU) {
 		var xTractU = opExtract(xU);
 		if (xU == 0) {return "Cv[8734]"}
-		if (nbrTest(xU) && log(xU) == int(log(xU))) {return cFunc(fmtResult(log(xU)))}
+		if (nbrTest(xU) && log(xU) == int(log(xU))) {return cFunc(fmtResult(log(xU)))} //calculate integer logs
 		if (xTractU.func == "cPow" && +xTractU.upper == 10) {return xTractU.lower}
 		if (xTractU.func == "cPow") {return cMulS(xTractU.upper,logS(xTractU.lower))}
 		if (xTractU.func == "cDiv" && +xTractU.upper == 1) {return cNegS(logS(xTractU.lower))}
@@ -1064,7 +1060,7 @@ var mgCalc = (function() {
 		var xTractL = opExtract(xL);
 		if (+xU == 10) {return logS(xL)}
 		if (xU == "Cv[8]") {return lneS(xL)}
-		if (nbrTest(xU)  && nbrTest(xL) && lgn(xU,xL) == int(lgn(xU,xL))) {return cFunc(fmtResult(lgn(xU,xL)))}
+		if (nbrTest(xU)  && nbrTest(xL) && lgn(xU,xL) == int(lgn(xU,xL))) {return cFunc(fmtResult(lgn(xU,xL)))} //calculate integer logs
 		return cDivS(lneS(xL),lneS(xU))
 	}
 	function efcS(xU) {
@@ -1370,27 +1366,27 @@ var mgCalc = (function() {
 	function iddS(xU) {return "idd("+xU+")"}
 	function tdrS(xU) {return "tdr("+xU+")"}
 	function tddS(xU) {return "tdd("+xU+")"}
-	function sbrS(xU)  {return "("+xU+")"}
-	function cbrS(xU)  {return "("+xU+")"}
-	function prnS(xU)  {return "("+xU+")"}
-	function conS(xU)  {return "con("+xU+")"}
-	function vecS(xU)  {return "vec("+xU+")"}
-	function hatS(xU)  {return "hat("+xU+")"}
-	function undS(xU)  {return "und("+xU+")"}
-	function udtS(xU)  {return "udt("+xU+")"}
-	function tldS(xU)  {return "tld("+xU+")"}
-	function cntS(xU)  {return "cnt("+xU+")"}
-	function sbtS(xU)  {return "sbt("+xU+")"}
-	function difS(xU)  {return "dif("+xU+")"}
-	function cdfS(xU)  {return "cdf("+xU+")"}
-	function pdfS(xU)  {return "pdf("+xU+")"}
-	function lcfS(xU)  {return "lcf("+xU+")"}
-	function lpfS(xU)  {return "lpf("+xU+")"}
-	function rouS(xU)  {return "rou("+xU+")"}
-	function rndS(xU)  {return "rnd("+xU+")"}
-	function rexS(xU)  {return "rex("+xU+")"}
-	function frcS(xU)  {return "frc("+xU+")"}
-	function ceiS(xU)  {return "cei("+xU+")"}
+	function sbrS(xU) {return "("+xU+")"}
+	function cbrS(xU) {return "("+xU+")"}
+	function prnS(xU) {return "("+xU+")"}
+	function conS(xU) {return "con("+xU+")"}
+	function vecS(xU) {return "vec("+xU+")"}
+	function hatS(xU) {return "hat("+xU+")"}
+	function undS(xU) {return "und("+xU+")"}
+	function udtS(xU) {return "udt("+xU+")"}
+	function tldS(xU) {return "tld("+xU+")"}
+	function cntS(xU) {return "cnt("+xU+")"}
+	function sbtS(xU) {return "sbt("+xU+")"}
+	function difS(xU) {return "dif("+xU+")"}
+	function cdfS(xU) {return "cdf("+xU+")"}
+	function pdfS(xU) {return "pdf("+xU+")"}
+	function lcfS(xU) {return "lcf("+xU+")"}
+	function lpfS(xU) {return "lpf("+xU+")"}
+	function rouS(xU) {return "rou("+xU+")"}
+	function rndS(xU) {return "rnd("+xU+")"}
+	function rexS(xU) {return "rex("+xU+")"}
+	function frcS(xU) {return "frc("+xU+")"}
+	function ceiS(xU) {return "cei("+xU+")"}
 	function cBndS(xU,xL) {return "cBnd("+xU+","+xL+")"}
 	function cEqlS(xU,xL) {return "cEql("+xU+","+xL+")"}
 	function cNqlS(xU,xL) {return "cNql("+xU+","+xL+")"}
@@ -1536,9 +1532,9 @@ var mgCalc = (function() {
 		function cTmsD(xU,xL) {return cMulD(xU,xL) }
 		function cDotD(xU,xL) {return cMulD(xU,xL) }
 		function cEqlD(xU,xL) {return cEqlS(xU,xL) }
-		function nrtD(xU,xL) {return drvS(cPowD(xL,cDivS(1,xU)),deeVar) }
-		function lgnD(xU,xL) {return drvS(cDivS(lneS(xL),lneS(xU)),deeVar) }
-		function cNegD(xU)   {return cNegS(drvS(xU,deeVar)) }
+		function nrtD(xU,xL)  {return drvS(cPowD(xL,cDivS(1,xU)),deeVar) }
+		function lgnD(xU,xL)  {return drvS(cDivS(lneS(xL),lneS(xU)),deeVar) }
+		function cNegD(xU)    {return cNegS(drvS(xU,deeVar)) }
 		function lneD(xU) {return cMulS(cDivS(1,xU),drvS(xU,deeVar)) }
 		function logD(xU) {return cMulS(cDivS(logS("Cv[8]"),xU),drvS(xU,deeVar)) }
 		function cbtD(xU) {return cMulS(cDivS(1,cMulS(3,cPowS(xU,cDivS(2,3)))),drvS(xU,deeVar)) }
@@ -1577,16 +1573,16 @@ var mgCalc = (function() {
 		function efcD(xU) {return cMulS(cNegS(cDivS(cMulS(2,cPowS("Cv[8]",cNegS(cPowS(xU,2)))),sqtS("Cv[29]"))),drvS(xU,deeVar)) }
 		function expD(xU) {return cMulS(cPowS("Cv[8]",xU),drvS(xU,deeVar)) }
 		function absD(xU) {return cMulS("cDiv("+xU+",abs("+xU+"))",drvS(xU,deeVar))}
-		function conD(xU)  {return "con("+xU+")"}
-		function facD(xU)  {return "fac("+xU+")"}
-		function vecD(xU)  {return "vec("+xU+")"}
-		function hatD(xU)  {return "hat("+xU+")"}
-		function undD(xU)  {return "und("+xU+")"}
-		function udtD(xU)  {return "udt("+xU+")"}
-		function tldD(xU)  {return "tld("+xU+")"}
-		function cntD(xU)  {return "cnt("+xU+")"}
-		function sbtD(xU)  {return "sbt("+xU+")"}
-		function difD(xU)  {return "dif("+xU+")"}
+		function conD(xU) {return "con("+xU+")"}
+		function facD(xU) {return "fac("+xU+")"}
+		function vecD(xU) {return "vec("+xU+")"}
+		function hatD(xU) {return "hat("+xU+")"}
+		function undD(xU) {return "und("+xU+")"}
+		function udtD(xU) {return "udt("+xU+")"}
+		function tldD(xU) {return "tld("+xU+")"}
+		function cntD(xU) {return "cnt("+xU+")"}
+		function sbtD(xU) {return "sbt("+xU+")"}
+		function difD(xU) {return "dif("+xU+")"}
 		function ntpD(nXpr,dV,iU,iL) {
 			if (dV == deeVar && typeof iU == "undefined" && typeof iL == "undefined") {return nXpr}
 			return "drv(ntp("+nXpr+","+dV+","+iU+","+iL+"),"+deeVar+")"
@@ -1595,7 +1591,6 @@ var mgCalc = (function() {
 		if (deeVar) {deeVarP = deeVar}	
 		if (solverFlag) {return "drv("+dXpr+")"}
 		dXpr = strConvert(dXpr);
-		if (dXpr == "undefined") {return "undefined"}
 		if (!qFlag) {dXpr = cReduce(dXpr)}
 		if (dXpr == deeVar) {return 1}
 		if (!strTest(dXpr,deeVar)) {return 0}
@@ -1917,15 +1912,15 @@ var mgCalc = (function() {
 		function erfI(xU) {if (deeVar == xU) {return "cAdd(cMul("+xU+",erf("+xU+")),cDiv(1,cMul(cPow(Cv[8],cPow("+xU+",2)),sqt(Cv[29]))))"};return iTest(erfS(xU))}
 		function efcI(xU) {return "undefined"}
 		function lgnI(xU,xL) {if (deeVar == xL) {return cSubS(cMulS(xL,lgnS(xU,xL)),cDivS(xL,lneS(xU)))};return "undefined"}
-		function conI(xU)  {return "con("+xU+")"}
-		function facI(xU)  {return "fac("+xU+")"}
-		function vecI(xU)  {return "vec("+xU+")"}
-		function hatI(xU)  {return "hat("+xU+")"}
-		function undI(xU)  {return "und("+xU+")"}
-		function udtI(xU)  {return "udt("+xU+")"}
-		function tldI(xU)  {return "tld("+xU+")"}
-		function cntI(xU)  {return "cnt("+xU+")"}
-		function sbtI(xU)  {return "sbt("+xU+")"}
+		function conI(xU) {return "con("+xU+")"}
+		function facI(xU) {return "fac("+xU+")"}
+		function vecI(xU) {return "vec("+xU+")"}
+		function hatI(xU) {return "hat("+xU+")"}
+		function undI(xU) {return "und("+xU+")"}
+		function udtI(xU) {return "udt("+xU+")"}
+		function tldI(xU) {return "tld("+xU+")"}
+		function cntI(xU) {return "cnt("+xU+")"}
+		function sbtI(xU) {return "sbt("+xU+")"}
 		function matI() {return "mat(" + Array.prototype.slice.call(arguments) + ")"}
 		// integration algorithms
 		function iParts(xU,xL) { //integration by parts
@@ -2032,7 +2027,7 @@ var mgCalc = (function() {
 			}
 			return "undefined"
 		}
-
+		function ntgExecute(xIn) {return eval(strConvert(xIn).replace(/([a-z])\(/,"$1I(").replace(/([a-z])\(/g,"$1S(").replace(/(Cv\[\d+\])/g,"'$1'").replace(/(Pv\[\d+\])/g,"'$1'").replace(/(Sv\[\d+\])/g,"'$1'"))}
 		//
 		if (iIterations > 20) {return "undefined"} //break infinite loop
 		iIterations++;
@@ -2049,9 +2044,9 @@ var mgCalc = (function() {
 		else if (xReduce(nXpr) == deeVar) {return cDivS(cPowS(deeVar,2),2)}  //integral of deevar
 		else if (!strTest(xReduce(nXpr),deeVar)) {return cMulS(nXpr,deeVar)} //integral of null expression
 		else { //indefinite integral
-			var dXpr = eval(xReduce(nXpr).replace(/([a-z])\(/,"$1I(").replace(/([a-z])\(/g,"$1S(").replace(/(Cv\[\d+\])/g,"'$1'").replace(/(Pv\[\d+\])/g,"'$1'").replace(/(Sv\[\d+\])/g,"'$1'"));
+			var dXpr = ntgExecute(xReduce(nXpr));
 			if (ntgCheck(dXpr)) {return cReduce(dXpr)}
-			dXpr = eval(cExpand(nXpr).replace(/([a-z])\(/,"$1I(").replace(/([a-z])\(/g,"$1S(").replace(/(Cv\[\d+\])/g,"'$1'").replace(/(Pv\[\d+\])/g,"'$1'").replace(/(Sv\[\d+\])/g,"'$1'"));
+			dXpr = ntgExecute(cExpand(nXpr));
 			if (ntgCheck(dXpr)) {return cReduce(dXpr)}
 			return "ntp("+nXpr+","+deeVar+")"
 		}
@@ -2059,15 +2054,19 @@ var mgCalc = (function() {
 
 	// Expand functions
 	function cExpand(xE) { //full expansion
+		expandFlag = true;
 		xE = strConvert(xE);
 		xE = xReduce(eval(xE.replace(/([a-z])\(/g,"$1S(").replace(/(Cv\[\d+\])/g,"'$1'").replace(/lneS/g,"lneX").replace(/sqtS/g,"sqtX").replace(/cPowS/g,"cPowX").replace(/cMulS/g,"cMulX").replace(/cDivS/g,"cDivX").replace(/cAddS/g,"cAddX").replace(/cSubS/g,"cSubX").replace(/(Pv\[\d+\])/g,"'$1'").replace(/(Sv\[\d+\])/g,"'$1'")));
 		xE = xE.replace(/cnt\(/g,"(");
+		expandFlag = false;
 		return xE
 	}
 	function iExpand(xE) { //operator-only expansion
+		expandFlag = true;
 		xE = strConvert(xE);
 		xE = xReduce(eval(xE.replace(/([a-z])\(/g,"$1S(").replace(/(Cv\[\d+\])/g,"'$1'").replace(/cDivS/g,"cDivX").replace(/cMulS/g,"cMulX").replace(/cAddS/g,"cAddX").replace(/cSubS/g,"cSubX").replace(/(Pv\[\d+\])/g,"'$1'").replace(/(Sv\[\d+\])/g,"'$1'")));
 		xE = xE.replace(/cnt\(/g,"(");
+		expandFlag = false;
 		return xE
 	}
 	function cAddX(xU,xL) {
@@ -2155,6 +2154,7 @@ var mgCalc = (function() {
 		function achE(xU) {return lneS(cAddS(xU,sqtS(cSubS(cPowS(xU,"2"),1))))}
 		function athE(xU) {return cDivS(cMulS(lneS(cAddS(1,xU)),lneS(cSubS(1,xU))),"2")}
 		//
+		xU = strConvert(xU);
 		for (var xFn=0;xFn<trigFn.length;xFn++) {
 			var rgx = new RegExp(trigFn[xFn]+"S","g");
 			xU = eval(xU.replace(/([a-z])\(/g,"$1S(").replace(/(Cv\[\d+\])/g,"'$1'").replace(/(Pv\[\d+\])/g,"'$1'").replace(/(Sv\[\d+\])/g,"'$1'").replace(rgx,trigFn[xFn]+"E"));
@@ -2243,18 +2243,18 @@ var mgCalc = (function() {
 		function erfL(xU) {var lTmp = erfS(lmtS(xU,lVar,xLim));if (strTest(lTmp,"Cv[8734]")) {return "undefined"}; return lTmp}
 		function efcL(xU) {var lTmp = efcS(lmtS(xU,lVar,xLim));if (strTest(lTmp,"Cv[8734]")) {return "undefined"}; return lTmp}
 		function cNegL(xU) {return cNegS(lmtS(xU,lVar,xLim))}
-		function nrtL(xU,xL)  {return nrtL(xU,lmtS(xL,lVar,xLim))}
-		function lgnL(xU,xL)  {return lgnL(xU,lmtS(xL,lVar,xLim))}
-		function conL(xU)  {return "con("+xU+")"}
-		function facL(xU)  {return "fac("+xU+")"}
-		function vecL(xU)  {return "vec("+xU+")"}
-		function hatL(xU)  {return "hat("+xU+")"}
-		function undL(xU)  {return "und("+xU+")"}
-		function udtL(xU)  {return "udt("+xU+")"}
-		function tldL(xU)  {return "tld("+xU+")"}
-		function cntL(xU)  {return "cnt("+xU+")"}
-		function sbtL(xU)  {return "sbt("+xU+")"}
-		function drvL(xU)  {return "drv("+xU+")"}
+		function nrtL(xU,xL) {return nrtL(xU,lmtS(xL,lVar,xLim))}
+		function lgnL(xU,xL) {return lgnL(xU,lmtS(xL,lVar,xLim))}
+		function conL(xU) {return "con("+xU+")"}
+		function facL(xU) {return "fac("+xU+")"}
+		function vecL(xU) {return "vec("+xU+")"}
+		function hatL(xU) {return "hat("+xU+")"}
+		function undL(xU) {return "und("+xU+")"}
+		function udtL(xU) {return "udt("+xU+")"}
+		function tldL(xU) {return "tld("+xU+")"}
+		function cntL(xU) {return "cnt("+xU+")"}
+		function sbtL(xU) {return "sbt("+xU+")"}
+		function drvL(xU) {return "drv("+xU+")"}
 		function ntpL(nXpr,deeVar,iU,iL) {return ntpS(nXpr,deeVar,iU,iL)}
 		function matL() {return "mat(" + Array.prototype.slice.call(arguments) + ")"}
 		//
@@ -2282,9 +2282,9 @@ var mgCalc = (function() {
 	// Factor 
 	function cFactor(cFac) {
 		function fAddMul(D2,D1,D0) {
-			if 		(D1 > 0 && D0*D2 > 0) {for (var iXu=D1;iXu>=0;iXu--) {if (D0*D2 == iXu*(D1-iXu)) {break}}}
+			if 		(D1 > 0 && D0*D2 > 0) {for (var iXu=D1;iXu>=0;iXu--)     {if (D0*D2 == iXu*(D1-iXu)) {break}}}
 			else if (D1 < 0 && D0*D2 > 0) {for (var iXu=-D0*D2;iXu<=0;iXu++) {if (D0*D2 == iXu*(D1-iXu)) {break}}}
-			else 						  {for (var iXu=D0*D2;iXu<=0;iXu++) {if (D0*D2 == iXu*(D1-iXu)) {break}}}
+			else 						  {for (var iXu=D0*D2;iXu<=0;iXu++)  {if (D0*D2 == iXu*(D1-iXu)) {break}}}
 			return iXu
 		}
 		function pFactor(xFac) { //factor polynomials
@@ -2304,7 +2304,7 @@ var mgCalc = (function() {
 			}
 			var sqrtA = sqt(abs(fCoeff[polyU.length-1])),sqrtB = sqt(abs(fCoeff[0])); //difference of perfect squares
 			tReturn = xReduce(cMulS(fGcf,"cMul((cAdd(cMul("+sqrtA+","+cPowS(pVar,cDiv((polyU.length-1),2))+"),"+sqrtB+")),(cSub(cMul("+sqrtA+","+cPowS(pVar,cDiv((polyU.length-1),2))+"),"+sqrtB+")))"));
-			if (cReduce(cExpand(tReturn)) == cReduce(xFac)) {return tReturn}
+			if (xReduce(cExpand(tReturn)) == xReduce(xFac)) {return tReturn}
 			var yVar = 1; //extract secondary quadratic variable
 			if (pNomial(pExpand(polyU)).length == polyU.length) {yVar = pVariable(pExpand(polyU))}
 			//factor extra pVar
@@ -2320,14 +2320,14 @@ var mgCalc = (function() {
 			var facB1 = xReduce(cAddS(cMulS(gcfA,pRoot),cMulS(gcfB,yVar)));
 			var facB2 = xReduce(cSubS(cMulS(gcfA,pRoot),cMulS(gcfB,yVar)));
 			tReturn = cMulS(fGcf,cMulS(facB1,facA1));
-			if (cReduce(cExpand(tReturn)) == cReduce(xFac)) {return tReturn}
+			if (xReduce(cExpand(tReturn)) == xReduce(xFac)) {return tReturn}
 			tReturn = cMulS(fGcf,cMulS(facB2,facA1));
-			if (cReduce(cExpand(tReturn)) == cReduce(xFac)) {return tReturn}
+			if (xReduce(cExpand(tReturn)) == xReduce(xFac)) {return tReturn}
 			tReturn = "cMul("+xReduce(fGcf)+","+xReduce(cDivS(xFac,fGcf))+")";
-			if (cExpand(tReturn) == cReduce(xFac) && fGcf != 1) {return tReturn}
+			if (cExpand(tReturn) == xReduce(xFac) && fGcf != 1) {return tReturn}
 			return xFac
 		}
-		function dtFactor(pfFac) { //factor div and trm
+		function dtFactor(pfFac) { //factor cDiv and cMul
 			var xTract = opExtract(pfFac);
 			if (xTract.func == "cDiv" && pNomial(xTract.lower).length > pNomial(xTract.upper).length) {//proper partial fractions
 				var fVar = pVariable(xTract.lower);
@@ -2375,12 +2375,16 @@ var mgCalc = (function() {
 			return fTrm
 		}
 		//
-		var facTemp = dtFactor(cFac);
-		if (facTemp != cFac) {return facTemp}
+		cFac = strConvert(cFac);
 		factorFlag = true;
-		facTemp = facTerms(facTerms(cFac));
+        var facTemp = dtFactor(cFac);
 		factorFlag = false;
-		return facTemp
+        if (facTemp != cFac && !strTest(facTemp, "undefined")) {return facTemp}
+        factorFlag = true;
+		facTemp = facTerms(facTerms(cFac));
+        factorFlag = false;
+        if (facTemp != cFac && !strTest(facTemp, "undefined")) {return facTemp}
+        return cFac
 	}
 	//Range of expression in MG format
 	function xprRange(xR)  {
@@ -2475,7 +2479,6 @@ var mgCalc = (function() {
 		//
 		xR = strConvert(xR);
 		var xRang = "";
-		if (xR == "undefined") {return ""}
 		if (strTest(xR,"=")) {xRang = cFunc(xR.split("=")[1])}
 		else {xRang = cFunc(xR)}
 		var dArray = [];
@@ -2531,7 +2534,7 @@ var mgCalc = (function() {
 			return "Cv[9999]"
 		}
 		//
-		if (xD == "undefined") {return ""}
+		xD = strConvert(xD);
 		if (strTest(xD,"=")) {xDom = cFunc(xD.split("=")[1])}
 		else {xDom = cFunc(parseCalculus(xD))}
 		var allVars = cInventory(xD);
@@ -3564,7 +3567,7 @@ var mgCalc = (function() {
 	function cBnd(xU,xL) {return "undefined"}
 	
 	var Sv = [],Pv = [];
-	var pxpFlag = false,limitFlag = false,qFlag = false,factorFlag = false,solverFlag = false;
+	var pxpFlag = false,limitFlag = false,qFlag = false,factorFlag = false,solverFlag = false,expandFlag = false;
 	var deeVarP = "";
 	var dRound = 1e12; //rounding for complex number arithmetic
 	var iConstant = 11100; //constant of integration variable index
