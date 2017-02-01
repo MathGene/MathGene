@@ -955,27 +955,28 @@ function mgExport(xFn) { //convert from FUNC format to MG format
 		xU += "";xL += "";
 		xTractU = oprExtract(cFunc(xU));
 		xTractL = oprExtract(cFunc(xL));
-		if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "fac") {xU  = "(" + xU + ")"}
-		if (xTractL.func == "cAdd" || xTractL.func == "cSub" || xTractL.func == "fac") {xL  = "(" + xL + ")"}	
-		if (xU.indexOf("Cv[45]") > -1 && xU.lastIndexOf("Cv[45]") == xU.length-6) {xU  = "(" + xU + ")"}	
-		if (xL.indexOf("Cv[45]") > -1 && xL.lastIndexOf("Cv[45]") == xL.length-6) {xL  = "(" + xL + ")"}	
-		if (xTractL.func == "cPow" && numTest(xU) &&  numTest(xTractL.upper)) {xL  = "(" + xL + ")"}
-		return xU + ""  + xL
+		if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "fac") {xU  = "(" + oParens(xU) + ")"}
+		if (xTractL.func == "cAdd" || xTractL.func == "cSub" || xTractL.func == "fac") {xL  = "(" + oParens(xL) + ")"}
+		if (xTractL.func == "cDiv" && xTractU.func == "cDiv") {xU  = "(" + oParens(xU) + ")";xL  = "(" + oParens(xL) + ")"}
+		if (xU.indexOf("Cv[45]") > -1 && xU.lastIndexOf("Cv[45]") == xU.length-6) {xU  = "(" + oParens(xU) + ")"}	
+		if (xL.indexOf("Cv[45]") > -1 && xL.lastIndexOf("Cv[45]") == xL.length-6) {xL  = "(" + oParens(xL) + ")"}	
+		if (xTractL.func == "cPow" && numTest(xU) &&  numTest(xTractL.upper)) {xL  = "(" + oParens(xL) + ")"}
+		return xU + "" + xL
 	}
 	function cDivE(xU,xL) { //division
 		xU += "";xL += "";
 		xTractU = oprExtract(cFunc(xU));
 		xTractL = oprExtract(cFunc(xL));
-		if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "cMul" || xTractU.func == "cDiv" || xTractU.func == "cNeg" || xU.indexOf("Cv[8747]") > -1) {xU  = "(" + xU + ")"}
-		if (xTractL.func == "cAdd" || xTractL.func == "cSub" || xTractL.func == "cMul" || xTractL.func == "cDiv" || xTractL.func == "cNeg" || xL.indexOf("Cv[8747]") > -1) {xL  = "(" + xL + ")"}
+		if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "cMul" || xTractU.func == "cDiv" || xTractU.func == "cNeg" || xU.indexOf("Cv[8747]") > -1) {xU  = "(" + oParens(xU) + ")"}
+		if (xTractL.func == "cAdd" || xTractL.func == "cSub" || xTractL.func == "cMul" || xTractL.func == "cDiv" || xTractL.func == "cNeg" || xL.indexOf("Cv[8747]") > -1) {xL  = "(" + oParens(xL) + ")"}
 		return xU + "/" + xL
 	}
 	function cPowE(xU,xL) { //powers
 		xU += "";xL += "";
 		xTractU = oprExtract(cFunc(xU));
 		xTractL = oprExtract(cFunc(xL));
-		if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "cMul" || xTractU.func == "cDiv" || xTractU.func == "cNeg" || xTractU.func == "fac") {xU  = "(" + xU + ")"}
-		if (xTractL.func == "cAdd" || xTractL.func == "cSub" || xTractL.func == "cMul" || xTractL.func == "cDiv" || xTractL.func == "cNeg") {xL  = "(" + xL + ")"}	
+		if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "cMul" || xTractU.func == "cDiv" || xTractU.func == "cNeg" || xTractU.func == "fac") {xU  = "(" + oParens(xU) + ")"}
+		if (xTractL.func == "cAdd" || xTractL.func == "cSub" || xTractL.func == "cMul" || xTractL.func == "cDiv" || xTractL.func == "cNeg") {xL  = "(" + oParens(xL) + ")"}	
 		return xU + "^" + xL
 	}
 	function cAngE(xU,xL) {return xU + "~" + xL} //angle
@@ -991,7 +992,7 @@ function mgExport(xFn) { //convert from FUNC format to MG format
 	function cNegE(xU) { //negative
 		xU += "";
 		xTractU = oprExtract(cFunc(xU));
-		if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "cDiv") {return "-(" + xU + ")"}
+		if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "cDiv") {return "-(" + oParens(xU) + ")"}
 		return "-" + xU
 	}
 	function sinE(xU) {return "sin(" + xU + ")"} //sin
