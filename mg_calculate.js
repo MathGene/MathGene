@@ -833,7 +833,8 @@ var mgCalc = (function() {
 		if (xTractU.func == "fac" && xTractL.func == "fac" && nbrTest(xTractU.upper) && nbrTest(xTractL.upper)) {return cDivS(fac(xTractU.upper),fac(xTractL.upper))}
 		if (xTractU.func == "cAdd" && (factorFlag || limitFlag)) {return cAddS(cDivS(xTractU.upper,xL),cDivS(xTractU.lower,xL))}
 		if (pxpFlag && xTractU.func == "cSub" && (factorFlag || limitFlag)) {return cSubS(cDivS(xTractU.upper,xL),cDivS(xTractU.lower,xL))}
-		if (xTractU.func == "cAdd" && (pNomial(xL).length < 2 || xTractL.func == "cMul")) {return cAddS(pDivide(xTractU.upper,xL),pDivide(xTractU.lower,xL))}
+		if (pxpFlag && xTractU.func == "cAdd" && (pNomial(xL).length < 2 || xTractL.func == "cMul")) {return cAddS(pDivide(xTractU.upper,xL),pDivide(xTractU.lower,xL))}
+		if (!pxpFlag && xTractU.func == "cAdd" && (pNomial(xL).length < 2)) {return cAddS(cDivS(xTractU.upper,xL),cDivS(xTractU.lower,xL))}
 		if (pxpFlag && xTractU.func == "cSub" && (pNomial(xL).length < 2 || xTractL.func == "cMul")) {return cSubS(cDivS(xTractU.upper,xL),cDivS(xTractU.lower,xL))}
 		if ((xTractL.func == "cAdd" || xTractL.func == "cSub") && !pxpFlag && !factorFlag) {return pDivide(xU,xL)}
 		return "cDiv("+xU+","+xL+")"
@@ -1003,8 +1004,7 @@ var mgCalc = (function() {
 	}
 	function sqtS(xU) {
 		var xTractU = opExtract(xU);
-		if (+xU < 0 && mgConfig.Domain == "Complex" && !factorFlag) {return cFunc(fmtResult(sqt(xU)))} //calculate complex roots
-		if (+xU < 0 && mgConfig.Domain != "Complex") {return "undefined"}
+		if (+xU < 0 && mgConfig.Domain == "Complex") {return cFunc(fmtResult(sqt(xU)))} //calculate complex roots
 		if (nbrTest(xU) && sqt(xU) == int(sqt(xU))){return cFunc(fmtResult(sqt(xU)))} //calculate integer roots
 		if (pxpFlag && xTractU.func == "cDiv") {return cDivS(sqtS(xTractU.upper),sqtS(xTractU.lower))}
 		if (pxpFlag && xTractU.func == "cMul") {return cMulS(sqtS(xTractU.upper),sqtS(xTractU.lower))}
@@ -2055,18 +2055,20 @@ var mgCalc = (function() {
 	// Expand functions
 	function cExpand(xE) { //full expansion
 		expandFlag = true;
-		xE = strConvert(xE);
-		xE = xReduce(eval(xE.replace(/([a-z])\(/g,"$1S(").replace(/(Cv\[\d+\])/g,"'$1'").replace(/lneS/g,"lneX").replace(/sqtS/g,"sqtX").replace(/cPowS/g,"cPowX").replace(/cMulS/g,"cMulX").replace(/cDivS/g,"cDivX").replace(/cAddS/g,"cAddX").replace(/cSubS/g,"cSubX").replace(/(Pv\[\d+\])/g,"'$1'").replace(/(Sv\[\d+\])/g,"'$1'")));
-		xE = xE.replace(/cnt\(/g,"(");
+		var xTemp = strConvert(xE);
+		xTemp = xReduce(eval(xTemp.replace(/([a-z])\(/g,"$1S(").replace(/(Cv\[\d+\])/g,"'$1'").replace(/lneS/g,"lneX").replace(/sqtS/g,"sqtX").replace(/cPowS/g,"cPowX").replace(/cMulS/g,"cMulX").replace(/cDivS/g,"cDivX").replace(/cAddS/g,"cAddX").replace(/cSubS/g,"cSubX").replace(/(Pv\[\d+\])/g,"'$1'").replace(/(Sv\[\d+\])/g,"'$1'")));
+		xTemp = xTemp.replace(/cnt\(/g,"(");
 		expandFlag = false;
+		if (!strTest("undefined",xTemp)) {return xTemp}
 		return xE
 	}
 	function iExpand(xE) { //operator-only expansion
 		expandFlag = true;
-		xE = strConvert(xE);
-		xE = xReduce(eval(xE.replace(/([a-z])\(/g,"$1S(").replace(/(Cv\[\d+\])/g,"'$1'").replace(/cDivS/g,"cDivX").replace(/cMulS/g,"cMulX").replace(/cAddS/g,"cAddX").replace(/cSubS/g,"cSubX").replace(/(Pv\[\d+\])/g,"'$1'").replace(/(Sv\[\d+\])/g,"'$1'")));
-		xE = xE.replace(/cnt\(/g,"(");
+		var xTemp = strConvert(xE);
+		xTemp = xReduce(eval(xTemp.replace(/([a-z])\(/g,"$1S(").replace(/(Cv\[\d+\])/g,"'$1'").replace(/cDivS/g,"cDivX").replace(/cMulS/g,"cMulX").replace(/cAddS/g,"cAddX").replace(/cSubS/g,"cSubX").replace(/(Pv\[\d+\])/g,"'$1'").replace(/(Sv\[\d+\])/g,"'$1'")));
+		xTemp = xTemp.replace(/cnt\(/g,"(");
 		expandFlag = false;
+		if (!strTest("undefined",xTemp)) {return xTemp}
 		return xE
 	}
 	function cAddX(xU,xL) {
@@ -2259,7 +2261,6 @@ var mgCalc = (function() {
 		function matL() {return "mat(" + Array.prototype.slice.call(arguments) + ")"}
 		//
 		xLim = strConvert(xLim);lXpr = strConvert(lXpr);
-		var tmpFlag = limitFlag;
 		limitFlag = true;
 		lXpr = xReduce(lXpr);
 		if (xprMatch(lXpr,"cPow(cAdd(1,cDiv(Cv[9999],"+lVar+")),"+lVar+")") && xLim == "Cv[8734]") {limitFlag = false;return cPowS("Cv[8]",xprMatch(lXpr,"cPow(cAdd(1,cDiv(Cv[9999],"+lVar+")),"+lVar+")"))}
@@ -2273,9 +2274,8 @@ var mgCalc = (function() {
 		if (lXpr == "cDiv(lne("+lVar+"),"+lVar+")"  && xLim == "Cv[8734]") {limitFlag = false;return "0"}
 		lXpr = strConvert(eval(lXpr.replace(/([a-z])\(/g,"$1S(").replace(/(Cv\[\d+\])/g,"'$1'").replace(/cDivS/g,"cDivL").replace(/(Pv\[\d+\])/g,"'$1'").replace(/(Sv\[\d+\])/g,"'$1'")));
 		lXpr = strConvert(eval(lXpr.replace(/([a-z])\(/g,"$1L(").replace(/(Cv\[\d+\])/g,"'$1'").replace(/(Pv\[\d+\])/g,"'$1'").replace(/(Sv\[\d+\])/g,"'$1'")));
-		limitFlag = false;
 		lXpr = cReduce(cSubst(lXpr,lVar,xLim));
-		limitFlag = tmpFlag;
+		limitFlag = false;
 		return lXpr
 	}
 
@@ -2341,7 +2341,7 @@ var mgCalc = (function() {
 					var A2 = xReduce(cSubst(xTract.upper,fVar,Z2));
 					var B1 = xReduce(cSubst(termsL[0],fVar,Z2));
 					var B2 = xReduce(cSubst(termsL[1],fVar,Z1));
-					return xReduce(cAddS(cDivS(cDivS(A2,B1),termsL[1]),cDivS(cDivS(A1,B2),termsL[0])))
+					if (Z1 == int(Z1) && Z2 == int(Z2)) {return xReduce(cAddS(cDivS(cDivS(A2,B1),termsL[1]),cDivS(cDivS(A1,B2),termsL[0])))}
 				}
 			}
 			if (xTract.func == "cDiv" || xTract.func == "cMul" ) {
