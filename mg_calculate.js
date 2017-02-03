@@ -1004,7 +1004,6 @@ var mgCalc = (function() {
 	}
 	function sqtS(xU) {
 		var xTractU = opExtract(xU);
-		if (+xU < 0 && mgConfig.Domain == "Complex") {return cFunc(fmtResult(sqt(xU)))} //calculate complex roots
 		if (nbrTest(xU) && sqt(xU) == int(sqt(xU))){return cFunc(fmtResult(sqt(xU)))} //calculate integer roots
 		if (pxpFlag && xTractU.func == "cDiv") {return cDivS(sqtS(xTractU.upper),sqtS(xTractU.lower))}
 		if (pxpFlag && xTractU.func == "cMul") {return cMulS(sqtS(xTractU.upper),sqtS(xTractU.lower))}
@@ -2054,20 +2053,16 @@ var mgCalc = (function() {
 
 	// Expand functions
 	function cExpand(xE) { //full expansion
-		expandFlag = true;
 		var xTemp = strConvert(xE);
 		xTemp = xReduce(eval(xTemp.replace(/([a-z])\(/g,"$1S(").replace(/(Cv\[\d+\])/g,"'$1'").replace(/lneS/g,"lneX").replace(/sqtS/g,"sqtX").replace(/cPowS/g,"cPowX").replace(/cMulS/g,"cMulX").replace(/cDivS/g,"cDivX").replace(/cAddS/g,"cAddX").replace(/cSubS/g,"cSubX").replace(/(Pv\[\d+\])/g,"'$1'").replace(/(Sv\[\d+\])/g,"'$1'")));
 		xTemp = xTemp.replace(/cnt\(/g,"(");
-		expandFlag = false;
 		if (!strTest("undefined",xTemp)) {return xTemp}
 		return xE
 	}
 	function iExpand(xE) { //operator-only expansion
-		expandFlag = true;
 		var xTemp = strConvert(xE);
 		xTemp = xReduce(eval(xTemp.replace(/([a-z])\(/g,"$1S(").replace(/(Cv\[\d+\])/g,"'$1'").replace(/cDivS/g,"cDivX").replace(/cMulS/g,"cMulX").replace(/cAddS/g,"cAddX").replace(/cSubS/g,"cSubX").replace(/(Pv\[\d+\])/g,"'$1'").replace(/(Sv\[\d+\])/g,"'$1'")));
 		xTemp = xTemp.replace(/cnt\(/g,"(");
-		expandFlag = false;
 		if (!strTest("undefined",xTemp)) {return xTemp}
 		return xE
 	}
@@ -3567,7 +3562,7 @@ var mgCalc = (function() {
 	function cBnd(xU,xL) {return "undefined"}
 	
 	var Sv = [],Pv = [];
-	var pxpFlag = false,limitFlag = false,qFlag = false,factorFlag = false,solverFlag = false,expandFlag = false;
+	var pxpFlag = false,limitFlag = false,qFlag = false,factorFlag = false,solverFlag = false;
 	var deeVarP = "";
 	var dRound = 1e12; //rounding for complex number arithmetic
 	var iConstant = 11100; //constant of integration variable index
