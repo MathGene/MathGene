@@ -151,6 +151,10 @@ var mgCalc = (function() {
 			while (strTest(rExpr,"(")) {
 				var getOp = opExtract(rExpr);
 				if (typeof solverMap[getOp.func]["solverL"] != "undefined") {
+					if (strTest(getOp.upper,xVar) && strTest(getOp.lower,xVar)) {
+						rExpr = cFactor(rExpr);
+						getOp = opExtract(rExpr);
+					}
 					if (strTest(getOp.upper,xVar) && strTest(getOp.lower,xVar)) {break}
 					else if (strTest(getOp.upper,xVar)) {
 						rExpr = getOp.upper;
@@ -177,6 +181,8 @@ var mgCalc = (function() {
 		//
 		var sXtract = relExtract(xSol);
 		if (!sXtract.lower || !sXtract.upper) {return cReduce(xSol)}
+		if (sXtract.lower.split(cVar).length > 2) {sXtract.lower = cFactor(sXtract.lower)}
+		if (sXtract.upper.split(cVar).length > 2) {sXtract.upper = cFactor(sXtract.upper)}
 		solverFlag = true;
 		if (strTest(sXtract.lower,cVar)) {
 			var cRet = cCrawl("0",cReduce(cSubS(sXtract.upper,sXtract.lower)),cVar);
@@ -831,7 +837,7 @@ var mgCalc = (function() {
 		if (+xL == 2 && xprMatch(xU,"cSub(csh(cMul(2,Cv[9999])),1)")) {return cPowS(snhS(xprMatch(xU,"cSub(csh(cMul(2,Cv[9999])),1)")),2)}
 		if (+xL == 2 && xprMatch(xU,"cAdd(csh(cMul(2,Cv[9999])),1)")) {return cPowS(cshS(xprMatch(xU,"cAdd(csh(cMul(2,Cv[9999])),1)")),2)}
 		if (xTractU.func == "fac" && xTractL.func == "fac" && nbrTest(xTractU.upper) && nbrTest(xTractL.upper)) {return cDivS(fac(xTractU.upper),fac(xTractL.upper))}
-		if (xTractU.func == "cAdd" && (factorFlag || limitFlag)) {return cAddS(cDivS(xTractU.upper,xL),cDivS(xTractU.lower,xL))}
+		if (pxpFlag && xTractU.func == "cAdd" && (factorFlag || limitFlag)) {return cAddS(cDivS(xTractU.upper,xL),cDivS(xTractU.lower,xL))}
 		if (pxpFlag && xTractU.func == "cSub" && (factorFlag || limitFlag)) {return cSubS(cDivS(xTractU.upper,xL),cDivS(xTractU.lower,xL))}
 		if (pxpFlag && xTractU.func == "cAdd" && (pNomial(xL).length < 2 || xTractL.func == "cMul")) {return cAddS(pDivide(xTractU.upper,xL),pDivide(xTractU.lower,xL))}
 		if (!pxpFlag && xTractU.func == "cAdd" && (pNomial(xL).length < 2)) {return cAddS(cDivS(xTractU.upper,xL),cDivS(xTractU.lower,xL))}
@@ -2008,7 +2014,7 @@ var mgCalc = (function() {
 			if (!strTest(tSearch,deeVar) && ntgCheck(tSearch)) {return cMulS(xF+"("+deeVar+")",tSearch)}
 			if (tElementsLen <= 10) {
 				for (var tL=0;tL<tElementsLen;tL++) {
-					if (tElements[tL] != deeVar && !nbrTest(tElements[tL]) && tElements[tL]) {
+					if (tElements[tL] != deeVar && !nbrTest(tElements[tL]) && !strTest(tElements[tL],"undefined") && tElements[tL]) {
 						tSearch = xReduce(cDivS(xU,drvQ(xF+"("+cAddS(deeVar,tElements[tL])+")",deeVar)));
 						if (!strTest(tSearch,deeVar) && ntgCheck(tSearch)) {return cMulS(xF+"("+cAddS(deeVar,tElements[tL])+")",tSearch)}
 						tSearch = xReduce(cDivS(xU,drvQ(xF+"("+cSubS(deeVar,tElements[tL])+")",deeVar)));
@@ -2322,7 +2328,7 @@ var mgCalc = (function() {
 			if (cExpand(tReturn) == xReduce(xFac) && fGcf != 1) {return tReturn}
 			return xFac
 		}
-		function dtFactor(pfFac) { //factor cDiv and cMul
+		function mdFactor(pfFac) { //factor cMul and cDiv
 			var xTract = opExtract(pfFac);
 			if (xTract.func == "cDiv" && pNomial(xTract.lower).length > pNomial(xTract.upper).length) {//proper partial fractions
 				var fVar = pVariable(xTract.lower);
@@ -2340,13 +2346,38 @@ var mgCalc = (function() {
 				}
 			}
 			if (xTract.func == "cDiv" || xTract.func == "cMul" ) {
-				factorFlag = true;
 				var xuTemp = facTerms(facTerms(xTract.upper));
 				var xlTemp = facTerms(facTerms(xTract.lower));
-				factorFlag = false;
 				if (xuTemp != xTract.upper || xlTemp != xTract.lower) {return xTract.func+"("+xuTemp+","+xlTemp+")"}			
 			}
 			return pfFac
+		}
+		function asFactor(sfFac) { //factor cAdd and cSub
+			var xTract = opExtract(sfFac);
+			if (xTract.func == "cAdd" || xTract.func == "cSub" ) {
+				var sFac = parsePoly(sfFac);
+				var nGcf = aGcf(pCoeff(sFac));
+				var sInv = cDissect(sfFac);
+				if (sFac.length > 1 && sInv.length > 1) {
+					var tFactor = 1;
+					var fReturn = 0;
+					for (var xI=0;xI<sInv.length;xI++) {
+						if (!nbrTest(sInv[xI]) && typeof sInv[xI] != "undefined") {
+							tFactor = cMulS(sInv[xI],tFactor);
+							for (var yI=0;yI<sFac.length;yI++) {
+								if (!strTest(sFac[yI],sInv[xI])) {tFactor = cDivS(tFactor,sInv[xI]);break}
+								if (strTest(xReduce(cDivS(sFac[yI],sInv[xI])),sInv[xI])) {tFactor = cDivS(tFactor,sInv[xI]);break}
+							}
+						}
+					}
+					tFactor = xReduce(cMulS(tFactor,nGcf));
+					for (var yI=0;yI<sFac.length;yI++) {
+						fReturn = cAddS(fReturn,xReduce(cDivS(sFac[yI],tFactor)))
+					}
+					return xReduce(cMulS(tFactor,fReturn))
+				}
+            }
+			return sfFac		
 		}
 		function facTerms(fTrm) { //factor terms and sort
 			var pfTerms = parseTerms(fTrm);
@@ -2370,15 +2401,17 @@ var mgCalc = (function() {
 			return fTrm
 		}
 		//
-		cFac = strConvert(cFac);
+		cFac = xReduce(cFac);
 		factorFlag = true;
-        var facTemp = dtFactor(cFac);
-		factorFlag = false;
-        if (facTemp != cFac && !strTest(facTemp, "undefined")) {return facTemp}
-        factorFlag = true;
+        var facTemp = mdFactor(cFac);
+        if (facTemp != cFac && !strTest(facTemp, "undefined")) {factorFlag = false;return facTemp}
+        facTemp = mdFactor(asFactor(cExpand(cFac)));
+        if (facTemp != cFac && !strTest(facTemp, "undefined")) {factorFlag = false;return facTemp}
 		facTemp = facTerms(facTerms(cFac));
-        factorFlag = false;
-        if (facTemp != cFac && !strTest(facTemp, "undefined")) {return facTemp}
+        if (facTemp != cFac && !strTest(facTemp, "undefined")) {factorFlag = false;return facTemp}
+		facTemp = asFactor(cFac);
+		if (facTemp != cFac && !strTest(facTemp, "undefined")) {factorFlag = false;return facTemp}
+		factorFlag = false;
         return cFac
 	}
 	//Range of expression in MG format
