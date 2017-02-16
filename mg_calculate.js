@@ -657,12 +657,12 @@ var mgCalc = (function() {
 		return xCoeff
 	}
 	function pDivide(xU,xL) { //polynomial division
-		var fGcf = cGcf(aGcf(pCoeff(pNomial(xU))),aGcf(pCoeff(pNomial(xL))));
-		if (fGcf != 0 && fGcf != 1) {xU = xReduce(cDivS(xU,fGcf)); xL = xReduce(cDivS(xL,fGcf))}
+		var fGcf = cGcf(aGcf(pCoeff(pNomial(xU))),aGcf(pCoeff(pNomial(xL)))); //calculate GCF 
+		if (fGcf != 0 && fGcf != 1) {xU = cDivS(xU,fGcf); xL = cDivS(xL,fGcf)} //apply GCF
 		var pVar = pVariable(xU);
 		var polyU = pNomial(xU,pVar);
 		var polyL = pNomial(xL,pVar);	
-		if (!strTest(xL,pVar)) {pVar = pVariable(xL)}
+		if (!strTest(xL,pVar)) {pVar = pVariable(xL)} //select primary variable
 		if (!strTest(xU,pVar)) {return "cDiv("+xU+","+xL+")"}	
 		if (!strTest(xU,pVariable(xL)) || polyU.length < polyL.length || polyU.length < 2 || polyL.length < 2 || strTest(xU,xL)) {return "cDiv("+xU+","+xL+")"}
 		var dReturn = "0";
@@ -1036,9 +1036,13 @@ var mgCalc = (function() {
 		var xTractL = opExtract(xL);
 		if (+xU == 2) {return sqtS(xL)}
 		if (+xU == 3) {return cbtS(xL)}
-		if (nbrTest(xU) && nbrTest(xL) && nrt(xU,xL) == int(nrt(xU,xL))) {return cFunc(fmtResult(nrt(xU,xL)))}
+		if (nbrTest(xU) && nbrTest(xL) && nrt(xU,xL) == int(nrt(xU,xL))) {return cFunc(fmtResult(nrt(xU,xL)))} //calculate integer roots
 		return cPowS(xL,cDivS(1,xU))
 	}
+    function lndS(xU) { //log with domain for calculus
+        if (mgConfig.Domain == "Real") {return lneS(absS(xU))}
+        return lneS(xU)
+    }
 	function lneS(xU) {
 		var xTractU = opExtract(xU);
 		if (xU == 0) {return "Cv[8734]"}
@@ -1428,8 +1432,8 @@ var mgCalc = (function() {
 		iIterations = 0;
 		sIterations = 0;
 		pIterations = 0;
-		var calcOpsIn  = ["idr(","idd(","tdr(","tdd(","lim(","sum(","prd("]
-		var calcOpsOut = ["drv(","drs(","tdv(","tds(","lmt(","smm(","pmm("]
+		var calcOpsIn  = ["idr(","idd(","tdr(","tdd(","lim(","sum(","prd("];
+		var calcOpsOut = ["drv(","drs(","tdv(","tds(","lmt(","smm(","pmm("];
 		var dV = "";
 		var sCount = dExp.split("Cv[8748]").length-1; //differential
 		for (var nC=0;nC<sCount;nC++) {
@@ -1448,8 +1452,8 @@ var mgCalc = (function() {
 			dExp = dExp.replace(/Cv\[8747\]/,"tmp(");
 			var lPar = 1,rPar = 0;
 			for (var iXs=dExp.indexOf("tmp(")+4;iXs<dExp.length;iXs++) {
-				if (dExp.substr(iXs,4) == "ntg(" ) {lPar++}
-				if (dExp.substr(iXs,4) == "dif(") {;rPar++}
+				if (dExp.substr(iXs,4) == "ntg(") {lPar++}
+				if (dExp.substr(iXs,4) == "dif(") {rPar++}
 				if (lPar == rPar) {break;}
 			}
 			dExp = dExp.substr(0,iXs)+"Cv[9999]"+dExp.substr(iXs+4,dExp.length);
@@ -1479,7 +1483,7 @@ var mgCalc = (function() {
 			var lIndex = dExp.substr(dExp.lastIndexOf("tmp("),dExp.length);
 			dV = parseParens(lIndex,lIndex.indexOf("tmp(")+3).inside;
 			dExp = dExp.replace(lIndex,"tmp("+lIndex.replace("tmp("+dV+")",""));
-			var strg = parseParens(dExp,dExp.lastIndexOf("tmp(")+3)
+			var strg = parseParens(dExp,dExp.lastIndexOf("tmp(")+3);
 			if (strg.inside.charAt(strg.inside.length-1) == "," || !strg.inside) {return cError("Missing operand(s)")}
 			dExp = dExp.substr(0,dExp.lastIndexOf("tmp("))+calcOpsOut[rFunc]+strg.inside+","+dV+")"+dExp.substr(strg.end,dExp.length);
 			if (strTest(dExp,"smm(") || strTest(dExp,"pmm(")) {dExp = dExp.replace("Cv[61]",",")}
@@ -1619,7 +1623,11 @@ var mgCalc = (function() {
 			if (xTractT.func == "cDiv" && xTractT.upper == deeVar) {aConst = cPowS(xTractT.lower,-1)}
 			if (strTest(xU,deeVar) && strTest(xL,deeVar)) {return "undefined"}
 			if (deeVar == xU && !strTest(xL,deeVar)) {return cDivS(cPowS(xU,cAddS(xL,1)),cAddS(xL,1))}
-			if (deeVar == xL && !strTest(xU,deeVar)) {return cDivS(cPowS(xU,xL),lneS(xU))}
+			if (deeVar == xL && !strTest(xU,deeVar)) {return cDivS(cPowS(xU,xL),lndS(xU))}
+			if (xU == "Cv[8]" && mgConfig.Domain == "Complex") {
+				var bTemp = iReduce(cDivS(xL,cPowS(deeVar,2)));
+				if (!strTest(bTemp,deeVar)) {return cMulS(cMulS(cNegS("Cv[46]"),cDivS(sqtS("Cv[29]"),cMulS(2,sqtS(bTemp)))),erfS(cMulS("Cv[46]",cMulS(deeVar,bTemp))))}
+			}
 			if (strTest(xU,deeVar) && !strTest(xL,deeVar)) {
 				var iTemp = xReduce(cDivS(drvS(cDivS(cPowS(xU,cAddS(xL,1)),cAddS(xL,1)),deeVar),cPowS(xU,xL)));
 				if (!strTest(iTemp,deeVar)) {return cDivS(cDivS(cPowS(xU,cAddS(xL,1)),cAddS(xL,1)),iTemp)}
@@ -1646,7 +1654,7 @@ var mgCalc = (function() {
 			if (+xL == 3 && xReduce(cDivS(xTractU.upper,aConst)) == deeVar) {
 				if (xTractU.func == "sin") {return cSubS(cDivS(cosS(cMulS(3,cMulS(aConst,deeVar))),cMulS(12,aConst)),cDivS(cMulS(3,cosS(cMulS(aConst,deeVar))),cMulS(4,aConst)))}
 				if (xTractU.func == "cos") {return cAddS(cDivS(sinS(cMulS(3,cMulS(aConst,deeVar))),cMulS(12,aConst)),cDivS(cMulS(3,sinS(cMulS(aConst,deeVar))),cMulS(4,aConst)))}
-				if (xTractU.func == "tan") {return cAddS(cDivS(lneS(cosS(cMulS(aConst,deeVar))),aConst),cDivS(cPowS(secS(cMulS(aConst,deeVar)),2),cMulS(2,aConst)))}
+				if (xTractU.func == "tan") {return cAddS(cDivS(lndS(cosS(cMulS(aConst,deeVar))),aConst),cDivS(cPowS(secS(cMulS(aConst,deeVar)),2),cMulS(2,aConst)))}
 				if (xTractU.func == "lne") {return cMulS(deeVar,cSubS(cAddS(cSubS(cPowS(lneS(cMulS(aConst,deeVar)),3),cMulS(3,cPowS(lneS(cMulS(aConst,deeVar)),2))),cMulS(6,lneS(cMulS(aConst,deeVar)))),6))}
 			}
 			var tTemp = iTest(cPowS(xU,xL));
@@ -1690,46 +1698,62 @@ var mgCalc = (function() {
 			return "undefined"
 		}
 		function cDivI(xU,xL) {
+			var xTractU = opExtract(xU);
 			var xTractL = opExtract(xL);
 			//explicit trig cases
 			if (cDivS(xU,xL) == cDivS(cosS(deeVar),cPowS(sinS(deeVar),2))) {return cNegS(cDivS(1,sinS(deeVar)))}
-			if (cDivS(xU,xL) == cDivS(cPowS(cosS(deeVar),2),sinS(deeVar))) {
-				if (mgConfig.Domain == "Real") {return cAddS(lneS(absS(tanS(cDivS(deeVar,2)))),cosS(deeVar))}
-				return cAddS(lneS(tanS(cDivS(deeVar,2))),cosS(deeVar))
-			}
+			if (cDivS(xU,xL) == cDivS(cPowS(cosS(deeVar),2),sinS(deeVar))) {return cAddS(lndS(tanS(cDivS(deeVar,2))),cosS(deeVar))}
 			if (cDivS(xU,xL) == cDivS(sinS(deeVar),cPowS(cosS(deeVar),2))) {return cDivS(1,cosS(deeVar))}
-			if (cDivS(xU,xL) == cDivS(1,cMulS(cPowS(cosS(deeVar),2),sinS(deeVar)))) {
-				if (mgConfig.Domain == "Real") {return cAddS(cDivS(1,cosS(deeVar)),lneS(absS(tanS(cDivS(deeVar,2)))))}
-				return cAddS(cDivS(1,cosS(deeVar)),lneS(tanS(cDivS(deeVar,2))))
-			}
-			if (cDivS(xU,xL) == cDivS(1,cMulS(cosS(deeVar),cPowS(sinS(deeVar),2)))) {
-				if (mgConfig.Domain == "Real") {return cSubS(lneS(absS(tanS(cDivS(deeVar,2)))),cDivS(1,sinS(deeVar)))}
-				return cSubS(lneS(tanS(cDivS(deeVar,2))),cDivS(1,sinS(deeVar)))
-			}
+			if (cDivS(xU,xL) == cDivS(1,cMulS(cPowS(cosS(deeVar),2),sinS(deeVar)))) {return cAddS(cDivS(1,cosS(deeVar)),lndS(tanS(cDivS(deeVar,2))))}
+			if (cDivS(xU,xL) == cDivS(1,cMulS(cosS(deeVar),cPowS(sinS(deeVar),2)))) {return cSubS(lndS(tanS(cDivS(deeVar,2))),cDivS(1,sinS(deeVar)))}
 			var xTest = xprMatch(cDivS(xU,xL),cDivS(1,cSubS("Cv[9999]",sqtS(deeVar))));
-			if (xTest && !strTest(xTest,deeVar)) {return cSubS(cNegS(cMulS(2,sqtS(deeVar))),cMulS(cMulS(2,xTest),lneS(cSubS(sqtS(deeVar),xTest))))}
-			if (cDivS(xU,xL) == cDivS(1,cMulS(cosS(deeVar),sinS(deeVar)))) {
-				if (mgConfig.Domain == "Real") {return lneS(absS(tanS(deeVar)))}
-				return lneS(tanS(deeVar))
-			}
+			if (xTest && !strTest(xTest,deeVar)) {return cSubS(cNegS(cMulS(2,sqtS(deeVar))),cMulS(cMulS(2,xTest),lndS(cSubS(sqtS(deeVar),xTest))))}
+			if (cDivS(xU,xL) == cDivS(1,cMulS(cosS(deeVar),sinS(deeVar)))) {return lndS(tanS(deeVar))}
 			//general cases
-			if (deeVar == xU && !strTest(xL,deeVar)) {return cDivS(cPowS(xU,2),cMulS(xL,2))}	
-			if (deeVar == xL && !strTest(xU,deeVar)) {
-				if (mgConfig.Domain == "Real") {return cMulS(xU,lneS(absS(cIterate(xL))))}
-				return cMulS(xU,lneS(cIterate(xL)))
-			}
+			if (deeVar == xU && !strTest(xL,deeVar)) {return cDivS(cPowS(xU,2),cMulS(xL,2))}
+			if (deeVar == xL && !strTest(xU,deeVar)) {return cMulS(xU,lndS(cIterate(xL)))}
 			if (strTest(xU,deeVar) && !strTest(xL,deeVar)) {return cMulS(cDivS(1,xL),ntgS(xU,deeVar))}
 			if (strTest(xL,"sqt") && strTest(xL,deeVar) && strTest(xU,deeVar)) {
 				var iTemp = xReduce(cDivS(cDivS(xU,xL),drvS(xL,deeVar)));
 				if (drvS(cMulS(iTemp,xL),deeVar) == cDivS(xU,xL)) {return cMulS(iTemp,xL)}
 			}
+			if (xTractU.func == "sqt" && xTractL.func == "sqt" && xTractU.upper == deeVar) {
+				var sqTemp = xprMatch(xTractL.upper, "cAdd(Cv[9999],"+deeVar+")");
+				if (sqTemp && !strTest(sqTemp,deeVar)) {return cSubS(sqtS(cMulS(deeVar,cAddS(sqTemp,deeVar))),cMulS(sqTemp,lndS(sqtS(cMulS(deeVar,cAddS(sqTemp,deeVar))))))}
+				sqTemp = xprMatch(xTractL.upper,"cAdd("+deeVar+",Cv[9999])");
+				if (sqTemp && !strTest(sqTemp,deeVar)) {return cSubS(sqtS(cMulS(deeVar,cAddS(sqTemp,deeVar))),cMulS(sqTemp,lndS(sqtS(cMulS(deeVar,cAddS(sqTemp,deeVar))))))}
+				sqTemp = xprMatch(xTractL.upper,"cSub("+deeVar+",Cv[9999])");
+				if (sqTemp && !strTest(sqTemp,deeVar)) {return cSubS(sqtS(cMulS(deeVar,cAddS(cNegS(sqTemp),deeVar))),cMulS(cNegS(sqTemp),lndS(sqtS(cMulS(deeVar,cAddS(cNegS(sqTemp),deeVar))))))}
+				sqTemp = xprMatch(xTractL.upper,"cSub(Cv[9999],"+deeVar+")");
+				if (sqTemp && !strTest(sqTemp,deeVar)) {return cSubS(cNegS(sqtS(cMulS(deeVar,cSubS(sqTemp,deeVar)))),cMulS(sqTemp,atnS(cDivS(sqtS(cMulS(deeVar,cSubS(sqTemp,deeVar))),cSubS(sqTemp,deeVar)))))}
+			}
 			if (strTest(xL,deeVar) && !strTest(xU,deeVar)) {
-				if (xprMatch(xL,"cPow(Cv[8],cPow(Cv[9999],2))") )	{return iSearch(cDivS(xU,xL),"erf")}
 				if (+xU != 1) {return cMulS(xU,ntgS(cDivS(1,xL),deeVar))}
+				var aTemp = cMulS(xU,lndS(xL));
+				var tTest = cDivS(drvS(aTemp,deeVar),cDivS(xU,xL));
+				if (!strTest(tTest,deeVar) && ntgCheck(tTest)) {return cDivS(aTemp,tTest)}
+				aTemp = xprMatch(xL, "cMul(Cv[9999],"+deeVar+")");
+				if (aTemp && !strTest(aTemp,deeVar)) {return cDivS(lndS(deeVar),aTemp)}
+				aTemp = xprMatch(xL, "cMul("+deeVar+",Cv[9999])");
+				if (aTemp && !strTest(aTemp,deeVar)) {return cDivS(lndS(deeVar),aTemp)}
 				if (xTractL.func == "cMul" && !strTest(xL,"sqt")) {return cMulS(xU,cMulI("cDiv(1,"+xTractL.lower+")","cDiv(1,"+xTractL.upper+")"))}
-				var iReturn = cMulS(xU,lneS(cIterate(xL)))
-				var tTest = cDivS(drvS(iReturn,deeVar),cDivS(xU,cIterate(xL)));
-				if (!strTest(tTest,deeVar) && ntgCheck(tTest)) {return cDivS(iReturn,tTest)}
+				if (xprMatch(xL,"cPow(Cv[8],cPow(Cv[9999],2))") ) {return iSearch(cDivS(xU,xL),"erf")}
+				aTemp = xprMatch(xL,"cSub(Cv[9999],cPow("+deeVar+",2))");
+				if (aTemp && !strTest(sqTemp,deeVar)) {return cDivS(athS(cDivS(deeVar,sqtS(aTemp))),sqtS(aTemp))}
+				aTemp = xprMatch(xL,"cAdd(Cv[9999],cPow("+deeVar+",2))");
+				if (aTemp && !strTest(sqTemp,deeVar)) {return cDivS(atnS(cDivS(deeVar,sqtS(aTemp))),sqtS(aTemp))}
+				aTemp = xprMatch(xL,"cAdd(cPow("+deeVar+",2),Cv[9999])");
+				if (aTemp && !strTest(sqTemp,deeVar)) {return cDivS(atnS(cDivS(deeVar,sqtS(aTemp))),sqtS(aTemp))}
+				if (xTractL.func == "sqt") {
+					var sqTemp = xprMatch(xTractL.upper, "cAdd(Cv[9999],cPow("+deeVar+",2))");
+					if (sqTemp && !strTest(sqTemp,deeVar)) {return lndS(cAddS(xL,deeVar))}
+					sqTemp = xprMatch(xTractL.upper, "cAdd(cPow("+deeVar+",2),Cv[9999])");
+					if (sqTemp && !strTest(sqTemp,deeVar)) {return lndS(cAddS(xL,deeVar))}
+					sqTemp = xprMatch(xTractL.upper, "cSub(cPow("+deeVar+",2),Cv[9999])");
+					if (sqTemp && !strTest(sqTemp,deeVar)) {return lndS(cAddS(xL,deeVar))}
+					sqTemp = xprMatch(xTractL.upper, "cSub(Cv[9999],cPow("+deeVar+",2))");
+					if (sqTemp && !strTest(sqTemp,deeVar)) {return atnS(cDivS(deeVar,xL))}
+				}
 				if (xTractL.func == "cPow") {
 					var xTractB = opExtract(xTractL.upper);
 					if (+xTractL.lower == 2) {
@@ -1752,12 +1776,12 @@ var mgCalc = (function() {
 				if (xTractL.func == "sin") {return cMulS(cscI(xTractL.upper),xU)}
 				if (xTractL.func == "csh") {return cMulS(schI(xTractL.upper),xU)}
 				if (xTractL.func == "snh") {return cMulS(cchI(xTractL.upper),xU)}		
-				if (xprMatch(xL,"sqt(cSub(1,cPow(Cv[9999],2)))"))			{return iSearch(cDivS(xU,xL),"asn")}
+				if (xprMatch(xL,"sqt(cSub(1,cPow(Cv[9999],2)))"))		{return iSearch(cDivS(xU,xL),"asn")}
 				if (xprMatch(xL,"cNeg(sqt(cSub(1,cPow(Cv[9999],2))))"))	{return iSearch(cDivS(xU,xL),"acs")}
 				if (xprMatch(xL,"sqt(cAdd(cPow(Cv[9999],2),1))")) 		{return iSearch(cDivS(xU,xL),"ash")}
 				if (xprMatch(xL,"sqt(cSub(cPow(Cv[9999],2),1))")) 		{return iSearch(cDivS(xU,xL),"ach")}
-				if (xprMatch(xL,"cAdd(cPow(Cv[9999],2),1)")) 				{return iSearch(cDivS(xU,xL),"atn")}
-				if (xprMatch(xL,"cSub(cPow(Cv[9999],2),1)")) 				{return iSearch(cDivS(xU,xL),"ath")}
+				if (xprMatch(xL,"cAdd(cPow(Cv[9999],2),1)")) 			{return iSearch(cDivS(xU,xL),"atn")}
+				if (xprMatch(xL,"cSub(cPow(Cv[9999],2),1)")) 			{return iSearch(cDivS(xU,xL),"ath")}
 				if (xTractL.func == "sqt") 	{var iTemp = cMulS(xU,cPowI(xTractL.upper,"cDiv(-1,2)")); if (ntgCheck(iTemp)) {return iTemp}}	
 				if (strTest(xL,"sqt")) {
 					var iTemp = iSearch("cDiv("+xU+","+xL+")","erf"); 
@@ -1805,9 +1829,17 @@ var mgCalc = (function() {
 		function cAddI(xU,xL) {return cAddS(ntgS(xU,deeVar),ntgS(xL,deeVar))}
 		function cSubI(xU,xL) {return cSubS(ntgS(xU,deeVar),ntgS(xL,deeVar))}
 		function cNegI(xU)    {return cNegS(ntgS(xU,deeVar))}
-		function sqtI(xU)    {
+		function sqtI(xU)     {
 			if (deeVar == xU) {return cDivS(cMulS(2,cPowS(xU,cDivS(3,2))),3)}
-			var uTemp = ntgS(cPowS(xU,"cDiv(1,2)"),deeVar);
+			var uTemp = xprMatch(xU,"cAdd(cPow("+deeVar+",2),Cv[9999])");
+			if (uTemp && !strTest(uTemp,deeVar)) {return cDivS(cAddS(cMulS(deeVar,sqtS(cAddS(cPowS(deeVar,2),uTemp))),cMulS(uTemp,lndS(cAddS(uTemp,sqtS(cAddS(cPowS(deeVar,2),uTemp)))))),2)}
+			uTemp = xprMatch(xU,"cAdd(Cv[9999],cPow("+deeVar+",2))");
+			if (uTemp && !strTest(uTemp,deeVar)) {return cDivS(cAddS(cMulS(deeVar,sqtS(cAddS(cPowS(deeVar,2),uTemp))),cMulS(uTemp,lndS(cAddS(uTemp,sqtS(cAddS(cPowS(deeVar,2),uTemp)))))),2)}
+			uTemp = xprMatch(xU,"cSub(cPow("+deeVar+",2),Cv[9999])");
+			if (uTemp && !strTest(uTemp,deeVar)) {return cDivS(cAddS(cMulS(deeVar,sqtS(cSubS(cPowS(deeVar,2),uTemp))),cMulS(uTemp,lndS(cAddS(uTemp,sqtS(cSubS(cPowS(deeVar,2),uTemp)))))),2)}
+			uTemp = xprMatch(xU,"cSub(Cv[9999],cPow("+deeVar+",2))");
+			if (uTemp && !strTest(uTemp,deeVar)) {return cDivS(cAddS(cMulS(deeVar,sqtS(cSubS(uTemp,cPowS(deeVar,2)))),cMulS(uTemp,atnS(cDivS(cMulS(deeVar,sqtS(cSubS(uTemp,cPowS(deeVar,2)))),cSubS(cPowS(deeVar,2),uTemp))))),2)}
+			uTemp = ntgS(cPowS(xU,"cDiv(1,2)"),deeVar);
 			if (ntgCheck(uTemp)) {return uTemp}
 			return uSubst(sqtS(xU));
 		}	
@@ -1840,31 +1872,19 @@ var mgCalc = (function() {
 			return iTest(cosS(xU))
 		}
 		function tanI(xU) {
-			if (deeVar == xU) {
-				if (mgConfig.Domain == "Real") {cNegS(lneS(absS(cosS(xU))))}
-				return cNegS(lneS(cosS(xU)))
-			}
+			if (deeVar == xU) {return cNegS(lndS(cosS(xU)))}
 			return iTest(tanS(xU))
 		}
 		function cscI(xU) {
-			if (deeVar == xU) {
-				if (mgConfig.Domain == "Real") {return cSubS(lneS(absS(sinS(cDivS(xU,2)))),lneS(absS(cosS(cDivS(xU,2)))))}
-				return cSubS(lneS(sinS(cDivS(xU,2))),lneS(cosS(cDivS(xU,2))))
-			}
+			if (deeVar == xU) {return cSubS(lndS(sinS(cDivS(xU,2))),lndS(cosS(cDivS(xU,2))))}
 			return iTest(cscS(xU))
 		}
 		function secI(xU) {
-			if (deeVar == xU) {
-				if (mgConfig.Domain == "Real") {return lneS(absS(cAddS(secS(xU),tanS(xU))))}
-				return lneS(cAddS(secS(xU),tanS(xU)))
-			}
+			if (deeVar == xU) {return lndS(cAddS(secS(xU),tanS(xU)))}
 			return iTest(secS(xU))
 		}
 		function cotI(xU) {
-			if (deeVar == xU) {
-				if (mgConfig.Domain == "Real") {return lneS(absS(sinS(xU)))}
-				return lneS(sinS(xU))
-			}
+			if (deeVar == xU) {return lndS(sinS(xU))}
 			return iTest(cotS(xU))
 		}
 		function snhI(xU) {
@@ -1887,17 +1907,11 @@ var mgCalc = (function() {
 		}
 		function schI(xU) {if (deeVar == xU) {return cMulS(2,atnS(snhS(cDivS(xU,2))))};return iTest(schS(xU))}
 		function cchI(xU) {
-			if (deeVar == xU) {
-				if (mgConfig.Domain == "Real") {return lneS(absS(tnhS(cDivS(xU,2))))}
-				return lneS(tnhS(cDivS(xU,2)))
-			}
+			if (deeVar == xU) {return lndS(tnhS(cDivS(xU,2)))}
 			return iTest(cchS(xU))
 		}
 		function cthI(xU) {
-			if (deeVar == xU) {
-				if (mgConfig.Domain == "Real") {return lneS(absS(snhS(xU)))}
-				return lneS(snhS(xU))
-			}
+			if (deeVar == xU) {return lndS(snhS(xU))}
 			return iTest(cthS(xU))
 		}
 		function asnI(xU) {if (deeVar == xU) {return cAddS(cMulS(xU,asnS(xU)),sqtS(cSubS(1,cPowS(xU,2))))};return iTest(asnS(xU))}
@@ -2007,29 +2021,26 @@ var mgCalc = (function() {
 			if (ntgCheck(tTest) && !strTest(tTest,deeVar)) {return cMulS(iReturn,tTest)}
 			return "undefined"
 		}
-		function iSearch(xU,xF) { //integration by derivative search
+		function iSearch(xU,xF) { //integration by derivative search (shotgun approach)
 			var tElements = cDissect(xU);
-			var tElementsLen = tElements.length;
 			var tSearch = xReduce(cDivS(xU,drvQ(xF+"("+deeVar+")",deeVar)));
 			if (!strTest(tSearch,deeVar) && ntgCheck(tSearch)) {return cMulS(xF+"("+deeVar+")",tSearch)}
-			if (tElementsLen <= 10) {
-				for (var tL=0;tL<tElementsLen;tL++) {
-					if (tElements[tL] != deeVar && !nbrTest(tElements[tL]) && !strTest(tElements[tL],"undefined") && tElements[tL]) {
-						tSearch = xReduce(cDivS(xU,drvQ(xF+"("+cAddS(deeVar,tElements[tL])+")",deeVar)));
-						if (!strTest(tSearch,deeVar) && ntgCheck(tSearch)) {return cMulS(xF+"("+cAddS(deeVar,tElements[tL])+")",tSearch)}
-						tSearch = xReduce(cDivS(xU,drvQ(xF+"("+cSubS(deeVar,tElements[tL])+")",deeVar)));
-						if (!strTest(tSearch,deeVar) && ntgCheck(tSearch)) {return cMulS(xF+"("+cSubS(deeVar,tElements[tL])+")",tSearch)}
-						tSearch = xReduce(cDivS(xU,drvQ(xF+"("+cSubS(tElements[tL],deeVar)+")",deeVar)));
-						if (!strTest(tSearch,deeVar) && ntgCheck(tSearch)) {return cMulS(xF+"("+cSubS(tElements[tL],deeVar)+")",tSearch)}
-						tSearch = xReduce(cDivS(xU,drvQ(xF+"("+cMulS(deeVar,tElements[tL])+")",deeVar)));
-						if (!strTest(tSearch,deeVar) && ntgCheck(tSearch)) {return cMulS(xF+"("+cMulS(deeVar,tElements[tL])+")",tSearch)}
-						tSearch = xReduce(cDivS(xU,drvQ(xF+"("+cDivS(deeVar,tElements[tL])+")",deeVar)));
-						if (!strTest(tSearch,deeVar) && ntgCheck(tSearch)) {return cMulS(xF+"("+cDivS(deeVar,tElements[tL])+")",tSearch)}
-						tSearch = xReduce(cDivS(xU,drvQ(xF+"("+cDivS(tElements[tL],deeVar)+")",deeVar)));
-						if (!strTest(tSearch,deeVar) && ntgCheck(tSearch)) {return cMulS(xF+"("+cDivS(tElements[tL],deeVar)+")",tSearch)}
-					}
-				}
-			}
+            for (var tL=0;tL<tElements.length;tL++) {
+                if (tElements[tL] != deeVar && !nbrTest(tElements[tL]) && !strTest(tElements[tL],"undefined") && tElements[tL]) {
+                    tSearch = xReduce(cDivS(xU,drvQ(xF+"("+cAddS(deeVar,tElements[tL])+")",deeVar)));
+                    if (!strTest(tSearch,deeVar) && ntgCheck(tSearch)) {return cMulS(xF+"("+cAddS(deeVar,tElements[tL])+")",tSearch)}
+                    tSearch = xReduce(cDivS(xU,drvQ(xF+"("+cSubS(deeVar,tElements[tL])+")",deeVar)));
+                    if (!strTest(tSearch,deeVar) && ntgCheck(tSearch)) {return cMulS(xF+"("+cSubS(deeVar,tElements[tL])+")",tSearch)}
+                    tSearch = xReduce(cDivS(xU,drvQ(xF+"("+cSubS(tElements[tL],deeVar)+")",deeVar)));
+                    if (!strTest(tSearch,deeVar) && ntgCheck(tSearch)) {return cMulS(xF+"("+cSubS(tElements[tL],deeVar)+")",tSearch)}
+                    tSearch = xReduce(cDivS(xU,drvQ(xF+"("+cMulS(deeVar,tElements[tL])+")",deeVar)));
+                    if (!strTest(tSearch,deeVar) && ntgCheck(tSearch)) {return cMulS(xF+"("+cMulS(deeVar,tElements[tL])+")",tSearch)}
+                    tSearch = xReduce(cDivS(xU,drvQ(xF+"("+cDivS(deeVar,tElements[tL])+")",deeVar)));
+                    if (!strTest(tSearch,deeVar) && ntgCheck(tSearch)) {return cMulS(xF+"("+cDivS(deeVar,tElements[tL])+")",tSearch)}
+                    tSearch = xReduce(cDivS(xU,drvQ(xF+"("+cDivS(tElements[tL],deeVar)+")",deeVar)));
+                    if (!strTest(tSearch,deeVar) && ntgCheck(tSearch)) {return cMulS(xF+"("+cDivS(tElements[tL],deeVar)+")",tSearch)}
+                }
+            }
 			return "undefined"
 		}
 		function ntgExecute(xIn) {return eval(strConvert(xIn).replace(/([a-z])\(/,"$1I(").replace(/([a-z])\(/g,"$1S(").replace(/(Cv\[\d+\])/g,"'$1'").replace(/(Pv\[\d+\])/g,"'$1'").replace(/(Sv\[\d+\])/g,"'$1'"))}
@@ -2046,7 +2057,7 @@ var mgCalc = (function() {
 			}
 			return "ntp("+nXpr+","+deeVar+","+iU+","+iL+")"
 		}
-		else if (xReduce(nXpr) == deeVar) {return cDivS(cPowS(deeVar,2),2)}  //integral of deevar
+		else if (xReduce(nXpr) == deeVar) {return cDivS(cPowS(deeVar,2),2)}  //integral of deeVar
 		else if (!strTest(xReduce(nXpr),deeVar)) {return cMulS(nXpr,deeVar)} //integral of null expression
 		else { //indefinite integral
 			var dXpr = ntgExecute(xReduce(nXpr));
