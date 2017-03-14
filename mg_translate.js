@@ -18,14 +18,13 @@
 
 //external callable functions
 function mgTranslate(expression,scale) { //translate between MG, HTML, and LaTex
-	if (typeof expression == "undefined") {return {html:"",latex:"",mg:"",func:"",} }
+	if (typeof expression == "undefined") {return {html:"",latex:"",mg:"",} }
 	if (typeof scale == "undefined") {scale = 100}
 	var mgFmt = texImport(expression);
 	return {
 		html:	"<span title='MathGene HTML' style='font-family:"+mgConfig.htmlFont+";font-size:"+scale+"%'>"+htmlExport(mgFmt)+"</span>",
 		latex:	texExport(mgFmt),
 		mg:		mgFmt,
-		func:	cFunc(mgFmt),
 		}
 }
 function mgOutput(expression,scale) { //output MG, HTML, and LaTex from MG without LaTex import
@@ -36,10 +35,6 @@ function mgOutput(expression,scale) { //output MG, HTML, and LaTex from MG witho
 		mg:		expression,
 		}
 }
-
-/*********************************/
-function externalTexImport(expression){return texImport(expression);}
-/*********************************/
 
 // internal objects
 var mgConfig = 
