@@ -65,6 +65,78 @@ function mgDomain(expression) { //find domain of expression
 	return mgOutput(mgCalc.Domain(texImport(expression)));
 }
 
+/*******************************************
+			My Stats Functions
+*******************************************/
+function mgMatrixSum(expression){ //calculate sum of list of numbers given as bmatrix
+	return mgCalc.MatrixSum(mgTranslate(expression, 100).mg);
+}
+
+function mgMatrixArthMean(expression){//calculate arithmetic mean of numbers given as bmatrix
+	return mgCalc.ArithmeticMean(mgTranslate(expression, 100).mg);
+}
+
+function mgMatrixRange(expression){//find the range between high and low values given as bmatrix
+	return mgCalc.ArrayRange(mgTranslate(expression, 100).mg);
+}
+
+function mgMatrixHighLow(expression){//returns the high and low value from a list of numbers given as a bmatrix as n array [high, low]
+	return mgCalc.ArrayHighLow(mgTranslate(expression, 100).mg);
+}
+
+function mgMatrixMedian(expression){//returns the median value of a list of numbers given as a bmatrix
+	return mgCalc.ArrayMedian(mgTranslate(expression, 100).mg);
+}
+
+function mgGeometricMean(expression){//returns the geometric mean of a list of numbers given as a bmatrix
+	return mgCalc.GeometricMean(mgTranslate(expression, 100).mg);
+}
+
+function mgHarmonicMean(expression){//returns the harmonic mean of a list of numbers given as a bmatrix
+	return mgCalc.HarmonicMean(mgTranslate(expression, 100).mg);
+}
+
+function mgRmsMean(expression){ //returns the rms mean of a list of numbers given as a bmatrix
+	return mgCalc.RmsMean(mgTranslate(expression, 100).mg);
+}
+
+function mgPopStdDev(expression){//returns the population standard deviation of a list of numbers given as a bmatrix
+	return mgCalc.PopStdDev(mgTranslate(expression, 100).mg);
+}
+
+function mgSampStdDev(expression){//returns the sample standard deviation of a list of numbers given as a bmatrix
+	return mgCalc.SampStdDev(mgTranslate(expression, 100).mg);
+}
+
+function mgRelStdDev(expression){//returns the relative standard deviation of a list of numbers given as a bmatrix
+	return mgCalc.RelStdDev(mgTranslate(expression, 100).mg);
+}
+
+function mgVariance(expression){//returns the variance of a list of numbers given as a bmatrix
+	return mgCalc.Variance(mgTranslate(expression, 100).mg);
+}
+
+function mgStdError(expression){//returns the standard error of a list of numbers given as a bmatrix
+	return mgCalc.StdError(mgTranslate(expression, 100).mg);
+}
+
+function mgPopKurtosis(expression){//returns the population kurtosis of a list of numbers given as a bmatrix
+	return mgCalc.PopKurtosis(mgTranslate(expression, 100).mg);
+}
+
+function mgSampKurtosis(expression){//returns the sample kurtosis of a list of numbers given as a bmatrix
+	return mgCalc.SampKurtosis(mgTranslate(expression, 100).mg);
+}
+
+function mgPopSkew(expression){//returns the population skewness of a list of numbers given as a bmatrix
+	return mgCalc.PopSkew(mgTranslate(expression, 100).mg);
+}
+
+function mgSampSkew(expression){//returns the sample skewness of a list of numbers given as a bmatrix
+	return mgCalc.SampSkew(mgTranslate(expression, 100).mg);
+}
+/******************************************/
+
 //internal functions-objects
 var mgCalc = (function() {
 
@@ -3536,6 +3608,186 @@ var mgCalc = (function() {
 		}
 		return "undefined"
 	}
+	
+	function cMatrixConvert(xpr) {//convert matrix to a sorted array of numeric values
+		
+		while(xpr.includes("),mat("))
+			xpr = xpr.replace("),mat(", ", ");	//remove mat between rows of matrix
+		while(xpr.includes("mat("))
+			xpr = xpr.replace("mat(", "");		//remove remaining mat
+		xpr = xpr.slice(0, xpr.length - 2);		//remove ending ))
+		var elements = xpr.split(",");			//array containing elements of the matrix as strings
+		
+		for(var i = 0; i < elements.length; i++)
+			elements[i] = eval(elements[i]);		//array is now numeric values
+		
+		elements = elements.sort(function compareNumbers(a,b){return a-b;});
+		
+		return elements;
+	}
+	
+	function cArraySum(arr){//sum the entries of an array
+		var sum = 0;
+		
+		for(var i = 0; i < arr.length; i++)
+			sum += arr[i];
+		
+		return sum;
+	}
+	
+	function cArithmeticMean(arr){//calculate arithmetic mean of an array
+		return cArraySum(arr) / arr.length;
+	}
+	
+	function cArrayRange(arr){//find range between hi and low value of a sorted array
+		return Math.abs(arr[arr.length - 1] - arr[0]);
+	}
+	
+	function cArrayHighLow(arr){//returns the high and low value of a sorted array in an array [high, low]
+		return [arr[arr.length - 1], arr[0]];
+	}
+	
+	function cArrayMedian(arr){//returns the median of a sorted array
+		if(arr.length % 2 != 0)
+			return arr[(arr.length / 2) - .5];
+		else
+			return (arr[arr.length / 2] + arr[(arr.length / 2) - 1]) / 2;
+	}
+	
+	function cGeoMean(arr){//returns the geometric mean of an array
+		var prod = 1;
+		var size = arr.length;
+		
+		for(var i = 0; i < size; i++)
+			prod *= arr[i];
+		
+		return Math.pow(prod, (1/size));
+	}
+	
+	function cHarmMean(arr){//returns the harmonic mean of an array
+		var recipSum = 0;
+		var size = arr.length;
+		
+		for(var i = 0; i < size; i++)
+			if(arr[i] != 0)
+				recipSum += 1 / arr[i];
+		
+		return size / recipSum;
+	}
+	
+	function cRmsMean(arr){//returns the rms mean of an array
+		var squareSum = 0;
+		var size = arr.length;
+		
+		for(var i = 0; i < size; i++)
+			squareSum += Math.pow(arr[i], 2);
+		
+		return Math.pow((1 / size) * squareSum, 0.5);
+	}
+	
+	function cPopStdDev(arr){//returns the population standard deviation of an array
+		var mean = cArithmeticMean(arr);
+		var stdDev = 0;
+		for(var i = 0; i < arr.length; i++)
+			stdDev += Math.pow((arr[i] - mean), 2);
+		stdDev = stdDev * (1/arr.length);
+		return Math.sqrt(stdDev);
+	}
+	
+	function cSampStdDev(arr){//returns the sample standard deviation of an array
+		var mean = cArithmeticMean(arr);
+		var stdDev = 0;
+		for(var i = 0; i < arr.length; i++)
+			stdDev += Math.pow((arr[i] - mean), 2);
+		stdDev = stdDev * (1/(arr.length - 1));
+		return Math.sqrt(stdDev);
+	}
+	
+	function cRelStdDev(arr){//returns the relative standard deviation of an array
+		var stdDev = cPopStdDev(arr);
+		var mean = cArithmeticMean(arr);
+		return stdDev / mean;
+	}
+	
+	function cVariance(arr){//returns the variance of an array
+		var mean = cArithmeticMean(arr);
+		var variance = 0;
+		for(var i = 0; i < arr.length; i++)
+			variance += Math.pow((arr[i] - mean), 2);
+		return variance = variance * (1/arr.length); 
+	}
+	
+	function cStdError(arr){//returns the standard error of an array
+		return cPopStdDev(arr) / Math.sqrt(arr.length);
+	}
+	
+	
+	function cPopKurtosis(arr){//return population kurtosis of an array
+		var mean = cArithmeticMean(arr);
+		var numerator = 0
+		var denominator = 0;
+		
+		for(var i = 0; i < arr.length; i++)
+			numerator += Math.pow(arr[i] - mean, 4);
+		
+		for(var i = 0; i < arr.length; i++)
+			denominator += Math.pow(arr[i] - mean, 2);
+		
+		denominator = Math.pow(denominator, 2);
+		
+		return arr.length * (numerator / denominator);
+	}
+	
+	function cSampKurtosis(arr){//return sample kurtosis of an array
+		var mean = cArithmeticMean(arr);
+		var numerator = 0
+		var denominator = 0;
+		
+		for(var i = 0; i < arr.length; i++)
+			numerator += Math.pow(arr[i] - mean, 4);
+		numerator = arr.length * (arr.length + 1) * (arr.length - 1) * numerator;
+		
+		for(var i = 0; i < arr.length; i++)
+			denominator += Math.pow(arr[i] - mean, 2);
+		
+		denominator = Math.pow(denominator, 2) * (arr.length - 2) * (arr.length * 3);
+		
+		return numerator / denominator;
+	}
+	
+	function cPopSkew(arr){//return population skewness of an array
+		var mean = cArithmeticMean(arr);
+		var numerator = 0
+		var denominator = 0;
+		
+		for(var i = 0; i < arr.length; i++)
+			numerator += Math.pow(arr[i] - mean, 3);
+		
+		for(var i = 0; i < arr.length; i++)
+			denominator += Math.pow(arr[i] - mean, 2);
+		
+		denominator = Math.pow(denominator, (3/2));
+		
+		return Math.sqrt(arr.length) * numerator / denominator;
+	}
+	
+	function cSampSkew(arr){//return sample skewness of an array
+		var mean = cArithmeticMean(arr);
+		var numerator = 0
+		var denominator = 0;
+		
+		for(var i = 0; i < arr.length; i++)
+			numerator += Math.pow(arr[i] - mean, 3);
+		numerator = arr.length * Math.sqrt(arr.length - 1) * numerator;
+		
+		for(var i = 0; i < arr.length; i++)
+			denominator += Math.pow(arr[i] - mean, 2);
+		
+		denominator = (arr.length - 2) * Math.pow(denominator, (3/2));
+		
+		return numerator / denominator;
+	}
+	
 	// dummy arithmetic handlers
 	function ntg(xU,xL) {return "ntg("+xU+","+xL+")"} //integral
 	function drv(xU,xL) {return "drv("+xU+","+xL+")"} //derivative
@@ -3574,7 +3826,27 @@ var mgCalc = (function() {
 	var invMult = "Cv[29]";
 	if (mgConfig.trigBase == Math.PI/180) {invMult = "180"}
 	if (mgConfig.trigBase == Math.PI/200) {invMult = "200"}
-
+	
+	/***************************/
+	var MatrixSum  	= function(xprA) {return cArraySum(cMatrixConvert(xprA))};
+	var ArithmeticMean	= function(xprA) {return cArithmeticMean(cMatrixConvert(xprA))};
+	var ArrayRange 	= function(xprA) {return cArrayRange(cMatrixConvert(xprA))};
+	var ArrayHighLow	= function(xprA) {return cArrayHighLow(cMatrixConvert(xprA))};
+	var ArrayMedian	= function(xprA) {return cArrayMedian(cMatrixConvert(xprA))};
+	var GeometricMean = function(xprA) {return cGeoMean(cMatrixConvert(xprA))};
+	var HarmonicMean = function(xprA) {return cHarmMean(cMatrixConvert(xprA))};
+	var RmsMean	= function(xprA) {return cRmsMean(cMatrixConvert(xprA))};
+	var PopStdDev = function(xprA) {return cPopStdDev(cMatrixConvert(xprA))};
+	var SampStdDev = function(xprA) {return cSampStdDev(cMatrixConvert(xprA))};
+	var RelStdDev = function(xprA) {return cRelStdDev(cMatrixConvert(xprA))};
+	var Variance = function(xprA) {return cVariance(cMatrixConvert(xprA))};
+	var StdError = function(xprA) {return cStdError(cMatrixConvert(xprA))};
+	var PopKurtosis = function(xprA) {return cPopKurtosis(cMatrixConvert(xprA))};
+	var SampKurtosis = function(xprA) {return cSampKurtosis(cMatrixConvert(xprA))};
+	var PopSkew	= function(xprA) {return cPopSkew(cMatrixConvert(xprA))};
+	var SampSkew = function(xprA) {return cSampSkew(cMatrixConvert(xprA))};
+	/***************************/
+	
 	var Numeric    = function(xprA) {return mgExport(fmtResult(eval(cFunc(xprA))))};
 	var	Simplify   = function(xprA) {return cReduce(cFunc(parseCalculus(xprA)))	};
 	var Solve      = function(xprA,xprB) {return xprSolve(cFunc(parseCalculus(xprA)),xprB)};
@@ -3633,6 +3905,23 @@ var mgCalc = (function() {
 		OptionVega:OptionVega,
 		irSolver:irSolver,
 		GCF:GCF,
+		MatrixSum:MatrixSum,
+		ArithmeticMean:ArithmeticMean,
+		ArrayRange:ArrayRange,
+		ArrayHighLow:ArrayHighLow,
+		ArrayMedian:ArrayMedian,
+		GeometricMean:GeometricMean,
+		HarmonicMean:HarmonicMean,
+		RmsMean:RmsMean,
+		PopStdDev:PopStdDev,
+		SampStdDev:SampStdDev,
+		RelStdDev:RelStdDev,
+		Variance:Variance,
+		StdError:StdError,
+		PopKurtosis:PopKurtosis,
+		SampKurtosis:SampKurtosis,
+		PopSkew:PopSkew,
+		SampSkew:SampSkew,
 	}
 }) ();
 // node.js export

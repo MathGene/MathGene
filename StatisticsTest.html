@@ -8,7 +8,7 @@
 	
 	<body>
 		<h1>To Translate:</h1>
-		<textarea id = "toConvert">\begin{bmatrix} 3&9&27\end{bmatrix}</textarea>
+		<textarea id = "toConvert">\begin{bmatrix} 2&4&4&4&5&5&7&9\end{bmatrix}</textarea>
 		<textarea id = "scale">250</textarea>
 		<button id = "transButton">Translate</button>
 		<h1>Test:</h1>
@@ -25,12 +25,32 @@
 		<h3 id = "medianArea"></h3>
 		<h1>Low Value</h1>
 		<h3 id = "lowArea"></h3>
+		<h1>Arithmetic Mean</h1>
+		<h3 id = "arthMeanArea"></h3>
 		<h1>Geometric Mean</h1>
 		<h3 id = "geoMeanArea"></h3>
 		<h1>Harmonic Mean</h1>
 		<h3 id = "harMeanArea"></h3>
 		<h1>Root Mean Square</h1>
 		<h3 id = "rmsMeanArea"></h3>
+		<h1>Population Standard Deviation</h1>
+		<h3 id = "popStdDevArea"><h3>
+		<h1>Sample Standard Deviation</h1>
+		<h3 id = "sampStdDevArea"></h3>
+		<h1>Relative Standard Deviation</h1>
+		<h3 id = "relStdDevArea"></h3>
+		<h1>Variance</h1>
+		<h3 id = "varianceArea"></h3>
+		<h1>Standard Error</h1>
+		<h3 id = "stdErrorArea"></h3>
+		<h1>Population Kurtosis</h1>
+		<h3 id = "popKurtosisArea"></h3>
+		<h1>Sample Kurtosis</h1>
+		<h3 id = "sampKurtosisArea"></h3>
+		<h1>Population Skewness</h1>
+		<h3 id = "popSkewArea"></h3>
+		<h1>Sample Skewness</h1>
+		<h3 id = "sampSkewArea"></h3>
 		
 		<script type = "text/javascript">
 			var testTranslate = document.getElementById("toConvert").value;
@@ -43,9 +63,19 @@
 			var high = highLow[0];
 			var low = highLow[1];
 			var median = mgMatrixMedian(testTranslate);
+			var arthMean = mgMatrixArthMean(testTranslate);
 			var geoMean = mgGeometricMean(testTranslate);
 			var harmMean = mgHarmonicMean(testTranslate);
 			var rmsMean = mgRmsMean(testTranslate);
+			var popStdDev = mgPopStdDev(testTranslate);
+			var sampStdDev = mgSampStdDev(testTranslate);
+			var relStdDev = mgRelStdDev(testTranslate);
+			var variance = mgVariance(testTranslate);
+			var stdError = mgStdError(testTranslate);
+			var popKurtosis = mgPopKurtosis(testTranslate);
+			var sampKurtosis = mgSampKurtosis(testTranslate);
+			var popSkew = mgPopSkew(testTranslate);
+			var sampSkew = mgSampSkew(testTranslate);
 			
 			testTranslate = mgTranslate(testTranslate, transScale);
 		
@@ -56,9 +86,19 @@
 			document.getElementById("highArea").innerHTML = high;
 			document.getElementById("lowArea").innerHTML = low;
 			document.getElementById("medianArea").innerHTML = median;
+			document.getElementById("arthMeanArea").innerHTML = arthMean;
 			document.getElementById("geoMeanArea").innerHTML = geoMean;
 			document.getElementById("harMeanArea").innerHTML = harmMean;
 			document.getElementById("rmsMeanArea").innerHTML = rmsMean;
+			document.getElementById("popStdDevArea").innerHTML = popStdDev;
+			document.getElementById("sampStdDevArea").innerHTML = sampStdDev;
+			document.getElementById("relStdDevArea").innerHTML = relStdDev;
+			document.getElementById("varianceArea").innerHTML = variance;
+			document.getElementById("stdErrorArea").innerHTML = stdError;
+			document.getElementById("popKurtosisArea").innerHTML = popKurtosis;
+			document.getElementById("sampKurtosisArea").innerHTML = sampKurtosis;
+			document.getElementById("popSkewArea").innerHTML = popSkew;
+			document.getElementById("sampSkewArea").innerHTML = sampSkew;
 		</script>
 		
 		<!--What to do when button is pressed...-->
@@ -76,9 +116,19 @@
 					var high = highLow[0];
 					var low = highLow[1];
 					var median = mgMatrixMedian(testTranslate);
+					var arthMean = mgMatrixArthMean(testTranslate);
 					var geoMean = mgGeometricMean(testTranslate);
 					var harmMean = mgHarmonicMean(testTranslate);
 					var rmsMean = mgRmsMean(testTranslate);
+					var popStdDev = mgPopStdDev(testTranslate);
+					var sampStdDev = mgSampStdDev(testTranslate);
+					var relStdDev = mgRelStdDev(testTranslate);
+					var variance = mgVariance(testTranslate);
+					var stdError = mgStdError(testTranslate);
+					var popKurtosis = mgPopKurtosis(testTranslate);
+					var sampKurtosis = mgSampKurtosis(testTranslate);
+					var popSkew = mgPopSkew(testTranslate);
+					var sampSkew = mgSampSkew(testTranslate);
 					
 					testTranslate = mgTranslate(testTranslate, transScale);
 					
@@ -88,10 +138,20 @@
 					document.getElementById("rangeArea").innerHTML = range;
 					document.getElementById("highArea").innerHTML = high;
 					document.getElementById("lowArea").innerHTML = low;
+					document.getElementById("arthMeanArea").innerHTML = arthMean;
 					document.getElementById("geoMeanArea").innerHTML = geoMean;
 					document.getElementById("harMeanArea").innerHTML = harmMean;
 					document.getElementById("rmsMeanArea").innerHTML = rmsMean;
 					document.getElementById("medianArea").innerHTML = median;
+					document.getElementById("popStdDevArea").innerHTML = popStdDev;
+					document.getElementById("sampStdDevArea").innerHTML = sampStdDev;
+					document.getElementById("relStdDevArea").innerHTML = relStdDev;
+					document.getElementById("varianceArea").innerHTML = variance;
+					document.getElementById("stdErrorArea").innerHTML = stdError;
+					document.getElementById("popKurtosisArea").innerHTML = popKurtosis;
+					document.getElementById("sampKurtosisArea").innerHTML = sampKurtosis;
+					document.getElementById("popSkewArea").innerHTML = popSkew;
+					document.getElementById("sampSkewArea").innerHTML = sampSkew;	
 				});
 		</script>
 	</body>
