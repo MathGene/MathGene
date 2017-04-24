@@ -1494,6 +1494,9 @@ Ct[8801] = "\\equiv ";
 Ct[8594] = "\\to ";
 Ct[8592] = "\\gets ";
 Ct[8226] = "\\cdot"; 
+Ct[8592] = "\\leftarrow ";
+Ct[8594] = "\\rightarrow ";
+Ct[8596] = "\\leftrightarrow ";
 Ct[8656] = "\\Leftarrow ";
 Ct[8658] = "\\Rightarrow ";
 Ct[8810] = "\\ll ";
@@ -1617,7 +1620,9 @@ function texImport(mgXpr) { //convert LaTeX to MG format
 	if (mgXpr == "NaN" || mgXpr == "undefined") {return "undefined"}
 	mgXpr += " ";
 	mgXpr = mgXpr.replace(/\\big/g,"\\");//fix big
+	mgXpr = mgXpr.replace(/\\(.)/g," \\$1").replace(/ \\\{/g,"\\{").replace(/ \\\}/g,"\\}");//fix slash whitespace
 	mgXpr = mgXpr.replace(/\s+\{/g,"{").replace(/\s+\}/g,"}").replace(/\{\s+/g,"{").replace(/\}\s+/g,"}"); //fix brace whitespaces
+	mgXpr = mgXpr.replace(/\{matrix\}/g,"{bmatrix}").replace(/\{pmatrix\}/g,"{bmatrix}").replace(/\{vmatrix\}/g,"{bmatrix}").replace(/\{Vmatrix\}/g,"{bmatrix}"); //convert all matrices to bmatrix
 	var sCount = strCount(mgXpr,"\\begin{bmatrix}"); //convert matrices
 	for (var nXf=0;nXf<sCount;nXf++) {
 		var rTemp = mgXpr.substr(mgXpr.lastIndexOf("\\begin{bmatrix}")+"\\begin{bmatrix}".length,mgXpr.length);
