@@ -469,6 +469,19 @@ var reduce =
 "cot(Cv[29]/12)","sqt(3)+2",
 "act(cot(Cv[29]/10))","Cv[29]/10",
 "act(cot(Cv[29]/12))","Cv[29]/12",
+"1/sin(Cv[10120])^2","csc(Cv[10120])^2",
+"5Cv[10121]/cos(Cv[10120])^2","5Cv[10121]sec(Cv[10120])^2",
+"1/tan(Cv[10120])^2","cot(Cv[10120])^2",
+"Cv[10121]/sec(Cv[10120])^2","Cv[10121]cos(Cv[10120])^2",
+"1/csc(Cv[10120])^4","sin(Cv[10120])^4",
+"1/snh(Cv[10120])^3","cch(Cv[10120])^3",
+"1/csh(Cv[10120])^2","sch(Cv[10120])^2",
+"1/tnh(Cv[10120])^2","cth(Cv[10120])^2",
+"1/sch(Cv[10120])^2","csh(Cv[10120])^2",
+"1/cch(Cv[10120])^2","snh(Cv[10120])^2",
+"1/cth(Cv[10120])^2","tnh(Cv[10120])^2",
+"1/csc(Cv[10120])^Cv[10121]","1/csc(Cv[10120])^Cv[10121]",
+
 "efc(erf(Cv[10120]))","Cv[10120]",
 "lne(Cv[8]^Cv[10120])","Cv[10120]",
 "lne(-1)","Cv[46]Cv[29]",
@@ -862,7 +875,6 @@ var limits =
 "lim(Cv[10120],0)tan(5Cv[10120])/Cv[10120]","5",
 "lim(Cv[10120],0)(4Cv[10120]+4Cv[10120]cos(4Cv[10120]))/sin(4Cv[10120])cos(4Cv[10120])","2",
 "lim(Cv[10120],0)Cv[10120]sec(Cv[10120])/cos(Cv[10120])","0",
-"lim(Cv[10120],0)(1-sin(Cv[10120]))/Cv[10120]^2","Cv[8734]",
 "lim(Cv[10120],0)sin(Cv[10097]Cv[10120])/Cv[10120]","Cv[10097]",
 
 "lim(Cv[10120],0)(Cv[8]^Cv[10120]-1)/Cv[10120]","1",
@@ -1112,6 +1124,9 @@ var integrals =
 "Cv[8747]1/(1-sqt(Cv[10120]))","-2lne(sqt(Cv[10120])-1)-2sqt(Cv[10120])+Cv[11100]",
 "Cv[8747]1/(Cv[10121]+sqt(Cv[10120]))Cv[8748]Cv[10120]","2sqt(Cv[10120])-2Cv[10121]lne(sqt(Cv[10120])+Cv[10121])+Cv[11100]",
 "Cv[8747]1/(sqt(Cv[10120])-1)Cv[8748]Cv[10120]","2sqt(Cv[10120])+2lne(sqt(Cv[10120])-1)+Cv[11100]",
+"Cv[8747]Cv[10120]^3","Cv[10120]^4/4+Cv[11100]",
+"Cv[8747]Cv[10121]Cv[10120]^3","Cv[9998]",
+"Cv[8747]2-sec(Cv[10121]/Cv[10120])Cv[8748]Cv[10120]","2Cv[10120]-Cv[8747]sec(Cv[10121]/Cv[10120])Cv[8748]Cv[10120]+Cv[11100]",
 
 //fn integration by test
 "Cv[8747]sin(Cv[10120]Cv[10121])Cv[8748]Cv[10120]","-(cos(Cv[10120]Cv[10121])/Cv[10121])+Cv[11100]",
@@ -1225,15 +1240,6 @@ var integrals =
 "Cv[8747]lne(Cv[10120])Cv[8748]Cv[10120]+idr(Cv[10121])Cv[10121]^2","Cv[10120]lne(Cv[10120])+2Cv[10121]-Cv[10120]+Cv[11100]",
 "Cv[8747]lne(Cv[10120])Cv[8748]Cv[10120]-idr(Cv[10121])Cv[10121]^2","Cv[10120]lne(Cv[10120])-2Cv[10121]-Cv[10120]+Cv[11100]",
 ];
-var partial_integrals =
-[
-"Cv[8747]2sec(Cv[10121]/Cv[10120])Cv[8748]Cv[10120]","2Cv[8747]sec(Cv[10121]/Cv[10120])Cv[8748]Cv[10120]+Cv[11100]",
-"Cv[8747]2+sec(Cv[10121]/Cv[10120])Cv[8748]Cv[10120]","Cv[8747]sec(Cv[10121]/Cv[10120])Cv[8748]Cv[10120]+2Cv[10120]+Cv[11100]",
-"Cv[8747]2-sec(Cv[10121]/Cv[10120])Cv[8748]Cv[10120]","2Cv[10120]-Cv[8747]sec(Cv[10121]/Cv[10120])Cv[8748]Cv[10120]+Cv[11100]",
-"Cv[8747]lne(Cv[10121]/sin(Cv[10120]))Cv[8748]Cv[10120]","Cv[10120]lne(Cv[10121])-Cv[8747]lne(sin(Cv[10120]))Cv[8748]Cv[10120]+Cv[11100]",
-"Cv[8747]Cv[10120]^3","Cv[10120]^4/4+Cv[11100]",
-"Cv[8747]Cv[10121]Cv[10120]^3","Cv[9998]"
-];
 
 var real_calculus =
 [
@@ -1243,7 +1249,6 @@ var real_calculus =
 "Cv[8747]lne(Cv[10120])Cv[8748]Cv[10120]","Cv[10120]lne(Cv[10120])-Cv[10120]+Cv[11100]",
 "Cv[8747]log(Cv[10120])Cv[8748]Cv[10120]","(Cv[10120]lne(Cv[10120])-Cv[10120])log(Cv[8])+Cv[11100]",
 "Cv[8747]tan(Cv[10120])Cv[8748]Cv[10120]","-lne(abs(cos(Cv[10120])))+Cv[11100]",
-"Cv[8747]tan(Cv[10120]Cv[10121])Cv[8748]Cv[10120]","-(lne(abs(cos(Cv[10120]Cv[10121])))/Cv[10121])+Cv[11100]",
 "Cv[8747]sec(Cv[10120])Cv[8748]Cv[10120]","lne(abs(tan(Cv[10120])+sec(Cv[10120])))+Cv[11100]", 
 "Cv[8747]Cv[10121]sec(Cv[10120])^2Cv[8748]Cv[10120]","Cv[10121]tan(Cv[10120])+Cv[11100]",
 "Cv[8747]csc(Cv[10120])Cv[8748]Cv[10120]","lne(abs(sin(Cv[10120]/2)))-lne(abs(cos(Cv[10120]/2)))+Cv[11100]",
@@ -1283,10 +1288,8 @@ var real_calculus =
 "Cv[8747]Cv[10121]/tan(Cv[10120])Cv[8748]Cv[10120]","Cv[10121]lne(abs(sin(Cv[10120])))+Cv[11100]",
 "Cv[8747]sin(Cv[10120]+Cv[10121])+sin(Cv[10120]-Cv[10121])Cv[8748]Cv[10120]","-cos(Cv[10121]+Cv[10120])-cos(Cv[10120]-Cv[10121])+Cv[11100]",
 "Cv[8747]cos(Cv[10120]+Cv[10121])+cos(Cv[10120]-Cv[10121])Cv[8748]Cv[10120]","sin(Cv[10121]+Cv[10120])+sin(Cv[10120]-Cv[10121])+Cv[11100]",
-"Cv[8747]tan(Cv[10120]+Cv[10121])+tan(Cv[10120]-Cv[10121])Cv[8748]Cv[10120]","-lne(abs(cos(Cv[10121]+Cv[10120])))-lne(abs(cos(Cv[10120]-Cv[10121])))+Cv[11100]",
 "Cv[8747]sin(Cv[10120]Cv[10121])+sin(Cv[10120]/Cv[10121])Cv[8748]Cv[10120]","-(cos(Cv[10120]Cv[10121])/Cv[10121])-Cv[10121]cos(Cv[10120]/Cv[10121])+Cv[11100]",
 "Cv[8747]cos(Cv[10120]Cv[10121])+cos(Cv[10120]/Cv[10121])Cv[8748]Cv[10120]","Cv[10121]sin(Cv[10120]/Cv[10121])+sin(Cv[10120]Cv[10121])/Cv[10121]+Cv[11100]",
-"Cv[8747]tan(Cv[10120]Cv[10121])+tan(Cv[10120]/Cv[10121])Cv[8748]Cv[10120]","-(lne(abs(cos(Cv[10120]Cv[10121])))/Cv[10121])-Cv[10121]lne(abs(cos(Cv[10120]/Cv[10121])))+Cv[11100]",
 "Cv[8747]Cv[10120]sqt(Cv[10120]+Cv[10121])Cv[8748]Cv[10120]","2Cv[10120](Cv[10121]+Cv[10120])^(3/2)/3-4(Cv[10121]+Cv[10120])^(5/2)/15+Cv[11100]",
 "Cv[8747]Cv[10120]sqt(Cv[10120]-Cv[10121])Cv[8748]Cv[10120]","2Cv[10120](Cv[10120]-Cv[10121])^(3/2)/3-4(Cv[10120]-Cv[10121])^(5/2)/15+Cv[11100]",
 "Cv[8747]Cv[10120]sqt(Cv[10120]Cv[10121])Cv[8748]Cv[10120]","2Cv[10120]^(5/2)sqt(Cv[10121])/5+Cv[11100]",
@@ -1655,6 +1658,7 @@ var mport =
 "2 = \\left(\\frac{\\left(3-x\\right) \\times 2}{3-x}\\right)","2=((((3-Cv[10120])*2)/(3-Cv[10120])))",
 "S_{\\text{new}} = S_{\\text{old}} - \\frac{ \\left( 5-T \\right) ^2} {2}","Cv[10083]sbt(Cv[10110]Cv[8]Cv[10119])=Cv[10083]sbt(Cv[10111]Cv[10108]Cv[10100])-(((5-Cv[10084])^2)/2)",
 "- \\frac{b}{3 a}+ \\frac{1- \\imath \\sqrt{3}}{6 a} \\sqrt[3]{ \\frac{1}{2} \\left(2 b^{3}-9 a b c+27 a^{2} d+ \\sqrt{\\Delta} \\right)}+ \\frac{1+ \\imath \\sqrt{3}}{6 a} \\sqrt[3]{ \\frac{1}{2} \\left(2 b^{3}-9 a b c+27 a^{2} d- \\sqrt{ \\Delta } \\right)}","-(Cv[10098]/3Cv[10097])+((1-Cv[46]sqt(3))/6Cv[10097])nrt(3,(1/2)(2Cv[10098]^3-9Cv[10097]Cv[10098]Cv[10099]+27Cv[10097]^2Cv[10100]+sqt(Cv[916])))+((1+Cv[46]sqt(3))/6Cv[10097])nrt(3,(1/2)(2Cv[10098]^3-9Cv[10097]Cv[10098]Cv[10099]+27Cv[10097]^2Cv[10100]-sqt(Cv[916])))",
+"(x_0 x_1 x_2 x_3)\\leftrightarrow\\begin{pmatrix} x_0+x_3&x_1+ix_2\\\\x_1-ix_2&x_0-x_3\\end{pmatrix}","(Cv[10120]sbt(0)Cv[10120]sbt(1)Cv[10120]sbt(2)Cv[10120]sbt(3))Cv[8596]mat(mat(Cv[10120]sbt(0)+Cv[10120]sbt(3),Cv[10120]sbt(1)+Cv[46]Cv[10120]sbt(2)),mat(Cv[10120]sbt(1)-Cv[46]Cv[10120]sbt(2),Cv[10120]sbt(0)-Cv[10120]sbt(3)))",
 ];
 
 var financial =
@@ -1690,13 +1694,11 @@ var internal =
 
 var simplify_bugs =
 [
-"Cv[8747]Cv[10120]^3/(Cv[10120]^4+10Cv[10120]^2+25)","(1/(Cv[10120]^2+1)+lne(Cv[10120]^2+1))/2+Cv[11100]",
 "Cv[8747]cos(5Cv[10120])/Cv[8]^sin(5Cv[10120])Cv[8748]Cv[10120]","-(1/(5Cv[8]^sin(5Cv[10120]))+Cv[11100])",
 "Cv[8747]Cv[10097]/Cv[10120]^3+Cv[10098]/Cv[10120]^2-Cv[10099]/Cv[10120]Cv[8748]Cv[10120]","-Cv[10097]/2Cv[10120]^2-Cv[10098]/Cv[10120]-Cv[10099]lne(Cv[10120])+Cv[11100]",
 "tdr(Cv[10120])3Cv[10120]^2+4Cv[10120]+7Cv[10120]Cv[10121]+Cv[10121]^2","(7Cv[10120]+2Cv[10121])Cv[8748]Cv[10121]+(6Cv[10120]+4)Cv[8748]Cv[10120]",
-"(186Cv[10120]+465)/(2Cv[10120]+5)(16Cv[10120]+40)","93/(16Cv[10120]+40)",
 "idr(Cv[10120])atn(Cv[10120]/sqt(1-Cv[10120]^2))","1/sqt(1-Cv[10120]^2)",
-
+"lim(Cv[10120],0)(1-sin(Cv[10120]))/Cv[10120]^2","Cv[8734]",
 ];
 
 var factor_bugs = 
@@ -1722,7 +1724,6 @@ var testList =
 "Complex Derivatives": "runDerivatives()",
 "Complex Integrals": "runIntegrals()",
 "Real Calculus": "runRealCalculus()",
-"Partial Integrals": "runPartialIntegrals()",
 "Summation": "runSummation()",
 "HTML": "runHTML()",
 "Latex Export": "runExport()",
@@ -1859,14 +1860,6 @@ function runRealCalculus() {
 	}
 	toOutput()
 	mgConfig.Domain = "Complex";
-}
-function runPartialIntegrals() {
-	setTitle("Partial Integrals Tests 'mgSimplify()'")
-	increment = 2;
-	for (index=0;index<partial_integrals.length;index+=increment) {
-		runTest(mgTranslate(partial_integrals[index]).html,mgSimplify(partial_integrals[index]).html,mgTranslate(partial_integrals[index+1]).html)
-	}
-	toOutput()
 }
 function runSummation() {
 	setTitle("Summation Tests 'mgSimplify()'")
