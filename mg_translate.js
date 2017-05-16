@@ -1,6 +1,6 @@
 /*
 	MathGene Translation/Rendering Library - Version 1.00
-    Copyright (C) 2016  George J. Paulos
+    Copyright (C) 2017  George J. Paulos
 
     MathGene is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -949,7 +949,11 @@ function mgExport(xFn) { //convert from FUNC format to MG format
 	function numTest(xT) {if (+xT == +xT*1) {return true}; return false} //test for numerical string
 	function toSciNot(xU) {xU+="";return xU.replace(/(\d+)e(\d+)/g,"$1*10^$2").replace(/(\d+)e\-(\d+)/g,"$1*10^-$2").replace(/(\d+)e\+(\d+)/g,"$1*10^$2")} //convert N.NNe+-NN notation to scientific
 	function cAddE(xU,xL) {return xU + "+" + xL} //addition
-	function cSubE(xU,xL) {return xU + "-" + xL} //subtraction
+	function cSubE(xU,xL) { //subtraction
+        xTractL = oprExtract(cFunc(xL));
+        if (xTractL.func == "cAdd") {return xU + "-(" + oParens(xL) + ")"}
+        return xU + "-" + xL
+    }
 	function cTmsE(xU,xL) {return xU + "*" + xL} //multiplication using *
 	function cMulE(xU,xL) { //multiplication by term
 		xU += "";xL += "";
@@ -1494,6 +1498,9 @@ Ct[8801] = "\\equiv ";
 Ct[8594] = "\\to ";
 Ct[8592] = "\\gets ";
 Ct[8226] = "\\cdot"; 
+Ct[8592] = "\\leftarrow ";
+Ct[8594] = "\\rightarrow ";
+Ct[8596] = "\\leftrightarrow ";
 Ct[8656] = "\\Leftarrow ";
 Ct[8658] = "\\Rightarrow ";
 Ct[8810] = "\\ll ";
@@ -1617,7 +1624,10 @@ function texImport(mgXpr) { //convert LaTeX to MG format
 	if (mgXpr == "NaN" || mgXpr == "undefined") {return "undefined"}
 	mgXpr += " ";
 	mgXpr = mgXpr.replace(/\\big/g,"\\");//fix big
+	mgXpr = mgXpr.replace(/\"/g,"\\").replace(/\'/g,"\\");//remove quotes
+	mgXpr = mgXpr.replace(/\\(.)/g," \\$1").replace(/ \\\{/g,"\\{").replace(/ \\\}/g,"\\}");//fix slash whitespace
 	mgXpr = mgXpr.replace(/\s+\{/g,"{").replace(/\s+\}/g,"}").replace(/\{\s+/g,"{").replace(/\}\s+/g,"}"); //fix brace whitespaces
+	mgXpr = mgXpr.replace(/\{matrix\}/g,"{bmatrix}").replace(/\{pmatrix\}/g,"{bmatrix}").replace(/\{vmatrix\}/g,"{bmatrix}").replace(/\{Vmatrix\}/g,"{bmatrix}"); //convert all matrices to bmatrix
 	var sCount = strCount(mgXpr,"\\begin{bmatrix}"); //convert matrices
 	for (var nXf=0;nXf<sCount;nXf++) {
 		var rTemp = mgXpr.substr(mgXpr.lastIndexOf("\\begin{bmatrix}")+"\\begin{bmatrix}".length,mgXpr.length);
