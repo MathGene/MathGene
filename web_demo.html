@@ -49,6 +49,14 @@ function trigdemo(num) {
 	}
 	window.setTimeout(runtrig,50)
 }
+function seriesdemo(num) {
+	document.getElementById('result'+num).innerHTML = "working..."
+	function runseries() {
+		document.getElementById('output'+num).innerHTML = mgTranslate(document.getElementById('input'+num).value).html
+		document.getElementById('result'+num).innerHTML = mgSeries(document.getElementById('input'+num).value,'x',1,8).html
+	}
+	window.setTimeout(runseries,50)
+}
 </script>
 
 <script type="text/javascript" src="mg_translate.js"></script>
@@ -142,6 +150,14 @@ function trigdemo(num) {
 <td width="5%"><button value="trigdemo(11)">Show</button></td>
 <td width="30%"><span id="output11"></span> = </td>
 <td width="30%"><span id="result11"></span></td>
+</tr>
+<tr><td colspan="4"><i>Taylor Series</i></td></tr>
+<tr>
+<td><textarea id='input12' rows="2" cols="50">\sqrt{x}</textarea></td>
+<td>&nbsp;</td>
+<td width="5%"><button value="seriesdemo(12)">Show</button></td>
+<td width="30%"><span id="output12"></span> = </td>
+<td width="30%"><span id="result12"></span></td>
 </tr>
 </table>
 </center>

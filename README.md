@@ -214,6 +214,7 @@ The following MathGene functions compute symbolic math:
 - mgTrigToExp(expression) - converts trig and hyperbolic functions to exponential equivalents
 - mgRange(expression) - returns range of expression
 - mgDomain(expression) - returns domain of expression
+- mgSeries(expression,variable,center,order) - returns Taylor series of expression, center default=0, order default=6
 
 The returned value of all the above functions is an object containing the three output formats LaTeX, HTML, and MG.
 
