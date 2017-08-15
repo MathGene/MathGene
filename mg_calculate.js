@@ -782,9 +782,10 @@ var mgCalc = (function() {
 		if (!factorFlag && xTractL.func == "cAdd" && nbrTest(xU)) {return cAddS(cMulS(xU,xTractL.upper),cMulS(xU,xTractL.lower))}
 		if (!factorFlag && xTractL.func == "cSub" && nbrTest(xU)) {return cSubS(cMulS(xU,xTractL.upper),cMulS(xU,xTractL.lower))}
 		if (xTractU.func == "cMul") {return "cMul("+xTractU.upper+",cMul("+xTractU.lower+","+xL+"))"}
-		if (nbrTest(xTractL.upper) && xTractU.func == "cPow" && nbrTest(xTractU.lower)) {return cMulS(xL,xU)}
+		if (nbrTest(xTractL.upper) && xTractU.func == "cPow" && nbrTest(xTractU.lower)) {return "cMul("+xL+","+xU+")"}
 		if (strTest(xU,"Cv[8748]") || strTest(xU,"ntp(")) {return "cMul("+xL+","+xU+")"}
 		if (!nbrTest(xU) && nbrTest(xL)) {return "cMul("+xL+","+xU+")"}
+		if (!pxpFlag && xTractL.func == "cPow" && xTractU.func != "" && xTractU.lower == "") {return "cMul("+xL+","+xU+")"}
 		return "cMul("+xU+","+xL+")"
 	}
 	function cTmsS(xU,xL) {return cMulS(xU,xL)}
@@ -1607,6 +1608,9 @@ var mgCalc = (function() {
 		function cntD(xU) {return "cnt("+xU+")"}
 		function sbtD(xU) {return "sbt("+xU+")"}
 		function difD(xU) {return "dif("+xU+")"}
+		function lmtD(xA,xB,xC) {return "lmt("+xA+","+xB+","+xC+")"}
+		function smmD(xA,xB,xC,xD) {return "smm("+xA+","+xB+","+xC+","+xD+")"}
+		function pmmD(xA,xB,xC,xD) {return "pmm("+xA+","+xB+","+xC+","+xD+")"}
 		function ntpD(nXpr,dV,iU,iL) {
 			if (dV == deeVar && typeof iU == "undefined" && typeof iL == "undefined") {return nXpr}
 			return "drv(ntp("+nXpr+","+dV+","+iU+","+iL+"),"+deeVar+")"
@@ -1995,6 +1999,9 @@ var mgCalc = (function() {
 		function tldI(xU) {return "tld("+xU+")"}
 		function cntI(xU) {return "cnt("+xU+")"}
 		function sbtI(xU) {return "sbt("+xU+")"}
+		function lmtI(xA,xB,xC) {return "lmt("+xA+","+xB+","+xC+")"}
+		function smmI(xA,xB,xC,xD) {return "smm("+xA+","+xB+","+xC+","+xD+")"}
+		function pmmI(xA,xB,xC,xD) {return "pmm("+xA+","+xB+","+xC+","+xD+")"}
 		function matI()   {return "mat(" + Array.prototype.slice.call(arguments) + ")"}
 		// integration algorithms
         function iParts(xU,xL) { //integration by parts
@@ -2355,6 +2362,8 @@ var mgCalc = (function() {
 		function cntL(xU) {return "cnt("+xU+")"}
 		function sbtL(xU) {return "sbt("+xU+")"}
 		function drvL(xU) {return "drv("+xU+")"}
+		function smmL(xA,xB,xC,xD) {return "smm("+xA+","+xB+","+xC+","+xD+")"}
+		function pmmL(xA,xB,xC,xD) {return "pmm("+xA+","+xB+","+xC+","+xD+")"}
 		function ntpL(nXpr,deeVar,iU,iL) {return ntpS(nXpr,deeVar,iU,iL)}
 		function matL() {return "mat(" + Array.prototype.slice.call(arguments) + ")"}
 		//
