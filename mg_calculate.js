@@ -782,10 +782,10 @@ var mgCalc = (function() {
 		if (!factorFlag && xTractL.func == "cAdd" && nbrTest(xU)) {return cAddS(cMulS(xU,xTractL.upper),cMulS(xU,xTractL.lower))}
 		if (!factorFlag && xTractL.func == "cSub" && nbrTest(xU)) {return cSubS(cMulS(xU,xTractL.upper),cMulS(xU,xTractL.lower))}
 		if (xTractU.func == "cMul") {return "cMul("+xTractU.upper+",cMul("+xTractU.lower+","+xL+"))"}
-		if (nbrTest(xTractL.upper) && xTractU.func == "cPow" && nbrTest(xTractU.lower)) {return "cMul("+xL+","+xU+")"}
 		if (strTest(xU,"Cv[8748]") || strTest(xU,"ntp(")) {return "cMul("+xL+","+xU+")"}
 		if (!nbrTest(xU) && nbrTest(xL)) {return "cMul("+xL+","+xU+")"}
-		if (!pxpFlag && xTractL.func == "cPow" && xTractU.func != "" && xTractU.lower == "") {return "cMul("+xL+","+xU+")"}
+		if (xTractU.func != "" && xTractU.lower == "" && xTractL.lower != "" && xTractL.func != "cMul") {return "cMul("+xL+","+xU+")"}
+		if (nbrTest(xTractL.upper) && xTractU.func == "cPow" && nbrTest(xTractU.lower)) {return "cMul("+xL+","+xU+")"}
 		return "cMul("+xU+","+xL+")"
 	}
 	function cTmsS(xU,xL) {return cMulS(xU,xL)}
