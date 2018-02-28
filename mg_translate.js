@@ -813,7 +813,7 @@ function oParens(xP) {//remove outside parens
 }
 function dNest(dN) {//count nested large elements
 	var dDepth = 0,dSpan = 0;
-	for (var iDp=0;iDp<dN.length;iDp++) {
+	for (var iDp in dN) {
 		if (dN.substr(iDp,6) == "<Xdiv>") {dSpan++}		
 		if (dN.substr(iDp,6) == "<Xdve>") {dSpan--}
 		if (dSpan > dDepth) {dDepth = dSpan}
@@ -1166,7 +1166,7 @@ function cFunc(cXpr) { //convert from MG format to FUNC format: a+bc/d -> cAdd(a
 				"(lim\\([^\\)]*\\,[^\\)]*\\))","(itg\\([^\\)]*\\,[^\\)]*\\))","(sdr\\([^\\)]*\\,[^\\)]*\\))","(ddr\\([^\\)]*\\,[^\\)]*\\))",
 				"(sum\\([^\\)]*\\,[^\\)]*\\))","(prd\\([^\\)]*\\,[^\\)]*\\))","(psd\\([^\\)]*\\,[^\\)]*\\))","(pdd\\([^\\)]*\\,[^\\)]*\\))",
 				"(cap\\([^\\)]*\\,[^\\)]*\\))","(cup\\([^\\)]*\\,[^\\)]*\\))","(dif\\([^\\)]*\\,[^\\)]*\\))","(Cv\\[10044])"];
-	for (nCf=0;nCf<nBind.length;nCf++) {//add @ between bind symbols
+	for (nCf in nBind) {//add @ between bind symbols
 		var rgx = new RegExp(nBind[nCf]+"(\\|?)#");
 		var rgy = new RegExp("#(\\|?)"+nBind[nCf]);
 		while (cXpr.search(rgx) != -1 || cXpr.search(rgy) != -1) {cXpr = cXpr.replace(rgx,"$1$2@").replace(rgy,"@$1$2")}
@@ -1175,7 +1175,7 @@ function cFunc(cXpr) { //convert from MG format to FUNC format: a+bc/d -> cAdd(a
 	var sCount = strCount(cXpr,"-");//parse power negatives to cPow(x,cNeg())
 	var nCases = ["^-","^|-"];
 	for (nCf=0;nCf<sCount;nCf++) {
-		for (var iXX=0;iXX<nCases.length;iXX++) {
+		for (var iXX in nCases) {
 			if (cXpr.indexOf(nCases[iXX]) > -1) {cXpr = nParse(cXpr,nCases[iXX])}
 		}
 	}
@@ -1187,7 +1187,7 @@ function cFunc(cXpr) { //convert from MG format to FUNC format: a+bc/d -> cAdd(a
 				  String.fromCharCode(8804)+"-",String.fromCharCode(8804)+"|-",String.fromCharCode(8805)+"-",String.fromCharCode(8805)+"|-",
 				  String.fromCharCode(8800)+"-",String.fromCharCode(8800)+"|-",String.fromCharCode(8226)+"-",String.fromCharCode(8226)+"|-"];
 	for (nCf=0;nCf<sCount;nCf++) {
-		for (var iXX=0;iXX<nCases.length;iXX++) {
+		for (var iXX in nCases) {
 			if (cXpr.indexOf(nCases[iXX]) > -1) {cXpr = nParse(cXpr,nCases[iXX])}
 		}
 	}
@@ -1307,7 +1307,7 @@ function dFunc(dXpr, prefix) { //map FUNC format to export format
 		var prefix = "";
 		var suffix = "";
 		if (typeof xA[0] == "string" && xA[0].substr(0,6) == "<Xrow>"){
-			for (var iM=0;iM<xA.length;iM++) {
+			for (var iM in xA) {
 				xA[iM] = xA[iM].replace(/\<Xrow\>/g,"").replace(/\<Xrwe\>/g,"").replace(/\<Xcel\>/g,"<td>").replace(/\<Xcle\>/g,"</td>");
 				dScale = dScale + dNest(xA+"")*(mgConfig.divScale/100)
 				mReturn = mReturn + "<tr>" + xA[iM] + "</tr>"
@@ -1317,7 +1317,7 @@ function dFunc(dXpr, prefix) { //map FUNC format to export format
 			return prefix+" <table style='text-align:center;display:inline-table;vertical-align:middle'><tr><td style='border-left:2px solid black;border-top:2px solid black;border-bottom:2px solid black'>&nbsp;</td><td><table>" + mReturn + "</table><td style='border-right:2px solid black;border-top:2px solid black;border-bottom:2px solid black'>&nbsp;</td></tr></table> "+suffix
 		}
 		else {
-			for (var iM=0;iM<xA.length;iM++) {mReturn = mReturn + "<Xcel>" + xA[iM] + "<Xcle>"}
+			for (var iM in xA) {mReturn = mReturn + "<Xcel>" + xA[iM] + "<Xcle>"}
 			return "<Xrow>" + mReturn + "<Xrwe>"
 		}
 	}
@@ -1609,8 +1609,8 @@ function texImport(mgXpr) { //convert LaTeX to MG format
 	function matI(xM) {
 		var mArray = xM.split("\\\\");
 		var mReturn = ""
-		for (var iM=0;iM<mArray.length;iM++) {mArray[iM] = mArray[iM].split("&")}
-		for (var iR=0;iR<mArray.length;iR++) {
+		for (var iM in mArray) {mArray[iM] = mArray[iM].split("&")}
+		for (var iR in mArray) {
 			mReturn = mReturn + "mat(" + mArray[iR] + ")"
 			if (iR < mArray.length-1) {mReturn = mReturn + ","}
 		}
@@ -1642,7 +1642,7 @@ function texImport(mgXpr) { //convert LaTeX to MG format
 	mgXpr = mgXpr.replace(/\\left\[/g,"sbr(").replace(/\\left\{/g,"cbr(").replace(/\\right\]/g,")").replace(/\\right\}/g,")");//convert brackets
 	var sCount = strCount(mgXpr,"\\");//convert left/right paren
 	for (var nXf=0;nXf<sCount;nXf++) {mgXpr = mgXpr.replace(/\\left\(/,"(").replace(/\\right\)/,")").replace(/\\left\\\(/,"(").replace(/\\right\\\)/,")")}
-	for (var iBr=0;iBr<lBrackets.length;iBr++){//convert left/right brackets
+	for (var iBr in lBrackets){//convert left/right brackets
 		var sCount = strCount(mgXpr,"\\left\\"+lBrackets[iBr]);
 		for (var nXf=0;nXf<sCount;nXf++) {mgXpr = mgXpr.replace("\\left\\"+lBrackets[iBr],"cbr(").replace("\\right\\"+rBrackets[iBr],")")	}
 	}
@@ -1694,7 +1694,7 @@ function texImport(mgXpr) { //convert LaTeX to MG format
 			}
 		}
 	}
-	for (var nXt=0;nXt<ulSymbols.length;nXt++) {//convert u/l functions
+	for (var nXt in ulSymbols) {//convert u/l functions
 		var sCount = strCount(mgXpr,ulSymbols[nXt]+"_");
 		for (var nXf=0;nXf<sCount;nXf++) {
 			var limitL= parseBrackets(mgXpr,mgXpr.indexOf(ulSymbols[nXt]+"_")+ulSymbols[nXt].length+1);
