@@ -1,5 +1,5 @@
 /*
-	MathGene Translation/Rendering Library - Version 1.00
+	MathGene Translation/Rendering Library - Version 1.10
     Copyright (C) 2017  George J. Paulos
 
     MathGene is free software: you can redistribute it and/or modify
@@ -538,71 +538,35 @@ drv:{	htmlL1:"''",								htmlR1:"''", //partial derivative from func
 		latexL1:"''",								latexR1:"''", 
 		latexL2:"''",								latexR2:"''",
 		},
-drs:{	htmlL1:"''",								htmlR1:"''", //partial second derivative from func
-		htmlL2:"''",								htmlR2:"''",
-		texfunc:"\\XXX",
-		latexL1:"''",								latexR1:"''",
-		latexL2:"''",								latexR2:"''",
-		},
 tdv:{	htmlL1:"''",								htmlR1:"''", //total derivative from func
 		htmlL2:"''",								htmlR2:"''",
 		texfunc:"\\XXX",
 		latexL1:"''",								latexR1:"''",
 		latexL2:"''",								latexR2:"''",
 		},
-tds:{	htmlL1:"''",								htmlR1:"''", //total second derivative from func
-		htmlL2:"''",								htmlR2:"''",
+tdr:{	htmlL1:"tdrL(mA,mB)",						htmlR1:"''", //derivative
+		htmlL2:"tdrL(mA,mB)",						htmlR2:"''",
 		texfunc:"\\XXX",
-		latexL1:"''",								latexR1:"''",
-		latexL2:"''",								latexR2:"''",
+		latexL1:"tdrX(mA,mB)",						latexR1:"''",
+		latexL2:"tdrX(mA,mB)",						latexR2:"''",
 		},
-tdr:{	htmlL1:"tdrL(mA)",							htmlR1:"''", //derivative
-		htmlL2:"tdrL(mA)",							htmlR2:"''",
+sdr:{	htmlL1:"sdrL(mA,mB,mC)",					htmlR1:"''", //derivative dy/dx
+		htmlL2:"sdrL(mA,mB,mC)",					htmlR2:"''",
 		texfunc:"\\XXX",
-		latexL1:"'\\\\frac{d}{d '+mA+'}'",			latexR1:"''",
-		latexL2:"'\\\\frac{d}{d '+mA+'}'",			latexR2:"''",
+		latexL1:"sdrX(mA,mB,mC)",					latexR1:"''",
+		latexL2:"sdrX(mA,mB,mC)",					latexR2:"''",
 		},
-tdd:{	htmlL1:"tddL(mA)",							htmlR1:"''", //second derivative
-		htmlL2:"tddL(mA)",							htmlR2:"''",
+idr:{	htmlL1:"idrL(mA,mB)",						htmlR1:"''", //partial derivative
+		htmlL2:"idrL(mA,mB)",						htmlR2:"''",
 		texfunc:"\\XXX",
-		latexL1:"'\\\\frac{d^2}{d '+mA+'^2}'",		latexR1:"''",
-		latexL2:"'\\\\frac{d^2}{d '+mA+'^2}'",		latexR2:"''",
+		latexL1:"idrX(mA,mB)", 						latexR1:"''",
+		latexL2:"idrX(mA,mB)", 						latexR2:"''",
 		},
-sdr:{	htmlL1:"sdrL(mA,mB)",						htmlR1:"''", //derivative dy/dx
-		htmlL2:"sdrL(mA,mB)",						htmlR2:"''",
+psd:{	htmlL1:"psdL(mA,mB,mC)",					htmlR1:"' '", //partial derivative dy/dx
+		htmlL2:"psdL(mA,mB,mC)",					htmlR2:"' '",
 		texfunc:"\\XXX",
-		latexL1:"'\\\\frac{d '+mA+'}{d '+mB+'}'",	latexR1:"''",
-		latexL2:"'\\\\frac{d '+mA+'}{d '+mB+'}'",	latexR2:"''",
-		},
-ddr:{	htmlL1:"ddrL(mA,mB)",						htmlR1:"''", //second derivative dy/dx
-		htmlL2:"ddrL(mA,mB)",						htmlR2:"''",
-		texfunc:"\\XXX",
-		latexL1:"'\\\\frac{d^2 '+mA+'}{d '+mB+'^2}'",	latexR1:"''",
-		latexL2:"'\\\\frac{d^2 '+mA+'}{d '+mB+'^2}'",	latexR2:"''",
-		},
-idr:{	htmlL1:"idrL(mA)",							htmlR1:"''", //partial derivative
-		htmlL2:"idrL(mA)",							htmlR2:"''",
-		texfunc:"\\XXX",
-		latexL1:"'\\\\frac{\\\\partial}{\\\\partial '+mA+'}'", latexR1:"''",
-		latexL2:"'\\\\frac{\\\\partial}{\\\\partial '+mA+'}'", latexR2:"''",
-		},
-idd:{	htmlL1:"iddL(mA)",							htmlR1:"''", //partial second derivative
-		htmlL2:"iddL(mA)",							htmlR2:"''",
-		texfunc:"\\XXX",
-		latexL1:"'\\\\frac{\\\\partial^2}{\\\\partial '+mA+'^2}'", latexR1:"''",
-		latexL2:"'\\\\frac{\\\\partial^2}{\\\\partial '+mA+'^2}'", latexR2:"''",
-		},
-psd:{	htmlL1:"psdL(mA,mB)",						htmlR1:"' '", //partial derivative dy/dx
-		htmlL2:"psdL(mA,mB)",						htmlR2:"' '",
-		texfunc:"\\XXX",
-		latexL1:"'\\\\frac{\\\\partial '+mA+'}{\\\\partial '+mB+'}'",	latexR1:"''",
-		latexL2:"'\\\\frac{\\\\partial '+mA+'}{\\\\partial '+mB+'}'",	latexR2:"''",
-		},
-pdd:{	htmlL1:"pddL(mA,mB)",						htmlR1:"' '", //partial second derivative dy/dx
-		htmlL2:"pddL(mA,mB)",						htmlR2:"' '",
-		texfunc:"\\XXX",
-		latexL1:"'\\\\frac{\\\\partial^2 '+mA+'}{\\\\partial '+mB+'^2}'",	latexR1:"''",
-		latexL2:"'\\\\frac{\\\\partial^2 '+mA+'}{\\\\partial '+mB+'^2}'",	latexR2:"''",
+		latexL1:"psdX(mA,mB,mC)",					latexR1:"''",
+		latexL2:"psdX(mA,mB,mC)",					latexR2:"''",
 		},
 sbt:{	htmlL1:"'<sub><sub>'+mA+'</sub></sub>'" ,	htmlR1:"''", //subscript
 		htmlL2:"'<sub><sub>'+mA+'</sub></sub>'",	htmlR2:"''",
@@ -1065,18 +1029,21 @@ function mgExport(xFn) { //convert from FUNC format to MG format
 	function capE(xU,xL) {return "cap(" + xU + "," + xL + ")"} //intersection
 	function limE(xU,xL) {return "lim(" + xU + "," + xL + ")"} //limit
 	function difE(xU) {return "Cv[8748]" + xU}   //differential
-	function idrE(xU) {return "idr(" + xU + ")"} //partial derivative
-	function iddE(xU) {return "idd(" + xU + ")"} //partial second derivative
-	function tdrE(xU,xL) {return "tdr(" + xU + "," + xL + ")"} //derivative
-	function tddE(xU,xL) {return "tdd(" + xU + "," + xL + ")"} //second derivative
+	function idrE(xU,xN) { //partial derivative
+		if (typeof xN == "undefined") {return "idr(" + xU + ")"}
+		return "idr(" + xU + "," + xN + ")"
+	}
+	function tdrE(xU,xL) {return "tdr(" + xU + "," + xL + ")"} //total derivative
 	function sdrE(xU,xL) {return "sdr(" + xU + "," + xL + ")"} //derivative
-	function ddrE(xU,xL) {return "ddr(" + xU + "," + xL + ")"} //second derivative
 	function psdE(xU,xL) {return "psd(" + xU + "," + xL + ")"} //partial derivative
-	function pddE(xU,xL) {return "pdd(" + xU + "," + xL + ")"} //partial second derivative
-	function tdvE(xU,dV) {return "(tdr(" + dV + ")" + xU + ")"} //total derivative from FUNC format
-	function tdsE(xU,dV) {return "(tdd(" + dV + ")" + xU + ")"} //total second derivative from FUNC format
-	function drvE(xU,dV) {return "(idr(" + dV + ")" + xU + ")"} //partial derivative from FUNC format
-	function drsE(xU,dV) {return "(idd(" + dV + ")" + xU + ")"} //partial second derivative from FUNC format
+	function tdvE(xU,dV,xN) { //total derivative from FUNC format
+		if (typeof xN == "undefined") {return "(tdr(" + dV + ")" + xU + ")"}
+		return "(tdr(" + dV + "," + xN + ")" + xU + ")"
+	}
+	function drvE(xU,dV,xN) { //partial derivative from FUNC format
+		if (typeof xN == "undefined") {return "(idr(" + dV + ")" + xU + ")"}
+		return "(idr(" + dV + "," + xN + ")" + xU + ")"
+	}
 	function lmtE(xU,dV,mL) {return "lim(" + dV + "," + mL +")" + xU} //limit from FUNC format
 	function smmE(xU,mU,dV,mL) {return "sum(" + mU + "," + dV + "Cv[61]" + mL + ")" + xU} //summation from FUNC format
 	function pmmE(xU,mU,dV,mL) {return "prd(" + mU + "," + dV + "Cv[61]" + mL + ")" + xU} //product from FUNC format
@@ -1161,11 +1128,12 @@ function cFunc(cXpr) { //convert from MG format to FUNC format: a+bc/d -> cAdd(a
 	}
 	cXpr = cXpr.replace(/([\)\]])(\|?)(\d)/g,"$1$2#$3").replace(/([\)\]\d])(\|?)\(/g,"$1$2#(").replace(/([\)\]\d])(\|?)Cv\[/g,"$1$2#Cv[").replace(/([\)\]\d])(\|?)([a-z][a-z][a-z]\()/ig,"$1$2#$3");//terms to # multiply 
 	// non-multiplying cBnd symbols
-	var nBind = ["(Cv\\[8773\\])","(Cv\\[8750\\])","(Cv\\[8751\\])","(Cv\\[8752\\])","(Cv\\[8592\\])","(Cv\\[8747\\])","(Cv\\[8748\\])","(Cv\\[59\\])",
-				"(idr\\([^\\)]*\\))","(idd\\([^\\)]*\\))","(tdr\\([^\\)]*\\))","(tdd\\([^\\)]*\\))",
-				"(lim\\([^\\)]*\\,[^\\)]*\\))","(itg\\([^\\)]*\\,[^\\)]*\\))","(sdr\\([^\\)]*\\,[^\\)]*\\))","(ddr\\([^\\)]*\\,[^\\)]*\\))",
-				"(sum\\([^\\)]*\\,[^\\)]*\\))","(prd\\([^\\)]*\\,[^\\)]*\\))","(psd\\([^\\)]*\\,[^\\)]*\\))","(pdd\\([^\\)]*\\,[^\\)]*\\))",
-				"(cap\\([^\\)]*\\,[^\\)]*\\))","(cup\\([^\\)]*\\,[^\\)]*\\))","(dif\\([^\\)]*\\,[^\\)]*\\))","(Cv\\[10044])"];
+	var nBind = ["(Cv\\[8773\\])","(Cv\\[8750\\])","(Cv\\[8751\\])","(Cv\\[8752\\])",
+				"(Cv\\[8592\\])","(Cv\\[8747\\])","(Cv\\[8748\\])","(Cv\\[59\\])",
+				"(idr\\([^\\)]*\\))","(tdr\\([^\\)]*\\))","(lim\\([^\\)]*\\,[^\\)]*\\))",
+				"(itg\\([^\\)]*\\,[^\\)]*\\))","(sdr\\([^\\)]*\\,[^\\)]*\\))","(sum\\([^\\)]*\\,[^\\)]*\\))",
+				"(prd\\([^\\)]*\\,[^\\)]*\\))","(psd\\([^\\)]*\\,[^\\)]*\\))","(cap\\([^\\)]*\\,[^\\)]*\\))",
+				"(cup\\([^\\)]*\\,[^\\)]*\\))","(dif\\([^\\)]*\\,[^\\)]*\\))","(Cv\\[10044])"];
 	for (nCf in nBind) {//add @ between bind symbols
 		var rgx = new RegExp(nBind[nCf]+"(\\|?)#");
 		var rgy = new RegExp("#(\\|?)"+nBind[nCf]);
@@ -1293,14 +1261,34 @@ function dFunc(dXpr, prefix) { //map FUNC format to export format
 	function tldR()  {return fAccentL("<span style='line-height:50%'>&nbsp;</span>")}
 	function udtL()  {return fAccentU("&#8226;")}
 	function udtR()  {return fAccentL("<span style='line-height:50%'>&nbsp;</span>")}
-	function tdrL(xA)    {var tmpDivSym = mgConfig.divSymbol;mgConfig.divSymbol = "Over";var xTmp = cDivL("<i>d</i>","<i>d</i>"+xA);mgConfig.divSymbol =  tmpDivSym;return xTmp}
-	function tddL(xA)    {var tmpDivSym = mgConfig.divSymbol;mgConfig.divSymbol = "Over";var xTmp = cDivL("<i>d</i><sup>2</sup>","<i>d</i>"+xA+"<sup>2</sup>");mgConfig.divSymbol =  tmpDivSym;return xTmp}
-	function idrL(xA)    {var tmpDivSym = mgConfig.divSymbol;mgConfig.divSymbol = "Over";var xTmp = cDivL("&#8706;","&#8706;"+xA);mgConfig.divSymbol =  tmpDivSym;return xTmp}
-	function iddL(xA)    {var tmpDivSym = mgConfig.divSymbol;mgConfig.divSymbol = "Over";var xTmp = cDivL("&#8706;<sup>2</sup>","&#8706;"+xA+"<sup>2</sup>");mgConfig.divSymbol =  tmpDivSym;return xTmp}
-	function sdrL(xA,xB) {var tmpDivSym = mgConfig.divSymbol;mgConfig.divSymbol = "Over";var xTmp = cDivL("<i>d</i>"+xA,"<i>d</i>"+xB);mgConfig.divSymbol =  tmpDivSym;return xTmp}
-	function ddrL(xA,xB) {var tmpDivSym = mgConfig.divSymbol;mgConfig.divSymbol = "Over";var xTmp = cDivL("<i>d</i><sup>2</sup>"+xA,"<i>d</i>"+xB+"<sup>2</sup>");mgConfig.divSymbol =  tmpDivSym;return xTmp}
-	function psdL(xA,xB) {var tmpDivSym = mgConfig.divSymbol;mgConfig.divSymbol = "Over";var xTmp = cDivL("&#8706;"+xA,"&#8706;"+xB);mgConfig.divSymbol =  tmpDivSym;return xTmp}
-	function pddL(xA,xB) {var tmpDivSym = mgConfig.divSymbol;mgConfig.divSymbol = "Over";var xTmp = cDivL("&#8706;<sup>2</sup>"+xA,"&#8706;"+xB+"<sup>2</sup>");mgConfig.divSymbol =  tmpDivSym;return xTmp}
+	function tdrL(xA,xN) {
+		var tmpDivSym = mgConfig.divSymbol;mgConfig.divSymbol = "Over";
+		if (typeof xN =="undefined" || xN == 1) {var xTmp = cDivL("<i>d</i>","<i>d</i>"+xA)}
+		else {var xTmp = cDivL("<i>d</i><sup>"+xN+"</sup>","<i>d</i>"+xA+"<sup>"+xN+"</sup>")}
+		mgConfig.divSymbol =  tmpDivSym;
+		return xTmp
+	}
+	function idrL(xA,xN) {
+		var tmpDivSym = mgConfig.divSymbol;mgConfig.divSymbol = "Over";
+		if (typeof xN =="undefined" || xN == 1) {var xTmp = cDivL("&#8706;","&#8706;"+xA)}
+		else {var xTmp = cDivL("&#8706;<sup>"+xN+"</sup>","&#8706;"+xA+"<sup>"+xN+"</sup>")}
+		mgConfig.divSymbol =  tmpDivSym;
+		return xTmp
+	}
+	function sdrL(xA,xB,xN) {
+		var tmpDivSym = mgConfig.divSymbol;mgConfig.divSymbol = "Over";
+		if (typeof xN =="undefined" || xN == 1) {var xTmp = cDivL("<i>d</i>"+xA,"<i>d</i>"+xB)}
+		else {var xTmp = cDivL("<i>d</i><sup>"+xN+"</sup>"+xA,"<i>d</i>"+xB+"<sup>"+xN+"</sup>")}
+		mgConfig.divSymbol =  tmpDivSym;
+		return xTmp
+	}
+	function psdL(xA,xB,xN) {
+		var tmpDivSym = mgConfig.divSymbol;mgConfig.divSymbol = "Over";
+		if (typeof xN =="undefined" || xN == 1) {var xTmp = cDivL("&#8706;"+xA,"&#8706;"+xB)}
+		else {var xTmp = cDivL("&#8706;<sup>"+xN+"</sup>"+xA,"&#8706;"+xB+"<sup>"+xN+"</sup>")}
+		mgConfig.divSymbol =  tmpDivSym;
+		return xTmp
+	}
 	function matL(xA) {
 		var mReturn = "";
 		var dScale = xA.length;
@@ -1327,6 +1315,22 @@ function dFunc(dXpr, prefix) { //map FUNC format to export format
 		if (xU.indexOf("\\") == 0) {return "("+oBrackets(xU)+")^{"+oBrackets(xL)+"}"}
 		return "{"+oBrackets(xU)+"}^{"+oBrackets(xL)+"}"
 	}
+	function idrX(xU,xN) {
+		if (typeof xN == "undefined") {return '\\frac{\\partial}{\\partial '+xU+'}'}
+		return '\\frac{\\partial^'+xN+'}{\\partial '+xU+'^2}'
+	}
+	function tdrX(xU,xN) {
+		if (typeof xN == "undefined") {return '\\frac{d}{d '+xU+'}'}
+		return	'\\frac{d^'+xN+'}{d '+xU+'^'+xN+'}'
+	}
+	function psdX(xU,xL,xN) {
+		if (typeof xN == "undefined") {return '\\frac{\\partial '+xU+'}{\\partial '+xL+'}'}
+		return	'\\frac{\\partial^'+xN+' '+xU+'}{\\partial '+xL+'^2}'
+	}
+	function sdrX(xU,xL,xN) {
+		if (typeof xN == "undefined") {return '\\frac{d '+xU+'}{d '+xL+'}'}
+		return '\\frac{d^'+xN+' '+xU+'}{d '+xL+'^'+xN+'}'
+	}
 	function matX(xA) {
 		var mReturn = "";
 		if (xA[0].search("<Xrow>") == -1) {
@@ -1348,8 +1352,8 @@ function dFunc(dXpr, prefix) { //map FUNC format to export format
 		return mReturn 
 	}
 	// function handlers
-	function lFunc(parm) {mA=parm[0];mB=parm[1];return eval(funcselect(funcKey,fnformatL))} //process left side function
-	function rFunc(parm) {mA=parm[0];mB=parm[1];return eval(funcselect(funcKey,fnformatR))} //process right side function
+	function lFunc(parm) {mA=parm[0];mB=parm[1];mC=parm[2];return eval(funcselect(funcKey,fnformatL))} //process left side function
+	function rFunc(parm) {mA=parm[0];mB=parm[1];mC=parm[2];return eval(funcselect(funcKey,fnformatR))} //process right side function
 	function funcselect(func,key) {return funcMap[func][key]}
 	//
 	var fnformatL = prefix+"L1";
@@ -1769,18 +1773,18 @@ function texImport(mgXpr) { //convert LaTeX to MG format
 	for (var nXf=0;nXf<sCount;nXf++) {
 		mgXpr = mgXpr.replace(/\(Cv\[10100\]\/Cv\[10100\]Cv\[(\d+)\]\)/,"tdr(Cv[$1])");
 		mgXpr = mgXpr.replace(/\(Cv\[10100\]Cv\[(\d+)\]\/Cv\[10100\]Cv\[(\d+)\]\)/,"sdr(Cv[$1],Cv[$2])");
-		//second derivative
-		mgXpr = mgXpr.replace(/\(Cv\[10100\]\^2\/Cv\[10100\]Cv\[(\d+)\]\^2\)/,"tdd(Cv[$1])");
-		mgXpr = mgXpr.replace(/\(Cv\[10100\]\^2Cv\[(\d+)\]\/Cv\[10100\]Cv\[(\d+)\]\^2\)/,"ddr(Cv[$1],Cv[$2])");		
+		//nth derivative
+		mgXpr = mgXpr.replace(/\(Cv\[10100\]\^\d+\/Cv\[10100\]Cv\[(\d+)\]\^(\d+)\)/,"tdr(Cv[$1],$2)");
+		mgXpr = mgXpr.replace(/\(Cv\[10100\]\^\d+Cv\[(\d+)\]\/Cv\[10100\]Cv\[(\d+)\]\^(\d+)\)/,"sdr(Cv[$1],Cv[$2],$3)");		
 	}
 	mgXpr = mgXpr.replace(/\(Cv\[8706\]\)/g,"Cv[8706]");
 	var sCount = strCount(mgXpr,"Cv[8706]");//convert partial derivatives
 	for (var nXf=0;nXf<sCount;nXf++) {
 		mgXpr = mgXpr.replace(/\(Cv\[8706\]\/Cv\[8706\]Cv\[(\d+)\]\)/,"idr(Cv[$1])");
 		mgXpr = mgXpr.replace(/\(Cv\[8706\]Cv\[(\d+)\]\/Cv\[8706\]Cv\[(\d+)\]\)/,"psd(Cv[$1],Cv[$2])");
-		//second derivative
-		mgXpr = mgXpr.replace(/\(Cv\[8706\]\^2\/Cv\[8706\]Cv\[(\d+)\]\^2\)/,"idd(Cv[$1])");
-		mgXpr = mgXpr.replace(/\(Cv\[8706\]\^2Cv\[(\d+)\]\/Cv\[8706\]Cv\[(\d+)\]\^2\)/,"pdd(Cv[$1],Cv[$2])");		
+		//nth derivative
+		mgXpr = mgXpr.replace(/\(Cv\[8706\]\^\d+\/Cv\[8706\]Cv\[(\d+)\]\^(\d+)\)/,"idr(Cv[$1],$2)");
+		mgXpr = mgXpr.replace(/\(Cv\[8706\]\^\d+Cv\[(\d+)\]\/Cv\[8706\]Cv\[(\d+)\]\^(\d+)\)/,"psd(Cv[$1],Cv[$2],$3)");		
 	}	
 	var sCount = strCount(mgXpr,"Cv[10100]");//convert differentials
 	for (var nXf=0;nXf<sCount;nXf++) {

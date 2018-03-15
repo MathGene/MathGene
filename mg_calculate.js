@@ -1,5 +1,5 @@
 /*
-	MathGene Math Library - Version 1.00
+	MathGene Math Library - Version 1.10
     Copyright (C) 2017  George J. Paulos
 
     MathGene is free software: you can redistribute it and/or modify
@@ -464,7 +464,7 @@ var mgCalc = (function() {
 		if (!pTerms.Terms[0]) {return tReturn}
 		if (strTest(pTerms.Terms,tReturn)) {pTerms.Exp[pTerms.Terms.indexOf(tReturn)] = cAddS(pTerms.Exp[pTerms.Terms.indexOf(tReturn)],1);tReturn = "1"}
 		var fTempU = 1,fTempL = 1; //upper and lower accumulators
-		for (var xI in pTerms.Terms) { //consolidate terms into accumulaters
+		for (var xI in pTerms.Terms) { //consolidate terms into accumulators
 			var tExtract = opExtract(pTerms.Exp[xI]);
 			if  (nbrTest(pTerms.Terms[xI]) && pTerms.Exp[xI] == -1) {//calculate GCF on integers
 				var tGcf = cGcf(tReturn,+pTerms.Terms[xI]);
@@ -665,10 +665,9 @@ var mgCalc = (function() {
 		if (!strTest(xU,pVariable(xL)) || polyU.length < polyL.length || polyU.length < 2 || polyL.length < 2 || strTest(xU,xL)) {return "cDiv("+xU+","+xL+")"}
 		if (polyU.length > 1 && polyL.length > 1 && cInventory(polyU[polyU.length-1]).length > 2) {return "cDiv("+xU+","+xL+")"} //fix for compound terms in numerator
 		var dReturn = "0";
-		var pDegree = polyU.length;
 		var uTemp = xReduce(xU);
 		var tTemp;
-		for (var pT=0;pT<pDegree;pT++) {
+		for (var pT in polyU) {
 			tTemp = xReduce(cDivS(polyU[polyU.length-1],polyL[polyL.length-1]));
 			uTemp = xReduce(cSubS(uTemp,xprExpand(cMulS(tTemp,xL))));
 			dReturn = xReduce(cAddS(dReturn,tTemp));
@@ -679,7 +678,7 @@ var mgCalc = (function() {
 	}
 
 	//Algebra
-	function cPowS(xU,xL) {
+	function cPowS(xU,xL) { //exponent xU^xL
 		var xTractU = opExtract(xU);
 		var xTractL = opExtract(xL);
 		if (xTractU.func == "mat") {
@@ -719,7 +718,7 @@ var mgCalc = (function() {
         if (xTractU.func == "cbt" && +xL == 3) {return xTractU.upper}
 		return "cPow("+xU+","+xL+")"
 	}
-	function cMulS(xU,xL) {
+	function cMulS(xU,xL) { //multiply xU * xL
 		function scalarMult(xM,xC) { //matrix scalar multiply
 			xM = matArray(xM);
 			var mReturn = xM;
@@ -737,15 +736,11 @@ var mgCalc = (function() {
 		if (xTractU.func == "mat" && xTractL.func == "mat") { //matrix multiply
 			xU = matArray(xU);
 			xL = matArray(xL);
-			var rowsU = xU.length;
-			var colsU = xU[0].length;
-			var rowsL = xL.length;
-			var colsL = xL[0].length;
-			if (rowsL != colsU) {return "undefined"}
-			var mReturn = matCreate(rowsU,colsL);
-			for (var rU=0;rU<rowsU;rU++) {
-				for (var cL=0;cL<colsL;cL++) {
-					for (var cU=0;cU<colsU;cU++) {
+			if (xL.length != xU[0].length) {return "undefined"}
+			var mReturn = matCreate(xU.length,xL[0].length);
+			for (var rU in xU) {
+				for (var cL in xL[0]) {
+					for (var cU in xU[0]) {
 						var mTemp = cMulS(matFunc(xU[rU][cU]),matFunc(xL[cU][cL]));
 						if (mReturn[rU][cL] == 0) {mReturn[rU][cL] = mTemp}
 						else {mReturn[rU][cL] = cAddS(mReturn[rU][cL],mTemp)}
@@ -788,9 +783,9 @@ var mgCalc = (function() {
 		if (nbrTest(xTractL.upper) && xTractU.func == "cPow" && nbrTest(xTractU.lower)) {return "cMul("+xL+","+xU+")"}
 		return "cMul("+xU+","+xL+")"
 	}
-	function cTmsS(xU,xL) {return cMulS(xU,xL)}
-	function cDotS(xU,xL) {return cMulS(xU,xL)}
-	function cDivS(xU,xL) {
+	function cTmsS(xU,xL) {return cMulS(xU,xL)} //multiply xU * xL as terms
+	function cDotS(xU,xL) {return cMulS(xU,xL)} //multiply xU . xL
+	function cDivS(xU,xL) { //divide xU/xL
 		var xTractU = opExtract(xU);
 		var xTractL = opExtract(xL);
 		if (xTractU.func == "cAdd" || xTractU.func == "cSub") {xU = "("+xU+")"}
@@ -864,7 +859,7 @@ var mgCalc = (function() {
         if ((xTractL.func == "cAdd" || xTractL.func == "cSub") && !pxpFlag && !factorFlag) {return pDivide(xU,xL)}
 		return "cDiv("+xU+","+xL+")"
 	}
-	function cAddS(xU,xL) {
+	function cAddS(xU,xL) { //add xU+xL
 		var xTractU = opExtract(xU);
 		var xTractL = opExtract(xL);
 		if (xTractU.func == "mat" && xTractL.func == "mat") { //matrix add
@@ -941,7 +936,7 @@ var mgCalc = (function() {
 		if (xTractU.func == "cAdd") {return "cAdd("+xTractU.upper+",cAdd("+xTractU.lower+","+xL+"))"}
 		return "cAdd("+xU+","+xL+")"
 	}
-	function cSubS(xU,xL) {
+	function cSubS(xU,xL) { //subtract xU-xL
 		var xTractU = opExtract(xU);
 		var xTractL = opExtract(xL);
 		if (xTractU.func == "mat" && xTractL.func == "mat") {return cAddS(xU,cMulS(xL,-1))} //matrix subtract
@@ -994,7 +989,7 @@ var mgCalc = (function() {
 		if (xTractU.func == "fac" && xTractL.func == "fac" && nbrTest(xTractU.upper) && nbrTest(xTractL.upper)) {return cSubS(fac(xTractU.upper),fac(xTractL.upper))}
 		return "cSub("+xU+","+xL+")"
 	}
-	function cNegS(xU) {
+	function cNegS(xU) { //negate -xU
 		var xTractU = opExtract(xU);
 		if (xU == 0) {return 0}
 		if (xTractU.func == "mat") {return cMulS(xU,-1)}
@@ -1022,12 +1017,12 @@ var mgCalc = (function() {
 			var rowsU = mTemp.length;
 			if (rowsU != mTemp[0].length) {return "undefined"}
 			var mReturn = matCreate(rowsU,rowsU);
-			for (var iR=0;iR<rowsU;iR++) {for (var iC=0;iC<rowsU;iC++) {mReturn[iR][iC] = invS(mTemp[iR][iC])}}
+			for (var iR in mTemp) {for (var iC in mTemp) {mReturn[iR][iC] = invS(mTemp[iR][iC])}}
 			return matFunc(mReturn)			
 		}
 		return cMulS(cDivS(1,detS(mTemp)),matFunc(trn(matCofac(mTemp))))
 	}
-	function sqtS(xU) {
+	function sqtS(xU) { //square root
 		var xTractU = opExtract(xU);
 		if (nbrTest(xU) && sqt(xU) == int(sqt(xU))){return cFunc(fmtResult(sqt(xU)))} //calculate integer roots
 		if (pxpFlag && xTractU.func == "cDiv") {return cDivS(sqtS(xTractU.upper),sqtS(xTractU.lower))}
@@ -1043,14 +1038,14 @@ var mgCalc = (function() {
 		if (xTractU.func == "cAdd" && xprMatch(xU,"cAdd(cPow(cot(Cv[9999]),2),1)")) {return cscS(xprMatch(xU,"cAdd(cPow(cot(Cv[9999]),2),1)"))}
 		return "sqt("+xU+")"
 	}
-	function cbtS(xU) {
+	function cbtS(xU) { //cube root
 		var xTractU = opExtract(xU);
 		if (nbrTest(xU) && cbt(xU) == int(cbt(xU)) ) {return cFunc(fmtResult(cbt(xU)))} //calculate integer roots
 		if (xTractU.func == "cPow") {return cPowS(xTractU.upper,cDivS(xTractU.lower,3))}
 		if (pxpFlag) {return "cPow("+xU+",cDiv(1,3))"}
 		return "cbt("+xU+")"
 	}
-	function nrtS(xU,xL)  {
+	function nrtS(xU,xL)  { //xLth root of xU
 		var xTractU = opExtract(xU);
 		var xTractL = opExtract(xL);
 		if (+xU == 2) {return sqtS(xL)}
@@ -1062,7 +1057,7 @@ var mgCalc = (function() {
         if (mgConfig.Domain == "Real") {return lneS(absS(xU))}
         return lneS(xU)
     }
-	function lneS(xU) {
+	function lneS(xU) { //natural log
 		var xTractU = opExtract(xU);
 		if (xU == 0) {return "Cv[8734]"}
 		if (xU == "Cv[8]") {return 1}
@@ -1074,7 +1069,7 @@ var mgCalc = (function() {
 		if (xTractU.func == "cPow") {return cMulS(xTractU.lower,lneS(xTractU.upper))}
 		return "lne("+xU+")"
 	}
-	function logS(xU) {
+	function logS(xU) { //common log
 		var xTractU = opExtract(xU);
 		if (xU == 0) {return "Cv[8734]"}
 		if (nbrTest(xU) && log(xU) == int(log(xU))) {return cFunc(fmtResult(log(xU)))} //calculate integer logs
@@ -1083,25 +1078,25 @@ var mgCalc = (function() {
 		if (xTractU.func == "cDiv" && +xTractU.upper == 1) {return cNegS(logS(xTractU.lower))}
 		return "log("+xU+")"
 	}
-	function lgnS(xU,xL)  {
+	function lgnS(xU,xL)  { //log xU to base xL
 		if (+xU == 10) {return logS(xL)}
 		if (xU == "Cv[8]") {return lneS(xL)}
 		if (nbrTest(xU)  && nbrTest(xL) && lgn(xU,xL) == int(lgn(xU,xL))) {return cFunc(fmtResult(lgn(xU,xL)))} //calculate integer logs
 		return cDivS(lneS(xL),lneS(xU))
 	}
-	function efcS(xU) {
+	function efcS(xU) { //inverse erf
 		var xTractU = opExtract(xU);
 		if (nbrTest(xU)) {return cFunc(fmtResult(efc(xU)))}
 		if (xTractU.func == "erf") {return xTractU.upper}
 		return "efc("+xU+")"
 	}
-	function erfS(xU) {
+	function erfS(xU) { //erf
 		var xTractU = opExtract(xU);
 		if (nbrTest(xU)) {return cFunc(fmtResult(erf(xU)))}
 		if (xTractU.func == "efc") {return xTractU.upper}
 		return "erf("+xU+")"
 	}
-	function expS(xU) {
+	function expS(xU) { //e^xU
 		var xTractU = opExtract(xU);
 		if (nbrTest(xU) && exp(xU) == int(exp(xU))) {return cFunc(fmtResult(exp(xU)))}
 		if (xTractU.func == "lne") {return xTractU.upper}
@@ -1382,16 +1377,16 @@ var mgCalc = (function() {
 		if (+xU == 0 || +xU == 1) {return 1}
 		return "gam("+xU+")"
 	}		
-	function sdrS(xU,xL) {return "tdv("+xU+","+xL+")"}
-	function ddrS(xU,xL) {return "tds("+xU+","+xL+")"}
-	function psdS(xU,xL) {return "drv("+xU+","+xL+")"}
-	function pddS(xU,xL) {return "drs("+xU+","+xL+")"}
+	function sdrS(xU,xL,xN) {
+		if (typeof xN == "undefined") {return "tdv("+xU+","+xL+")"}
+		return "tdv("+xU+","+xL+","+xN+")"
+	}
+	function psdS(xU,xL,xN) {
+		if (typeof xN == "undefined") {return "drv("+xU+","+xL+")"}
+		return "drv("+xU+","+xL+","+xN+")"
+	}
 	function matS() {return "mat(" + Array.prototype.slice.call(arguments) + ")"}
 	//passthru
-	function idrS(xU) {return "idr("+xU+")"}
-	function iddS(xU) {return "idd("+xU+")"}
-	function tdrS(xU) {return "tdr("+xU+")"}
-	function tddS(xU) {return "tdd("+xU+")"}
 	function sbrS(xU) {return "("+xU+")"}
 	function cbrS(xU) {return "("+xU+")"}
 	function prnS(xU) {return "("+xU+")"}
@@ -1449,8 +1444,8 @@ var mgCalc = (function() {
 		iIterations = 0;
 		sIterations = 0;
 		pIterations = 0;
-		var calcOpsIn  = ["idr(","idd(","tdr(","tdd(","lim(","sum(","prd("];
-		var calcOpsOut = ["drv(","drs(","tdv(","tds(","lmt(","smm(","pmm("];
+		var calcOpsIn  = ["idr(","tdr(","lim(","sum(","prd("];
+		var calcOpsOut = ["drv(","tdv(","lmt(","smm(","pmm("];
 		var dV = "";
 		var sCount = dExp.split("Cv[8748]").length-1; //differential
 		for (var nC=0;nC<sCount;nC++) {
@@ -1508,22 +1503,22 @@ var mgCalc = (function() {
 		return dExp
 	}
 	//Derivatives
-	function tdvS(dXpr,deeVar) { //total derivative
+	function tdvS(dXpr,deeVar,nTh) { //nTh total derivative
+		if (typeof nTh == "undefined" || nTh == "undefined") {nTh = 1}
+		if (nTh == 0) {return dXpr}
 		if (deeVar) {deeVarP = deeVar}
-		if (solverFlag) {return "tdv("+dXpr+")"}
+		if (solverFlag) {return tdvS("tdv("+dXpr+")",deeVar,nTh-1)} //return nested derivatives for solver
 		var cInv = cInventory(dXpr);
 		if (cInv.length > 1) {
 			var totDeriv = "0";
 			for (var nTd in cInv) {
-				totDeriv = cAddS(totDeriv,cMulS(drvS(dXpr,"Cv["+cInv[nTd]+"]",deeVar),difS("Cv["+cInv[nTd]+"]")))
+				totDeriv = cAddS(totDeriv,cMulS(drvS(dXpr,"Cv["+cInv[nTd]+"]",nTh),difS("Cv["+cInv[nTd]+"]")))
 			}
 			return totDeriv
 		}
-		return drvS(dXpr,deeVar)
+		return drvS(dXpr,deeVar,nTh)
 	}
-	function tdsS(dXpr,deeVar) {return tdvS(tdvS(dXpr,deeVar),deeVar)} //total second derivative
-	function drsS(dXpr,deeVar) {return drvS(drvS(dXpr,deeVar),deeVar)} //partial second derivative
-	function drvS(dXpr,deeVar) { //partial derivative
+	function drvS(dXpr,deeVar,nTh) { //nTh partial derivative
 		function cPowD(xU,xL) {
 			if (strTest(xU,deeVar) && strTest(xL,deeVar)) {return cMulS(cAddS(cMulS(lneS(deeVar),drvS(xL,deeVar)),cDivS(xL,deeVar)),cPowS(xU,xL))}
 			if (strTest(xU,deeVar)) {return cMulS(cMulS(xL,(cPowS(xU,cSubS(xL,1)))),drvS(xU,deeVar))}	
@@ -1617,12 +1612,14 @@ var mgCalc = (function() {
 		}
         function drvExecute(xIn) {return eval(xIn.replace(/([a-z])\(/,"$1D(").replace(/([a-z])\(/g,"$1S(").replace(/(Cv\[\d+\])/g,"'$1'").replace(/(Pv\[\d+\])/g,"'$1'").replace(/(Sv\[\d+\])/g,"'$1'"))}
 		//
+		if (typeof nTh == "undefined" || nTh == "undefined") {nTh = 1}
+		if (nTh == 0) {return dXpr}
 		if (deeVar) {deeVarP = deeVar}	
-		if (solverFlag) {return "drv("+dXpr+")"}
+		if (solverFlag) {return drvS("drv("+dXpr+")",deeVar,nTh-1)} //return nested derivatives for solver
 		dXpr = cReduce(dXpr);
 		if (dXpr == deeVar) {return 1}
 		if (!strTest(dXpr,deeVar)) {return 0}
-		return cReduce(drvExecute(dXpr))
+		return drvS(cReduce(drvExecute(dXpr)),deeVar,nTh-1) //recurse derivatives greater that 1st
 	}
 
 	//Integrals
@@ -1630,7 +1627,7 @@ var mgCalc = (function() {
 		if (typeof iU != "undefined" && typeof iL != "undefined") {return "ntp("+nXpr+","+deeVar+","+iU+","+iL+")"}
 		return "ntp("+nXpr+","+deeVar+")"
 	}
-	function ntgS(nXpr,deeVar,iU,iL) {
+	function ntgS(nXpr,deeVar,iU,iL) { //integrate (integrand, variable, upper_limit, lower_limit)
 		function ntgCheck(rCheck) {if (typeof rCheck == "undefined" || strTest(rCheck,"Cv[9998]") || strTest(rCheck,"undefined")) {return false}; return true}
 		function ntgTest(rTest)   {if (ntgCheck(rTest) &&  !strTest(rTest,"ntp(") && rTest != 0) {return true}; return false} //test for ntg success
         function cPowI(xU,xL) {
@@ -2599,12 +2596,8 @@ var mgCalc = (function() {
 		function difR(xU) {return "dif("+xU+")"}
 		function idrR(xU) {return "idr("+xU+")"}
 		function tdrR(xU) {return "tdv("+xU+")"}
-		function iddR(xU) {return "idd("+xU+")"}
-		function tddR(xU) {return "tdd("+xU+")"}
 		function sdrR(xU,xL) {return "sdr("+xU+","+xL+")"}
-		function ddrR(xU,xL) {return "ddr("+xU+","+xL+")"}
 		function psdR(xU,xL) {return "psd("+xU+","+xL+")"}
-		function pddR(xU,xL) {return "pdd("+xU+","+xL+")"}
 		function sumR(xU,xL,xR) {return "sum("+xU+","+xL+","+xR+")"}
 		function prdR(xU,xL,xR) {return "prd("+xU+","+xL+","+xR+")"}
 		function limR(xU,xL,xR) {return "lim("+xU+","+xL+","+xR+")"}
@@ -2990,7 +2983,7 @@ var mgCalc = (function() {
 		return "undefined"
 	}
 
-	// arithemetic operators
+	// Arithmetic operators
 	function cNeg(xU) { //negative
 		return cMul(-1,xU)
 	}
@@ -3043,15 +3036,11 @@ var mgCalc = (function() {
 		if (getType(xU) == "matrix" && getType(xL) != "matrix") {return scalarMult(xU,xL)}
 		if (getType(xL) == "matrix" && getType(xU) != "matrix") {return scalarMult(xL,xU)}
 		if (getType(xU) == "matrix" && getType(xL) == "matrix") { //matrix multiply
-			var rowsU = xU.length;
-			var colsU = xU[0].length;
-			var rowsL = xL.length;
-			var colsL = xL[0].length;
-			if (rowsL != colsU) {return "undefined"}
-			var mReturn = matCreate(rowsU,colsL);
-			for (var rU=0;rU<rowsU;rU++) {
-				for (var cL=0;cL<colsL;cL++) {
-					for (var cU=0;cU<colsU;cU++) {
+			if (xL.length != xU[0].length) {return "undefined"}
+			var mReturn = matCreate(xU.length,xL[0].length);
+			for (var rU in xU) {
+				for (var cL in xL[0]) {
+					for (var cU in xU[0]) {
 						var mTemp = cMul(xU[rU][cU],xL[cU][cL]);
 						if (mReturn[rU][cL] == 0) {mReturn[rU][cL] = mTemp}
 						else {mReturn[rU][cL] = cAdd(mReturn[rU][cL],mTemp)}
@@ -3110,27 +3099,24 @@ var mgCalc = (function() {
 			var rowsU = xU.length;
 			if (rowsU != xU[0].length) {return "undefined"}
 			if (rowsU == 2) {return cSubS(cMulS(det(xU[0][0]),det(xU[1][1])),cMulS(det(xU[0][1]),det(xU[1][0])))}
-			for (var rU=0;rU<rowsU;rU++) {determinant = cAddS(determinant,cMulS(det(matMinor(xU,0,rU)),matInvSign(xU)[0][rU]))}
+			for (var rU in xU) {determinant = cAddS(determinant,cMulS(det(matMinor(xU,0,rU)),matInvSign(xU)[0][rU]))}
 			return determinant
 		}
 		return xU
 	}
 	function trc(xU) { //matrix trace
 		if (getType(xU) == "matrix") {
-			var rowsU = xU.length;
-			if (rowsU != xU[0].length) {return "undefined"}
+			if (xU.length != xU[0].length) {return "undefined"}
 			var mReturn = 0;
-			for (var rU=0;rU<rowsU;rU++) {mReturn = cAddS(mReturn,xU[rU][rU])}
+			for (var rU in xU) {mReturn = cAddS(mReturn,xU[rU][rU])}
 			return mReturn
 		}
 		return "undefined"		
 	}
 	function trn(xU) { //matrix transpose 
 		if (getType(xU) == "matrix") {
-			var rowsU = xU.length;
-			var colsU = xU[0].length;
-			var mReturn = matCreate(colsU,rowsU);
-			for (var iR=0;iR<rowsU;iR++) {for (var iC=0;iC<colsU;iC++) {mReturn[iC][iR] = trn(xU[iR][iC])}}
+			var mReturn = matCreate(xU[0].length,xU.length);
+			for (var iR in xU) {for (var iC in xU[0]) {mReturn[iC][iR] = trn(xU[iR][iC])}}
 			return mReturn
 		}
 		return xU
@@ -3140,7 +3126,7 @@ var mgCalc = (function() {
 			var rowsU = xU.length;
 			if (rowsU != xU[0].length) {return "undefined"}
 			var mReturn = matCreate(rowsU,rowsU);
-			for (var iR=0;iR<rowsU;iR++) {for (var iC=0;iC<rowsU;iC++) {mReturn[iR][iC] = inv(xU[iR][iC])}}
+			for (var iR in xU) {for (var iC in xU) {mReturn[iR][iC] = inv(xU[iR][iC])}}
 			return mReturn			
 		}
 		return cMul(cDiv(1,det(xU)),trn(matCofac(xU)))
@@ -3153,11 +3139,10 @@ var mgCalc = (function() {
 	function matIdentity(xU) { //matrix identity
 		if (getType(xU) == "matrix") {
 			var rowsU = xU.length;
-			var colsU = xU[0].length;
-			if (rowsU != colsU) {return "undefined"}
+			if (rowsU != xU[0].length) {return "undefined"}
 			var mReturn = matCreate(rowsU,rowsU);
-			for (var iR=0;iR<rowsU;iR++) {
-				for (var iC=0;iC<colsU;iC++) {
+			for (var iR in xU) {
+				for (var iC in xU[0]) {
 					if (iR == iC) {
 						if (getType(xU[iR][iC]) == "matrix") {mReturn[iR][iC] = matIdentity(xU[iR][iC])}
 						else {mReturn[iR][iC] = 1}
@@ -3177,9 +3162,9 @@ var mgCalc = (function() {
 			var rowsU = xU.length;
 			var rowFac = 1;
 			var mReturn = matCreate(rowsU,rowsU);
-			for (var iR=0;iR<rowsU;iR++) {
+			for (var iR in xU) {
 				var colFac = rowFac;
-				for (var iC=0;iC<rowsU;iC++) {
+				for (var iC in xU) {
 					mReturn[iR][iC] = cMulS(colFac,xU[iR][iC]);
 					colFac = -colFac;
 				}
@@ -3194,8 +3179,8 @@ var mgCalc = (function() {
 			var rowsU = xU.length;
 			if (rowsU != xU[0].length) {return "undefined"}
 			var mReturn = matCreate(rowsU,rowsU);
-			for (var iR=0;iR<rowsU;iR++) {
-				for (var iC=0;iC<rowsU;iC++) {
+			for (var iR in xU) {
+				for (var iC in xU) {
 					mReturn[iR][iC] = det(matMinor(xU,iR,iC))
 				}
 			}
@@ -3209,16 +3194,16 @@ var mgCalc = (function() {
 		var mReturn = new Array(rowsU-1);
 		for (var iC=0;iC<rowsU-1;iC++) {mReturn[iC] = []}
 		var oRow = 0;
-		for (var iR=0;iR<rowsU;iR++) {
+		for (var iR in xU) {
 			if (iR != row) {
-				for (var iC=0;iC<rowsU;iC++) {if (iC != col) {mReturn[oRow].push(xU[iR][iC])}}
+				for (var iC in xU) {if (iC != col) {mReturn[oRow].push(xU[iR][iC])}}
 				oRow++;
 			}
 		}
 		return mReturn
 	}
 	
-	//numerical functions
+	//Numerical functions
 	function cAng(xU,xL) { //complex polar form
 		if (getType(xU) == "real" && getType(xL) == "real") {return cMul(xU,cAdd(cos(xL),cMul(Cv[46],sin(xL))))}
 		return "undefined"

@@ -1,5 +1,5 @@
 /*
-	MathGene Test Suite - Version 1.00
+	MathGene Test Suite - Version 1.10
     Copyright (C) 2016  George J. Paulos
 
     MathGene is free software: you can redistribute it and/or modify
@@ -793,14 +793,14 @@ var solve =
 "idr(Cv[10121])Cv[10120]=Cv[10121]^2+3sin(Cv[10121])","Cv[10120]","Cv[10120]=Cv[10121]^3/3-3cos(Cv[10121])",
 "idr(Cv[10120])idr(Cv[10120])Cv[10121]=Cv[10120]^3","Cv[10121]","Cv[10121]=Cv[10120]^5/20",
 "Cv[10120]^3=idr(Cv[10120])idr(Cv[10120])Cv[10121]","Cv[10121]","Cv[10121]=Cv[10120]^5/20",
-"idd(Cv[10120])Cv[10121]=Cv[10120]^3","Cv[10121]","Cv[10121]=Cv[10120]^5/20",
-"tdd(Cv[10120])Cv[10121]=Cv[10120]^3","Cv[10121]","Cv[10121]=Cv[10120]^5/20",
+"idr(Cv[10120],2)Cv[10121]=Cv[10120]^3","Cv[10121]","Cv[10121]=Cv[10120]^5/20",
+"tdr(Cv[10120],2)Cv[10121]=Cv[10120]^3","Cv[10121]","Cv[10121]=Cv[10120]^5/20",
 
 "sdr(Cv[10121],Cv[10120])=Cv[10120]^3","Cv[10121]","Cv[10121]=Cv[10120]^4/4",
 "Cv[10120]^3=sdr(Cv[10121],Cv[10120])","Cv[10121]","Cv[10121]=Cv[10120]^4/4",
 "psd(Cv[10121],Cv[10120])=Cv[10120]^3","Cv[10121]","Cv[10121]=Cv[10120]^4/4",
-"ddr(Cv[10121],Cv[10120])=Cv[10120]^3","Cv[10121]","Cv[10121]=Cv[10120]^5/20",
-"pdd(Cv[10121],Cv[10120])=Cv[10120]^3","Cv[10121]","Cv[10121]=Cv[10120]^5/20",
+"sdr(Cv[10121],Cv[10120],2)=Cv[10120]^3","Cv[10121]","Cv[10121]=Cv[10120]^5/20",
+"psd(Cv[10121],Cv[10120],2)=Cv[10120]^3","Cv[10121]","Cv[10121]=Cv[10120]^5/20",
 
 "Cv[10121]/Cv[8]^Cv[10120]^2Cv[8800]Cv[10122]","Cv[10120]","Cv[10120]Cv[8800]sqt(lne(Cv[10121]/Cv[10122]))",
 "Cv[10120]Cv[60]Cv[10121]+Cv[10122]","Cv[10121]","Cv[10121]Cv[62]Cv[10120]-Cv[10122]",
@@ -997,17 +997,20 @@ var derivatives =
 "idr(Cv[10120])Cv[10097]/Cv[10120]+Cv[10098]/Cv[10120]-Cv[10099]/Cv[10120]","(Cv[10099]-Cv[10097]-Cv[10098])/Cv[10120]^2",
 "idr(Cv[10120])Cv[8]^Cv[10120]^2/(2Cv[10120]^2+2)","(Cv[10120]Cv[8]^Cv[10120]^2)/(Cv[10120]^2+1)-(4Cv[10120]Cv[8]^Cv[10120]^2)/(2Cv[10120]^2+2)^2",
 
+
 "tdr(Cv[10120])4Cv[10120]^2+5Cv[10120]+6Cv[10120]Cv[10121]+Cv[10121]^2","(8Cv[10120]+6Cv[10121]+5)Cv[8748]Cv[10120]+(6Cv[10120]+2Cv[10121])Cv[8748]Cv[10121]",
 "tdr(Cv[10120])2Cv[10120]^2Cv[10121]^3","4Cv[10120]Cv[10121]^3Cv[8748]Cv[10120]+6Cv[10120]^2Cv[10121]^2Cv[8748]Cv[10121]",
 "tdr(Cv[10120])5Cv[10120]^2+Cv[10121]^2","2Cv[10121]Cv[8748]Cv[10121]+10Cv[10120]Cv[8748]Cv[10120]",
 
-"idd(Cv[10120])Cv[10120]^3","6Cv[10120]",
-"idd(Cv[10121])Cv[10121]^3","6Cv[10121]",
-"idd(Cv[10120])Cv[10121]-Cv[10120]^3","-6Cv[10120]",
-"idd(Cv[10120])Cv[10097]/Cv[10120]+Cv[10098]/Cv[10120]-Cv[10099]/Cv[10120]","(2Cv[10098]+2Cv[10097]-2Cv[10099])/Cv[10120]^3",
+"idr(Cv[10120],2)x^3","6x",
+"idr(Cv[10120],3)x^4","24x",
+"idr(Cv[10120],2)Cv[10120]^3","6Cv[10120]",
+"idr(Cv[10121],2)Cv[10121]^3","6Cv[10121]",
+"idr(Cv[10120],2)Cv[10121]-Cv[10120]^3","-6Cv[10120]",
+"idr(Cv[10120],2)Cv[10097]/Cv[10120]+Cv[10098]/Cv[10120]-Cv[10099]/Cv[10120]","(2Cv[10098]+2Cv[10097]-2Cv[10099])/Cv[10120]^3",
 
-"tdd(Cv[10120])Cv[10120]^3","6Cv[10120]",
-"tdd(Cv[10121])Cv[10121]^3","6Cv[10121]",
+"tdr(Cv[10120],2)Cv[10120]^3","6Cv[10120]",
+"tdr(Cv[10121],2)Cv[10121]^3","6Cv[10121]",
 
 ];
 var integrals =
@@ -1455,8 +1458,8 @@ var html =
 "Cv[10102](Cv[10120])=sum(Cv[8734],Cv[10110]=Cv[10097]) (Cv[10102]^cbr(Cv[10110])(Cv[10097])/Cv[10110]Cv[45])(Cv[10120]-Cv[10097])^Cv[10110]","<span title='MathGene HTML' style='font-family:Times,Serif;font-size:100%'><i>f</i>(<i>x</i>) = <span style='display:inline-block;'><span style='vertical-align:middle;text-align:center;display:inline-table;'><span style='display:table-row;font-size:50%'>&#8734;</span><span style='line-height:80%;display:table-row;font-size:125%'>&#8721;</span><span style='line-height:150%;display:table-row;font-size:50%'><i>n</i> = <i>a</i></span></span></span>  <span style='text-align:center;vertical-align:middle;display:inline-block;'><span style='display:table-row;'><span style='font-size:85%;display:table-cell'><i>f</i><sup>&#123;<i>n</i>&#125;</sup>(<i>a</i>)</span></span><span style='display:table-row;vertical-align:top'><span style='font-size:85%;display:table-cell;border-top-style:solid;border-top-width:2px;padding:3px;'><i>n</i>!</span></span></span> (<i>x</i>&minus;<i>a</i>)<sup><i>n</i></sup></span>",
 "tan(Cv[10120])=sum(Cv[8734],Cv[10110]=1)(Cv[10066]sbt(2Cv[10110])(-4)^Cv[10110](1-4^Cv[10110])/(2Cv[10110])Cv[45])Cv[10120]^(2Cv[10110]-1)=Cv[10120]+Cv[10120]^3/3+2Cv[10120]^5/15+Cv[8230]","<span title='MathGene HTML' style='font-family:Times,Serif;font-size:100%'>tan(<i>x</i>) = <span style='display:inline-block;'><span style='vertical-align:middle;text-align:center;display:inline-table;'><span style='display:table-row;font-size:50%'>&#8734;</span><span style='line-height:80%;display:table-row;font-size:125%'>&#8721;</span><span style='line-height:150%;display:table-row;font-size:50%'><i>n</i> = 1</span></span></span>  <span style='text-align:center;vertical-align:middle;display:inline-block;'><span style='display:table-row;'><span style='font-size:85%;display:table-cell'><i>B</i><sub><sub>2<i>n</i></sub></sub>(&minus;4)<sup><i>n</i></sup>(1&minus;4<sup><i>n</i></sup>)</span></span><span style='display:table-row;vertical-align:top'><span style='font-size:85%;display:table-cell;border-top-style:solid;border-top-width:2px;padding:3px;'>(2<i>n</i>)!</span></span></span> <i>x</i><sup>2<i>n</i>&minus;1</sup> = <i>x</i>+ <span style='text-align:center;vertical-align:middle;display:inline-block;'><span style='display:table-row;'><span style='font-size:85%;display:table-cell'><i>x</i><sup>3</sup></span></span><span style='display:table-row;vertical-align:top'><span style='font-size:85%;display:table-cell;border-top-style:solid;border-top-width:2px;padding:3px;'>3</span></span></span> + <span style='text-align:center;vertical-align:middle;display:inline-block;'><span style='display:table-row;'><span style='font-size:85%;display:table-cell'>2<i>x</i><sup>5</sup></span></span><span style='display:table-row;vertical-align:top'><span style='font-size:85%;display:table-cell;border-top-style:solid;border-top-width:2px;padding:3px;'>15</span></span></span> +&#8230;</span>",
 "tnh(Cv[10120])=sum(Cv[8734],Cv[10110]=1)(Cv[10066]sbt(2Cv[10110])4^Cv[10110](4^Cv[10110]-1)/(2Cv[10110])Cv[45])Cv[10120]^(2Cv[10110]-1)=Cv[10120]-(1/3)Cv[10120]^3+(2/15)Cv[10120]^5-(17/315)Cv[10120]^7+Cv[8230]","<span title='MathGene HTML' style='font-family:Times,Serif;font-size:100%'>tanh(<i>x</i>) = <span style='display:inline-block;'><span style='vertical-align:middle;text-align:center;display:inline-table;'><span style='display:table-row;font-size:50%'>&#8734;</span><span style='line-height:80%;display:table-row;font-size:125%'>&#8721;</span><span style='line-height:150%;display:table-row;font-size:50%'><i>n</i> = 1</span></span></span>  <span style='text-align:center;vertical-align:middle;display:inline-block;'><span style='display:table-row;'><span style='font-size:85%;display:table-cell'><i>B</i><sub><sub>2<i>n</i></sub></sub>4<sup><i>n</i></sup>(4<sup><i>n</i></sup>&minus;1)</span></span><span style='display:table-row;vertical-align:top'><span style='font-size:85%;display:table-cell;border-top-style:solid;border-top-width:2px;padding:3px;'>(2<i>n</i>)!</span></span></span> <i>x</i><sup>2<i>n</i>&minus;1</sup> = <i>x</i>&minus; <span style='text-align:center;vertical-align:middle;display:inline-block;'><span style='display:table-row;'><span style='font-size:85%;display:table-cell'>1</span></span><span style='display:table-row;vertical-align:top'><span style='font-size:85%;display:table-cell;border-top-style:solid;border-top-width:2px;padding:3px;'>3</span></span></span> <i>x</i><sup>3</sup>+ <span style='text-align:center;vertical-align:middle;display:inline-block;'><span style='display:table-row;'><span style='font-size:85%;display:table-cell'>2</span></span><span style='display:table-row;vertical-align:top'><span style='font-size:85%;display:table-cell;border-top-style:solid;border-top-width:2px;padding:3px;'>15</span></span></span> <i>x</i><sup>5</sup>&minus; <span style='text-align:center;vertical-align:middle;display:inline-block;'><span style='display:table-row;'><span style='font-size:85%;display:table-cell'>17</span></span><span style='display:table-row;vertical-align:top'><span style='font-size:85%;display:table-cell;border-top-style:solid;border-top-width:2px;padding:3px;'>315</span></span></span> <i>x</i><sup>7</sup>+&#8230;</span>",
-"idd(Cv[10120])Cv[10097]/Cv[10120]+Cv[10098]/Cv[10120]-Cv[10099]/Cv[10120]","<span title='MathGene HTML' style='font-family:Times,Serif;font-size:100%'> <span style='text-align:center;vertical-align:middle;display:inline-block;'><span style='display:table-row;'><span style='font-size:85%;display:table-cell'>&#8706;<sup>2</sup></span></span><span style='display:table-row;vertical-align:top'><span style='font-size:85%;display:table-cell;border-top-style:solid;border-top-width:2px;padding:3px;'>&#8706;<i>x</i><sup>2</sup></span></span></span>  <span style='text-align:center;vertical-align:middle;display:inline-block;'><span style='display:table-row;'><span style='font-size:85%;display:table-cell'><i>a</i></span></span><span style='display:table-row;vertical-align:top'><span style='font-size:85%;display:table-cell;border-top-style:solid;border-top-width:2px;padding:3px;'><i>x</i></span></span></span> + <span style='text-align:center;vertical-align:middle;display:inline-block;'><span style='display:table-row;'><span style='font-size:85%;display:table-cell'><i>b</i></span></span><span style='display:table-row;vertical-align:top'><span style='font-size:85%;display:table-cell;border-top-style:solid;border-top-width:2px;padding:3px;'><i>x</i></span></span></span> &minus; <span style='text-align:center;vertical-align:middle;display:inline-block;'><span style='display:table-row;'><span style='font-size:85%;display:table-cell'><i>c</i></span></span><span style='display:table-row;vertical-align:top'><span style='font-size:85%;display:table-cell;border-top-style:solid;border-top-width:2px;padding:3px;'><i>x</i></span></span></span> </span>",
-"tdd(Cv[10120])Cv[10120]^3","<span title='MathGene HTML' style='font-family:Times,Serif;font-size:100%'> <span style='text-align:center;vertical-align:middle;display:inline-block;'><span style='display:table-row;'><span style='font-size:85%;display:table-cell'><i>d</i><sup>2</sup></span></span><span style='display:table-row;vertical-align:top'><span style='font-size:85%;display:table-cell;border-top-style:solid;border-top-width:2px;padding:3px;'><i>d</i><i>x</i><sup>2</sup></span></span></span> <i>x</i><sup>3</sup></span>",
+"idr(Cv[10120],2)Cv[10097]/Cv[10120]+Cv[10098]/Cv[10120]-Cv[10099]/Cv[10120]","<span title='MathGene HTML' style='font-family:Times,Serif;font-size:100%'> <span style='text-align:center;vertical-align:middle;display:inline-block;'><span style='display:table-row;'><span style='font-size:85%;display:table-cell'>&#8706;<sup>2</sup></span></span><span style='display:table-row;vertical-align:top'><span style='font-size:85%;display:table-cell;border-top-style:solid;border-top-width:2px;padding:3px;'>&#8706;<i>x</i><sup>2</sup></span></span></span>  <span style='text-align:center;vertical-align:middle;display:inline-block;'><span style='display:table-row;'><span style='font-size:85%;display:table-cell'><i>a</i></span></span><span style='display:table-row;vertical-align:top'><span style='font-size:85%;display:table-cell;border-top-style:solid;border-top-width:2px;padding:3px;'><i>x</i></span></span></span> + <span style='text-align:center;vertical-align:middle;display:inline-block;'><span style='display:table-row;'><span style='font-size:85%;display:table-cell'><i>b</i></span></span><span style='display:table-row;vertical-align:top'><span style='font-size:85%;display:table-cell;border-top-style:solid;border-top-width:2px;padding:3px;'><i>x</i></span></span></span> &minus; <span style='text-align:center;vertical-align:middle;display:inline-block;'><span style='display:table-row;'><span style='font-size:85%;display:table-cell'><i>c</i></span></span><span style='display:table-row;vertical-align:top'><span style='font-size:85%;display:table-cell;border-top-style:solid;border-top-width:2px;padding:3px;'><i>x</i></span></span></span> </span>",
+"tdr(Cv[10120],2)Cv[10120]^3","<span title='MathGene HTML' style='font-family:Times,Serif;font-size:100%'> <span style='text-align:center;vertical-align:middle;display:inline-block;'><span style='display:table-row;'><span style='font-size:85%;display:table-cell'><i>d</i><sup>2</sup></span></span><span style='display:table-row;vertical-align:top'><span style='font-size:85%;display:table-cell;border-top-style:solid;border-top-width:2px;padding:3px;'><i>d</i><i>x</i><sup>2</sup></span></span></span> <i>x</i><sup>3</sup></span>",
 
 "sqt(mat(mat(7,10),mat(15,22)))","<span title='MathGene HTML' style='font-family:Times,Serif;font-size:100%'><span style='vertical-align:middle;display:inline-block;padding:3px'><span style='vertical-align:top;font-size:304%'>&#8730;</span><span style='vertical-align:top;border-top-style:solid;border-top-width:2px;'><span style='vertical-align:top;'><span style='vertical-align:middle;font-size:90%'> <table style='text-align:center;display:inline-table;vertical-align:middle'><tr><td style='border-left:2px solid black;border-top:2px solid black;border-bottom:2px solid black'>&nbsp;</td><td><table><tr><td>7</td><td>10</td></tr><tr><td>15</td><td>22</td></tr></table><td style='border-right:2px solid black;border-top:2px solid black;border-bottom:2px solid black'>&nbsp;</td></tr></table> </span></span></span></span></span>",
 "mat(mat(1,2,3,4,5,6),mat(11,12,13,14,15,16))","<span title='MathGene HTML' style='font-family:Times,Serif;font-size:100%'> <table style='text-align:center;display:inline-table;vertical-align:middle'><tr><td style='border-left:2px solid black;border-top:2px solid black;border-bottom:2px solid black'>&nbsp;</td><td><table><tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td></tr><tr><td>11</td><td>12</td><td>13</td><td>14</td><td>15</td><td>16</td></tr></table><td style='border-right:2px solid black;border-top:2px solid black;border-bottom:2px solid black'>&nbsp;</td></tr></table> </span>",
@@ -1631,14 +1634,18 @@ var mport =
 "\\underline{XY}","und(Cv[10088]Cv[10089])",
 "\\frac{d}{dx}","tdr(Cv[10120])",
 "\\frac{d}{dy} y^2","tdr(Cv[10121])Cv[10121]^2",
+"\\frac{d^2}{dy^2} y^2","tdr(Cv[10121],2)Cv[10121]^2",
+"\\frac{d^3}{dy^3} y^5","tdr(Cv[10121],3)Cv[10121]^5",
 "\\frac{d}{dy} \\sin(y)","tdr(Cv[10121])sin(Cv[10121])",
 "\\frac{dx}{dy}=\\sin{y}","sdr(Cv[10120],Cv[10121])=sin(Cv[10121])",
+"\\frac{d^2x}{dy^2}=\\sin{y}","sdr(Cv[10120],Cv[10121],2)=sin(Cv[10121])",
 "\\frac{\\partial}{\\partial x}","idr(Cv[10120])",
 "\\frac{\\partial}{\\partial y} y^2","idr(Cv[10121])Cv[10121]^2",
 "\\frac{\\partial}{\\partial x} \\sin{x}","idr(Cv[10120])sin(Cv[10120])",
 "\\frac{\\partial x}{\\partial y} = \\sin(y)","psd(Cv[10120],Cv[10121])=sin(Cv[10121])",
-"\\frac{d^2}{d x^2} x^{3}","tdd(Cv[10120])Cv[10120]^3",
-"\\frac{\\partial^2}{\\partial x^2}\\frac{a}{x}+\\frac{b}{x}-\\frac{c}{x}","idd(Cv[10120])(Cv[10097]/Cv[10120])+(Cv[10098]/Cv[10120])-(Cv[10099]/Cv[10120])",
+"\\frac{\\partial^2 x}{\\partial y^2} = \\sin(y)","psd(Cv[10120],Cv[10121],2)=sin(Cv[10121])",
+"\\frac{d^2}{d x^2} x^{3}","tdr(Cv[10120],2)Cv[10120]^3",
+"\\frac{\\partial^2}{\\partial x^2}\\frac{a}{x}+\\frac{b}{x}-\\frac{c}{x}","idr(Cv[10120],2)(Cv[10097]/Cv[10120])+(Cv[10098]/Cv[10120])-(Cv[10099]/Cv[10120])",
 "\\sin x \\cos x","sin(Cv[10120])cos(Cv[10120])",
 "\\sin \\frac xy \\cos 2x","sin(Cv[10120]/Cv[10121])cos(2)Cv[10120]",
 "\\sin \\frac xy \\cos \\frac ax","sin(Cv[10120]/Cv[10121])cos(Cv[10097]/Cv[10120])",
