@@ -1,5 +1,5 @@
 /*
-	MathGene Translation/Rendering Library - Version 1.10
+	MathGene Translation/Rendering Library - Version 1.00
     Copyright (C) 2017  George J. Paulos
 
     MathGene is free software: you can redistribute it and/or modify

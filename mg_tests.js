@@ -1,5 +1,5 @@
 /*
-	MathGene Test Suite - Version 1.10
+	MathGene Test Suite - Version 1.00
     Copyright (C) 2016  George J. Paulos
 
     MathGene is free software: you can redistribute it and/or modify
@@ -824,32 +824,50 @@ var solve =
 
 var trigtoexp =
 [
-"sin(Cv[10120])","(Cv[8]^(Cv[46]Cv[10120])-1/Cv[8]^(Cv[46]Cv[10120]))/2Cv[46]",
-"cos(Cv[10120])","(Cv[8]^(Cv[46]Cv[10120])+1/Cv[8]^(Cv[46]Cv[10120]))/2",
-"tan(Cv[10120])","(Cv[8]^(Cv[46]Cv[10120])-1/Cv[8]^(Cv[46]Cv[10120]))/Cv[46](Cv[8]^(Cv[46]Cv[10120])+1/Cv[8]^(Cv[46]Cv[10120]))",
+"sin(Cv[10120])","Cv[46]/(2Cv[8]^(Cv[46]Cv[10120]))-(Cv[46]Cv[8]^(Cv[46]Cv[10120]))/2",
+"cos(Cv[10120])","Cv[8]^(Cv[46]Cv[10120])/2+1/(2Cv[8]^(Cv[46]Cv[10120]))",
+"tan(Cv[10120])","(Cv[46]/Cv[8]^(Cv[46]Cv[10120])-Cv[46]Cv[8]^(Cv[46]Cv[10120]))/(Cv[8]^(Cv[46]Cv[10120])+1/Cv[8]^(Cv[46]Cv[10120]))",
 "sec(Cv[10120])","2/(Cv[8]^(Cv[46]Cv[10120])+1/Cv[8]^(Cv[46]Cv[10120]))",
 "csc(Cv[10120])","2Cv[46]/(Cv[8]^(Cv[46]Cv[10120])-1/Cv[8]^(Cv[46]Cv[10120]))",
 "cot(Cv[10120])","Cv[46](Cv[8]^(Cv[46]Cv[10120])+1/Cv[8]^(Cv[46]Cv[10120]))/(Cv[8]^(Cv[46]Cv[10120])-1/Cv[8]^(Cv[46]Cv[10120]))",
 
-"snh(Cv[10120])","(Cv[8]^(Cv[10120])-1/Cv[8]^(Cv[10120]))/2",
-"csh(Cv[10120])","(Cv[8]^Cv[10120]+1/Cv[8]^Cv[10120])/2",
-"tnh(Cv[10120])","(Cv[8]^Cv[10120]-1/Cv[8]^(Cv[10120]))/(Cv[8]^Cv[10120]+1/Cv[8]^(Cv[10120]))",
+"snh(Cv[10120])","Cv[8]^Cv[10120]/2-1/2Cv[8]^Cv[10120]",
+"csh(Cv[10120])","Cv[8]^Cv[10120]/2+1/2Cv[8]^Cv[10120]",
+"tnh(Cv[10120])","(Cv[8]^Cv[10120]-1/Cv[8]^Cv[10120])/(Cv[8]^Cv[10120]+1/Cv[8]^Cv[10120])",
 "sch(Cv[10120])","2/(Cv[8]^Cv[10120]+1/Cv[8]^Cv[10120])",
 "cch(Cv[10120])","2/(Cv[8]^(Cv[10120])-1/Cv[8]^(Cv[10120]))",
 "cth(Cv[10120])","(Cv[8]^Cv[10120]+1/Cv[8]^Cv[10120])/(Cv[8]^Cv[10120]-1/Cv[8]^Cv[10120])",
 
-"asn(Cv[10120])","-Cv[46]lne(Cv[46]Cv[10120]+sqt(1-Cv[10120]^2))",
-"acs(Cv[10120])","Cv[46]lne(Cv[10120]+Cv[46]sqt(1-Cv[10120]^2))",
+"asn(Cv[10120])","-Cv[46]lne(sqt(1-Cv[10120]^2)+Cv[46]Cv[10120])",
+"acs(Cv[10120])","Cv[46]lne(Cv[46]sqt(1-Cv[10120]^2)+Cv[10120])",
 "atn(Cv[10120])","Cv[46]lne(2Cv[46]/(Cv[46]-Cv[10120])-1)/2",
-"asc(Cv[10120])","-(lne(Cv[46]/Cv[10120]+sqt(1-Cv[46]/Cv[10120]^2))/2)",
-"acc(Cv[10120])","-(lne(Cv[46]/Cv[10120]+sqt(Cv[46]-Cv[46]/Cv[10120]^2))/2)",
+"asc(Cv[10120])","-(lne(sqt(1-Cv[46]/Cv[10120]^2)+Cv[46]/Cv[10120])/2)",
+"acc(Cv[10120])","-(lne(sqt(Cv[46]-Cv[46]/Cv[10120]^2)+Cv[46]/Cv[10120])/2)",
 "act(Cv[10120])","Cv[46]lne(2Cv[46]/(Cv[46]+Cv[10120])-1)/2",
 
-"ash(Cv[10120])","lne(Cv[10120]+sqt(Cv[10120]^2+1))",
-"ach(Cv[10120])","lne(Cv[10120]+sqt(Cv[10120]^2-1))",
+"ash(Cv[10120])","lne(sqt(Cv[10120]^2+1)+Cv[10120])",
+"ach(Cv[10120])","lne(sqt(Cv[10120]^2-1)+Cv[10120])",
 "ath(Cv[10120])","lne(Cv[10120]+1)lne(1-Cv[10120])/2",
 ];
 
+var exptotrig =
+[
+"Cv[8]^Cv[10120]/2-1/2Cv[8]^Cv[10120]","snh(Cv[10120])",
+"(Cv[8]^(2Cv[10120])-Cv[8]^-(2Cv[10120]))/2","snh(2Cv[10120])",
+"Cv[8]^Cv[10120]/2+1/2Cv[8]^Cv[10120]","csh(Cv[10120])",
+"(Cv[8]^Cv[10120]-1/Cv[8]^Cv[10120])/(Cv[8]^Cv[10120]+1/Cv[8]^Cv[10120])","tnh(Cv[10120])",
+"(Cv[8]^(Cv[10121]Cv[10120])-1/Cv[8]^(Cv[10121]Cv[10120]))/(Cv[8]^(Cv[10121]Cv[10120])+1/Cv[8]^(Cv[10121]Cv[10120]))","tnh(Cv[10120]Cv[10121])",
+"Cv[8]^(Cv[46]Cv[10120])/2Cv[46]-1/2Cv[46]Cv[8]^(Cv[46]Cv[10120])","sin(Cv[10120])",
+"Cv[8]^(2Cv[46]Cv[10120])/2Cv[46]-1/2Cv[46]Cv[8]^(2Cv[46]Cv[10120])","sin(2Cv[10120])",
+"Cv[8]^(Cv[46]Cv[10120])/2+1/(2Cv[8]^(Cv[46]Cv[10120]))","cos(Cv[10120])",
+"Cv[8]^(2Cv[46]Cv[10120])/2+1/(2Cv[8]^(2Cv[46]Cv[10120]))","cos(2Cv[10120])",
+"2/(Cv[8]^(Cv[46]Cv[10120])+1/Cv[8]^(Cv[46]Cv[10120]))","sec(Cv[10120])",
+"(Cv[46]/Cv[8]^(Cv[46]Cv[10120])-Cv[46]Cv[8]^(Cv[46]Cv[10120]))/(Cv[8]^(Cv[46]Cv[10120])+1/Cv[8]^(Cv[46]Cv[10120]))","tan(Cv[10120])",
+"(Cv[46]/Cv[8]^(3Cv[46]Cv[10120])-Cv[46]Cv[8]^(3Cv[46]Cv[10120]))/(Cv[8]^(3Cv[46]Cv[10120])+1/Cv[8]^(3Cv[46]Cv[10120]))","tan(3Cv[10120])",
+"(2Cv[46])/(Cv[8]^(Cv[46]Cv[10120])-1/Cv[8]^(Cv[46]Cv[10120]))","csc(Cv[10120])",
+"(Cv[46](Cv[8]^(Cv[46]Cv[10120])+1/Cv[8]^(Cv[46]Cv[10120])))/(Cv[8]^(Cv[46]Cv[10120])-1/Cv[8]^(Cv[46]Cv[10120]))","cot(Cv[10120])",
+"(Cv[46](Cv[8]^(Cv[46]Cv[10120]Cv[10121])+1/Cv[8]^(Cv[46]Cv[10120]Cv[10121])))/(Cv[8]^(Cv[46]Cv[10120]Cv[10121])-1/Cv[8]^(Cv[46]Cv[10120]Cv[10121]))","cot(Cv[10120]Cv[10121])",
+];
 var limits =
 [
 "lim(Cv[10120],Cv[8734])(2Cv[10120]^3+4Cv[10120]^2)/(3Cv[10120]^3+1)","2/3",
@@ -1090,6 +1108,7 @@ var integrals =
 "Cv[8747]Cv[8747](Cv[10120]Cv[10121])^2Cv[8748]Cv[10120]Cv[8748]Cv[10121]","Cv[10120]^3Cv[10121]^3/9+Cv[10121]Cv[11100]+Cv[11101]",
 "Cv[8747]Cv[8747]Cv[10121]/Cv[10120]Cv[8748]Cv[10120]Cv[8748]Cv[10121]","Cv[10121]^2lne(Cv[10120])/2+Cv[10121]Cv[11100]+Cv[11101]",
 "Cv[8747]Cv[8747]Cv[10120]/Cv[10121]Cv[8748]Cv[10121]Cv[8748]Cv[10120]","Cv[10120]^2lne(Cv[10121])/2+Cv[10120]Cv[11100]+Cv[11101]",
+"Cv[8747]Cv[8747]Cv[10120]/Cv[10121]Cv[8748]Cv[10120]Cv[8748]Cv[10121]","Cv[10120]^2lne(Cv[10121])/2+Cv[10121]Cv[11100]+Cv[11101]",
 "Cv[8747]Cv[8747]Cv[10120]/Cv[10121]Cv[8748]Cv[10120]Cv[8748]Cv[10121]","Cv[10120]^2lne(Cv[10121])/2+Cv[10121]Cv[11100]+Cv[11101]",
 "Cv[8747]Cv[8747]Cv[8747]Cv[10120]/Cv[10121]Cv[8748]Cv[10120]Cv[8748]Cv[10120]Cv[8748]Cv[10120]","Cv[10120]^4/24Cv[10121]+Cv[11100]Cv[10120]^2/2+Cv[10120]Cv[11101]+Cv[11102]",
 "Cv[8747]Cv[10120]/sqt(2Cv[10120]^2+1)Cv[8748]Cv[10120]","sqt(2Cv[10120]^2+1)/2+Cv[11100]",
@@ -1743,6 +1762,7 @@ var testList =
 "Expand": "runExpand()",
 "Solve": "runSolve()",
 "Trig to Exponential": "runTrigtoexp()",
+"Exponential to Trig": "runExptotrig()",
 "Limits": "runLimits()",
 "Complex Derivatives": "runDerivatives()",
 "Complex Integrals": "runIntegrals()",
@@ -1856,6 +1876,14 @@ function runTrigtoexp() {
 	increment = 2;
 	for (index=0;index<trigtoexp.length;index+=increment) {
 		runTest(mgTranslate(trigtoexp[index]).html,mgTrigToExp(trigtoexp[index]).html,mgTranslate(trigtoexp[index+1]).html)
+	}
+	toOutput()
+}
+function runExptotrig() {
+	setTitle("Exponential to Trig Tests 'mgExpToTrig()'")
+	increment = 2;
+	for (index=0;index<exptotrig.length;index+=increment) {
+		runTest(mgTranslate(exptotrig[index]).html,mgExpToTrig(exptotrig[index]).html,mgTranslate(exptotrig[index+1]).html)
 	}
 	toOutput()
 }
@@ -2038,6 +2066,7 @@ if (typeof module == "object") {
 	var mgFactor = function(xpr) {return mgCl.mgFactor(xpr)};
 	var mgExpand = function(xpr) {return mgCl.mgExpand(xpr)};
 	var mgTrigToExp = function(xpr) {return mgCl.mgTrigToExp(xpr)};
+	var mgExpToTrig = function(xpr) {return mgCl.mgExpToTrig(xpr)};
 	var mgSolve = function(xpr,slvar) {return mgCl.mgSolve(xpr,slvar)};
     var mgSeries = function(xpr,svar,center,order) {return mgCl.mgSeries(xpr,svar,center,order)};
 	var mgConfig = mgTr.mgConfig;
