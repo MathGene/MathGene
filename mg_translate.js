@@ -1,6 +1,6 @@
 /*
-	MathGene Translation/Rendering Library - Version 1.00
-    Copyright (C) 2017  George J. Paulos
+	MathGene Translation/Rendering Library - Version 1.10
+    Copyright (C) 2018  George J. Paulos
 
     MathGene is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
