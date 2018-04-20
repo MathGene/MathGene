@@ -1,6 +1,6 @@
 /*
-	MathGene Math Library - Version 1.00
-    Copyright (C) 2017  George J. Paulos
+	MathGene Math Library - Version 1.10
+    Copyright (C) 2018  George J. Paulos
 
     MathGene is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -328,12 +328,10 @@ var mgCalc = (function() {
 		if (xIter.search(/,,/) > -1 || xIter.search(/,\)/) > -1 || xIter.search(/\(,/) > -1 || xIter.search(/\(\)/) > -1) {return cError("Missing operand(s)")}
 		return strConvert(eval(xIter.replace(/([a-z])\(/g,"$1S(").replace(/(Cv\[\d+\])/g,"'$1'").replace(/(Pv\[\d+\])/g,"'$1'").replace(/(Sv\[\d+\])/g,"'$1'")));
 	}
-	function cReduce(cRdce) {return iReduce(xReduce(xprIterate(cRdce)))} //complete expression reduction
+	function cReduce(cRdce) {return iReduce(xReduce(cRdce))} //complete expression reduction
 	function pxpExecute(xIn) {Pv = [];return xprIterate(xprIterate(xIn.replace(/cMul\(/g,"vMul(").replace(/cDiv\(/g,"vDiv(").replace(/cNeg\(/g,"vNeg(")).replace(/Pv\[(\d+)\]/g,"pxp($1)"))}
 	function smxExecute(xIn) {Sv = [];return xprIterate(xprIterate(xIn.replace(/cAdd\(/g,"vAdd(").replace(/cSub\(/g,"vSub(")).replace(/Sv\[(\d+)\]/g,"smx($1)"))}
 	function xReduce(xRdce) { //basic expression reduction
-		function pxpExecute(xIn) {Pv = [];return xprIterate(xprIterate(xIn.replace(/cMul\(/g,"vMul(").replace(/cDiv\(/g,"vDiv(").replace(/cNeg\(/g,"vNeg(")).replace(/Pv\[(\d+)\]/g,"pxp($1)"))}
-		function smxExecute(xIn) {Sv = [];return xprIterate(xprIterate(xIn.replace(/cAdd\(/g,"vAdd(").replace(/cSub\(/g,"vSub(")).replace(/Sv\[(\d+)\]/g,"smx($1)"))}
 		xRdce = smxExecute(xprIterate(xRdce)); //reduce sum-difference terms	
 		pxpFlag = true; //convert cDiv denominator to cPow(x,-1)
 		expFlag = true;
@@ -385,7 +383,7 @@ var mgCalc = (function() {
 		);
 		var sTerms = {Terms:[],Factors:[],Divisors:[]}; //collector for segregated terms
 		var tReturn = 0;
-		for (var xI in tSum) { //extract factors trom tSum array
+		for (var xI in tSum) { //extract factors from tSum array
 			var tExtract = opExtract(tSum[xI]);
 			if      (nbrTest(tSum[xI])) {tReturn = (+tSum[xI])+tReturn} //combine numerical terms into tReturn
 			else if (tExtract.func == "cMul" && nbrTest(tExtract.upper)) { //extract term factors
@@ -2297,15 +2295,16 @@ var mgCalc = (function() {
 		var expFnh = ["snh","csh","tnh","sch","cch","cth"]
 		xU = xReduce(xU);
 		var opMatch = xprSearch(xU,"cPow(Cv[8],Cv[9999])")
+		if (opExtract(opMatch).func == "cMul" && +opExtract(opMatch).upper < 0) {opMatch = xReduce(cNegS(opMatch))} //fix for negative numerical coeff
 		if (opMatch && !strTest(opMatch,"Cv[46]")) {
-			for (var xFn=0;xFn<expFnh.length;xFn++) {
-				xU = xU.replace(xprTrigToExp(expFnh[xFn]+"("+opMatch+")"),expFnh[xFn]+"("+opMatch+")")
+			for (var xFn in expFnh) {
+				xU = xU.replace(xReduce(xprTrigToExp(expFnh[xFn]+"("+opMatch+")")),expFnh[xFn]+"("+opMatch+")")
 			}
 		}
 		if (opMatch && strTest(opMatch,"Cv[46]")) {
-			opMatch = xReduce(cDivS(opMatch,"Cv[46]"))
-			for (var xFn=0;xFn<expFn.length;xFn++) {
-				xU = xU.replace(xprTrigToExp(expFn[xFn]+"("+opMatch+")"),expFn[xFn]+"("+opMatch+")")
+			opMatch = xReduce(cDivS(opMatch,"Cv[46]"))	
+			for (var xFn in expFn) {
+				xU = xU.replace(xReduce(xprTrigToExp(expFn[xFn]+"("+opMatch+")")),expFn[xFn]+"("+opMatch+")")
 			}
 		}
 		return xU
