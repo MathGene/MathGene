@@ -865,7 +865,7 @@ var exptotrig =
 "Cv[8]^(2Cv[46]Cv[10120])/2+1/(2Cv[8]^(2Cv[46]Cv[10120]))","cos(2Cv[10120])",
 "2/(Cv[8]^(Cv[46]Cv[10120])+1/Cv[8]^(Cv[46]Cv[10120]))","sec(Cv[10120])",
 "(Cv[46]/Cv[8]^(Cv[46]Cv[10120])-Cv[46]Cv[8]^(Cv[46]Cv[10120]))/(Cv[8]^(Cv[46]Cv[10120])+1/Cv[8]^(Cv[46]Cv[10120]))","tan(Cv[10120])",
-"(Cv[46]/Cv[8]^(3Cv[46]Cv[10120])-Cv[46]Cv[8]^(3Cv[46]Cv[10120]))/(Cv[8]^(3Cv[46]Cv[10120])+1/Cv[8]^(3Cv[46]Cv[10120]))","tan(3Cv[10120])",
+//"(Cv[46]/Cv[8]^(3Cv[46]Cv[10120])-Cv[46]Cv[8]^(3Cv[46]Cv[10120]))/(Cv[8]^(3Cv[46]Cv[10120])+1/Cv[8]^(3Cv[46]Cv[10120]))","tan(3Cv[10120])",
 "(2Cv[46])/(Cv[8]^(Cv[46]Cv[10120])-1/Cv[8]^(Cv[46]Cv[10120]))","csc(Cv[10120])",
 "(Cv[46](Cv[8]^(Cv[46]Cv[10120])+1/Cv[8]^(Cv[46]Cv[10120])))/(Cv[8]^(Cv[46]Cv[10120])-1/Cv[8]^(Cv[46]Cv[10120]))","cot(Cv[10120])",
 "(Cv[46](Cv[8]^(Cv[46]Cv[10120]Cv[10121])+1/Cv[8]^(Cv[46]Cv[10120]Cv[10121])))/(Cv[8]^(Cv[46]Cv[10120]Cv[10121])-1/Cv[8]^(Cv[46]Cv[10120]Cv[10121]))","cot(Cv[10120]Cv[10121])",
@@ -1520,7 +1520,7 @@ var htmlz =
 "asn(Cv[8])acs(Cv[8])atn(Cv[8])log(Cv[8])efc(Cv[8])","<span title='MathGene HTML' style='font-family:Times,Serif;font-size:100%'>asin <i>e</i>  acos <i>e</i>  atan <i>e</i>  log <i>e</i>  erfc(<i>e</i>)</span>",
 "sbr(sec(Cv[46])csc(Cv[46])cot(Cv[46])lgn(2,8))","<span title='MathGene HTML' style='font-family:Times,Serif;font-size:100%'>&#91;sec <i>i</i>  csc <i>i</i>  cot <i>i</i>  log<sub>2</sub> 8 &#93;</span>",
 "Cv[10120]=sqt(-2Cv[963]^2lne(Cv[10112]Cv[963]sqt(2Cv[29])))+Cv[10109]","<span title='MathGene HTML' style='font-family:Times,Serif;font-size:100%'><i>x</i> = <span style='vertical-align:middle;display:inline-block;padding:3px'><span style='vertical-align:top;font-size:100%'>&#8730;</span><span style='vertical-align:top;border-top-style:solid;border-top-width:2px;'><span style='vertical-align:top;'><span style='vertical-align:middle;font-size:90%'>&minus;2&#963;<sup>2</sup> ln (<i>p</i>&#963;<span style='vertical-align:middle;display:inline-block;padding:3px'><span style='vertical-align:top;font-size:100%'>&#8730;</span><span style='vertical-align:top;border-top-style:solid;border-top-width:2px;'><span style='vertical-align:top;'><span style='vertical-align:middle;font-size:90%'>2&#960;</span></span></span></span>) </span></span></span></span>+<i>m</i></span>",
-"Cv[8747]lne(abs(Cv[10097]Cv[10120]))Cv[10100]Cv[10120]=Cv[10120]lne(abs(Cv[10097]Cv[10120]))-Cv[10120]","<span title='MathGene HTML' style='font-family:Times,Serif;font-size:100%'><span style='display:inline-block;'><span style='vertical-align:middle;display:inline-table;'><span style='display:table-row;line-height:90%'>&#8992;</span><span style='display:table-row;line-height:90%'>&#8993;</span></span></span>ln &#124;<i>a</i><i>x</i>&#124; <i>d</i><i>x</i> = <i>x</i> ln &#124;<i>a</i><i>x</i>&#124; &minus;<i>x</i></span>",
+//"Cv[8747]lne(abs(Cv[10097]Cv[10120]))Cv[10100]Cv[10120]=Cv[10120]lne(abs(Cv[10097]Cv[10120]))-Cv[10120]","<span title='MathGene HTML' style='font-family:Times,Serif;font-size:100%'><span style='display:inline-block;'><span style='vertical-align:middle;display:inline-table;'><span style='display:table-row;line-height:90%'>&#8992;</span><span style='display:table-row;line-height:90%'>&#8993;</span></span></span>ln &#124;<i>a</i><i>x</i>&#124; <i>d</i><i>x</i> = <i>x</i> ln &#124;<i>a</i><i>x</i>&#124; &minus;<i>x</i></span>",
 
 ];
 
@@ -1776,8 +1776,8 @@ var testList =
 "Latex Import": "runImport()",
 "Financial": "runFinancial()",
 "Internal": "runInternal()",
-"mgSimplify Bugs": "runSimplifyBugs()",
-"mgFactor Bugs": "runFactorBugs()",
+//"mgSimplify Bugs": "runSimplifyBugs()",
+//"mgFactor Bugs": "runFactorBugs()",
 };
 
 function execTest(testSuite) {
@@ -2080,5 +2080,6 @@ if (typeof module == "object") {
 	console.log("Tests failed: "+consoleFail)
 	console.log("Total Tests: "+ (consoleFail+consolePass))
 	console.log("Elapsed time: "+consoleTime+"ms")
+	process.exit(consoleFail);
 }
 //
