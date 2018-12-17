@@ -1,7 +1,4 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
+# MathGene Azure Pipeline
 
 trigger:
 - master
@@ -9,10 +6,15 @@ trigger:
 pool:
   vmImage: 'Ubuntu-16.04'
 
+strategy:
+  matrix:
+    node_8_x:
+      node_version: 8.x
+    node_9_x:
+      node_version: 9.x
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
-
-- script: |
-    node mg_tests.js
-  displayName: 'Run a multi-line script'
+- task: NodeTool@0 
+  inputs:
+    versionSpec: $(node_version)
+- script: node mg_tests.js
+  displayName: 'Run test script'
