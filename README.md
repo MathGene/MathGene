@@ -21,8 +21,9 @@ MathGene supports the following browsers, mobile devices, and Javascript engines
 - FireFox version 8 or higher (Windows, Mac, Linux)
 - Google Chrome version 10 or higher (Windows, Mac, Linux, Android)
 - Internet Explorer version 10 or higher (Windows)
+- Microsoft Edge
 - Safari version 5 or higher (Mac)
-- Node.js 4.6
+- Node.js versions 4 or higher
 - Apple iPhone 3+
 - Apple iPad 2+
 - Android 4.3+
@@ -46,7 +47,7 @@ Use the followng HTML statements to load MathGene into a web page (view file 'we
 	<script type="text/javascript" src="mg_translate.js"></script>
 	<script type="text/javascript" src="mg_calculate.js"></script>
 
-MathGene is compatible with Node.js version 4.6 for server-side implementations. 
+MathGene is compatible with Node.js versions 4 through 10 for server-side implementations. 
 
 MathGene requires no additional Node.js modules and can be used with Node.js as a complete math processing engine.
 
@@ -255,7 +256,7 @@ Inverse trig function style format in mgConfig.fnFmt can be either "asin" for 'a
 
 ## MathGene Tests
 
-MathGene has an extensive test suite containing over 1400 individual tests that cover both translations and computations.
+MathGene has an extensive test suite containing over 1500 individual tests that cover both translations and computations.
 The test suite provides use cases for each of the MathGene functions as well as test coverage. 
 Tests can be run either command-line via Node.js or via browser using a web interface.
 
@@ -264,6 +265,8 @@ To run the test suite via command-line (Node.js required, typical runtime 100 se
 	node mg_tests.js
 
 To run the web interface, load the file 'test_suite.html' into a supported web browser.
+
+Each merge to master branch will also run node tests via Azure Pipelines. Pipeline tests run against multiple versions of NodeJS.
 
 
 ## MathGene in Action
