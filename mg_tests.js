@@ -1,5 +1,5 @@
 /*
-	MathGene Test Suite - Version 1.10
+    MathGene Test Suite - Version 1.10
     Copyright (C) 2018  George J. Paulos
 
     MathGene is free software: you can redistribute it and/or modify
@@ -1781,305 +1781,305 @@ var testList =
 };
 
 function execTest(testSuite) {
-	totalTime = 0;
-	startTime = Date.now();
-	testNum = 0;
-	tPass = 0;
-	tFail = 0;
-	htmlResults = "";
-	consoleResults = "\n";
-	eval(testList[testSuite])
+    totalTime = 0;
+    startTime = Date.now();
+    testNum = 0;
+    tPass = 0;
+    tFail = 0;
+    htmlResults = "";
+    consoleResults = "\n";
+    eval(testList[testSuite])
 }
 function setTitle(label) {
-	console.log(label)
-	htmlResults =htmlResults+"<br><div align='center'><b>"+label+"</b></div><br>";
+    console.log(label)
+    htmlResults =htmlResults+"<br><div align='center'><b>"+label+"</b></div><br>";
 }
 function runNumerical() {
-	setTitle("Numerical Tests 'mgNumeric()'")
-	mgConfig.dPrecision = 8; //reduce precision to allow for different JS engines
-	increment = 2;
-	for (index=0;index<numerical.length;index+=increment) {
-		runTest(mgTranslate(numerical[index]).html,mgNumeric(numerical[index]).html,mgTranslate(numerical[index+1]).html)
-	}
-	mgConfig.dPrecision = 16;
-	toOutput()
+    setTitle("Numerical Tests 'mgNumeric()'")
+    mgConfig.dPrecision = 8; //reduce precision to allow for different JS engines
+    increment = 2;
+    for (index=0;index<numerical.length;index+=increment) {
+        runTest(mgTranslate(numerical[index]).html,mgNumeric(numerical[index]).html,mgTranslate(numerical[index+1]).html)
+    }
+    mgConfig.dPrecision = 16;
+    toOutput()
 }
 function runRange() {
-	setTitle("Range Tests 'mgRange()'")
-	increment = 2;
-	degree = 1;
-	for (index=0;index<range.length;index+=increment) {
-		runTest(mgTranslate(range[index]).html,mgRange(range[index]).html,mgTranslate(range[index+1]).html)
-	}
-	toOutput()
+    setTitle("Range Tests 'mgRange()'")
+    increment = 2;
+    degree = 1;
+    for (index=0;index<range.length;index+=increment) {
+        runTest(mgTranslate(range[index]).html,mgRange(range[index]).html,mgTranslate(range[index+1]).html)
+    }
+    toOutput()
 }
 function runDomain() {
-	setTitle("Domain Tests 'mgDomain()'")
-	increment = 2;
-	degree = 1;
-	for (index=0;index<domain.length;index+=increment) {
-		runTest(mgTranslate(domain[index]).html,mgDomain(domain[index]).html,mgTranslate(domain[index+1]).html)
-	}
-	toOutput()
+    setTitle("Domain Tests 'mgDomain()'")
+    increment = 2;
+    degree = 1;
+    for (index=0;index<domain.length;index+=increment) {
+        runTest(mgTranslate(domain[index]).html,mgDomain(domain[index]).html,mgTranslate(domain[index+1]).html)
+    }
+    toOutput()
 }
 function runMatrix() {
-	setTitle("Matrix Tests 'mgSimplify()'")
-	increment = 2;
-	degree = 1;
-	for (index=0;index<matrix.length;index+=increment) {
-		runTest(mgTranslate(matrix[index]).html,mgSimplify(matrix[index]).html,mgTranslate(matrix[index+1]).html)
-	}
-	toOutput()
+    setTitle("Matrix Tests 'mgSimplify()'")
+    increment = 2;
+    degree = 1;
+    for (index=0;index<matrix.length;index+=increment) {
+        runTest(mgTranslate(matrix[index]).html,mgSimplify(matrix[index]).html,mgTranslate(matrix[index+1]).html)
+    }
+    toOutput()
 }
 function runReduce() {
-	setTitle("Reduce Tests 'mgSimplify()'")
-	degree = 1;
-	increment = 2;
-	for (index=0;index<reduce.length;index+=increment) {
-		runTest(mgTranslate(reduce[index]).html,mgSimplify(reduce[index]).html,mgTranslate(reduce[index+1]).html)
-	}
-	toOutput()
+    setTitle("Reduce Tests 'mgSimplify()'")
+    degree = 1;
+    increment = 2;
+    for (index=0;index<reduce.length;index+=increment) {
+        runTest(mgTranslate(reduce[index]).html,mgSimplify(reduce[index]).html,mgTranslate(reduce[index+1]).html)
+    }
+    toOutput()
 }
 function runFactor() {
-	setTitle("Factor Tests 'mgFactor()'")
-	degree = 1;
-	increment = 2;
-	for (index=0;index<factor.length;index+=increment) {
-		runTest(mgTranslate(factor[index]).html,mgFactor(factor[index]).html,mgTranslate(factor[index+1]).html)
-	}
-	toOutput()
+    setTitle("Factor Tests 'mgFactor()'")
+    degree = 1;
+    increment = 2;
+    for (index=0;index<factor.length;index+=increment) {
+        runTest(mgTranslate(factor[index]).html,mgFactor(factor[index]).html,mgTranslate(factor[index+1]).html)
+    }
+    toOutput()
 }
 function runExpand() {
-	setTitle("Expand Tests 'mgExpand()'")
-	increment = 2;
-	for (index=0;index<expand.length;index+=increment) {
-		runTest(mgTranslate(expand[index]).html,mgExpand(expand[index]).html,mgTranslate(expand[index+1]).html)
-	}
-	toOutput()
+    setTitle("Expand Tests 'mgExpand()'")
+    increment = 2;
+    for (index=0;index<expand.length;index+=increment) {
+        runTest(mgTranslate(expand[index]).html,mgExpand(expand[index]).html,mgTranslate(expand[index+1]).html)
+    }
+    toOutput()
 }
 function runSolve() {
-	setTitle("Solve Tests 'mgSolve()'")
-	increment = 3;
-	for (index=0;index<solve.length;index+=increment) {
-		runTest(mgTranslate(solve[index]).html,mgSolve(solve[index],solve[index+1]).html,mgTranslate(solve[index+2]).html)
-	}
-	toOutput()
+    setTitle("Solve Tests 'mgSolve()'")
+    increment = 3;
+    for (index=0;index<solve.length;index+=increment) {
+        runTest(mgTranslate(solve[index]).html,mgSolve(solve[index],solve[index+1]).html,mgTranslate(solve[index+2]).html)
+    }
+    toOutput()
 }
 function runSeries() {
-	setTitle("Taylor Series Tests 'mgSeries()'")
-	increment = 5;
-	for (index=0;index<series.length;index+=increment) {
-		runTest(mgTranslate(series[index]).html,mgSeries(series[index],series[index+1],series[index+2],series[index+3]).html,mgTranslate(series[index+4]).html)
-	}
-	toOutput()
+    setTitle("Taylor Series Tests 'mgSeries()'")
+    increment = 5;
+    for (index=0;index<series.length;index+=increment) {
+        runTest(mgTranslate(series[index]).html,mgSeries(series[index],series[index+1],series[index+2],series[index+3]).html,mgTranslate(series[index+4]).html)
+    }
+    toOutput()
 }
 function runTrigtoexp() {
-	setTitle("Trig to Exponential Tests 'mgTrigToExp()'")
-	increment = 2;
-	for (index=0;index<trigtoexp.length;index+=increment) {
-		runTest(mgTranslate(trigtoexp[index]).html,mgTrigToExp(trigtoexp[index]).html,mgTranslate(trigtoexp[index+1]).html)
-	}
-	toOutput()
+    setTitle("Trig to Exponential Tests 'mgTrigToExp()'")
+    increment = 2;
+    for (index=0;index<trigtoexp.length;index+=increment) {
+        runTest(mgTranslate(trigtoexp[index]).html,mgTrigToExp(trigtoexp[index]).html,mgTranslate(trigtoexp[index+1]).html)
+    }
+    toOutput()
 }
 function runExptotrig() {
-	setTitle("Exponential to Trig Tests 'mgExpToTrig()'")
-	increment = 2;
-	for (index=0;index<exptotrig.length;index+=increment) {
-		runTest(mgTranslate(exptotrig[index]).html,mgExpToTrig(exptotrig[index]).html,mgTranslate(exptotrig[index+1]).html)
-	}
-	toOutput()
+    setTitle("Exponential to Trig Tests 'mgExpToTrig()'")
+    increment = 2;
+    for (index=0;index<exptotrig.length;index+=increment) {
+        runTest(mgTranslate(exptotrig[index]).html,mgExpToTrig(exptotrig[index]).html,mgTranslate(exptotrig[index+1]).html)
+    }
+    toOutput()
 }
 function runLimits() {
-	setTitle("Limits Tests 'mgSimplify()'")
-	increment = 2;
-	for (index=0;index<limits.length;index+=increment) {
-		runTest(mgTranslate(limits[index]).html,mgSimplify(limits[index]).html,mgTranslate(limits[index+1]).html)
-	}
-	toOutput()
+    setTitle("Limits Tests 'mgSimplify()'")
+    increment = 2;
+    for (index=0;index<limits.length;index+=increment) {
+        runTest(mgTranslate(limits[index]).html,mgSimplify(limits[index]).html,mgTranslate(limits[index+1]).html)
+    }
+    toOutput()
 }
 function runDerivatives() {
-	setTitle("Complex Domain Derivatives Tests 'mgSimplify()'")
-	increment = 2;
-	for (index=0;index<derivatives.length;index+=increment) {
-		runTest(mgTranslate(derivatives[index]).html,mgSimplify(derivatives[index]).html,mgTranslate(derivatives[index+1]).html)
-	}
-	toOutput()
+    setTitle("Complex Domain Derivatives Tests 'mgSimplify()'")
+    increment = 2;
+    for (index=0;index<derivatives.length;index+=increment) {
+        runTest(mgTranslate(derivatives[index]).html,mgSimplify(derivatives[index]).html,mgTranslate(derivatives[index+1]).html)
+    }
+    toOutput()
 }
 function runIntegrals() {
-	setTitle("Complex Domain Integrals Tests 'mgSimplify()'")
-	increment = 2;
-	for (index=0;index<integrals.length;index+=increment) {
-		runTest(mgTranslate(integrals[index]).html,mgSimplify(integrals[index]).html,mgTranslate(integrals[index+1]).html)
-	}
-	toOutput()
+    setTitle("Complex Domain Integrals Tests 'mgSimplify()'")
+    increment = 2;
+    for (index=0;index<integrals.length;index+=increment) {
+        runTest(mgTranslate(integrals[index]).html,mgSimplify(integrals[index]).html,mgTranslate(integrals[index+1]).html)
+    }
+    toOutput()
 }
 function runRealCalculus() {
-	setTitle("Real Domain Calculus Tests 'mgSimplify()'")
-	increment = 2;
-	mgConfig.Domain = "Real";
-	for (index=0;index<real_calculus.length;index+=increment) {
-		runTest(mgTranslate(real_calculus[index]).html,mgSimplify(real_calculus[index]).html,mgTranslate(real_calculus[index+1]).html)
-	}
-	toOutput()
-	mgConfig.Domain = "Complex";
+    setTitle("Real Domain Calculus Tests 'mgSimplify()'")
+    increment = 2;
+    mgConfig.Domain = "Real";
+    for (index=0;index<real_calculus.length;index+=increment) {
+        runTest(mgTranslate(real_calculus[index]).html,mgSimplify(real_calculus[index]).html,mgTranslate(real_calculus[index+1]).html)
+    }
+    toOutput()
+    mgConfig.Domain = "Complex";
 }
 function runSummation() {
-	setTitle("Summation Tests 'mgSimplify()'")
-	increment = 2;
-	for (index=0;index<summation.length;index+=increment) {
-		runTest(mgTranslate(summation[index]).html,mgSimplify(summation[index]).html,mgTranslate(summation[index+1]).html)
-	}
-	toOutput()
+    setTitle("Summation Tests 'mgSimplify()'")
+    increment = 2;
+    for (index=0;index<summation.length;index+=increment) {
+        runTest(mgTranslate(summation[index]).html,mgSimplify(summation[index]).html,mgTranslate(summation[index+1]).html)
+    }
+    toOutput()
 }
 function runHTML() {
-	setTitle("HTML Tests 'mgTranslate().html'")
-	increment = 2;
-	mgConfig.invFmt = "asin"
-	mgConfig.fnFmt = "fn(x)";
-	for (index=0;index<html.length;index+=increment) {
-		runTest(html[index],mgTranslate(html[index]).html,html[index+1])
-	}
-	mgConfig.invFmt = "sin<sup>-1</sup>"
-	setTitle("HTML Tests 'mgTranslate().html sin<sup>-1</sup>'")
-	for (index=0;index<htmlx.length;index+=increment) {
-		runTest(htmlx[index],mgTranslate(htmlx[index]).html,htmlx[index+1])
-	}
-	mgConfig.invFmt = "sin<sup>-1</sup>";
-	mgConfig.fnFmt = "fn x";
-	setTitle("HTML Tests 'mgTranslate().html fn x sin<sup>-1</sup>'")
-	for (index=0;index<htmly.length;index+=increment) {
-		runTest(htmly[index],mgTranslate(htmly[index]).html,htmly[index+1])
-	}
-	mgConfig.invFmt = "asin";
-	mgConfig.fnFmt = "fn x";
-	setTitle("HTML Tests 'mgTranslate().html fn x asin'")
-	for (index=0;index<htmlz.length;index+=increment) {
-		runTest(htmlz[index],mgTranslate(htmlz[index]).html,htmlz[index+1])
-	}
-	mgConfig.fnFmt = "fn(x)";
-	toOutput()
+    setTitle("HTML Tests 'mgTranslate().html'")
+    increment = 2;
+    mgConfig.invFmt = "asin"
+    mgConfig.fnFmt = "fn(x)";
+    for (index=0;index<html.length;index+=increment) {
+        runTest(html[index],mgTranslate(html[index]).html,html[index+1])
+    }
+    mgConfig.invFmt = "sin<sup>-1</sup>"
+    setTitle("HTML Tests 'mgTranslate().html sin<sup>-1</sup>'")
+    for (index=0;index<htmlx.length;index+=increment) {
+        runTest(htmlx[index],mgTranslate(htmlx[index]).html,htmlx[index+1])
+    }
+    mgConfig.invFmt = "sin<sup>-1</sup>";
+    mgConfig.fnFmt = "fn x";
+    setTitle("HTML Tests 'mgTranslate().html fn x sin<sup>-1</sup>'")
+    for (index=0;index<htmly.length;index+=increment) {
+        runTest(htmly[index],mgTranslate(htmly[index]).html,htmly[index+1])
+    }
+    mgConfig.invFmt = "asin";
+    mgConfig.fnFmt = "fn x";
+    setTitle("HTML Tests 'mgTranslate().html fn x asin'")
+    for (index=0;index<htmlz.length;index+=increment) {
+        runTest(htmlz[index],mgTranslate(htmlz[index]).html,htmlz[index+1])
+    }
+    mgConfig.fnFmt = "fn(x)";
+    toOutput()
 }
 function runExport() {
-	setTitle("Latex Export Tests 'mgTranslate().latex'")
-	increment = 2;
-	for (index=0;index<xport.length;index+=increment) {
-		runTest(mgTranslate(xport[index]).html,mgTranslate(xport[index]).latex.replace(/ /g,""),xport[index+1].replace(/ /g,""))
-	}
-	mgConfig.fnFmt = "fn x";
-	setTitle("Latex Export Tests 'mgTranslate().latex fn x'")
-	for (index=0;index<xportx.length;index+=increment) {
-		runTest(mgTranslate(xportx[index]).html,mgTranslate(xportx[index]).latex.replace(/ /g,""),xportx[index+1].replace(/ /g,""))
-	}
-	mgConfig.fnFmt = "fn x";
-	mgConfig.invFmt = "sin<sup>-1</sup>";
-	setTitle("Latex Export Tests 'mgTranslate().latex' 'fn x sin<sup>-1</sup>'")
-	for (index=0;index<xporty.length;index+=increment) {
-		runTest(mgTranslate(xporty[index]).html,mgTranslate(xporty[index]).latex.replace(/ /g,""),xporty[index+1].replace(/ /g,""))
-	}
-	mgConfig.fnFmt = "fn(x)";
-	mgConfig.invFmt = "sin<sup>-1</sup>";
-	setTitle("Latex Export Tests 'mgTranslate().latex' 'fn(x) sin<sup>-1</sup>'")
-	for (index=0;index<xportz.length;index+=increment) {
-		runTest(mgTranslate(xportz[index]).html,mgTranslate(xportz[index]).latex.replace(/ /g,""),xportz[index+1].replace(/ /g,""))
-	}
-	mgConfig.invFmt = "asin";
-	
-	toOutput()
+    setTitle("Latex Export Tests 'mgTranslate().latex'")
+    increment = 2;
+    for (index=0;index<xport.length;index+=increment) {
+        runTest(mgTranslate(xport[index]).html,mgTranslate(xport[index]).latex.replace(/ /g,""),xport[index+1].replace(/ /g,""))
+    }
+    mgConfig.fnFmt = "fn x";
+    setTitle("Latex Export Tests 'mgTranslate().latex fn x'")
+    for (index=0;index<xportx.length;index+=increment) {
+        runTest(mgTranslate(xportx[index]).html,mgTranslate(xportx[index]).latex.replace(/ /g,""),xportx[index+1].replace(/ /g,""))
+    }
+    mgConfig.fnFmt = "fn x";
+    mgConfig.invFmt = "sin<sup>-1</sup>";
+    setTitle("Latex Export Tests 'mgTranslate().latex' 'fn x sin<sup>-1</sup>'")
+    for (index=0;index<xporty.length;index+=increment) {
+        runTest(mgTranslate(xporty[index]).html,mgTranslate(xporty[index]).latex.replace(/ /g,""),xporty[index+1].replace(/ /g,""))
+    }
+    mgConfig.fnFmt = "fn(x)";
+    mgConfig.invFmt = "sin<sup>-1</sup>";
+    setTitle("Latex Export Tests 'mgTranslate().latex' 'fn(x) sin<sup>-1</sup>'")
+    for (index=0;index<xportz.length;index+=increment) {
+        runTest(mgTranslate(xportz[index]).html,mgTranslate(xportz[index]).latex.replace(/ /g,""),xportz[index+1].replace(/ /g,""))
+    }
+    mgConfig.invFmt = "asin";
+    
+    toOutput()
 }
 function runImport() {
-	setTitle("Latex Import Tests 'mgTranslate().mg'")
-	increment = 2;
-	mgConfig.fnFmt = "fn(x)";
-	for (index=0;index<mport.length;index+=increment) {
-		runTest(mport[index],mgTranslate(mport[index]).html,mgTranslate(mport[index+1]).html)
-	}
-	toOutput()
+    setTitle("Latex Import Tests 'mgTranslate().mg'")
+    increment = 2;
+    mgConfig.fnFmt = "fn(x)";
+    for (index=0;index<mport.length;index+=increment) {
+        runTest(mport[index],mgTranslate(mport[index]).html,mgTranslate(mport[index+1]).html)
+    }
+    toOutput()
 }
 function runFinancial() {
-	setTitle("Financial Function Tests")
-	mgConfig.dPrecision = 2;
-	increment = 2;
-	for (index=0;index<financial.length;index+=increment) {
-		runTest(financial[index],eval(financial[index]),financial[index+1])
-	}
-	mgConfig.dPrecision = 16;
-	toOutput()
+    setTitle("Financial Function Tests")
+    mgConfig.dPrecision = 2;
+    increment = 2;
+    for (index=0;index<financial.length;index+=increment) {
+        runTest(financial[index],eval(financial[index]),financial[index+1])
+    }
+    mgConfig.dPrecision = 16;
+    toOutput()
 }
 function runInternal() {
-	setTitle("Internal Function Tests")
-	mgConfig.dPrecision = 8;
-	increment = 2;
-	for (index=0;index<internal.length;index+=increment) {
-		runTest(internal[index],eval(internal[index]),internal[index+1])
-	}
-	mgConfig.dPrecision = 16;
-	toOutput()
+    setTitle("Internal Function Tests")
+    mgConfig.dPrecision = 8;
+    increment = 2;
+    for (index=0;index<internal.length;index+=increment) {
+        runTest(internal[index],eval(internal[index]),internal[index+1])
+    }
+    mgConfig.dPrecision = 16;
+    toOutput()
 }
 function runSimplifyBugs() {
-	setTitle("Outstanding mgSimplify() Bugs")
-	increment = 2;
-	for (index=0;index<simplify_bugs.length;index+=increment) {
-		runTest(mgTranslate(simplify_bugs[index]).html,mgSimplify(simplify_bugs[index]).html,mgTranslate(simplify_bugs[index+1]).html)
-	}
-	toOutput()
+    setTitle("Outstanding mgSimplify() Bugs")
+    increment = 2;
+    for (index=0;index<simplify_bugs.length;index+=increment) {
+        runTest(mgTranslate(simplify_bugs[index]).html,mgSimplify(simplify_bugs[index]).html,mgTranslate(simplify_bugs[index+1]).html)
+    }
+    toOutput()
 }
 function runFactorBugs() {
-	setTitle("Outstanding mgFactor() Bugs")
-	increment = 2;
-	degree = 1;
-	for (index=0;index<factor_bugs.length;index+=increment) {
-		runTest(mgTranslate(factor_bugs[index]).html,mgFactor(factor_bugs[index]).html,mgTranslate(factor_bugs[index+1]).html)
-	}
-	toOutput()
+    setTitle("Outstanding mgFactor() Bugs")
+    increment = 2;
+    degree = 1;
+    for (index=0;index<factor_bugs.length;index+=increment) {
+        runTest(mgTranslate(factor_bugs[index]).html,mgFactor(factor_bugs[index]).html,mgTranslate(factor_bugs[index+1]).html)
+    }
+    toOutput()
 }
 function runTest(tIn,tOut,tExpected) {
-	testNum++;
-	var background = "FFFFFF"
-	var testStatus = "";
-	if (tOut == tExpected) {testStatus = "<font color=green><b>Pass</b></font>";tPass++}
-	else {
-		testStatus = "<font color=red><b>Fail</b></font>";tFail++;background="FF9999";
-		consoleResults = consoleResults+"Test # FAIL: " + testNum + "\n";
-	}
-	htmlResults = htmlResults+"<table align='center' width='600' bgcolor='#"+background+"'><tr align='left' bgcolor='#DDDDDD'><td align='left' width='25%'><b>Test # </b></td><td align='left' width='75%'><b>"+testNum+"</b></td></tr><tr align='left'><td align='left' width='25%'>Test Input:</td><td align='left' width='75%'>"+tIn+"</td></tr><tr align='left'><td align='left' width='25%'>Test Output:</td><td align='left' width='75%'>"+tOut+"</td></tr><tr align='left'><td align='left' width='25%'>Expected:</td><td align='left' width='75%'>"+tExpected+"</td></tr><tr align='left'><td align='left' width='25%'>Status:</td><td align='left' width='75%'>"+testStatus+"</td></table><br>";
-	
+    testNum++;
+    var background = "FFFFFF"
+    var testStatus = "";
+    if (tOut == tExpected) {testStatus = "<font color=green><b>Pass</b></font>";tPass++}
+    else {
+        testStatus = "<font color=red><b>Fail</b></font>";tFail++;background="FF9999";
+        consoleResults = consoleResults+"Test # FAIL: " + testNum + "\n";
+    }
+    htmlResults = htmlResults+"<table align='center' width='600' bgcolor='#"+background+"'><tr align='left' bgcolor='#DDDDDD'><td align='left' width='25%'><b>Test # </b></td><td align='left' width='75%'><b>"+testNum+"</b></td></tr><tr align='left'><td align='left' width='25%'>Test Input:</td><td align='left' width='75%'>"+tIn+"</td></tr><tr align='left'><td align='left' width='25%'>Test Output:</td><td align='left' width='75%'>"+tOut+"</td></tr><tr align='left'><td align='left' width='25%'>Expected:</td><td align='left' width='75%'>"+tExpected+"</td></tr><tr align='left'><td align='left' width='25%'>Status:</td><td align='left' width='75%'>"+testStatus+"</td></table><br>";
+    
 }
 function toOutput() {
-	testTime = Date.now()
-	totalTime = (testTime-startTime)
-	htmlResults = htmlResults+"<br><b><div align='center'>Tests passed: "+tPass+"</div><div align='center'>Tests failed: "+tFail+"</div></div><div align='center'>Total Time: "+totalTime+"ms</div></b><br>";
-	consoleResults = consoleResults+"Tests passed: "+tPass+"\nTests failed: "+tFail+"\nTotal Time: "+totalTime+"ms\n";
-	console.log(consoleResults)
-	consoleTime = consoleTime+totalTime;
-	consolePass = consolePass+tPass;
-	consoleFail = consoleFail+tFail;
-	if (!nodejs && document.getElementById('testDisplay')) {document.getElementById('testDisplay').innerHTML = htmlResults}
+    testTime = Date.now()
+    totalTime = (testTime-startTime)
+    htmlResults = htmlResults+"<br><b><div align='center'>Tests passed: "+tPass+"</div><div align='center'>Tests failed: "+tFail+"</div></div><div align='center'>Total Time: "+totalTime+"ms</div></b><br>";
+    consoleResults = consoleResults+"Tests passed: "+tPass+"\nTests failed: "+tFail+"\nTotal Time: "+totalTime+"ms\n";
+    console.log(consoleResults)
+    consoleTime = consoleTime+totalTime;
+    consolePass = consolePass+tPass;
+    consoleFail = consoleFail+tFail;
+    if (!nodejs && document.getElementById('testDisplay')) {document.getElementById('testDisplay').innerHTML = htmlResults}
 }
 
 //Node.js branch
 if (typeof module == "object") {
-	var mgTr = module.require('./mg_translate.js')
-	var mgCl = module.require('./mg_calculate.js')
-	var mgTranslate = function(xpr,scale) {return mgTr.mgTranslate(xpr,scale)};
-	var mgNumeric = function(xpr) {return mgCl.mgNumeric(xpr)};
-	var mgSimplify = function(xpr) {return mgCl.mgSimplify(xpr)};
-	var mgRange = function(xpr) {return mgCl.mgRange(xpr)};
-	var mgDomain = function(xpr) {return mgCl.mgDomain(xpr)};
-	var mgFactor = function(xpr) {return mgCl.mgFactor(xpr)};
-	var mgExpand = function(xpr) {return mgCl.mgExpand(xpr)};
-	var mgTrigToExp = function(xpr) {return mgCl.mgTrigToExp(xpr)};
-	var mgExpToTrig = function(xpr) {return mgCl.mgExpToTrig(xpr)};
-	var mgSolve = function(xpr,slvar) {return mgCl.mgSolve(xpr,slvar)};
+    var mgTr = module.require('./mg_translate.js')
+    var mgCl = module.require('./mg_calculate.js')
+    var mgTranslate = function(xpr,scale) {return mgTr.mgTranslate(xpr,scale)};
+    var mgNumeric = function(xpr) {return mgCl.mgNumeric(xpr)};
+    var mgSimplify = function(xpr) {return mgCl.mgSimplify(xpr)};
+    var mgRange = function(xpr) {return mgCl.mgRange(xpr)};
+    var mgDomain = function(xpr) {return mgCl.mgDomain(xpr)};
+    var mgFactor = function(xpr) {return mgCl.mgFactor(xpr)};
+    var mgExpand = function(xpr) {return mgCl.mgExpand(xpr)};
+    var mgTrigToExp = function(xpr) {return mgCl.mgTrigToExp(xpr)};
+    var mgExpToTrig = function(xpr) {return mgCl.mgExpToTrig(xpr)};
+    var mgSolve = function(xpr,slvar) {return mgCl.mgSolve(xpr,slvar)};
     var mgSeries = function(xpr,svar,center,order) {return mgCl.mgSeries(xpr,svar,center,order)};
-	var mgConfig = mgTr.mgConfig;
-	var mgCalc = mgCl.mgCalc;
-	var nodejs = true;
-	for (var testcase in testList) {execTest(testcase)}
-	console.log("Test report:")
-	console.log("Tests passed: "+consolePass)
-	console.log("Tests failed: "+consoleFail)
-	console.log("Total Tests: "+ (consoleFail+consolePass))
-	console.log("Elapsed time: "+consoleTime+"ms")
-	process.exit(consoleFail);
+    var mgConfig = mgTr.mgConfig;
+    var mgCalc = mgCl.mgCalc;
+    var nodejs = true;
+    for (var testcase in testList) {execTest(testcase)}
+    console.log("Test report:")
+    console.log("Tests passed: "+consolePass)
+    console.log("Tests failed: "+consoleFail)
+    console.log("Total Tests: "+ (consoleFail+consolePass))
+    console.log("Elapsed time: "+consoleTime+"ms")
+    process.exit(consoleFail);
 }
 //
