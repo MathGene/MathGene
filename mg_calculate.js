@@ -1092,17 +1092,8 @@ var mgCalc = (function() {
         if (xTractU.func == "cPow") {return cMulS(xTractU.lower,lneS(xTractU.upper))}
         return "lne("+xU+")"
     }
-    function logS(xU) { //common log
-        var xTractU = opExtract(xU);
-        if (xU == 0) {return "Cv[8734]"}
-        if (nbrTest(xU) && log(xU) == int(log(xU))) {return cFunc(fmtResult(log(xU)))} //calculate integer logs
-        if (xTractU.func == "cPow" && +xTractU.upper == 10) {return xTractU.lower}
-        if (xTractU.func == "cPow") {return cMulS(xTractU.upper,logS(xTractU.lower))}
-        if (xTractU.func == "cDiv" && +xTractU.upper == 1) {return cNegS(logS(xTractU.lower))}
-        return "log("+xU+")"
-    }
+    function logS(xU) {return "lne("+xU+")"} //natural log
     function lgnS(xU,xL)  { //log xU to base xL
-        if (+xU == 10) {return logS(xL)}
         if (xU == "Cv[8]") {return lneS(xL)}
         if (nbrTest(xU)  && nbrTest(xL) && lgn(xU,xL) == int(lgn(xU,xL))) {return cFunc(fmtResult(lgn(xU,xL)))} //calculate integer logs
         return cDivS(lneS(xL),lneS(xU))
@@ -1151,7 +1142,7 @@ var mgCalc = (function() {
         if (rAngle == "0") {return 0}
         if (strTest(iAngle,rAngle)) {return sinAngle[iAngle.indexOf(rAngle)]}
         if (+xU == 0) {return 0}
-        if (nbrTest(xU)) {return cFunc(fmtResult(sin(xU)))}
+        if (nbrTest(xU) && sin(xU) == int(sin(xU))) {return cFunc(fmtResult(sin(xU)))}
         return "sin("+xU+")"
     }
     var cosAngle = [
@@ -1171,7 +1162,7 @@ var mgCalc = (function() {
         if (rAngle == "0") {return 1}
         if (strTest(iAngle,rAngle)) {return cosAngle[iAngle.indexOf(rAngle)]}
         if (+xU == 0) {return 1}
-        if (nbrTest(xU)) {return cFunc(fmtResult(cos(xU)))} 
+        if (nbrTest(xU) && cos(xU) == int(cos(xU))) {return cFunc(fmtResult(cos(xU)))} 
         return "cos("+xU+")"
     }
     var tanAngle = [
@@ -1191,7 +1182,7 @@ var mgCalc = (function() {
         if (rAngle == "0") {return 0}
         if (strTest(iAngle,rAngle)) {return tanAngle[iAngle.indexOf(rAngle)]}
         if (+xU == 0) {return 0}
-        if (nbrTest(xU)) {return cFunc(fmtResult(tan(xU)))}
+        if (nbrTest(xU) && tan(xU) == int(tan(xU))) {return cFunc(fmtResult(tan(xU)))}
         return "tan("+xU+")"
     }
     var secAngle = [
@@ -1211,7 +1202,7 @@ var mgCalc = (function() {
         if (rAngle == "0") {return 1}
         if (strTest(iAngle,rAngle)) {return secAngle[iAngle.indexOf(rAngle)]}
         if (+xU == 0) {return 1}
-        if (nbrTest(xU)) {return cFunc(fmtResult(sec(xU)))}
+        if (nbrTest(xU) && sec(xU) == int(sec(xU))) {return cFunc(fmtResult(sec(xU)))}
         return "sec("+xU+")"
     }
     var cscAngle = [
@@ -1230,7 +1221,7 @@ var mgCalc = (function() {
         if (rAngle == "0") {return "undefined"}
         if (strTest(iAngle,rAngle)) {return cscAngle[iAngle.indexOf(rAngle)]}
         if (+xU == 0) {return "undefined"}
-        if (nbrTest(xU)) {return cFunc(fmtResult(csc(xU)))}
+        if (nbrTest(xU) && csc(xU) == int(csc(xU))) {return cFunc(fmtResult(csc(xU)))}
         return "csc("+xU+")"
     }
     var cotAngle = [
@@ -1249,7 +1240,7 @@ var mgCalc = (function() {
         if (rAngle == "0") {return "undefined"}
         if (strTest(iAngle,rAngle)) {return cotAngle[iAngle.indexOf(rAngle)]}
         if (+xU == 0) {return "undefined"}
-        if (nbrTest(xU)) {return cFunc(fmtResult(cot(xU)))}
+        if (nbrTest(xU) && cot(xU) == int(cot(xU))) {return cFunc(fmtResult(cot(xU)))}
         return "cot("+xU+")"
     }
     function asnS(xU) {
@@ -1257,7 +1248,7 @@ var mgCalc = (function() {
         if (xU == 1) {return "cDiv(Cv[29],2)"}
         if (xU == -1) {return "cNeg(cDiv(Cv[29],2))"}
         if (strTest(sinAngle,xU)) {return cMulS(invMult,iAngle[sinAngle.indexOf(xU)])}
-        if (nbrTest(xU)) {return cFunc(fmtResult(asn(xU)))}
+        if (nbrTest(xU) && asn(xU) == int(asn(xU))) {return cFunc(fmtResult(asn(xU)))}
         if (xTractU.func == "sin") {return xTractU.upper}
         return "asn("+xU+")"
     }
@@ -1266,7 +1257,7 @@ var mgCalc = (function() {
         if (xU == 0) {return "cDiv(Cv[29],2)"}
         if (xU == -1) {return "Cv[29]"}
         if (strTest(cosAngle,xU)) {return cMulS(invMult,iAngle[cosAngle.indexOf(xU)])}
-        if (nbrTest(xU)) {return cFunc(fmtResult(acs(xU)))}
+        if (nbrTest(xU) && acs(xU) == int(acs(xU))) {return cFunc(fmtResult(acs(xU)))}
         if (xTractU.func == "cos") {return xTractU.upper}
         return "acs("+xU+")"
     }
@@ -1274,14 +1265,14 @@ var mgCalc = (function() {
         var xTractU = opExtract(xU);
         if (xU == 1) {return "cDiv(Cv[29],4)"}
         if (strTest(tanAngle,xU)) {return cMulS(invMult,iAngle[tanAngle.indexOf(xU)])}
-        if (nbrTest(xU)) {return cFunc(fmtResult(atn(xU)))}
+        if (nbrTest(xU) && atn(xU) == int(atn(xU))) {return cFunc(fmtResult(atn(xU)))}
         if (xTractU.func == "tan") {return xTractU.upper}
         return "atn("+xU+")"
     }
     function ascS(xU) {
         var xTractU = opExtract(xU);
         if (strTest(secAngle,xU)) {return cMulS(invMult,iAngle[secAngle.indexOf(xU)])}
-        if (nbrTest(xU)) {return cFunc(fmtResult(asc(xU)))}
+        if (nbrTest(xU) && asc(xU) == int(asc(xU))) {return cFunc(fmtResult(asc(xU)))}
         if (xTractU.func == "sec") {return xTractU.upper}
         return "asc("+xU+")"
     }
@@ -1289,7 +1280,7 @@ var mgCalc = (function() {
         var xTractU = opExtract(xU);
         if (xU == 1) {return "cDiv(Cv[29],2)"}
         if (strTest(cscAngle,xU)) {return cMulS(invMult,iAngle[cscAngle.indexOf(xU)])}
-        if (nbrTest(xU)) {return cFunc(fmtResult(acc(xU)))}
+        if (nbrTest(xU) && acc(xU) == int(acc(xU))) {return cFunc(fmtResult(acc(xU)))}
         if (xTractU.func == "csc") {return xTractU.upper}
         return "acc("+xU+")"
     }
@@ -1298,28 +1289,28 @@ var mgCalc = (function() {
         if (xU == 0) {return "cDiv(Cv[29],2)"}
         if (xU == 1) {return "cDiv(Cv[29],4)"}
         if (strTest(cotAngle,xU)) {return cMulS(invMult,iAngle[cotAngle.indexOf(xU)])}
-        if (nbrTest(xU)) {return cFunc(fmtResult(act(xU)))}
+        if (nbrTest(xU) && act(xU) == int(act(xU))) {return cFunc(fmtResult(act(xU)))}
         if (xTractU.func == "cot") {return xTractU.upper}
         return "act("+xU+")"
     }
 
     function snhS(xU) {
         var xTractU = opExtract(xU);
-        if (nbrTest(xU)) {return cFunc(fmtResult(snh(xU)))}
+        if (nbrTest(xU) && snh(xU) == int(snh(xU))) {return cFunc(fmtResult(snh(xU)))}
         if (xTractU.func == "ash") {return xTractU.upper}
         if (xTractU.func == "cNeg") {return "cNeg(snh("+xTractU.upper+"))"}
         return "snh("+xU+")"
     }
     function cshS(xU) {
         var xTractU = opExtract(xU);
-        if (nbrTest(xU)) {return cFunc(fmtResult(csh(xU)))}
+        if (nbrTest(xU) && csh(xU) == int(csh(xU))) {return cFunc(fmtResult(csh(xU)))}
         if (xTractU.func == "ach") {return xTractU.upper}
         if (xTractU.func == "cNeg") {return "csh("+xTractU.upper+")"}
         return "csh("+xU+")"
     }
     function tnhS(xU) {
         var xTractU = opExtract(xU);
-        if (nbrTest(xU)) {return cFunc(fmtResult(tnh(xU)))}
+        if (nbrTest(xU) && tnh(xU) == int(tnh(xU))) {return cFunc(fmtResult(tnh(xU)))}
         if (xTractU.func == "ath") {return xTractU.upper}
         if (xTractU.func == "cNeg") {return "cNeg(tnh("+xTractU.upper+"))"}
         return "tnh("+xU+")"
@@ -1327,21 +1318,21 @@ var mgCalc = (function() {
 
     function schS(xU) {
         var xTractU = opExtract(xU);
-        if (nbrTest(xU)) {return cFunc(fmtResult(sch(xU)))}
+        if (nbrTest(xU) && sch(xU) == int(sch(xU))) {return cFunc(fmtResult(sch(xU)))}
         if (xTractU.func == "axh") {return xTractU.upper}
         if (xTractU.func == "cNeg") {return "sch("+xTractU.upper+")"}
         return "sch("+xU+")"
     }
     function cchS(xU) {
         var xTractU = opExtract(xU);
-        if (nbrTest(xU)) {return cFunc(fmtResult(cch(xU)))}
+        if (nbrTest(xU) && cch(xU) == int(cch(xU))) {return cFunc(fmtResult(cch(xU)))}
         if (xTractU.func == "ayh") {return xTractU.upper}
         if (xTractU.func == "cNeg") {return "cNeg(cch("+xTractU.upper+"))"}
         return "cch("+xU+")"
     }
     function cthS(xU) {
         var xTractU = opExtract(xU);
-        if (nbrTest(xU)) {return cFunc(fmtResult(cth(xU)))}
+        if (nbrTest(xU) && cth(xU) == int(cth(xU))) {return cFunc(fmtResult(cth(xU)))}
         if (xTractU.func == "azh") {return xTractU.upper}
         if (xTractU.func == "cNeg") {return "cNeg(cth("+xTractU.upper+"))"}
         return "cth("+xU+")"
@@ -1349,38 +1340,38 @@ var mgCalc = (function() {
 
     function ashS(xU) {
         var xTractU = opExtract(xU);
-        if (nbrTest(xU)) {return cFunc(fmtResult(ash(xU)))}
+        if (nbrTest(xU) && ash(xU) == int(ash(xU))) {return cFunc(fmtResult(ash(xU)))}
         if (xTractU.func == "snh") {return xTractU.upper}
         return "ash("+xU+")"
     }
     function achS(xU) {
         var xTractU = opExtract(xU);
-        if (nbrTest(xU)) {return cFunc(fmtResult(ach(xU)))}
+        if (nbrTest(xU) && ach(xU) == int(ach(xU))) {return cFunc(fmtResult(ach(xU)))}
         if (xTractU.func == "csh") {return xTractU.upper}
         return "ach("+xU+")"
     }
     function athS(xU) {
         var xTractU = opExtract(xU);
-        if (nbrTest(xU)) {return cFunc(fmtResult(ath(xU)))}
+        if (nbrTest(xU) && ath(xU) == int(ath(xU))) {return cFunc(fmtResult(ath(xU)))}
         if (xTractU.func == "tnh") {return xTractU.upper}
         return "ath("+xU+")"
     }
 
     function axhS(xU) {
         var xTractU = opExtract(xU);
-        if (nbrTest(xU)) {return cFunc(fmtResult(axh(xU)))}
+        if (nbrTest(xU) && axh(xU) == int(axh(xU))) {return cFunc(fmtResult(axh(xU)))}
         if (xTractU.func == "sch") {return xTractU.upper}
         return "axh("+xU+")"
     }
     function ayhS(xU) {
         var xTractU = opExtract(xU);
-        if (nbrTest(xU)) {return cFunc(fmtResult(ayh(xU)))}
+        if (nbrTest(xU) && ayh(xU) == int(ayh(xU))) {return cFunc(fmtResult(ayh(xU)))}
         if (xTractU.func == "cch") {return xTractU.upper}
         return "ayh("+xU+")"
     }
     function azhS(xU) {
         var xTractU = opExtract(xU);
-        if (nbrTest(xU)) {return cFunc(fmtResult(azh(xU)))}
+        if (nbrTest(xU) && azh(xU) == int(azh(xU))) {return cFunc(fmtResult(azh(xU)))}
         if (xTractU.func == "cth") {return xTractU.upper}
         return "azh("+xU+")"
     }
@@ -1581,7 +1572,6 @@ var mgCalc = (function() {
         function lgnD(xU,xL)  {return drvS(cDivS(lneS(xL),lneS(xU)),deeVar) }
         function cNegD(xU)    {return cNegS(drvS(xU,deeVar)) }
         function lneD(xU) {return cMulS(cDivS(1,xU),drvS(xU,deeVar)) }
-        function logD(xU) {return cMulS(cDivS(logS("Cv[8]"),xU),drvS(xU,deeVar)) }
         function cbtD(xU) {return cMulS(cDivS(1,cMulS(3,cPowS(xU,cDivS(2,3)))),drvS(xU,deeVar)) }
         function sqtD(xU) {return cMulS(cDivS(1,cMulS(2,sqtS(xU))),drvS(xU,deeVar)) }
         function sinD(xU) {return cMulS(cosS(xU),drvS(xU,deeVar)) }
@@ -1881,10 +1871,6 @@ var mgCalc = (function() {
             var uTemp = ntgS(cPowS(xU,"cDiv(1,"+xL+")"),deeVar);
             if (ntgTest(uTemp)) {return uTemp}
             return "undefined"
-        }
-        function logI(xU) {
-            if (deeVar == xU) {return cMulS(logS("Cv[8]"),cSubS(cMulS(xU,lneS(xU)),xU))};
-            return uSubst(logS(xU))
         }
         function sinI(xU) {
             var xTractU = opExtract(xU);
@@ -3301,6 +3287,8 @@ var mgCalc = (function() {
         if (getType(xU) == "real")  {return Math.log(xU)}
         return "undefined"
     }
+    function log(xU) {return lne(xU)} //natural log
+    function lgn(xU,xL) {return cDiv(lne(xL),lne(xU))} //log base n
     function sqt(xU) {//square root
         if (getType(xU) == "complex" && +xU.i == 0) {xU = +xU.r}
         if (Math.sqrt(xU) == Math.sqrt(xU)*1) {
@@ -3315,12 +3303,6 @@ var mgCalc = (function() {
         return cPow(toCplx(xU),1/3)
     }
     function nrt(xU,xL) {return cPow(toCplx(xL),cDiv(1,toCplx(xU)))} //n'th root
-    function log(xU) {//common log
-        if ((getType(xU) == "complex") || xU < 0) {return cDiv(lne(xU),2.302585092994046) }
-        if (getType(xU) == "real") {return Math.log(xU)/2.302585092994046}
-        return "undefined"
-    }
-    function lgn(xU,xL) {return cDiv(lne(xL),lne(xU))} //log base n
     function abs(xU) {//absolute value
         if (getType(xU) == "complex") {return Math.sqrt((xU.r*xU.r)+(xU.i*xU.i))}
         if (getType(xU) == "real") {return Math.abs(xU)}
