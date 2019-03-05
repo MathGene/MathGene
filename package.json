@@ -5,9 +5,8 @@
   "devDependencies": {
     "jest": "^24.1.0"
   },
-  "collectCoverage": true,
-  "coverageDirectory": ".",
-  "coverageReporters": [
-    "text-summary"
-  ]
+  "jest": {
+     "collectCoverage": true,
+     "coverageReporters": ["json", "html"]
+ }
 }
