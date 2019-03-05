@@ -1,0 +1,13 @@
+{
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "jest": "^24.1.0"
+  },
+  "collectCoverage": true,
+  "coverageDirectory": ".",
+  "coverageReporters": [
+    "text-summary"
+  ]
+}

@@ -3033,7 +3033,7 @@ var mgCalc = (function() {
         if (getType(xU) == "complex" || getType(xL) == "complex") {
             var cA = toCplx(xU); 
             var cB = toCplx(xL); 
-            return {r:(+cA.r)+(+cB.r), i:(+cA.i)+(+cB.i), s:xL.s}
+            return {r:(+cA.r)+(+cB.r), i:(+cA.i)+(+cB.i)}
         }
         if (getType(xU) == "matrix" && getType(xL) == "matrix" && xU.length == xL.length) {
             var mReturn = xU;
@@ -3051,10 +3051,9 @@ var mgCalc = (function() {
             for (var iR in xM) {
                 for (var iC in xM[iR]) {mReturn[iR][iC] = cMul(xM[iR][iC],xC)}
             }
-            return mReturn      
+            return mReturn
         }
-        if (xL.s == "!") {return fac(xU)} //factorial
-        if (xU.s == "/" || xU.s == "&divide;") {return cMul(xU,cDiv(1,xL))} //divide by '/'
+        if (xL == Cv[45]) {return fac(xU)} //factorial
         if (getType(xU) == "real" && getType(xL) == "real") {
             if (xU == Math.round(xU) && xL == Math.round(xL)) {return Math.round((+xU)*(+xL))}
             return (+xU)*(+xL)
@@ -3062,7 +3061,7 @@ var mgCalc = (function() {
         if (getType(xU) == "complex" || getType(xL) == "complex") {
             var cA = toCplx(xU);
             var cB = toCplx(xL);
-            return {r:cA.r*cB.r-cA.i*cB.i, i:cA.i*cB.r+cA.r*cB.i, s:xL.s}
+            return {r:cA.r*cB.r-cA.i*cB.i, i:cA.i*cB.r+cA.r*cB.i}
         }
         if (getType(xU) == "matrix" && getType(xL) != "matrix") {return scalarMult(xU,xL)}
         if (getType(xL) == "matrix" && getType(xU) != "matrix") {return scalarMult(xL,xU)}
@@ -3095,11 +3094,11 @@ var mgCalc = (function() {
             var cB = toCplx(xL);
             if (Math.abs(cB.r)>=Math.abs(cB.i)) {
                 var r=cB.i/cB.r;var s=+cB.r+r*cB.i;
-                return {r:(+cA.r+cA.i*r)/s, i:(cA.i-cA.r*r)/s, s:xL.s}
+                return {r:(+cA.r+cA.i*r)/s, i:(cA.i-cA.r*r)/s}
             }
             else {
                 var r=cB.r/cB.i;var s=+cB.i+r*cB.r;
-                return {r:(cA.r*r+cA.i)/s, i:(cA.i*r-cA.r)/s, s:xL.s}
+                return {r:(cA.r*r+cA.i)/s, i:(cA.i*r-cA.r)/s}
             }
         }
         return "undefined"
@@ -3269,7 +3268,7 @@ var mgCalc = (function() {
     function exp(xU) { //exp(x)
         if (getType(xU) == "complex" && xU.i != 0) {
             var cA = toCplx(xU); 
-            return {r:Math.exp(cA.r)*Math.cos(cA.i), i:Math.exp(cA.r)*Math.sin(cA.i), s:xU.s}
+            return {r:Math.exp(cA.r)*Math.cos(cA.i), i:Math.exp(cA.r)*Math.sin(cA.i)}
         }
         if (getType(xU) == "complex" && xU.i == 0) {return Math.exp(toReal(xU))}
         if (getType(xU) == "real")  {return Math.exp(xU)}
@@ -3282,7 +3281,7 @@ var mgCalc = (function() {
         }
         if (getType(xU) == "complex" || xU < 0) {
             var cA = toCplx(xU); 
-            return {r:Math.log(cAbs(cA)), i:arg(cA), s:xU.s}
+            return {r:Math.log(cAbs(cA)), i:arg(cA)}
         }
         if (getType(xU) == "real")  {return Math.log(xU)}
         return "undefined"
@@ -3309,17 +3308,17 @@ var mgCalc = (function() {
         return "undefined"
     }
     function int(xU) { //floor
-        if (getType(xU) == "complex") {return {r:Math.floor(xU.r), i:Math.floor(xU.i), s:xU.s}}
+        if (getType(xU) == "complex") {return {r:Math.floor(xU.r), i:Math.floor(xU.i)}}
         if (getType(xU) == "real") {return Math.floor(+xU)}
         return "undefined"
     }
     function cei(xU) { //ceiling
-        if (getType(xU) == "complex") {return {r:Math.ceil(xU.r), i:Math.ceil(xU.i), s:xU.s}}
+        if (getType(xU) == "complex") {return {r:Math.ceil(xU.r), i:Math.ceil(xU.i)}}
         if (getType(xU) == "real") {return Math.ceil(+xU)}
         return "undefined"
     }
     function rou(xU) { //round
-        if (getType(xU) == "complex") {return {r:Math.round(xU.r), i:Math.round(xU.i), s:xU.s}}
+        if (getType(xU) == "complex") {return {r:Math.round(xU.r), i:Math.round(xU.i)}}
         if (getType(xU) == "real") {return Math.round(+xU)}
         return "undefined"
     }
