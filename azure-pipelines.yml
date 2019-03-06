@@ -8,13 +8,27 @@ pool:
 
 strategy:
   matrix:
-    node_8_x:
-      node_version: 8.x
+    node_10_x:
+      node_version: 10.x
     node_9_x:
       node_version: 9.x
+
 steps:
 - task: NodeTool@0 
   inputs:
     versionSpec: $(node_version)
-- script: node mg_tests.js
+- script: |
+    npm install --save-dev jest
+    npm install --save-dev jest-junit-reporter
+    npm test
   displayName: 'Run test script'
+- task: PublishTestResults@2
+  condition: succeededOrFailed()
+  inputs:
+    testRunner: JUnit
+    testResultsFiles: '$(System.DefaultWorkingDirectory)/**/test-report.xml'
+- task: PublishCodeCoverageResults@1
+  inputs: 
+    codeCoverageTool: Cobertura
+    summaryFileLocation: '$(System.DefaultWorkingDirectory)/**/*coverage.xml'
+    reportDirectory: '$(System.DefaultWorkingDirectory)/**/coverage'

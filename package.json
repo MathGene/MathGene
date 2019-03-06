@@ -1,0 +1,20 @@
+{
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "jest": "^24.1.0"
+  },
+  "jest": {
+    "testResultsProcessor": "./node_modules/jest-junit-reporter",
+    "collectCoverage": true,
+    "coverageReporters": [
+      "text",
+      "cobertura",
+      "html"
+    ]
+  },
+  "dependencies": {
+    "jest-junit-reporter": "^1.1.0"
+  }
+}

@@ -18,7 +18,6 @@
 
 var testNum = 0;
 var htmlResults = "";
-var consoleResults = "";
 var tPass = 0;
 var tFail = 0;
 var vTime = new Date();
@@ -32,6 +31,7 @@ var consoleTime = 0;
 var consolePass = 0;
 var consoleFail = 0;
 
+// tests are loaded in following arrays
 var numerical =
 [
 "2+2","4",
@@ -477,6 +477,13 @@ var reduce =
 "1/sch(Cv[10120])^2","csh(Cv[10120])^2",
 "1/cch(Cv[10120])^2","snh(Cv[10120])^2",
 "1/cth(Cv[10120])^2","tnh(Cv[10120])^2",
+"1/cot(Cv[10120])^2","tan(Cv[10120])^2",
+"1/csc(Cv[10120])","sin(Cv[10120])",
+"1/cot(Cv[10120])","tan(Cv[10120])",
+"1/sch(Cv[10120])","csh(Cv[10120])",
+"1/cch(Cv[10120])","snh(Cv[10120])",
+"1/tnh(Cv[10120])","cth(Cv[10120])",
+"1/cth(Cv[10120])","tnh(Cv[10120])",
 "1/csc(Cv[10120])^Cv[10121]","1/csc(Cv[10120])^Cv[10121]",
 
 "efc(erf(Cv[10120]))","Cv[10120]",
@@ -622,6 +629,20 @@ var reduce =
 "(1-2/(Cv[10120]^2+3))/Cv[10120]","1/Cv[10120]-2/(Cv[10120](Cv[10120]^2+3))",
 "1/sqt(1-Cv[10120])/(Cv[10120]^2/sqt(1-Cv[10120])^2+1)","1/((Cv[10120]/(1-Cv[10120])-Cv[10120]+1)sqt(1-Cv[10120]))",
 "(Cv[10120]+Cv[10121])Cv[10122]/2(Cv[10120]+Cv[10121])","Cv[10122]/2",
+"abs(Cv[10101]/Cv[10102])abs(Cv[10120]Cv[10121])","abs(Cv[10120]Cv[10121]Cv[10101]/Cv[10102])",
+"Cv[8734]/Cv[10120]","Cv[8734]",
+"-Cv[8734]/Cv[10120]","-Cv[8734]",
+"snh(Cv[10120])/csh(Cv[10120])","tnh(Cv[10120])",
+"snh(Cv[10120])/tnh(Cv[10120])","csh(Cv[10120])",
+"abs(Cv[10101]/Cv[10102])/abs(Cv[10120]Cv[10121])","abs(Cv[10101]/Cv[10102]Cv[10120]Cv[10121])",
+
+
+//bugs
+//"Cv[8747]cos(5Cv[10120])/Cv[8]^sin(5Cv[10120])Cv[8748]Cv[10120]","-(1/(5Cv[8]^sin(5Cv[10120]))+Cv[11100])",
+//"tdr(Cv[10120])3Cv[10120]^2+4Cv[10120]+7Cv[10120]Cv[10121]+Cv[10121]^2","(7Cv[10120]+2Cv[10121])Cv[8748]Cv[10121]+(6Cv[10120]+4)Cv[8748]Cv[10120]",
+//"idr(Cv[10120])atn(Cv[10120]/sqt(1-Cv[10120]^2))","1/sqt(1-Cv[10120]^2)",
+//"lim(Cv[10120],0)(1-sin(Cv[10120]))/Cv[10120]^2","Cv[8734]",
+
 ];
 
 var expand =
@@ -710,6 +731,13 @@ var factor =
 "3Cv[10121]+4Cv[10122]","4Cv[10122]+3Cv[10121]",
 "2Cv[10120]Cv[10121]+4Cv[10120]Cv[10122]","2Cv[10120](2Cv[10122]+Cv[10121])",
 "(2Cv[10120]+5)(16Cv[10120]+40)","8(2Cv[10120]+5)^2",
+
+
+//bugs
+//"Cv[10120]^8-Cv[10121]^4","(Cv[10120]^4-Cv[10121]^2)(Cv[10120]^2+Cv[10121])(Cv[10120]^2-Cv[10121])",
+//"Cv[10120]^(2Cv[10097])-3Cv[10120]^Cv[10097]-4","(Cv[10120]^Cv[10097]+1)(Cv[10120]^Cv[10097]-4)",
+//"Cv[10120]^(2Cv[10109])-36Cv[10121]^2","(Cv[10120]^Cv[10109]+6Cv[10121])(Cv[10120]^Cv[10109]-6Cv[10121])",
+//"2Cv[10120]+Cv[10121]Cv[10120]+Cv[10122]","Cv[10120](Cv[10121]+2)+Cv[10122]",
 ];
 
 var solve =
@@ -801,22 +829,31 @@ var solve =
 
 "Cv[10121]/Cv[8]^Cv[10120]^2Cv[8800]Cv[10122]","Cv[10120]","Cv[10120]Cv[8800]sqt(lne(Cv[10121]/Cv[10122]))",
 "Cv[10120]Cv[60]Cv[10121]+Cv[10122]","Cv[10121]","Cv[10121]Cv[62]Cv[10120]-Cv[10122]",
-"Cv[10120]Cv[60]Cv[10121]-Cv[10122]","Cv[10121]","Cv[10121]Cv[62]Cv[10122]+Cv[10120]",
+"Cv[10120]Cv[8804]Cv[10121]+Cv[10122]","Cv[10121]","Cv[10121]Cv[8805]Cv[10120]-Cv[10122]",
+"Cv[10120]Cv[62]Cv[10121]-Cv[10122]","Cv[10121]","Cv[10121]Cv[60]Cv[10122]+Cv[10120]",
+"Cv[10120]Cv[8805]Cv[10121]-Cv[10122]","Cv[10121]","Cv[10121]Cv[8804]Cv[10122]+Cv[10120]",
 "Cv[10120]Cv[60]-Cv[10121]-Cv[10122]","Cv[10121]","Cv[10121]Cv[60]-Cv[10120]-Cv[10122]",
+"Cv[10120]Cv[8804]-Cv[10121]-Cv[10122]","Cv[10121]","Cv[10121]Cv[8804]-Cv[10120]-Cv[10122]",
 "-Cv[10120]Cv[60]Cv[10121]+Cv[10122]","Cv[10121]","Cv[10121]Cv[62]-Cv[10120]-Cv[10122]",
 "Cv[10120]Cv[60]Cv[10121]","Cv[10121]","Cv[10121]Cv[62]Cv[10120]",
 "Cv[10120]Cv[60]Cv[10121]","Cv[10120]","Cv[10120]Cv[60]Cv[10121]",
 "Cv[10120]Cv[60]-Cv[10121]","Cv[10121]","Cv[10121]Cv[60]-Cv[10120]",
 "Cv[10120]Cv[60]2Cv[10121]","Cv[10121]","Cv[10121]Cv[62]Cv[10120]/2",
 "Cv[10120]Cv[60]-2Cv[10121]","Cv[10121]","Cv[10121]Cv[60]-(Cv[10120]/2)",
-
-"Cv[10120]Cv[60]Cv[10121]Cv[10122]","Cv[10121]","undefined",
-"=Cv[10121]/2","Cv[10121]","Cv[9998]",
-"tdr(Cv[10120])=Cv[10121]","Cv[10121]^2","Cv[9998]",
-"Cv[10121]=Cv[8747]2Cv[10120]Cv[8748]","Cv[10121]","Cv[9998]",
+"Cv[10120]Cv[62]-2Cv[10121]","Cv[10121]","Cv[10121]Cv[62]-(Cv[10120]/2)",
+"Cv[10120]Cv[8805]-2Cv[10121]","Cv[10121]","Cv[10121]Cv[8805]-(Cv[10120]/2)",
 
 "Cv[10097]=Cv[10120]Cv[10121]-Cv[10120]Cv[10122]","Cv[10120]","Cv[10120]=Cv[10097]/(Cv[10121]-Cv[10122])",
 "2Cv[10098](Cv[10120]Cv[10121]-Cv[10120]Cv[10122])=Cv[10097]","Cv[10120]","Cv[10120]=Cv[10097]/(Cv[10121]-Cv[10122])2Cv[10098]",
+"Cv[10120]/Cv[10121]=-Cv[10121]","Cv[10121]","Cv[10120]/Cv[10121]+Cv[10121]=0",
+
+"Cv[10120]Cv[60]Cv[10121]Cv[10122]","Cv[10121]","undefined",
+"=Cv[10121]/2","Cv[10121]","Cv[9998]",
+"Cv[10120]/Cv[10121]=","Cv[10121]","Cv[9998]",
+"tdr(Cv[10120])=Cv[10121]","Cv[10121]^2","Cv[9998]",
+"Cv[10121]=Cv[8747]2Cv[10120]Cv[8748]","Cv[10121]","Cv[9998]",
+"Cv[10120]/Cv[10121]","Cv[10121]","Cv[10120]/Cv[10121]",
+
 ];
 
 var trigtoexp =
@@ -1013,7 +1050,10 @@ var derivatives =
 "idr(Cv[10120])Cv[10098]/Cv[10120]-Cv[10099]/Cv[10120]","(Cv[10099]-Cv[10098])/Cv[10120]^2",
 "idr(Cv[10120])Cv[10097]/Cv[10120]+Cv[10098]/Cv[10120]-Cv[10099]/Cv[10120]","(Cv[10099]-Cv[10097]-Cv[10098])/Cv[10120]^2",
 "idr(Cv[10120])Cv[8]^Cv[10120]^2/(2Cv[10120]^2+2)","(Cv[10120]Cv[8]^Cv[10120]^2)/(Cv[10120]^2+1)-(4Cv[10120]Cv[8]^Cv[10120]^2)/(2Cv[10120]^2+2)^2",
-
+"idr(Cv[10120])lgn(Cv[10120],Cv[10121])","-(lne(Cv[10121])/Cv[10120]lne(Cv[10120])^2)",
+"idr(Cv[10120])lgn(Cv[10121],Cv[10120])","1/Cv[10120]lne(Cv[10121])",
+"idr(Cv[10120])efc(Cv[10120])","-(2/Cv[8]^Cv[10120]^2sqt(Cv[29]))",
+"idr(Cv[10120])exp(Cv[10120])","Cv[8]^Cv[10120]",
 
 "tdr(Cv[10120])4Cv[10120]^2+5Cv[10120]+6Cv[10120]Cv[10121]+Cv[10121]^2","(8Cv[10120]+6Cv[10121]+5)Cv[8748]Cv[10120]+(6Cv[10120]+2Cv[10121])Cv[8748]Cv[10121]",
 "tdr(Cv[10120])2Cv[10120]^2Cv[10121]^3","4Cv[10120]Cv[10121]^3Cv[8748]Cv[10120]+6Cv[10120]^2Cv[10121]^2Cv[8748]Cv[10121]",
@@ -1028,6 +1068,10 @@ var derivatives =
 
 "tdr(Cv[10120],2)Cv[10120]^3","6Cv[10120]",
 "tdr(Cv[10121],2)Cv[10121]^3","6Cv[10121]",
+
+"idr(Cv[10097])sum(Cv[8734],Cv[10120]Cv[61]Cv[10120])(Cv[10097]/2^Cv[10120])","2^(1-Cv[10120]",
+"idr(Cv[10110])prd(Cv[10097],Cv[10120]Cv[61]Cv[10098])Cv[10110]","(Cv[10097]-Cv[10098]+1)Cv[10110]^(Cv[10097]-Cv[10098])",
+"idr(Cv[10110])lim(Cv[10120],0)(1+Cv[10120])^(Cv[10110]/Cv[10120])","Cv[8]^Cv[10110]",
 
 ];
 var integrals =
@@ -1148,6 +1192,7 @@ var integrals =
 "Cv[8747]Cv[10121]Cv[10120]^3","Cv[9998]",
 "Cv[8747]2-sec(Cv[10121]/Cv[10120])Cv[8748]Cv[10120]","2Cv[10120]-Cv[8747]sec(Cv[10121]/Cv[10120])Cv[8748]Cv[10120]+Cv[11100]",
 "Cv[8747]Cv[10097]/Cv[10120]^3+Cv[10098]/Cv[10120]^2-Cv[10099]/Cv[10120]Cv[8748]Cv[10120]","-(Cv[10098]/Cv[10120])-(Cv[10099]lne(Cv[10120])+(Cv[10097]/2Cv[10120]^2))+Cv[11100]",
+
 
 //fn integration by test
 "Cv[8747]sin(Cv[10120]Cv[10121])Cv[8748]Cv[10120]","-(cos(Cv[10120]Cv[10121])/Cv[10121])+Cv[11100]",
@@ -1336,6 +1381,23 @@ var real_calculus =
 "Cv[8747]lne(Cv[10120]^2+1)Cv[8748]Cv[10120]","Cv[10120](lne(Cv[10120]^2+1)-2)+2atn(Cv[10120])+Cv[11100]",
 "Cv[8747]Cv[10120](Cv[10120]+Cv[10121])^Cv[10122]Cv[8748]Cv[10120]","Cv[10120](Cv[10121]+Cv[10120])^(Cv[10122]+1)/(Cv[10122]+1)-(Cv[10121]+Cv[10120])^(Cv[10122]+2)/(Cv[10122]+1)(Cv[10122]+2)+Cv[11100]",
 "Cv[8747]Cv[10121]/(Cv[10120]+1)Cv[8748]Cv[10120]","Cv[10121]lne(abs(Cv[10120]+1))+Cv[11100]",
+"Cv[8747]exp(Cv[10120])Cv[8748]Cv[10120]","exp(Cv[10120])+Cv[11100]",
+"Cv[8747]abs(Cv[10120])Cv[8748]Cv[10120]","Cv[10120]abs(Cv[10120])/2+Cv[11100]",
+"Cv[8747]erf(Cv[10120])Cv[8748]Cv[10120]","1/Cv[8]^Cv[10120]^2sqt(Cv[29])+Cv[10120]erf(Cv[10120])+Cv[11100]",
+"Cv[8747]lgn(3,Cv[10120])Cv[8748]Cv[10120]","(Cv[10120]lne(Cv[10120])-Cv[10120])/lne(3)+Cv[11100]",
+"Cv[8747]azh(Cv[10120])Cv[8748]Cv[10120]","Cv[10120]azh(Cv[10120])+lne(1-Cv[10120]^2)/2+Cv[11100]", //acoth()
+"Cv[8747]ayh(Cv[10120])Cv[8748]Cv[10120]","Cv[10120](ash(Cv[10120])sqt(1/Cv[10120]^2+1)/sqt(Cv[10120]^2+1)+ayh(Cv[10120]))+Cv[11100]", //acsch()
+"Cv[8747]snh(lne(Cv[10120]))Cv[8748]Cv[10120]","Cv[10120]^2/4-lne(Cv[10120])/2+Cv[11100]",
+"Cv[8747]csh(lne(Cv[10120]))Cv[8748]Cv[10120]","Cv[10120]^2/4+lne(Cv[10120])/2+Cv[11100]",
+"Cv[8747]tnh(lne(Cv[10120]))Cv[8748]Cv[10120]","Cv[10120]-2atn(Cv[10120])+Cv[11100]",
+"Cv[8747]lne(Cv[10121]/Cv[10120])Cv[8748]Cv[10120]","Cv[10120]lne(Cv[10121])+Cv[10120]-Cv[10120]lne(Cv[10120])+Cv[11100]",
+"Cv[8747]sin(2Cv[10120])sin(3Cv[10120])Cv[8748]Cv[10120]","(2cos(2Cv[10120])sin(3Cv[10120])-3cos(3Cv[10120])sin(2Cv[10120]))/5+Cv[11100]",
+"Cv[8747]cos(2Cv[10120])cos(3Cv[10120])Cv[8748]Cv[10120]","(3cos(2Cv[10120])sin(3Cv[10120])-2cos(3Cv[10120])sin(2Cv[10120]))/5+Cv[11100]",
+
+//"Cv[8747]axh(Cv[10120])Cv[8748]Cv[10120]","", //asech()
+//"Cv[8747]sum(Cv[8734],Cv[10120]Cv[61]Cv[10120])(Cv[10097]/2^Cv[10120])Cv[8748]Cv[10097]","",
+//"Cv[8747]prd(Cv[10097],Cv[10120]Cv[61]Cv[10098])Cv[10110]Cv[8748]Cv[10110]","",
+//"Cv[8747]lim(Cv[10120],0)(1+Cv[10120])^(Cv[10110]/Cv[10120])Cv[8748]Cv[10110]","Cv[8]^Cv[10110]",
 ];
 var summation =
 [
@@ -1730,26 +1792,15 @@ var internal =
 "mgCalc.GCF(120,76)","4",
 "mgCalc.GCF(2049,333)","3",
 "mgCalc.GCF(450,225)","225",
+"mgCalculate('2+3').mg","5",
+"mgSubstitute('2/Cv[10110]+1','Cv[10110]','Cv[10120]^2').mg","2/Cv[10120]^2+1"
+
 ];
 
-var simplify_bugs =
-[
-"Cv[8747]cos(5Cv[10120])/Cv[8]^sin(5Cv[10120])Cv[8748]Cv[10120]","-(1/(5Cv[8]^sin(5Cv[10120]))+Cv[11100])",
-"tdr(Cv[10120])3Cv[10120]^2+4Cv[10120]+7Cv[10120]Cv[10121]+Cv[10121]^2","(7Cv[10120]+2Cv[10121])Cv[8748]Cv[10121]+(6Cv[10120]+4)Cv[8748]Cv[10120]",
-"idr(Cv[10120])atn(Cv[10120]/sqt(1-Cv[10120]^2))","1/sqt(1-Cv[10120]^2)",
-"lim(Cv[10120],0)(1-sin(Cv[10120]))/Cv[10120]^2","Cv[8734]",
-];
-
-var factor_bugs = 
-[
-"Cv[10120]^8-Cv[10121]^4","(Cv[10120]^4-Cv[10121]^2)(Cv[10120]^2+Cv[10121])(Cv[10120]^2-Cv[10121])",
-"Cv[10120]^(2Cv[10097])-3Cv[10120]^Cv[10097]-4","(Cv[10120]^Cv[10097]+1)(Cv[10120]^Cv[10097]-4)",
-"Cv[10120]^(2Cv[10109])-36Cv[10121]^2","(Cv[10120]^Cv[10109]+6Cv[10121])(Cv[10120]^Cv[10109]-6Cv[10121])",
-"2Cv[10120]+Cv[10121]Cv[10120]+Cv[10122]","Cv[10120](Cv[10121]+2)+Cv[10122]",
-];
 
 var testList =
 {
+
 "Numerical": "runNumerical()",
 "Range": "runRange()",
 "Domain": "runDomain()",
@@ -1771,8 +1822,7 @@ var testList =
 "Latex Import": "runImport()",
 "Financial": "runFinancial()",
 "Internal": "runInternal()",
-//"mgSimplify Bugs": "runSimplifyBugs()",
-//"mgFactor Bugs": "runFactorBugs()",
+
 };
 
 function execTest(testSuite) {
@@ -1782,11 +1832,9 @@ function execTest(testSuite) {
     tPass = 0;
     tFail = 0;
     htmlResults = "";
-    consoleResults = "\n";
     eval(testList[testSuite])
 }
 function setTitle(label) {
-    console.log(label)
     htmlResults =htmlResults+"<br><div align='center'><b>"+label+"</b></div><br>";
 }
 function runNumerical() {
@@ -1794,7 +1842,14 @@ function runNumerical() {
     mgConfig.dPrecision = 8; //reduce precision to allow for different JS engines
     increment = 2;
     for (index=0;index<numerical.length;index+=increment) {
-        runTest(mgTranslate(numerical[index]).html,mgNumeric(numerical[index]).html,mgTranslate(numerical[index+1]).html)
+		if (nodejs) {
+			const xpectd = mgNumeric(numerical[index]).mg;
+			const rceivd = numerical[index+1];
+			test("Numerical:"+numerical[index], () => {expect(xpectd).toBe(rceivd)})	
+		}
+		else {
+			runTest(mgTranslate(numerical[index]).html,mgNumeric(numerical[index]).html,mgTranslate(numerical[index+1]).html)
+		}
     }
     mgConfig.dPrecision = 16;
     toOutput()
@@ -1804,7 +1859,14 @@ function runRange() {
     increment = 2;
     degree = 1;
     for (index=0;index<range.length;index+=increment) {
-        runTest(mgTranslate(range[index]).html,mgRange(range[index]).html,mgTranslate(range[index+1]).html)
+		if (nodejs) {
+			const xpectd = mgRange(range[index]).html;
+			const rceivd = mgTranslate(range[index+1]).html;
+			test("Range:"+range[index], () => {expect(xpectd).toBe(rceivd)})	
+		}
+		else {
+			runTest(mgTranslate(range[index]).html,mgRange(range[index]).html,mgTranslate(range[index+1]).html)
+		}
     }
     toOutput()
 }
@@ -1813,7 +1875,14 @@ function runDomain() {
     increment = 2;
     degree = 1;
     for (index=0;index<domain.length;index+=increment) {
-        runTest(mgTranslate(domain[index]).html,mgDomain(domain[index]).html,mgTranslate(domain[index+1]).html)
+		if (nodejs) {
+			const xpectd = mgDomain(domain[index]).html;
+			const rceivd = mgTranslate(domain[index+1]).html;
+			test("Domain:"+domain[index], () => {expect(xpectd).toBe(rceivd)})	
+		}
+		else {
+			runTest(mgTranslate(domain[index]).html,mgDomain(domain[index]).html,mgTranslate(domain[index+1]).html)
+		}
     }
     toOutput()
 }
@@ -1822,7 +1891,14 @@ function runMatrix() {
     increment = 2;
     degree = 1;
     for (index=0;index<matrix.length;index+=increment) {
-        runTest(mgTranslate(matrix[index]).html,mgSimplify(matrix[index]).html,mgTranslate(matrix[index+1]).html)
+		if (nodejs) {
+			const xpectd = mgSimplify(matrix[index]).html;
+			const rceivd = mgTranslate(matrix[index+1]).html;
+			test("Matrix:"+matrix[index], () => {expect(xpectd).toBe(rceivd)})	
+		}
+		else {
+			runTest(mgTranslate(matrix[index]).html,mgSimplify(matrix[index]).html,mgTranslate(matrix[index+1]).html)
+		}
     }
     toOutput()
 }
@@ -1831,7 +1907,14 @@ function runReduce() {
     degree = 1;
     increment = 2;
     for (index=0;index<reduce.length;index+=increment) {
+		if (nodejs) {
+			const xpectd = mgSimplify(reduce[index]).html;
+			const rceivd = mgTranslate(reduce[index+1]).html;
+			test("Reduce:"+reduce[index], () => {expect(xpectd).toBe(rceivd)})	
+		}
+		else {
         runTest(mgTranslate(reduce[index]).html,mgSimplify(reduce[index]).html,mgTranslate(reduce[index+1]).html)
+		}
     }
     toOutput()
 }
@@ -1840,7 +1923,14 @@ function runFactor() {
     degree = 1;
     increment = 2;
     for (index=0;index<factor.length;index+=increment) {
-        runTest(mgTranslate(factor[index]).html,mgFactor(factor[index]).html,mgTranslate(factor[index+1]).html)
+		if (nodejs) {
+			const xpectd = mgFactor(factor[index]).html;
+			const rceivd = mgTranslate(factor[index+1]).html;
+			test("Factor:"+factor[index], () => {expect(xpectd).toBe(rceivd)})	
+		}
+		else {
+			runTest(mgTranslate(factor[index]).html,mgFactor(factor[index]).html,mgTranslate(factor[index+1]).html)
+		}
     }
     toOutput()
 }
@@ -1848,7 +1938,14 @@ function runExpand() {
     setTitle("Expand Tests 'mgExpand()'")
     increment = 2;
     for (index=0;index<expand.length;index+=increment) {
-        runTest(mgTranslate(expand[index]).html,mgExpand(expand[index]).html,mgTranslate(expand[index+1]).html)
+		if (nodejs) {
+			const xpectd = mgExpand(expand[index]).html;
+			const rceivd = mgTranslate(expand[index+1]).html;
+			test("Expand:"+expand[index], () => {expect(xpectd).toBe(rceivd)})	
+		}
+		else {
+			runTest(mgTranslate(expand[index]).html,mgExpand(expand[index]).html,mgTranslate(expand[index+1]).html)
+		}
     }
     toOutput()
 }
@@ -1856,7 +1953,14 @@ function runSolve() {
     setTitle("Solve Tests 'mgSolve()'")
     increment = 3;
     for (index=0;index<solve.length;index+=increment) {
-        runTest(mgTranslate(solve[index]).html,mgSolve(solve[index],solve[index+1]).html,mgTranslate(solve[index+2]).html)
+		if (nodejs) {
+			const xpectd = mgSolve(solve[index],solve[index+1]).html;
+			const rceivd = mgTranslate(solve[index+2]).html;
+			test("Solve:"+solve[index]+" for "+solve[index+2], () => {expect(xpectd).toBe(rceivd)})	
+		}
+		else {
+			runTest(mgTranslate(solve[index]).html,mgSolve(solve[index],solve[index+1]).html,mgTranslate(solve[index+2]).html)
+		}
     }
     toOutput()
 }
@@ -1872,7 +1976,14 @@ function runTrigtoexp() {
     setTitle("Trig to Exponential Tests 'mgTrigToExp()'")
     increment = 2;
     for (index=0;index<trigtoexp.length;index+=increment) {
-        runTest(mgTranslate(trigtoexp[index]).html,mgTrigToExp(trigtoexp[index]).html,mgTranslate(trigtoexp[index+1]).html)
+		if (nodejs) {
+			const xpectd = mgTrigToExp(trigtoexp[index]).html;
+			const rceivd = mgTranslate(trigtoexp[index+1]).html;
+			test("Trig2exp:"+trigtoexp[index], () => {expect(xpectd).toBe(rceivd)})	
+		}
+		else {
+			runTest(mgTranslate(trigtoexp[index]).html,mgTrigToExp(trigtoexp[index]).html,mgTranslate(trigtoexp[index+1]).html)
+		}
     }
     toOutput()
 }
@@ -1880,7 +1991,14 @@ function runExptotrig() {
     setTitle("Exponential to Trig Tests 'mgExpToTrig()'")
     increment = 2;
     for (index=0;index<exptotrig.length;index+=increment) {
-        runTest(mgTranslate(exptotrig[index]).html,mgExpToTrig(exptotrig[index]).html,mgTranslate(exptotrig[index+1]).html)
+		if (nodejs) {
+			const xpectd = mgExpToTrig(exptotrig[index]).html;
+			const rceivd = mgTranslate(exptotrig[index+1]).html;
+			test("Exp2trig:"+exptotrig[index], () => {expect(xpectd).toBe(rceivd)})	
+		}
+		else {
+			runTest(mgTranslate(exptotrig[index]).html,mgExpToTrig(exptotrig[index]).html,mgTranslate(exptotrig[index+1]).html)
+		}
     }
     toOutput()
 }
@@ -1888,7 +2006,14 @@ function runLimits() {
     setTitle("Limits Tests 'mgSimplify()'")
     increment = 2;
     for (index=0;index<limits.length;index+=increment) {
-        runTest(mgTranslate(limits[index]).html,mgSimplify(limits[index]).html,mgTranslate(limits[index+1]).html)
+		if (nodejs) {
+			const xpectd = mgSimplify(limits[index]).html;
+			const rceivd = mgTranslate(limits[index+1]).html;
+			test("Limits:"+limits[index], () => {expect(xpectd).toBe(rceivd)})	
+		}
+		else {
+			runTest(mgTranslate(limits[index]).html,mgSimplify(limits[index]).html,mgTranslate(limits[index+1]).html)
+		}
     }
     toOutput()
 }
@@ -1896,7 +2021,14 @@ function runDerivatives() {
     setTitle("Complex Domain Derivatives Tests 'mgSimplify()'")
     increment = 2;
     for (index=0;index<derivatives.length;index+=increment) {
-        runTest(mgTranslate(derivatives[index]).html,mgSimplify(derivatives[index]).html,mgTranslate(derivatives[index+1]).html)
+		if (nodejs) {
+			const xpectd = mgSimplify(derivatives[index]).html;
+			const rceivd = mgTranslate(derivatives[index+1]).html;
+			test("Derivatives:"+derivatives[index], () => {expect(xpectd).toBe(rceivd)})	
+		}
+		else {
+			runTest(mgTranslate(derivatives[index]).html,mgSimplify(derivatives[index]).html,mgTranslate(derivatives[index+1]).html)
+		}
     }
     toOutput()
 }
@@ -1904,7 +2036,14 @@ function runIntegrals() {
     setTitle("Complex Domain Integrals Tests 'mgSimplify()'")
     increment = 2;
     for (index=0;index<integrals.length;index+=increment) {
-        runTest(mgTranslate(integrals[index]).html,mgSimplify(integrals[index]).html,mgTranslate(integrals[index+1]).html)
+		if (nodejs) {
+			const xpectd = mgSimplify(integrals[index]).html;
+			const rceivd = mgTranslate(integrals[index+1]).html;
+			test("Integrals:"+integrals[index], () => {expect(xpectd).toBe(rceivd)})	
+		}
+		else {
+			runTest(mgTranslate(integrals[index]).html,mgSimplify(integrals[index]).html,mgTranslate(integrals[index+1]).html)
+		}
     }
     toOutput()
 }
@@ -1913,7 +2052,14 @@ function runRealCalculus() {
     increment = 2;
     mgConfig.Domain = "Real";
     for (index=0;index<real_calculus.length;index+=increment) {
-        runTest(mgTranslate(real_calculus[index]).html,mgSimplify(real_calculus[index]).html,mgTranslate(real_calculus[index+1]).html)
+		if (nodejs) {
+			const xpectd = mgSimplify(real_calculus[index]).html;
+			const rceivd = mgTranslate(real_calculus[index+1]).html;
+			test("RealCalculus:"+real_calculus[index], () => {expect(xpectd).toBe(rceivd)})	
+		}
+		else {
+			runTest(mgTranslate(real_calculus[index]).html,mgSimplify(real_calculus[index]).html,mgTranslate(real_calculus[index+1]).html)
+		}
     }
     toOutput()
     mgConfig.Domain = "Complex";
@@ -1922,7 +2068,14 @@ function runSummation() {
     setTitle("Summation Tests 'mgSimplify()'")
     increment = 2;
     for (index=0;index<summation.length;index+=increment) {
-        runTest(mgTranslate(summation[index]).html,mgSimplify(summation[index]).html,mgTranslate(summation[index+1]).html)
+		if (nodejs) {
+			const xpectd = mgSimplify(summation[index]).html;
+			const rceivd = mgTranslate(summation[index+1]).html;
+			test("Summation:"+summation[index], () => {expect(xpectd).toBe(rceivd)})	
+		}
+		else {
+			runTest(mgTranslate(summation[index]).html,mgSimplify(summation[index]).html,mgTranslate(summation[index+1]).html)
+		}
     }
     toOutput()
 }
@@ -1932,24 +2085,52 @@ function runHTML() {
     mgConfig.invFmt = "asin"
     mgConfig.fnFmt = "fn(x)";
     for (index=0;index<html.length;index+=increment) {
-        runTest(html[index],mgTranslate(html[index]).html,html[index+1])
+		if (nodejs) {
+			const xpectd = mgTranslate(html[index]).html;
+			const rceivd = html[index+1];
+			test("html:"+html[index], () => {expect(xpectd).toBe(rceivd)})	
+		}
+		else {
+			runTest(html[index],mgTranslate(html[index]).html,html[index+1])
+		}
     }
     mgConfig.invFmt = "sin<sup>-1</sup>"
     setTitle("HTML Tests 'mgTranslate().html sin<sup>-1</sup>'")
     for (index=0;index<htmlx.length;index+=increment) {
-        runTest(htmlx[index],mgTranslate(htmlx[index]).html,htmlx[index+1])
+		if (nodejs) {
+			const xpectd = mgTranslate(htmlx[index]).html;
+			const rceivd = htmlx[index+1];
+			test("html:"+htmlx[index], () => {expect(xpectd).toBe(rceivd)})	
+		}
+		else {
+			runTest(htmlx[index],mgTranslate(htmlx[index]).html,htmlx[index+1])
+		}
     }
     mgConfig.invFmt = "sin<sup>-1</sup>";
     mgConfig.fnFmt = "fn x";
     setTitle("HTML Tests 'mgTranslate().html fn x sin<sup>-1</sup>'")
     for (index=0;index<htmly.length;index+=increment) {
-        runTest(htmly[index],mgTranslate(htmly[index]).html,htmly[index+1])
+		if (nodejs) {
+			const xpectd = mgTranslate(htmly[index]).html;
+			const rceivd = htmly[index+1];
+			test("html:"+htmly[index], () => {expect(xpectd).toBe(rceivd)})	
+		}
+		else {
+			runTest(htmly[index],mgTranslate(htmly[index]).html,htmly[index+1])
+		}
     }
     mgConfig.invFmt = "asin";
     mgConfig.fnFmt = "fn x";
     setTitle("HTML Tests 'mgTranslate().html fn x asin'")
     for (index=0;index<htmlz.length;index+=increment) {
-        runTest(htmlz[index],mgTranslate(htmlz[index]).html,htmlz[index+1])
+		if (nodejs) {
+			const xpectd = mgTranslate(htmlz[index]).html;
+			const rceivd = htmlz[index+1];
+			test("html:"+htmlz[index], () => {expect(xpectd).toBe(rceivd)})	
+		}
+		else {
+			runTest(htmlz[index],mgTranslate(htmlz[index]).html,htmlz[index+1])
+		}
     }
     mgConfig.fnFmt = "fn(x)";
     toOutput()
@@ -1957,25 +2138,54 @@ function runHTML() {
 function runExport() {
     setTitle("Latex Export Tests 'mgTranslate().latex'")
     increment = 2;
+	mgConfig.fnFmt = "fn(x)";
     for (index=0;index<xport.length;index+=increment) {
-        runTest(mgTranslate(xport[index]).html,mgTranslate(xport[index]).latex.replace(/ /g,""),xport[index+1].replace(/ /g,""))
+		if (nodejs) {
+			const xpectd = mgTranslate(xport[index]).latex.replace(/ /g,"");
+			const rceivd = xport[index+1].replace(/ /g,"");
+			test("Latex-xport:"+xport[index], () => {expect(xpectd).toBe(rceivd)})	
+		}
+		else {
+			runTest(mgTranslate(xport[index]).html,mgTranslate(xport[index]).latex.replace(/ /g,""),xport[index+1].replace(/ /g,""))
+		}
     }
     mgConfig.fnFmt = "fn x";
     setTitle("Latex Export Tests 'mgTranslate().latex fn x'")
     for (index=0;index<xportx.length;index+=increment) {
-        runTest(mgTranslate(xportx[index]).html,mgTranslate(xportx[index]).latex.replace(/ /g,""),xportx[index+1].replace(/ /g,""))
+		if (nodejs) {
+			const xpectd = mgTranslate(xportx[index]).latex.replace(/ /g,"");
+			const rceivd = xportx[index+1].replace(/ /g,"");
+			test("Latex-xport:"+xportx[index], () => {expect(xpectd).toBe(rceivd)})	
+		}
+		else {
+			runTest(mgTranslate(xportx[index]).html,mgTranslate(xportx[index]).latex.replace(/ /g,""),xportx[index+1].replace(/ /g,""))
+		}
     }
     mgConfig.fnFmt = "fn x";
     mgConfig.invFmt = "sin<sup>-1</sup>";
     setTitle("Latex Export Tests 'mgTranslate().latex' 'fn x sin<sup>-1</sup>'")
     for (index=0;index<xporty.length;index+=increment) {
-        runTest(mgTranslate(xporty[index]).html,mgTranslate(xporty[index]).latex.replace(/ /g,""),xporty[index+1].replace(/ /g,""))
+		if (nodejs) {
+			const xpectd = mgTranslate(xporty[index]).latex.replace(/ /g,"");
+			const rceivd = xporty[index+1].replace(/ /g,"");
+			test("Latex-xport:"+xporty[index], () => {expect(xpectd).toBe(rceivd)})	
+		}
+		else {
+			runTest(mgTranslate(xporty[index]).html,mgTranslate(xporty[index]).latex.replace(/ /g,""),xporty[index+1].replace(/ /g,""))
+		}
     }
     mgConfig.fnFmt = "fn(x)";
     mgConfig.invFmt = "sin<sup>-1</sup>";
     setTitle("Latex Export Tests 'mgTranslate().latex' 'fn(x) sin<sup>-1</sup>'")
     for (index=0;index<xportz.length;index+=increment) {
-        runTest(mgTranslate(xportz[index]).html,mgTranslate(xportz[index]).latex.replace(/ /g,""),xportz[index+1].replace(/ /g,""))
+		if (nodejs) {
+			const xpectd = mgTranslate(xportz[index]).latex.replace(/ /g,"");
+			const rceivd = xportz[index+1].replace(/ /g,"");
+			test("Latex-xport:"+xportz[index], () => {expect(xpectd).toBe(rceivd)})	
+		}
+		else {
+			runTest(mgTranslate(xportz[index]).html,mgTranslate(xportz[index]).latex.replace(/ /g,""),xportz[index+1].replace(/ /g,""))
+		}
     }
     mgConfig.invFmt = "asin";
     
@@ -1986,7 +2196,14 @@ function runImport() {
     increment = 2;
     mgConfig.fnFmt = "fn(x)";
     for (index=0;index<mport.length;index+=increment) {
-        runTest(mport[index],mgTranslate(mport[index]).html,mgTranslate(mport[index+1]).html)
+		if (nodejs) {
+			const xpectd = mgTranslate(mport[index+1]).html;
+			const rceivd = mgTranslate(mport[index]).html;
+			test("Latex-import:"+mport[index], () => {expect(xpectd).toBe(rceivd)})	
+		}
+		else {
+			runTest(mport[index],mgTranslate(mport[index]).html,mgTranslate(mport[index+1]).html)
+		}
     }
     toOutput()
 }
@@ -1995,7 +2212,14 @@ function runFinancial() {
     mgConfig.dPrecision = 2;
     increment = 2;
     for (index=0;index<financial.length;index+=increment) {
-        runTest(financial[index],eval(financial[index]),financial[index+1])
+		if (nodejs) {
+			const xpectd = financial[index+1];
+			const rceivd = eval(financial[index])+"";
+			test("Financial:"+financial[index], () => {expect(xpectd).toBe(rceivd)})	
+		}
+		else {
+			runTest(financial[index],eval(financial[index]),financial[index+1])
+		}
     }
     mgConfig.dPrecision = 16;
     toOutput()
@@ -2005,28 +2229,19 @@ function runInternal() {
     mgConfig.dPrecision = 8;
     increment = 2;
     for (index=0;index<internal.length;index+=increment) {
-        runTest(internal[index],eval(internal[index]),internal[index+1])
+		if (nodejs) {
+			const xpectd = internal[index+1];
+			const rceivd = eval(internal[index])+"";
+			test("Internal:"+internal[index], () => {expect(xpectd).toBe(rceivd)})	
+		}
+		else {
+			runTest(internal[index],eval(internal[index]),internal[index+1])
+		}
     }
     mgConfig.dPrecision = 16;
     toOutput()
 }
-function runSimplifyBugs() {
-    setTitle("Outstanding mgSimplify() Bugs")
-    increment = 2;
-    for (index=0;index<simplify_bugs.length;index+=increment) {
-        runTest(mgTranslate(simplify_bugs[index]).html,mgSimplify(simplify_bugs[index]).html,mgTranslate(simplify_bugs[index+1]).html)
-    }
-    toOutput()
-}
-function runFactorBugs() {
-    setTitle("Outstanding mgFactor() Bugs")
-    increment = 2;
-    degree = 1;
-    for (index=0;index<factor_bugs.length;index+=increment) {
-        runTest(mgTranslate(factor_bugs[index]).html,mgFactor(factor_bugs[index]).html,mgTranslate(factor_bugs[index+1]).html)
-    }
-    toOutput()
-}
+
 function runTest(tIn,tOut,tExpected) {
     testNum++;
     var background = "FFFFFF"
@@ -2034,7 +2249,6 @@ function runTest(tIn,tOut,tExpected) {
     if (tOut == tExpected) {testStatus = "<font color=green><b>Pass</b></font>";tPass++}
     else {
         testStatus = "<font color=red><b>Fail</b></font>";tFail++;background="FF9999";
-        consoleResults = consoleResults+"Test # FAIL: " + testNum + "\n";
     }
     htmlResults = htmlResults+"<table align='center' width='600' bgcolor='#"+background+"'><tr align='left' bgcolor='#DDDDDD'><td align='left' width='25%'><b>Test # </b></td><td align='left' width='75%'><b>"+testNum+"</b></td></tr><tr align='left'><td align='left' width='25%'>Test Input:</td><td align='left' width='75%'>"+tIn+"</td></tr><tr align='left'><td align='left' width='25%'>Test Output:</td><td align='left' width='75%'>"+tOut+"</td></tr><tr align='left'><td align='left' width='25%'>Expected:</td><td align='left' width='75%'>"+tExpected+"</td></tr><tr align='left'><td align='left' width='25%'>Status:</td><td align='left' width='75%'>"+testStatus+"</td></table><br>";
     
@@ -2043,11 +2257,6 @@ function toOutput() {
     testTime = Date.now()
     totalTime = (testTime-startTime)
     htmlResults = htmlResults+"<br><b><div align='center'>Tests passed: "+tPass+"</div><div align='center'>Tests failed: "+tFail+"</div></div><div align='center'>Total Time: "+totalTime+"ms</div></b><br>";
-    consoleResults = consoleResults+"Tests passed: "+tPass+"\nTests failed: "+tFail+"\nTotal Time: "+totalTime+"ms\n";
-    console.log(consoleResults)
-    consoleTime = consoleTime+totalTime;
-    consolePass = consolePass+tPass;
-    consoleFail = consoleFail+tFail;
     if (!nodejs && document.getElementById('testDisplay')) {document.getElementById('testDisplay').innerHTML = htmlResults}
 }
 
@@ -2057,7 +2266,9 @@ if (typeof module == "object") {
     var mgCl = module.require('./mg_calculate.js')
     var mgTranslate = function(xpr,scale) {return mgTr.mgTranslate(xpr,scale)};
     var mgNumeric = function(xpr) {return mgCl.mgNumeric(xpr)};
+	var mgCalculate = function(xpr) {return mgCl.mgCalculate(xpr)};
     var mgSimplify = function(xpr) {return mgCl.mgSimplify(xpr)};
+	var mgSubstitute = function(x1,x2,x3) {return mgCl.mgSubstitute(x1,x2,x3)};
     var mgRange = function(xpr) {return mgCl.mgRange(xpr)};
     var mgDomain = function(xpr) {return mgCl.mgDomain(xpr)};
     var mgFactor = function(xpr) {return mgCl.mgFactor(xpr)};
@@ -2070,11 +2281,5 @@ if (typeof module == "object") {
     var mgCalc = mgCl.mgCalc;
     var nodejs = true;
     for (var testcase in testList) {execTest(testcase)}
-    console.log("Test report:")
-    console.log("Tests passed: "+consolePass)
-    console.log("Tests failed: "+consoleFail)
-    console.log("Total Tests: "+ (consoleFail+consolePass))
-    console.log("Elapsed time: "+consoleTime+"ms")
-    process.exit(consoleFail);
 }
 //
