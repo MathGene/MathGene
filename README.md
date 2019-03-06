@@ -258,16 +258,19 @@ Inverse trig function style format in mgConfig.fnFmt can be either "asin" for 'a
 ## MathGene Tests
 
 MathGene has an extensive test suite containing over 1500 individual tests that cover both translations and computations.
-The test suite provides use cases for each of the MathGene functions as well as test coverage. 
-Tests can be run either command-line via Node.js or via browser using a web interface.
+The test suite provides test cases for each of the MathGene functions as well as test coverage. 
+Tests can be run either command-line or via browser.
 
-To run the test suite via command-line (Node.js required, typical runtime 100 seconds):
+To run the test suite via command-line run the following commands (Node.js 9 or higher required):
 	
-	node mg_tests.js
+    npm install --save-dev jest
+    npm install --save-dev jest-junit-reporter
+    npm test
 
-To run the web interface, load the file 'test_suite.html' into a supported web browser.
+To run the web test interface, load the file 'test_suite.html' into a supported web browser.
 
-Each merge to master branch will also run node tests via Azure Pipelines. Pipeline tests run against multiple versions of NodeJS.
+Each merge or pull request to master branch will also run node tests via Azure Pipelines. 
+Pipeline tests run against multiple versions of NodeJS and include coverage reporting.
 
 
 ## MathGene in Action
