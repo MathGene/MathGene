@@ -26,11 +26,8 @@ if (typeof module ==  "object") {
     var parseParens = function(xpr,bSym) {return mgTr.parseParens(xpr,bSym)};
     var cFunc = function(xpr) {return mgTr.cFunc(xpr)};
     var texImport = function(xpr) {return mgTr.texImport(xpr)};
-    var texExport = function(xpr) {return mgTr.texExport(xpr)};
     var mgExport = function(xpr) {return mgTr.mgExport(xpr)};
-    var htmlExport = function(xpr) {return mgTr.htmlExport(xpr)};
     var mgOutput = function(xpr,scale) {return mgTr.mgOutput(xpr,scale)};
-    var mgTranslate = function(xpr,scale) {return mgTr.mgTranslate(xpr,scale)};
 }
 
 //external callable functions
@@ -159,8 +156,8 @@ var mgCalc = (function() {
                     if (strTest(getOp.upper,xVar) && strTest(getOp.lower,xVar)) {
                         rExpr = xprFactor(rExpr);
                         getOp = opExtract(rExpr);
+						break
                     }
-                    if (strTest(getOp.upper,xVar) && strTest(getOp.lower,xVar)) {break}
                     else if (strTest(getOp.upper,xVar)) {
                         rExpr = getOp.upper;
                         var strgI = getOp.lower;
@@ -356,14 +353,6 @@ var mgCalc = (function() {
             if (iTemp.split(iInv[iC]).length-1 < iCount[iC] && iCount[iC] != 0) {return iTemp} //if element count is smaller then return expanded result
         }
         return iRdce
-    }
-    function eReduce(eRdce) { //reduce to exponential form
-        pxpFlag = true;
-        expFlag = true;
-        eRdce = pxpExecute(xprIterate(eRdce)); //reduce product-quotient-exponent terms
-        pxpFlag = false;
-        expFlag = false;
-        return eRdce        
     }
     function smxS(xU) { //consolidate sum-difference terms 2a-b+c/d -> [(2a),(-b),(c/d)]
         Sv[xU] = strConvert(Sv[xU]);

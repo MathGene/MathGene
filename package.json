@@ -6,7 +6,10 @@
     "jest": "^24.1.0"
   },
   "jest": {
-     "collectCoverage": true,
-     "coverageReporters": ["json", "html"]
- }
+    "collectCoverage": true,
+    "coverageReporters": [
+      "json",
+      "html"
+    ]
+  }
 }

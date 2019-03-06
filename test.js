@@ -814,14 +814,19 @@ var solve =
 
 "Cv[10121]/Cv[8]^Cv[10120]^2Cv[8800]Cv[10122]","Cv[10120]","Cv[10120]Cv[8800]sqt(lne(Cv[10121]/Cv[10122]))",
 "Cv[10120]Cv[60]Cv[10121]+Cv[10122]","Cv[10121]","Cv[10121]Cv[62]Cv[10120]-Cv[10122]",
-"Cv[10120]Cv[60]Cv[10121]-Cv[10122]","Cv[10121]","Cv[10121]Cv[62]Cv[10122]+Cv[10120]",
+"Cv[10120]Cv[8804]Cv[10121]+Cv[10122]","Cv[10121]","Cv[10121]Cv[8805]Cv[10120]-Cv[10122]",
+"Cv[10120]Cv[62]Cv[10121]-Cv[10122]","Cv[10121]","Cv[10121]Cv[60]Cv[10122]+Cv[10120]",
+"Cv[10120]Cv[8805]Cv[10121]-Cv[10122]","Cv[10121]","Cv[10121]Cv[8804]Cv[10122]+Cv[10120]",
 "Cv[10120]Cv[60]-Cv[10121]-Cv[10122]","Cv[10121]","Cv[10121]Cv[60]-Cv[10120]-Cv[10122]",
+"Cv[10120]Cv[8804]-Cv[10121]-Cv[10122]","Cv[10121]","Cv[10121]Cv[8804]-Cv[10120]-Cv[10122]",
 "-Cv[10120]Cv[60]Cv[10121]+Cv[10122]","Cv[10121]","Cv[10121]Cv[62]-Cv[10120]-Cv[10122]",
 "Cv[10120]Cv[60]Cv[10121]","Cv[10121]","Cv[10121]Cv[62]Cv[10120]",
 "Cv[10120]Cv[60]Cv[10121]","Cv[10120]","Cv[10120]Cv[60]Cv[10121]",
 "Cv[10120]Cv[60]-Cv[10121]","Cv[10121]","Cv[10121]Cv[60]-Cv[10120]",
 "Cv[10120]Cv[60]2Cv[10121]","Cv[10121]","Cv[10121]Cv[62]Cv[10120]/2",
 "Cv[10120]Cv[60]-2Cv[10121]","Cv[10121]","Cv[10121]Cv[60]-(Cv[10120]/2)",
+"Cv[10120]Cv[62]-2Cv[10121]","Cv[10121]","Cv[10121]Cv[62]-(Cv[10120]/2)",
+"Cv[10120]Cv[8805]-2Cv[10121]","Cv[10121]","Cv[10121]Cv[8805]-(Cv[10120]/2)",
 
 "Cv[10120]Cv[60]Cv[10121]Cv[10122]","Cv[10121]","undefined",
 "=Cv[10121]/2","Cv[10121]","Cv[9998]",
@@ -830,6 +835,8 @@ var solve =
 
 "Cv[10097]=Cv[10120]Cv[10121]-Cv[10120]Cv[10122]","Cv[10120]","Cv[10120]=Cv[10097]/(Cv[10121]-Cv[10122])",
 "2Cv[10098](Cv[10120]Cv[10121]-Cv[10120]Cv[10122])=Cv[10097]","Cv[10120]","Cv[10120]=Cv[10097]/(Cv[10121]-Cv[10122])2Cv[10098]",
+
+"Cv[10120]/Cv[10121]=-Cv[10121]","Cv[10121]","Cv[10120]/Cv[10121]+Cv[10121]=0",
 ];
 
 var trigtoexp =
@@ -1743,6 +1750,9 @@ var internal =
 "mgCalc.GCF(120,76)","4",
 "mgCalc.GCF(2049,333)","3",
 "mgCalc.GCF(450,225)","225",
+"mgCalculate('2+3').mg","5",
+"mgSubstitute('2/Cv[10110]+1','Cv[10110]','Cv[10120]^2').mg","2/Cv[10120]^2+1"
+
 ];
 
 
@@ -2214,7 +2224,9 @@ if (typeof module == "object") {
     var mgCl = module.require('./mg_calculate.js')
     var mgTranslate = function(xpr,scale) {return mgTr.mgTranslate(xpr,scale)};
     var mgNumeric = function(xpr) {return mgCl.mgNumeric(xpr)};
+	var mgCalculate = function(xpr) {return mgCl.mgCalculate(xpr)};
     var mgSimplify = function(xpr) {return mgCl.mgSimplify(xpr)};
+	var mgSubstitute = function(x1,x2,x3) {return mgCl.mgSubstitute(x1,x2,x3)};
     var mgRange = function(xpr) {return mgCl.mgRange(xpr)};
     var mgDomain = function(xpr) {return mgCl.mgDomain(xpr)};
     var mgFactor = function(xpr) {return mgCl.mgFactor(xpr)};

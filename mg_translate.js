@@ -952,8 +952,8 @@ function mgExport(xFn) { //convert from FUNC format to MG format
     function cNqlE(xU,xL) {return xU + "Cv[8800]" + xL} //not equal
     function cGthE(xU,xL) {return xU + "Cv[62]" + xL} //greater than
     function cLthE(xU,xL) {return xU + "Cv[60]" + xL} //less than
-    function cGeqE(xU,xL) {return xU + "Cv[8804]" + xL} //greater than or equal
-    function cLeqE(xU,xL) {return xU + "Cv[8805]" + xL} //less than or equal
+    function cGeqE(xU,xL) {return xU + "Cv[8805]" + xL} //greater than or equal
+    function cLeqE(xU,xL) {return xU + "Cv[8804]" + xL} //less than or equal
     function cBndE(xU,xL) {return xU + "" + xL} //non-multiplying symbol bond
     function nrtE(xU,xL)  {return "nrt(" + xU + "," + xL + ")"} //nth root
     function lgnE(xU,xL)  {return "lgn(" + xU + "," + xL + ")"} //log to nth
