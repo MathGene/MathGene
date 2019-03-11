@@ -570,6 +570,7 @@ var reduce =
 "8Cv[8]^(Cv[46]Cv[29])","-8",
 "sin(Cv[10120])cos(Cv[10121])+sin(Cv[10121])cos(Cv[10120])","sin(Cv[10121]+Cv[10120])",
 "sin(Cv[10117])cos(Cv[10118])-sin(Cv[10118])cos(Cv[10117])","sin(Cv[10117]-Cv[10118])",
+"cos(Cv[10120])cos(Cv[10121])+sin(Cv[10120])sin(Cv[10121])","cos(Cv[10121]+Cv[10120])",
 "cos(Cv[10120])cos(Cv[10121])-sin(Cv[10120])sin(Cv[10121])","cos(Cv[10120]-Cv[10121])",
 "snh(Cv[10120])csh(Cv[10121])-csh(Cv[10120])snh(Cv[10121])","snh(Cv[10120]-Cv[10121])",
 "csh(Cv[10120])csh(Cv[10121])-snh(Cv[10120])snh(Cv[10121])","csh(Cv[10120]-Cv[10121])",
@@ -636,6 +637,10 @@ var reduce =
 "snh(Cv[10120])/tnh(Cv[10120])","csh(Cv[10120])",
 "abs(Cv[10101]/Cv[10102])/abs(Cv[10120]Cv[10121])","abs(Cv[10101]/Cv[10102]Cv[10120]Cv[10121])",
 
+"snh(Cv[10120])csh(Cv[10121])+snh(Cv[10121])csh(Cv[10120])","snh(Cv[10121]+Cv[10120])",
+"snh(Cv[10117])csh(Cv[10118])-snh(Cv[10118])csh(Cv[10117])","snh(Cv[10117]-Cv[10118])",
+"csh(Cv[10120])csh(Cv[10121])+snh(Cv[10120])snh(Cv[10121])","csh(Cv[10121]+Cv[10120])",
+"csh(Cv[10120])csh(Cv[10121])-snh(Cv[10120])snh(Cv[10121])","csh(Cv[10120]-Cv[10121])",
 
 //bugs
 //"Cv[8747]cos(5Cv[10120])/Cv[8]^sin(5Cv[10120])Cv[8748]Cv[10120]","-(1/(5Cv[8]^sin(5Cv[10120]))+Cv[11100])",
@@ -962,6 +967,10 @@ var limits =
 "lim(Cv[10120],)Cv[10120]","Cv[9998]",
 "lim(Cv[10120],0)","Cv[9998]",
 "lim(Cv[10120],Cv[8734])1/2^Cv[10120]","0",
+"lim(Cv[10120],0)(1-cos(Cv[10120]))/Cv[10120]^2","1/2",
+"lim(Cv[10120],0)(tan(Cv[10120])-sin(Cv[10120]))/Cv[10120]^2","1/2",
+
+
 
 "itg(-Cv[8734],0)Cv[10120]^2Cv[8748]Cv[10120]","-Cv[8734]",
 "itg(-Cv[8734],0)Cv[10120]^3Cv[8748]Cv[10120]","Cv[8734]",
@@ -972,8 +981,6 @@ var limits =
 "itg(-Cv[8734],0)Cv[10120]^2Cv[8748]Cv[10120]","-Cv[8734]",
 "itg(2,Cv[8734])1/Cv[10120]^2Cv[8748]Cv[10120]","-(1/2)",
 
-"lim(Cv[10120],0)(1-cos(Cv[10120]))/Cv[10120]^2","1/2",
-"lim(Cv[10120],0)(tan(Cv[10120])-sin(Cv[10120]))/Cv[10120]^2","1/2",
 ];
 var derivatives =
 [
@@ -1394,10 +1401,13 @@ var real_calculus =
 "Cv[8747]sin(2Cv[10120])sin(3Cv[10120])Cv[8748]Cv[10120]","(2cos(2Cv[10120])sin(3Cv[10120])-3cos(3Cv[10120])sin(2Cv[10120]))/5+Cv[11100]",
 "Cv[8747]cos(2Cv[10120])cos(3Cv[10120])Cv[8748]Cv[10120]","(3cos(2Cv[10120])sin(3Cv[10120])-2cos(3Cv[10120])sin(2Cv[10120]))/5+Cv[11100]",
 
+"Cv[8747](sum(Cv[8734],Cv[10120]Cv[61]Cv[10120])(Cv[10097]/2^Cv[10120]))Cv[8748]Cv[10097]","Cv[10097]^2/2^Cv[10120]+Cv[11100]",
+"Cv[8747](prd(Cv[10097],Cv[10120]Cv[61]Cv[10098])Cv[10110])Cv[8748]Cv[10110]","Cv[10110]^(Cv[10097]-Cv[10098]+2)/(Cv[10097]-Cv[10098]+2)+Cv[11100]",
+"Cv[8747](lim(Cv[10120],0)(1+Cv[10120])^(Cv[10110]/Cv[10120]))Cv[8748]Cv[10110]","Cv[8]^Cv[10110]+Cv[11100]",
+
+"itg(1,0)Cv[10120]^Cv[10120]","itg(1,0)Cv[10120]^Cv[10120]Cv[8748]Cv[10120]",
+
 //"Cv[8747]axh(Cv[10120])Cv[8748]Cv[10120]","", //asech()
-//"Cv[8747]sum(Cv[8734],Cv[10120]Cv[61]Cv[10120])(Cv[10097]/2^Cv[10120])Cv[8748]Cv[10097]","",
-//"Cv[8747]prd(Cv[10097],Cv[10120]Cv[61]Cv[10098])Cv[10110]Cv[8748]Cv[10110]","",
-//"Cv[8747]lim(Cv[10120],0)(1+Cv[10120])^(Cv[10110]/Cv[10120])Cv[8748]Cv[10110]","Cv[8]^Cv[10110]",
 ];
 var summation =
 [
@@ -1761,6 +1771,8 @@ var mport =
 "S_{\\text{new}} = S_{\\text{old}} - \\frac{ \\left( 5-T \\right) ^2} {2}","Cv[10083]sbt(Cv[10110]Cv[8]Cv[10119])=Cv[10083]sbt(Cv[10111]Cv[10108]Cv[10100])-(((5-Cv[10084])^2)/2)",
 "- \\frac{b}{3 a}+ \\frac{1- \\imath \\sqrt{3}}{6 a} \\sqrt[3]{ \\frac{1}{2} \\left(2 b^{3}-9 a b c+27 a^{2} d+ \\sqrt{\\Delta} \\right)}+ \\frac{1+ \\imath \\sqrt{3}}{6 a} \\sqrt[3]{ \\frac{1}{2} \\left(2 b^{3}-9 a b c+27 a^{2} d- \\sqrt{ \\Delta } \\right)}","-(Cv[10098]/3Cv[10097])+((1-Cv[46]sqt(3))/6Cv[10097])nrt(3,(1/2)(2Cv[10098]^3-9Cv[10097]Cv[10098]Cv[10099]+27Cv[10097]^2Cv[10100]+sqt(Cv[916])))+((1+Cv[46]sqt(3))/6Cv[10097])nrt(3,(1/2)(2Cv[10098]^3-9Cv[10097]Cv[10098]Cv[10099]+27Cv[10097]^2Cv[10100]-sqt(Cv[916])))",
 "(x_0 x_1 x_2 x_3)\\leftrightarrow\\begin{pmatrix} x_0+x_3&x_1+ix_2\\\\x_1-ix_2&x_0-x_3\\end{pmatrix}","(Cv[10120]sbt(0)Cv[10120]sbt(1)Cv[10120]sbt(2)Cv[10120]sbt(3))Cv[8596]mat(mat(Cv[10120]sbt(0)+Cv[10120]sbt(3),Cv[10120]sbt(1)+Cv[46]Cv[10120]sbt(2)),mat(Cv[10120]sbt(1)-Cv[46]Cv[10120]sbt(2),Cv[10120]sbt(0)-Cv[10120]sbt(3)))",
+"\\arg {\\Gamma (x)}","arg(gam(Cv[10120]))",
+"\\exp {x}","exp(Cv[10120])",
 ];
 
 var financial =
@@ -1793,8 +1805,14 @@ var internal =
 "mgCalc.GCF(2049,333)","3",
 "mgCalc.GCF(450,225)","225",
 "mgCalculate('2+3').mg","5",
-"mgSubstitute('2/Cv[10110]+1','Cv[10110]','Cv[10120]^2').mg","2/Cv[10120]^2+1"
-
+"mgSubstitute('2/Cv[10110]+1','Cv[10110]','Cv[10120]^2').mg","2/Cv[10120]^2+1",
+"mgExport('lmt(cDiv(1,Cv[10120]),Cv[10120],1)')","lim(Cv[10120],1)1/Cv[10120]",
+"mgExport('pmm(cDiv(1,Cv[10120]),Cv[10120],1,10)')","prd(Cv[10120],1Cv[61]10)1/Cv[10120]",
+"mgExport('drv(cDiv(1,Cv[10120]),Cv[10120])')","(idr(Cv[10120])1/Cv[10120])",
+"mgExport('drv(cDiv(1,Cv[10120]),Cv[10120],2)')","(idr(Cv[10120],2)1/Cv[10120])",
+"mgExport('tdv(cDiv(1,Cv[10120]),Cv[10120])')","(tdr(Cv[10120])1/Cv[10120])",
+"mgExport('tdv(cDiv(1,Cv[10120]),Cv[10120],2)')","(tdr(Cv[10120],2)1/Cv[10120])",
+"mgExport('cBnd(Cv[10120],cAng(Cv[10110],2))')","Cv[10120]Cv[10110]~2",
 ];
 
 
@@ -1843,8 +1861,8 @@ function runNumerical() {
     increment = 2;
     for (index=0;index<numerical.length;index+=increment) {
 		if (nodejs) {
-			const xpectd = mgNumeric(numerical[index]).mg;
-			const rceivd = numerical[index+1];
+			const rceivd = mgNumeric(numerical[index]).mg;
+			const xpectd = numerical[index+1];
 			test("Numerical:"+numerical[index], () => {expect(xpectd).toBe(rceivd)})	
 		}
 		else {
@@ -1860,8 +1878,8 @@ function runRange() {
     degree = 1;
     for (index=0;index<range.length;index+=increment) {
 		if (nodejs) {
-			const xpectd = mgRange(range[index]).html;
-			const rceivd = mgTranslate(range[index+1]).html;
+			const rceivd = mgRange(range[index]).html;
+			const xpectd = mgTranslate(range[index+1]).html;
 			test("Range:"+range[index], () => {expect(xpectd).toBe(rceivd)})	
 		}
 		else {
@@ -1876,8 +1894,8 @@ function runDomain() {
     degree = 1;
     for (index=0;index<domain.length;index+=increment) {
 		if (nodejs) {
-			const xpectd = mgDomain(domain[index]).html;
-			const rceivd = mgTranslate(domain[index+1]).html;
+			const rceivd = mgDomain(domain[index]).html;
+			const xpectd = mgTranslate(domain[index+1]).html;
 			test("Domain:"+domain[index], () => {expect(xpectd).toBe(rceivd)})	
 		}
 		else {
@@ -1892,8 +1910,8 @@ function runMatrix() {
     degree = 1;
     for (index=0;index<matrix.length;index+=increment) {
 		if (nodejs) {
-			const xpectd = mgSimplify(matrix[index]).html;
-			const rceivd = mgTranslate(matrix[index+1]).html;
+			const rceivd = mgSimplify(matrix[index]).html;
+			const xpectd = mgTranslate(matrix[index+1]).html;
 			test("Matrix:"+matrix[index], () => {expect(xpectd).toBe(rceivd)})	
 		}
 		else {
@@ -1908,8 +1926,8 @@ function runReduce() {
     increment = 2;
     for (index=0;index<reduce.length;index+=increment) {
 		if (nodejs) {
-			const xpectd = mgSimplify(reduce[index]).html;
-			const rceivd = mgTranslate(reduce[index+1]).html;
+			const rceivd = mgSimplify(reduce[index]).html;
+			const xpectd = mgTranslate(reduce[index+1]).html;
 			test("Reduce:"+reduce[index], () => {expect(xpectd).toBe(rceivd)})	
 		}
 		else {
@@ -1924,8 +1942,8 @@ function runFactor() {
     increment = 2;
     for (index=0;index<factor.length;index+=increment) {
 		if (nodejs) {
-			const xpectd = mgFactor(factor[index]).html;
-			const rceivd = mgTranslate(factor[index+1]).html;
+			const rceivd = mgFactor(factor[index]).html;
+			const xpectd = mgTranslate(factor[index+1]).html;
 			test("Factor:"+factor[index], () => {expect(xpectd).toBe(rceivd)})	
 		}
 		else {
@@ -1939,8 +1957,8 @@ function runExpand() {
     increment = 2;
     for (index=0;index<expand.length;index+=increment) {
 		if (nodejs) {
-			const xpectd = mgExpand(expand[index]).html;
-			const rceivd = mgTranslate(expand[index+1]).html;
+			const rceivd = mgExpand(expand[index]).html;
+			const xpectd = mgTranslate(expand[index+1]).html;
 			test("Expand:"+expand[index], () => {expect(xpectd).toBe(rceivd)})	
 		}
 		else {
@@ -1954,8 +1972,8 @@ function runSolve() {
     increment = 3;
     for (index=0;index<solve.length;index+=increment) {
 		if (nodejs) {
-			const xpectd = mgSolve(solve[index],solve[index+1]).html;
-			const rceivd = mgTranslate(solve[index+2]).html;
+			const rceivd = mgSolve(solve[index],solve[index+1]).html;
+			const xpectd = mgTranslate(solve[index+2]).html;
 			test("Solve:"+solve[index]+" for "+solve[index+2], () => {expect(xpectd).toBe(rceivd)})	
 		}
 		else {
@@ -1977,8 +1995,8 @@ function runTrigtoexp() {
     increment = 2;
     for (index=0;index<trigtoexp.length;index+=increment) {
 		if (nodejs) {
-			const xpectd = mgTrigToExp(trigtoexp[index]).html;
-			const rceivd = mgTranslate(trigtoexp[index+1]).html;
+			const rceivd = mgTrigToExp(trigtoexp[index]).html;
+			const xpectd = mgTranslate(trigtoexp[index+1]).html;
 			test("Trig2exp:"+trigtoexp[index], () => {expect(xpectd).toBe(rceivd)})	
 		}
 		else {
@@ -1992,8 +2010,8 @@ function runExptotrig() {
     increment = 2;
     for (index=0;index<exptotrig.length;index+=increment) {
 		if (nodejs) {
-			const xpectd = mgExpToTrig(exptotrig[index]).html;
-			const rceivd = mgTranslate(exptotrig[index+1]).html;
+			const rceivd = mgExpToTrig(exptotrig[index]).html;
+			const xpectd = mgTranslate(exptotrig[index+1]).html;
 			test("Exp2trig:"+exptotrig[index], () => {expect(xpectd).toBe(rceivd)})	
 		}
 		else {
@@ -2007,8 +2025,8 @@ function runLimits() {
     increment = 2;
     for (index=0;index<limits.length;index+=increment) {
 		if (nodejs) {
-			const xpectd = mgSimplify(limits[index]).html;
-			const rceivd = mgTranslate(limits[index+1]).html;
+			const rceivd = mgSimplify(limits[index]).html;
+			const xpectd = mgTranslate(limits[index+1]).html;
 			test("Limits:"+limits[index], () => {expect(xpectd).toBe(rceivd)})	
 		}
 		else {
@@ -2022,8 +2040,8 @@ function runDerivatives() {
     increment = 2;
     for (index=0;index<derivatives.length;index+=increment) {
 		if (nodejs) {
-			const xpectd = mgSimplify(derivatives[index]).html;
-			const rceivd = mgTranslate(derivatives[index+1]).html;
+			const rceivd = mgSimplify(derivatives[index]).html;
+			const xpectd = mgTranslate(derivatives[index+1]).html;
 			test("Derivatives:"+derivatives[index], () => {expect(xpectd).toBe(rceivd)})	
 		}
 		else {
@@ -2037,8 +2055,8 @@ function runIntegrals() {
     increment = 2;
     for (index=0;index<integrals.length;index+=increment) {
 		if (nodejs) {
-			const xpectd = mgSimplify(integrals[index]).html;
-			const rceivd = mgTranslate(integrals[index+1]).html;
+			const rceivd = mgSimplify(integrals[index]).html;
+			const xpectd = mgTranslate(integrals[index+1]).html;
 			test("Integrals:"+integrals[index], () => {expect(xpectd).toBe(rceivd)})	
 		}
 		else {
@@ -2053,8 +2071,8 @@ function runRealCalculus() {
     mgConfig.Domain = "Real";
     for (index=0;index<real_calculus.length;index+=increment) {
 		if (nodejs) {
-			const xpectd = mgSimplify(real_calculus[index]).html;
-			const rceivd = mgTranslate(real_calculus[index+1]).html;
+			const rceivd = mgSimplify(real_calculus[index]).html;
+			const xpectd = mgTranslate(real_calculus[index+1]).html;
 			test("RealCalculus:"+real_calculus[index], () => {expect(xpectd).toBe(rceivd)})	
 		}
 		else {
@@ -2069,8 +2087,8 @@ function runSummation() {
     increment = 2;
     for (index=0;index<summation.length;index+=increment) {
 		if (nodejs) {
-			const xpectd = mgSimplify(summation[index]).html;
-			const rceivd = mgTranslate(summation[index+1]).html;
+			const rceivd = mgSimplify(summation[index]).html;
+			const xpectd = mgTranslate(summation[index+1]).html;
 			test("Summation:"+summation[index], () => {expect(xpectd).toBe(rceivd)})	
 		}
 		else {
@@ -2098,8 +2116,8 @@ function runHTML() {
     setTitle("HTML Tests 'mgTranslate().html sin<sup>-1</sup>'")
     for (index=0;index<htmlx.length;index+=increment) {
 		if (nodejs) {
-			const xpectd = mgTranslate(htmlx[index]).html;
-			const rceivd = htmlx[index+1];
+			const rceivd = mgTranslate(htmlx[index]).html;
+			const xpectd = htmlx[index+1];
 			test("html:"+htmlx[index], () => {expect(xpectd).toBe(rceivd)})	
 		}
 		else {
@@ -2111,8 +2129,8 @@ function runHTML() {
     setTitle("HTML Tests 'mgTranslate().html fn x sin<sup>-1</sup>'")
     for (index=0;index<htmly.length;index+=increment) {
 		if (nodejs) {
-			const xpectd = mgTranslate(htmly[index]).html;
-			const rceivd = htmly[index+1];
+			const rceivd = mgTranslate(htmly[index]).html;
+			const xpectd = htmly[index+1];
 			test("html:"+htmly[index], () => {expect(xpectd).toBe(rceivd)})	
 		}
 		else {
@@ -2124,8 +2142,8 @@ function runHTML() {
     setTitle("HTML Tests 'mgTranslate().html fn x asin'")
     for (index=0;index<htmlz.length;index+=increment) {
 		if (nodejs) {
-			const xpectd = mgTranslate(htmlz[index]).html;
-			const rceivd = htmlz[index+1];
+			const rceivd = mgTranslate(htmlz[index]).html;
+			const xpectd = htmlz[index+1];
 			test("html:"+htmlz[index], () => {expect(xpectd).toBe(rceivd)})	
 		}
 		else {
@@ -2141,8 +2159,8 @@ function runExport() {
 	mgConfig.fnFmt = "fn(x)";
     for (index=0;index<xport.length;index+=increment) {
 		if (nodejs) {
-			const xpectd = mgTranslate(xport[index]).latex.replace(/ /g,"");
-			const rceivd = xport[index+1].replace(/ /g,"");
+			const rceivd = mgTranslate(xport[index]).latex.replace(/ /g,"");
+			const xpectd = xport[index+1].replace(/ /g,"");
 			test("Latex-xport:"+xport[index], () => {expect(xpectd).toBe(rceivd)})	
 		}
 		else {
@@ -2153,8 +2171,8 @@ function runExport() {
     setTitle("Latex Export Tests 'mgTranslate().latex fn x'")
     for (index=0;index<xportx.length;index+=increment) {
 		if (nodejs) {
-			const xpectd = mgTranslate(xportx[index]).latex.replace(/ /g,"");
-			const rceivd = xportx[index+1].replace(/ /g,"");
+			const rceivd = mgTranslate(xportx[index]).latex.replace(/ /g,"");
+			const xpectd = xportx[index+1].replace(/ /g,"");
 			test("Latex-xport:"+xportx[index], () => {expect(xpectd).toBe(rceivd)})	
 		}
 		else {
@@ -2166,8 +2184,8 @@ function runExport() {
     setTitle("Latex Export Tests 'mgTranslate().latex' 'fn x sin<sup>-1</sup>'")
     for (index=0;index<xporty.length;index+=increment) {
 		if (nodejs) {
-			const xpectd = mgTranslate(xporty[index]).latex.replace(/ /g,"");
-			const rceivd = xporty[index+1].replace(/ /g,"");
+			const rceivd = mgTranslate(xporty[index]).latex.replace(/ /g,"");
+			const xpectd = xporty[index+1].replace(/ /g,"");
 			test("Latex-xport:"+xporty[index], () => {expect(xpectd).toBe(rceivd)})	
 		}
 		else {
@@ -2179,8 +2197,8 @@ function runExport() {
     setTitle("Latex Export Tests 'mgTranslate().latex' 'fn(x) sin<sup>-1</sup>'")
     for (index=0;index<xportz.length;index+=increment) {
 		if (nodejs) {
-			const xpectd = mgTranslate(xportz[index]).latex.replace(/ /g,"");
-			const rceivd = xportz[index+1].replace(/ /g,"");
+			const rceivd = mgTranslate(xportz[index]).latex.replace(/ /g,"");
+			const xpectd = xportz[index+1].replace(/ /g,"");
 			test("Latex-xport:"+xportz[index], () => {expect(xpectd).toBe(rceivd)})	
 		}
 		else {
@@ -2197,8 +2215,8 @@ function runImport() {
     mgConfig.fnFmt = "fn(x)";
     for (index=0;index<mport.length;index+=increment) {
 		if (nodejs) {
+			const rceivd = mgTranslate(mport[index]).html;		    
 			const xpectd = mgTranslate(mport[index+1]).html;
-			const rceivd = mgTranslate(mport[index]).html;
 			test("Latex-import:"+mport[index], () => {expect(xpectd).toBe(rceivd)})	
 		}
 		else {
@@ -2213,8 +2231,8 @@ function runFinancial() {
     increment = 2;
     for (index=0;index<financial.length;index+=increment) {
 		if (nodejs) {
-			const xpectd = financial[index+1];
 			const rceivd = eval(financial[index])+"";
+			const xpectd = financial[index+1];
 			test("Financial:"+financial[index], () => {expect(xpectd).toBe(rceivd)})	
 		}
 		else {
@@ -2230,8 +2248,8 @@ function runInternal() {
     increment = 2;
     for (index=0;index<internal.length;index+=increment) {
 		if (nodejs) {
+			const rceivd = eval(internal[index])+"";		
 			const xpectd = internal[index+1];
-			const rceivd = eval(internal[index])+"";
 			test("Internal:"+internal[index], () => {expect(xpectd).toBe(rceivd)})	
 		}
 		else {
@@ -2265,6 +2283,7 @@ if (typeof module == "object") {
     var mgTr = module.require('./mg_translate.js')
     var mgCl = module.require('./mg_calculate.js')
     var mgTranslate = function(xpr,scale) {return mgTr.mgTranslate(xpr,scale)};
+	var mgExport = function(xpr) {return mgTr.mgExport(xpr)};
     var mgNumeric = function(xpr) {return mgCl.mgNumeric(xpr)};
 	var mgCalculate = function(xpr) {return mgCl.mgCalculate(xpr)};
     var mgSimplify = function(xpr) {return mgCl.mgSimplify(xpr)};
