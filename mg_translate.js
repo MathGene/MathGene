@@ -122,7 +122,7 @@ for (var iAl=47;iAl<10000;iAl++)    {Cs[iAl]="&#"+(iAl)+";"}
 for (var iAl=58;iAl<=127;iAl++)     {Cs[iAl]=String.fromCharCode(iAl)}//ascii
 for (var iAl=48;iAl<=57;iAl++)      {Cs[iAl]="<i>"+String.fromCharCode(iAl)+"</i>"}//0-9
 for (var iAl=65;iAl<=90;iAl++)      {Cs[iAl]="<b>"+String.fromCharCode(iAl)+"</b>"}//A-Z bold 
-for (var iAl=97;iAl<=22;iAl++)      {Cs[iAl]="<b>"+String.fromCharCode(iAl)+"</b>"}//a-z bold 
+for (var iAl=97;iAl<=122;iAl++)     {Cs[iAl]="<b>"+String.fromCharCode(iAl)+"</b>"}//a-z bold 
 for (var iAl=10032;iAl<=10047;iAl++){Cs[iAl]=String.fromCharCode(iAl-10000)}//punc
 for (var iAl=10065;iAl<=10090;iAl++){Cs[iAl]="<i>"+String.fromCharCode(iAl-10000)+"</i>"}//A-Z italic
 for (var iAl=10097;iAl<=10122;iAl++){Cs[iAl]="<i>"+String.fromCharCode(iAl-10000)+"</i>"}//a-z italic
@@ -947,7 +947,12 @@ function mgExport(xFn) { //convert from FUNC format to MG format
         if (xTractL.func == "cAdd" || xTractL.func == "cSub" || xTractL.func == "cMul" || xTractL.func == "cDiv" || xTractL.func == "cNeg") {xL  = "(" + oParens(xL) + ")"} 
         return xU + "^" + xL
     }
-    function cAngE(xU,xL) {return xU + "~" + xL} //angle
+    function cNegE(xU) { //negative
+        xU += "";
+        xTractU = oprExtract(cFunc(xU));
+        if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "cDiv") {return "-(" + oParens(xU) + ")"}
+        return "-" + xU
+    }	
     function cEqlE(xU,xL) {return xU + "=" + xL} //equal
     function cNqlE(xU,xL) {return xU + "Cv[8800]" + xL} //not equal
     function cGthE(xU,xL) {return xU + "Cv[62]" + xL} //greater than
@@ -955,14 +960,10 @@ function mgExport(xFn) { //convert from FUNC format to MG format
     function cGeqE(xU,xL) {return xU + "Cv[8805]" + xL} //greater than or equal
     function cLeqE(xU,xL) {return xU + "Cv[8804]" + xL} //less than or equal
     function cBndE(xU,xL) {return xU + "" + xL} //non-multiplying symbol bond
+    function cAngE(xU,xL) {return xU + "~" + xL} //angle
+	//passthru	
     function nrtE(xU,xL)  {return "nrt(" + xU + "," + xL + ")"} //nth root
     function lgnE(xU,xL)  {return "lgn(" + xU + "," + xL + ")"} //log to nth
-    function cNegE(xU) { //negative
-        xU += "";
-        xTractU = oprExtract(cFunc(xU));
-        if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "cDiv") {return "-(" + oParens(xU) + ")"}
-        return "-" + xU
-    }
     function sinE(xU) {return "sin(" + xU + ")"} //sin
     function cosE(xU) {return "cos(" + xU + ")"} //cos
     function tanE(xU) {return "tan(" + xU + ")"} //tan
@@ -1017,25 +1018,29 @@ function mgExport(xFn) { //convert from FUNC format to MG format
     function udtE(xU) {return "udt(" + xU + ")"} //accent
     function tldE(xU) {return "tld(" + xU + ")"} //tilde accent
     function undE(xU) {return "und(" + xU + ")"} //underline
-    function invE(xU) {return "inv(" + xU + ")"} //inverse function
     function cntE(xU) {return xU} //container
     function facE(xU) { //factorial
         if (!numTest(xU) && cFunc(xU) != oParens(xU)) {return "(" + oParens(xU) +")Cv[45]"}
         return xU + "Cv[45]"
     }
-    function sumE(xU,xL) {return "sum(" + xU + "," + xL + ")"} //summation
-    function prdE(xU,xL) {return "prd(" + xU + "," + xL + ")"} //product
     function cupE(xU,xL) {return "cup(" + xU + "," + xL + ")"} //union
     function capE(xU,xL) {return "cap(" + xU + "," + xL + ")"} //intersection
-    function limE(xU,xL) {return "lim(" + xU + "," + xL + ")"} //limit
     function difE(xU) {return "Cv[8748]" + xU}   //differential
     function idrE(xU,xN) { //partial derivative
         if (typeof xN == "undefined") {return "idr(" + xU + ")"}
         return "idr(" + xU + "," + xN + ")"
     }
-    function tdrE(xU,xL) {return "tdr(" + xU + "," + xL + ")"} //total derivative
+    function tdrE(xU,xN) { //total derivative
+        if (typeof xN == "undefined") {return "tdr(" + xU + ")"}
+        return "tdr(" + xU + "," + xN + ")"
+    }
     function sdrE(xU,xL) {return "sdr(" + xU + "," + xL + ")"} //derivative
     function psdE(xU,xL) {return "psd(" + xU + "," + xL + ")"} //partial derivative
+    function limE(xU,xL) {return "lim(" + xU + "," + xL + ")"} //limit
+    function sumE(xU,xL) {return "sum(" + xU + "," + xL + ")"} //summation
+    function prdE(xU,xL) {return "prd(" + xU + "," + xL + ")"} //product
+    function itgE(xU,xL) {return "itg(" + xU + "," + xL + ")"} //definite integral
+    //
     function tdvE(xU,dV,xN) { //total derivative from FUNC format
         if (typeof xN == "undefined") {return "(tdr(" + dV + ")" + xU + ")"}
         return "(tdr(" + dV + "," + xN + ")" + xU + ")"
@@ -1047,7 +1052,6 @@ function mgExport(xFn) { //convert from FUNC format to MG format
     function lmtE(xU,dV,mL) {return "lim(" + dV + "," + mL +")" + xU} //limit from FUNC format
     function smmE(xU,mU,dV,mL) {return "sum(" + mU + "," + dV + "Cv[61]" + mL + ")" + xU} //summation from FUNC format
     function pmmE(xU,mU,dV,mL) {return "prd(" + mU + "," + dV + "Cv[61]" + mL + ")" + xU} //product from FUNC format
-    function itgE(xU,xL) {return "itg(" + xU + "," + xL + ")"} //definite integral
     function ntgE(xU,dV,mU,mL) { //integral from FUNC format
         if (typeof mU == "undefined" && typeof mL == "undefined") {return "Cv[8747]" + xU + "Cv[8748]" + dV}    
         return "itg(" + mU + "," + mL + ")" + xU + "Cv[8748]" + dV

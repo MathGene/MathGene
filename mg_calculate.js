@@ -262,6 +262,12 @@ var mgCalc = (function() {
         if ((iDv > 64 && iDv < 91) || (iDv > 96 && iDv < 123) || (iDv > 10064 && iDv < 10091) || (iDv > 10096 && iDv < 10123) || (iDv > 913 && iDv < 969)) {return true}
         return false
     }
+	function varConst(iDv) { //test if string is a MG constant (Cv[xxx])
+        iDv = strConvert(iDv);
+        iDv = iDv.replace(/Cv\[(\d+)\]/,"$1");
+        if (iDv > 0 && iDv < 44) {return true}
+        return false
+    }
     function xprMatch(Xpression,Pattern) { //match exact pattern template to expression Cv[9999] = wildcard
         Xpression = xprIterate(Xpression);
         var pOutput = "";
@@ -1360,6 +1366,7 @@ var mgCalc = (function() {
     }
     function absS(xU) {
         var xTractU = opExtract(xU);
+		if (varConst(xU)) {return xU}
         if (nbrTest(xU)) {return abs(xU)}
         if (xTractU.func == "abs") {return xU}
         if (xTractU.func == "cNeg") {return absS(xTractU.upper)}
@@ -3650,32 +3657,6 @@ var mgCalc = (function() {
         }
         return "undefined"
     }
-    // dummy arithmetic handlers
-    function ntg(xU,xL) {return "ntg("+xU+","+xL+")"} //integral
-    function drv(xU,xL) {return "drv("+xU+","+xL+")"} //derivative
-    function dif(xU) {return xU} //differential 
-    function sbr(xU) {return xU} //straight brackets
-    function cbr(xU) {return xU} //curly brackets
-    function prn(xU) {return xU} //parentheses
-    function sbt(xU) {return 1} //subscript
-    function prd(xU,xL) {return "undefined"} //pi product
-    function sum(xU,xL) {return "undefined"} //sigma sum
-    function cap(xU,xL) {return "undefined"} //intersection
-    function cup(xU,xL) {return "undefined"} //union
-    function und(xU) {return xU} //underline
-    function vec(xU) {return xU} //vector overhead
-    function hat(xU) {return xU} //hat overhead
-    function udt(xU) {return xU} //dot overhead
-    function tld(xU) {return xU} //tilde overhead
-    function cnt(xU) {return xU} //container
-    function idr(xU) {return "undefined"} //single derivative
-    function tdr(xU) {return "undefined"} //total derivative
-    function sdr(xU,xL) {return "undefined"} //single derivative
-    function psd(xU,xL) {return "undefined"} //single partial derivative
-    function ddr(xU,xL) {return "undefined"} //double derivative
-    function pdd(xU,xL) {return "undefined"} //double partial derivative
-    function cEql(xU,xL) {return "undefined"}
-    function cBnd(xU,xL) {return "undefined"}
     
     var Sv = [],Pv = [];
     var pxpFlag = false,expFlag = false,limitFlag = false,factorFlag = false,solverFlag = false;seriesFlag = false;
