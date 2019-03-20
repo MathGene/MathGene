@@ -2302,15 +2302,8 @@ var mgCalc = (function() {
                 if (strTest(xU,lVar) && xLim == "cNeg(Cv[8734])" && +xL > 1) {return "cNeg(Cv[8734])"}
                 if (strTest(xL,lVar) && xLim == "cNeg(Cv[8734])" && +xU > 1) {return 0}         
                 if (strTest(xL,lVar) && xLim == "cNeg(Cv[8734])" && +xU > -1 && +xU < 1) {return "Cv[8734]"}
-                if (xL == "Cv[8734]" && +xU > 1) {return "Cv[8734]"}
-                if (xL == "Cv[8734]" && +xU > -1 && +xU < 1) {return 0}
-                if (xL == "cNeg(Cv[8734])" && +xU > 1) {return 0}   
-                if (xL == "cNeg(Cv[8734])" && +xU > -1 && +xU < 1) {return "Cv[8734]"}
                 return "Cv[8734]"
             }
-            if (xL == "Cv[8734]") {return "Cv[8734]"}
-            if (xL == "cNeg(Cv[8734])" && !strTest(xU,"Cv[8734]")) {return 0}
-            if (xU == "Cv[8734]") {return "Cv[8734]"}
             return cPowS(lmtS(xU,lVar,xLim),lmtS(xL,lVar,xLim))
         }
         function lneL(xU) {
