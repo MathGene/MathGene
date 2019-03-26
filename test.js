@@ -1906,6 +1906,14 @@ var internal =
 "mgExport('cMul(cDiv(1,2),cDiv(3,4))')","(1/2)(3/4)",
 "mgExport('log(int(arg(cei(Cv[10120]))))')","log(int(arg(cei(Cv[10120]))))",
 "mgExport('lgn(3,nrt(Cv[10120],Cv[10121]))')","lgn(3,nrt(Cv[10120],Cv[10121]))",
+"mgExport('cMul(gam(Cv[10120]),cdf(Cv[10120]))')","gam(Cv[10120])cdf(Cv[10120])",
+"mgExport('cMul(pdf(Cv[10120]),lcf(Cv[10120]))')","pdf(Cv[10120])lcf(Cv[10120])",
+"mgExport('cMul(lpf(Cv[10120]),rou(Cv[10120]))')","lpf(Cv[10120])rou(Cv[10120])",
+"mgExport('cMul(rnd(Cv[10120]),rex(Cv[10120]))')","rnd(Cv[10120])rex(Cv[10120])",
+"mgExport('cMul(imx(Cv[10120]),frc(Cv[10120]))')","imx(Cv[10120])frc(Cv[10120])",
+"mgExport('cMul(sbr(Cv[10120]),cbr(Cv[10120]))')","sbr(Cv[10120])cbr(Cv[10120])",
+"mgExport('cMul(udt(Cv[10120]),tld(Cv[10120]))')","udt(Cv[10120])tld(Cv[10120])",
+"mgExport('cMul(cup(Cv[10120],Cv[10121]),cap(Cv[10120],Cv[10121]))')","cup(Cv[10120],Cv[10121])cap(Cv[10120],Cv[10121])",
 ];
 
 
