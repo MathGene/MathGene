@@ -1100,7 +1100,6 @@ var mgCalc = (function() {
     }
     function expS(xU) { //e^xU
         var xTractU = opExtract(xU);
-        if (nbrTest(xU) && exp(xU) == int(exp(xU))) {return (fmtResult(exp(xU)))}
         if (xTractU.func == "lne") {return xTractU.upper}
         return "exp("+xU+")"
     }
@@ -1341,7 +1340,7 @@ var mgCalc = (function() {
     }
     function absS(xU) {
         var xTractU = opExtract(xU);
-		if (varConst(xU)) {return xU}
+        if (varConst(xU)) {return xU}
         if (nbrTest(xU)) {return abs(xU)}
         if (xTractU.func == "abs") {return xU}
         if (xTractU.func == "cNeg") {return absS(xTractU.upper)}
