@@ -1916,7 +1916,7 @@ var mgCalc = (function() {
             return uSubst(athS(xU))
         }
         function axhI(xU) {
-            if (deeVar == xU) {return cSubS(cMulS(xU,axhS(xU)),cDivS(cMulS(cMulS(cMulS(2,sqtS(cDivS(cSubS(1,xU),cAddS(xU,1)))),sqtS(cSubS(1,cPowS(xU,2)))),asnS(cDivS(sqtS(cAddS(xU,1)),sqtS(2)))),cSubS(xU,1)))}
+            if (deeVar == xU) {return cSubS(cMulS(xU,axhS(xU)),atnS(cMulS(cDivS(xU,cSubS(xU,1)),sqtS(cDivS(cSubS(1,xU),cAddS(1,xU))))))}
             return uSubst(axhS(xU))
         }
         function ayhI(xU) {
