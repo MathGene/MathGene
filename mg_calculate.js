@@ -795,7 +795,6 @@ var mgCalc = (function() {
         if (!factorFlag && xTractL.func == "cAdd" && nbrTest(xU)) {return cAddS(cMulS(xU,xTractL.upper),cMulS(xU,xTractL.lower))}
         if (!factorFlag && xTractL.func == "cSub" && nbrTest(xU)) {return cSubS(cMulS(xU,xTractL.upper),cMulS(xU,xTractL.lower))}
         if (xTractU.func == "cMul") {return "cMul("+xTractU.upper+",cMul("+xTractU.lower+","+xL+"))"}
-        if (strTest(xU,"Cv[8748]") || strTest(xU,"ntp(")) {return "cMul("+xL+","+xU+")"}
         if (!nbrTest(xU) && nbrTest(xL)) {return "cMul("+xL+","+xU+")"}
         if (xTractU.func != "" && xTractU.lower == "" && xTractL.lower != "" && xTractL.func != "cMul") {return "cMul("+xL+","+xU+")"}
         if (nbrTest(xTractL.upper) && xTractU.func == "cPow" && nbrTest(xTractU.lower)) {return "cMul("+xL+","+xU+")"}
@@ -997,7 +996,6 @@ var mgCalc = (function() {
             if (xTractT.func == "sec") {return cPowS(tanS(xTractT.upper),2)}
         }
         if (!pxpFlag && xTractU.func == "cDiv" && xTractL.func == "cDiv" && !nbrTest(xTractU.lower) && !nbrTest(xTractL.lower)){ //subtract fractions
-            if (xTractU.lower == xTractL.lower && pNomial(xTractL.upper).length < pNomial(xTractU.lower).length && pNomial(xTractU.upper).length < pNomial(xTractU.lower).length) {return "cDiv("+cSubS(xTractU.upper,xTractL.upper)+","+xTractL.lower+")"}
             if (!factorFlag && !limitFlag ) { //normalize denominators
                 var lTemp = cDivS(xTractU.lower,xTractL.lower);
                 var uTemp = cDivS(xTractL.lower,xTractU.lower);
