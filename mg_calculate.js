@@ -380,7 +380,7 @@ var mgCalc = (function() {
         var tReturn = 0;
         for (var xI in tSum) { //extract factors from tSum array
             var tExtract = opExtract(tSum[xI]);
-            if      (nbrTest(tSum[xI])) {tReturn = (+tSum[xI])+tReturn} //combine numerical terms into tReturn
+            if      (nbrTest(tSum[xI])) {tReturn = (+tSum[xI])+(+tReturn)} //combine numerical terms into tReturn
             else if (tExtract.func == "cMul" && nbrTest(tExtract.upper)) { //extract term factors
                 if  (strTest(sTerms.Terms,tExtract.lower)) {sTerms.Factors[sTerms.Terms.indexOf(tExtract.lower)] = cAddS(sTerms.Factors[sTerms.Terms.indexOf(tExtract.lower)],(+tExtract.upper))} //combine factors of identical terms
                 else {sTerms.Terms.push(tExtract.lower);sTerms.Factors.push(+tExtract.upper);sTerms.Divisors.push(1)} //push unique terms
@@ -940,7 +940,6 @@ var mgCalc = (function() {
             if (xTractT.func == "tan") {return cPowS(secS(xTractT.upper),2)}
         }
         if (xTractU.func == "cDiv" && xTractL.func == "cDiv" && !nbrTest(xTractU.lower) && !nbrTest(xTractL.lower)){ //add fractions
-            //if (xTractU.lower == xTractL.lower && pNomial(xTractL.upper).length < pNomial(xTractU.lower).length && pNomial(xTractU.upper).length < pNomial(xTractU.lower).length) {return "cDiv("+cAddS(xTractU.upper,xTractL.upper)+","+xTractL.lower+")"}
             if (!factorFlag && !limitFlag) { //normalize denominators
                 var lTemp = cDivS(xTractU.lower,xTractL.lower);
                 var uTemp = cDivS(xTractL.lower,xTractU.lower);
@@ -1737,8 +1736,8 @@ var mgCalc = (function() {
                 aTemp = xprMatch(xL,"cAdd(Cv[9999],cPow("+deeVar+",2))");
                 if (aTemp && !strTest(sqTemp,deeVar)) {return cDivS(atnS(cDivS(deeVar,sqtS(aTemp))),sqtS(aTemp))}
                 aTemp = xprMatch(xL,"cAdd(cPow("+deeVar+",2),Cv[9999])");
-                if (xL == "cPow(Cv[8],cPow("+deeVar+",2))" ) {return cDivS(cMulS(erfS(deeVar),sqtS("Cv[29]")),2)}  
                 if (aTemp && !strTest(sqTemp,deeVar)) {return cDivS(atnS(cDivS(deeVar,sqtS(aTemp))),sqtS(aTemp))}
+                if (xL == "cPow(Cv[8],cPow("+deeVar+",2))" ) {return cDivS(cMulS(erfS(deeVar),sqtS("Cv[29]")),2)}  
                 if (xL == "cSub(cPow("+deeVar+",2),1)") {return cNegS(athS(deeVar))}
                 if (xTractL.func == "cos") {return cMulS(ntgS(secS(xTractL.upper),deeVar),xU)}
                 if (xTractL.func == "sin") {return cMulS(ntgS(cscS(xTractL.upper),deeVar),xU)}
@@ -1771,7 +1770,6 @@ var mgCalc = (function() {
             }
             //general cases
             if (deeVar == xU && !strTest(xL,deeVar)) {return cDivS(cPowS(xU,2),cMulS(xL,2))}
-            if (deeVar == xL && !strTest(xU,deeVar)) {return cMulS(xU,lndS(xprIterate(xL)))}
             if (strTest(xU,deeVar) && !strTest(xL,deeVar)) {return cMulS(cDivS(1,xL),ntgS(xU,deeVar))}
             if (strTest(xL,deeVar) && pNomial(xL).length > 2 && iIterations < 2) { //integration by partial fractions
                 var fTemp = mdFactor("cDiv("+xU+","+xL+")");
