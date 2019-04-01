@@ -441,7 +441,7 @@ cdf:{   htmlL1:"'<Xfnc>&#934;<Xfnx>('",             htmlR1:"')'",   //cumulative
         latexL1:"'\\\\Phi(<Xfnx>'",                 latexR1:"')'",
         latexL2:"'\\\\Phi(<Xfnx>'",                 latexR2:"')'",
         },
-pdf:{   htmlL1:"'<Xfnc>&#966;<sub><i>ln</i></sub><Xfnx>('",htmlR1:"')'", //probability density function
+pdf:{   htmlL1:"'<Xfnc>&#966;<Xfnx>('",             htmlR1:"')'", //probability density function
         htmlL2:"'<Xfnc>&#966;<Xfnx>('",             htmlR2:"')'",
         texfunc:"\\XXX",
         latexL1:"'\\\\phi(<Xfnx>'",                 latexR1:"')'",
