@@ -1358,8 +1358,6 @@ var mgCalc = (function() {
     }
     function matS() {return "mat(" + Array.prototype.slice.call(arguments) + ")"}
     //passthru
-    function idrS(xU) {return "idr("+xU+")"}
-    function tdrS(xU) {return "tdr("+xU+")"}
     function sbrS(xU) {return "("+xU+")"}
     function cbrS(xU) {return "("+xU+")"}
     function conS(xU) {return "con("+xU+")"}
@@ -2296,7 +2294,6 @@ var mgCalc = (function() {
         function azhL(xU) {var lTmp = azhS(lmtS(xU,lVar,xLim));if (strTest(lTmp,"Cv[8734]")) {return "undefined"}; return lTmp}
         function expL(xU) {var lTmp = expS(lmtS(xU,lVar,xLim));if (strTest(lTmp,"Cv[8734]")) {return "undefined"}; return lTmp}
         function absL(xU) {var lTmp = absS(lmtS(xU,lVar,xLim));if (strTest(lTmp,"Cv[8734]")) {return "undefined"}; return lTmp}
-        function abnL(xU) {var lTmp = abnS(lmtS(xU,lVar,xLim));if (strTest(lTmp,"Cv[8734]")) {return "undefined"}; return lTmp}
         function erfL(xU) {var lTmp = erfS(lmtS(xU,lVar,xLim));if (strTest(lTmp,"Cv[8734]")) {return "undefined"}; return lTmp}
         function efcL(xU) {var lTmp = efcS(lmtS(xU,lVar,xLim));if (strTest(lTmp,"Cv[8734]")) {return "undefined"}; return lTmp}
         function cNegL(xU) {return cNegS(lmtS(xU,lVar,xLim))}
@@ -2345,8 +2342,6 @@ var mgCalc = (function() {
         facTemp = mdFactor(asFactor(xprExpand(cFac)));
         if (facTemp != cFac && !strTest(facTemp, "undefined")) {factorFlag = false;return facTemp}
         facTemp = facTerms(facTerms(cFac));
-        if (facTemp != cFac && !strTest(facTemp, "undefined")) {factorFlag = false;return facTemp}
-        facTemp = asFactor(cFac);
         if (facTemp != cFac && !strTest(facTemp, "undefined")) {factorFlag = false;return facTemp}
         factorFlag = false;
         return cFac
@@ -2533,7 +2528,6 @@ var mgCalc = (function() {
         function azhR(xU) {dArray.push("-1Cv[8804]"+xU+"Cv[8804]1");return "azh("+xU+")"}
         function expR(xU) {return "exp("+xU+")"}
         function absR(xU) {return "abs("+xU+")"}
-        function abnR(xU) {return "abn("+xU+")"}
         function erfR(xU) {return "erf("+xU+")"}
         function efcR(xU) {return "efc("+xU+")"}
         function conR(xU) {return "con("+xU+")"}
@@ -2548,8 +2542,6 @@ var mgCalc = (function() {
         function difR(xU) {return "dif("+xU+")"}
         function idrR(xU) {return "idr("+xU+")"}
         function tdrR(xU) {return "tdv("+xU+")"}
-        function iddR(xU) {return "idd("+xU+")"}
-        function tddR(xU) {return "tdd("+xU+")"}
         function sdrR(xU,xL) {return "sdr("+xU+","+xL+")"}
         function psdR(xU,xL) {return "psd("+xU+","+xL+")"}
         function sumR(xU,xL,xR) {return "sum("+xU+","+xL+","+xR+")"}
@@ -2735,7 +2727,6 @@ var mgCalc = (function() {
         function azhM(xU) {return "undefined"}
         function expM(xU) {return "undefined"}
         function absM(xU) {return "undefined"}
-        function abnM(xU) {return "undefined"}
         function erfM(xU) {return "undefined"}
         function efcM(xU) {return "undefined"}
         function conM(xU) {return "undefined"}
@@ -2833,7 +2824,6 @@ var mgCalc = (function() {
         function azhP(xU) {return "undefined"}
         function expP(xU) {return "undefined"}
         function absP(xU) {return "undefined"}
-        function abnP(xU) {return "undefined"}
         function erfP(xU) {return "undefined"}
         function efcP(xU) {return "undefined"}
         function conP(xU) {return "undefined"}
