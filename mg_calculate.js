@@ -378,8 +378,9 @@ var mgCalc = (function() {
         );
         var sTerms = {Terms:[],Factors:[],Divisors:[]}; //collector for segregated terms
         var tReturn = 0;
+		var tExtract = "";
         for (var xI in tSum) { //extract factors from tSum array
-            var tExtract = opExtract(tSum[xI]);
+            tExtract = opExtract(tSum[xI]);
             if      (nbrTest(tSum[xI])) {tReturn = (+tSum[xI])+(+tReturn)} //combine numerical terms into tReturn
             else if (tExtract.func == "cMul" && nbrTest(tExtract.upper)) { //extract term factors
                 if  (strTest(sTerms.Terms,tExtract.lower)) {sTerms.Factors[sTerms.Terms.indexOf(tExtract.lower)] = cAddS(sTerms.Factors[sTerms.Terms.indexOf(tExtract.lower)],(+tExtract.upper))} //combine factors of identical terms
@@ -393,7 +394,7 @@ var mgCalc = (function() {
             else    {sTerms.Terms.push(tSum[xI]);sTerms.Factors.push(1);sTerms.Divisors.push(1)} //push unique terms
         }
         for (var xI in sTerms.Terms) { //Extract and consolidate numeric divisors
-            var tExtract = opExtract(sTerms.Terms[xI]);     
+            tExtract = opExtract(sTerms.Terms[xI]);     
             if (tExtract.func == "cDiv") {
                 if (nbrTest(tExtract.upper)) {sTerms.Factors[xI] = cMulS(tExtract.upper,sTerms.Factors[xI]);sTerms.Terms[xI] = "cDiv(1,"+tExtract.lower+")"}
                 tExtract = opExtract(sTerms.Terms[xI]);
@@ -418,7 +419,7 @@ var mgCalc = (function() {
             }
         }
         for (var xI in sTerms.Terms) { //consolidate common divisors
-            var tExtract = opExtract(sTerms.Terms[xI]);
+            tExtract = opExtract(sTerms.Terms[xI]);
             if (tExtract.func == "cDiv") {
                 sTerms.Terms[xI] = tExtract.upper;
                 sTerms.Divisors[xI] = cMulS(sTerms.Divisors[xI],tExtract.lower);
@@ -452,8 +453,9 @@ var mgCalc = (function() {
         var tPrd = Pv[xU].split("_").sort(); //sort alpha
         var pTerms = {Terms:[],Exp:[]}; //collector for segregated terms
         var tReturn = 1;
+		var tExtract = "";
         for (var xI in tPrd) {//collect and consolidate segregated terms from tPrd array
-            var tExtract = opExtract(tPrd[xI]);
+            tExtract = opExtract(tPrd[xI]);
             if (nbrTest(tPrd[xI])) {tReturn = cMulS(tPrd[xI],tReturn)} //combine numerical terms into tReturn
             else if  (tExtract.func == "cPow") { //collect exponents
                 if (strTest(pTerms.Terms,tExtract.upper)) {pTerms.Exp[pTerms.Terms.indexOf(tExtract.upper)] = cAddS(pTerms.Exp[pTerms.Terms.indexOf(tExtract.upper)],tExtract.lower)} //combine duplicates into exponents
@@ -477,7 +479,7 @@ var mgCalc = (function() {
         if (strTest(pTerms.Terms,tReturn)) {pTerms.Exp[pTerms.Terms.indexOf(tReturn)] = cAddS(pTerms.Exp[pTerms.Terms.indexOf(tReturn)],1);tReturn = "1"}
         var fTempU = 1,fTempL = 1; //upper and lower accumulators
         for (var xI in pTerms.Terms) { //consolidate terms into accumulaters
-            var tExtract = opExtract(pTerms.Exp[xI]);
+            tExtract = opExtract(pTerms.Exp[xI]);
             if  (nbrTest(pTerms.Terms[xI]) && pTerms.Exp[xI] == -1) {//calculate GCF on integers
                 var tGcf = cGcf(tReturn,+pTerms.Terms[xI]);
                 tReturn = cDivS(tReturn,tGcf);
@@ -536,8 +538,9 @@ var mgCalc = (function() {
         return "Pv["+(Pv.length-1)+"]";
     }
     function vDivS(xU,xL) { //parse cDiv into Pv
+        var xTractL = "";
         if (PvTest(xU) && !PvTest(xL)) {
-            var xTractL = opExtract(xL);
+            xTractL = opExtract(xL);
             if (xTractL.func == "cPow") {Pv[Pv.length-1] = Pv[Pv.length-1]+"_cPow("+xTractL.upper+","+cNegS(xTractL.lower)+")" }
             else {Pv[Pv.length-1] = Pv[Pv.length-1]+"_"+cPowS(xL,-1)}
         }
@@ -545,7 +548,7 @@ var mgCalc = (function() {
             var tDiv= Pv[Pv.length-1].split("_");
             Pv[Pv.length-1] = PvPointer(xU);
             for (var tD in tDiv) {
-                var xTractL = opExtract(tDiv[tD]);
+                xTractL = opExtract(tDiv[tD]);
                 if (xTractL.func == "cPow") {Pv[Pv.length-1] = Pv[Pv.length-1]+"_cPow("+xTractL.upper+","+cNegS(xTractL.lower)+")" }
                 else {Pv[Pv.length-1] = Pv[Pv.length-1]+"_cPow("+tDiv[tD]+",-1)" }
             }
@@ -953,6 +956,8 @@ var mgCalc = (function() {
     function cSubS(xU,xL) { //subtract xU-xL
         var xTractU = opExtract(xU);
         var xTractL = opExtract(xL);
+		var xTractT = "";
+		var xTractB = "";
         if (xTractU.func == "mat" && xTractL.func == "mat") {return cAddS(xU,cMulS(xL,-1))} //matrix subtract
         if (xTractL.func == "cAdd") {xL = "("+xL+")"}
         if (xU == "Cv[8734]" && xL == "Cv[8734]" ) {return "undefined"}
@@ -971,7 +976,7 @@ var mgCalc = (function() {
         }
         if (xTractU.func == "csh" && xTractL.func == "snh" && xTractU.upper == xTractL.upper) {return cPowS("Cv[8]",cNegS(xTractU.upper))}
         if (xTractU.func == "cPow" && xTractL.func == "cPow" && +xTractU.lower == 2 && +xTractL.lower == 2) {
-            var xTractT = opExtract(xTractU.upper);var xTractB = opExtract(xTractL.upper);
+            xTractT = opExtract(xTractU.upper);xTractB = opExtract(xTractL.upper);
             if (xTractT.func == "sin" && xTractB.func == "cos" && xTractT.upper == xTractB.upper) {return cNegS(cosS(cMulS(2,xTractT.upper)))}
             if (xTractT.func == "cos" && xTractB.func == "sin" && xTractT.upper == xTractB.upper) {return cosS(cMulS(2,xTractT.upper))}
         }
@@ -980,7 +985,7 @@ var mgCalc = (function() {
             if (xprMatch(xL,"cPow(sin(Cv[9999]),2)")) {return cPowS(cosS(xprMatch(xL,"cPow(sin(Cv[9999]),2)")),2)}
         }
         if (xTractU.func == "cMul" && xTractL.func == "cMul") {
-            var xTractT = opExtract(xTractU.upper);var xTractB = opExtract(xTractU.lower);
+            xTractT = opExtract(xTractU.upper);xTractB = opExtract(xTractU.lower);
             var xTractX = opExtract(xTractL.upper);var xTractY = opExtract(xTractL.lower);
             if (xTractT.upper == xTractY.upper && xTractX.upper == xTractB.upper && xTractT.func == "cos" && xTractB.func == "sin" && xTractX.func == "cos" && xTractY.func == "sin" ) {return sinS(cSubS(xTractB.upper,xTractT.upper))}
             if (xTractT.upper == xTractY.upper && xTractX.upper == xTractB.upper && xTractT.func == "csh" && xTractB.func == "snh" && xTractX.func == "csh" && xTractY.func == "snh" ) {return snhS(cSubS(xTractB.upper,xTractT.upper))}
@@ -988,7 +993,7 @@ var mgCalc = (function() {
             if (xTractT.upper == xTractX.upper && xTractB.upper == xTractY.upper && xTractT.func == "csh" && xTractB.func == "csh" && xTractX.func == "snh" && xTractY.func == "snh" ) {return cshS(cSubS(xTractT.upper,xTractB.upper))}
         }
         if (xTractU.func == "cPow" && +xTractU.lower == 2 && +xL == 1) {
-            var xTractT = opExtract(xTractU.upper);
+            xTractT = opExtract(xTractU.upper);
             if (xTractT.func == "csc") {return cPowS(cotS(xTractT.upper),2)}
             if (xTractT.func == "sec") {return cPowS(tanS(xTractT.upper),2)}
         }
@@ -1052,8 +1057,6 @@ var mgCalc = (function() {
         return "cbt("+xU+")"
     }
     function nrtS(xU,xL)  { //xUth root of xL
-        var xTractU = opExtract(xU);
-        var xTractL = opExtract(xL);
         if (nbrTest(xU) && nbrTest(xL) && nrt(xU,xL) == int(nrt(xU,xL))) {return (fmtResult(nrt(xU,xL)))} //calculate integer roots
         return cPowS(xL,cDivS(1,xU))
     }
@@ -1593,7 +1596,6 @@ var mgCalc = (function() {
         function ntgTest(rTest)   {if (ntgCheck(rTest) &&  !strTest(rTest,"ntp(") && rTest != 0) {return true}; return false} //test for ntg success
         function cPowI(xU,xL) {
             var xTractU = opExtract(xU);
-            var xTractL = opExtract(xL);
             //special cases
             var aConst = 1;
             if (opExtract(xTractU.upper).func == "cMul") {aConst = xReduce(cDivS(xTractU.upper,deeVar))}
@@ -2149,7 +2151,6 @@ var mgCalc = (function() {
     }
     function cDivX(xU,xL) {
         var xTractU = opExtract(xU);
-        var xTractL = opExtract(xL);
         if (pNomial(xL).length < 2) {
             if (xTractU.func == "cAdd") {return "cAdd(cnt(cDiv("+xTractU.upper+","+xL+")),cnt(cDiv("+xTractU.lower+","+xL+")))"}
             if (xTractU.func == "cSub") {return "cSub(cnt(cDiv("+xTractU.upper+","+xL+")),cnt(cDiv("+xTractU.lower+","+xL+")))"}
@@ -2869,8 +2870,9 @@ var mgCalc = (function() {
                 if (Math.abs(cIn.r*1e6) < Math.abs(cIn.i)) {cIn.r = 0}
                 if (+cIn.i == 0) {return roundDecTo(cIn.r)}
                 if (+cIn.i == 1 && +cIn.r == 0) {return "Cv[46]"}
-                if (+cIn.r == 0) {var tCmpx = roundDecTo(cIn.i,cT)+"Cv[46]"}
-                else {var tCmpx = roundDecTo(cIn.r,cT)+"+"+roundDecTo(cIn.i,cT)+"Cv[46]"}
+				var tCmpx = "";
+                if (+cIn.r == 0) {tCmpx = roundDecTo(cIn.i,cT)+"Cv[46]"}
+                else {tCmpx = roundDecTo(cIn.r,cT)+"+"+roundDecTo(cIn.i,cT)+"Cv[46]"}
                 return cFunc(tCmpx.replace(/\+\-/g,"-").replace(/\-1Cv\[46\]/g,"-Cv[46]").replace(/\+1Cv\[46\]/g,"+Cv[46]"))
             }
         }
@@ -3259,7 +3261,7 @@ var mgCalc = (function() {
     }
     function sec(xU) { //secant
         if (getType(xU) == "complex" && xU.i != 0) {return cDiv(1,cos(xU))}
-        else {return Math.round(1/Math.cos(toReal(xU)*mgConfig.trigBase)*dRound)/dRound;}
+        if (getType(xU) == "real") {return Math.round(1/Math.cos(toReal(xU)*mgConfig.trigBase)*dRound)/dRound;}
         return "undefined"
     }
     function csc(xU) {//cosec
@@ -3561,14 +3563,14 @@ var mgCalc = (function() {
             for (var ix=1;ix<100;ix++) {
                 iSlv = (nH+nL)/2;
                 t1 = toReal(eval(expr));
-                if (t1 > result || t1 == "NaN") {nH = (nH+nL)/2} else {nL = (nH+nL)/2}  
+                if (t1 > result) {nH = (nH+nL)/2} else {nL = (nH+nL)/2}  
             }
         }
         else {
             for (var ix=1;ix<100;ix++) {        
                 iSlv = (nH+nL)/2;
                 t1 = toReal(eval(expr));
-                if (t1 < result || t1 == "NaN") {nH = (nH+nL)/2} else {nL = (nH+nL)/2}  
+                if (t1 < result) {nH = (nH+nL)/2} else {nL = (nH+nL)/2}  
             }
         }
         return iSlv
