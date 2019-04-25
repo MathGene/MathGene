@@ -3557,7 +3557,7 @@ var mgCalc = (function() {
         var t1 = 0;
         var iSlv = nL;
         var tLo =  toReal(eval(expr));
-        var iSlv = nH;
+        iSlv = nH;
         var tHi =  toReal(eval(expr));
         if (tHi > tLo) {
             for (var ix=1;ix<100;ix++) {
