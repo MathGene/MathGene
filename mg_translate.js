@@ -118,17 +118,18 @@ Cv[8230] = 0;
 Cv[8734] = "Infinity";
 
 //initialize symbols
-for (var iAl=47;iAl<10000;iAl++)    {Cs[iAl]="&#"+(iAl)+";"}
-for (var iAl=58;iAl<=127;iAl++)     {Cs[iAl]=String.fromCharCode(iAl)}//ascii
-for (var iAl=48;iAl<=57;iAl++)      {Cs[iAl]="<i>"+String.fromCharCode(iAl)+"</i>"}//0-9
-for (var iAl=65;iAl<=90;iAl++)      {Cs[iAl]="<b>"+String.fromCharCode(iAl)+"</b>"}//A-Z bold 
-for (var iAl=97;iAl<=122;iAl++)     {Cs[iAl]="<b>"+String.fromCharCode(iAl)+"</b>"}//a-z bold 
-for (var iAl=10032;iAl<=10047;iAl++){Cs[iAl]=String.fromCharCode(iAl-10000)}//punc
-for (var iAl=10065;iAl<=10090;iAl++){Cs[iAl]="<i>"+String.fromCharCode(iAl-10000)+"</i>"}//A-Z italic
-for (var iAl=10097;iAl<=10122;iAl++){Cs[iAl]="<i>"+String.fromCharCode(iAl-10000)+"</i>"}//a-z italic
-for (var iAl=10768;iAl<=10879;iAl++){Cs[iAl]="<i>&#"+(iAl-10000)+";</i>"}//italic accents
+var iAl = 0;
+for (iAl=47;iAl<10000;iAl++)    {Cs[iAl]="&#"+(iAl)+";"}
+for (iAl=58;iAl<=127;iAl++)     {Cs[iAl]=String.fromCharCode(iAl)}//ascii
+for (iAl=48;iAl<=57;iAl++)      {Cs[iAl]="<i>"+String.fromCharCode(iAl)+"</i>"}//0-9
+for (iAl=65;iAl<=90;iAl++)      {Cs[iAl]="<b>"+String.fromCharCode(iAl)+"</b>"}//A-Z bold 
+for (iAl=97;iAl<=122;iAl++)     {Cs[iAl]="<b>"+String.fromCharCode(iAl)+"</b>"}//a-z bold 
+for (iAl=10032;iAl<=10047;iAl++){Cs[iAl]=String.fromCharCode(iAl-10000)}//punc
+for (iAl=10065;iAl<=10090;iAl++){Cs[iAl]="<i>"+String.fromCharCode(iAl-10000)+"</i>"}//A-Z italic
+for (iAl=10097;iAl<=10122;iAl++){Cs[iAl]="<i>"+String.fromCharCode(iAl-10000)+"</i>"}//a-z italic
+for (iAl=10768;iAl<=10879;iAl++){Cs[iAl]="<i>&#"+(iAl-10000)+";</i>"}//italic accents
 Cs[11100]="<i>C</i>";//constants of integration
-for (var iAl=11101;iAl<=11110;iAl++) {Cs[iAl]="<i>C<sub>"+(iAl-11100)+"</sub></i>"}//constants of integration
+for (iAl=11101;iAl<=11110;iAl++) {Cs[iAl]="<i>C<sub>"+(iAl-11100)+"</sub></i>"}//constants of integration
 Cv[10047] = {s:"/"}; //slash
 Cv[247] = {s:"&divide;"}; //quotient
 Cs[59] = "; ";
@@ -813,14 +814,15 @@ function parseBrackets(xB,bSym) {//parse brackets and return inside string, begi
 }
 function dedupBrackets(dB) { //remove redundant brackets
     var sCount = strCount(dB,"{");
-    for (var nXf=0;nXf<sCount;nXf++) {
+	var nXf = 0;
+    for (nXf=0;nXf<sCount;nXf++) {
         var dparens = parseBrackets(dB,dB.lastIndexOf("{{")+1);
         if (dB.substr(dparens.end,2) == "}}" ) {
             dB = dB.substr(0,dB.lastIndexOf("{{")+1)+dparens.inside+dB.substr(dparens.end+1,dB.length)
         }
     }
-    var sCount = strCount(dB,"(");
-    for (var nXf=0;nXf<sCount;nXf++) {
+    sCount = strCount(dB,"(");
+    for (nXf=0;nXf<sCount;nXf++) {
         var dparens = parseBrackets(dB,dB.lastIndexOf("((")+1);
         if (dB.substr(dparens.end,2) == "))" ) {
             dB = dB.substr(0,dB.lastIndexOf("((")+1)+dparens.inside+dB.substr(dparens.end+1,dB.length)
@@ -829,12 +831,11 @@ function dedupBrackets(dB) { //remove redundant brackets
     return dB
 }
 function oBrackets(xP) {//remove outside brackets
+    var tparens = parseBrackets(xP,0);
     if (xP.charAt(0) == "(" && xP.charAt(xP.length-1) == ")") {
-        var tparens = parseBrackets(xP,0);
         if (tparens.end == xP.length-1) {return tparens.inside}
     }
     if (xP.charAt(0) == "{" && xP.charAt(xP.length-1) == "}") {
-        var tparens = parseBrackets(xP,0);
         if (tparens.end == xP.length-1) {return tparens.inside}
     }
     return xP
@@ -849,8 +850,8 @@ function brkt(xS,xO) {//scale brackets
 function htmlExport(htmlXpr) { //convert MG format to HTML
     function dedupParens(xP) {//remove duplicate parens
         xP += "";
-        var sCount = strCount(xP,"(");
-        for (var nXf=0;nXf<sCount;nXf++) {
+        var dCount = strCount(xP,"(");
+        for (var nXf=0;nXf<dCount;nXf++) {
             var dparens = parseParens(xP,xP.lastIndexOf("((")+1);
             if (xP.substr(dparens.end,2) == "))" ) {xP = xP.substr(0,xP.lastIndexOf("((")+1)+dparens.inside+xP.substr(dparens.end+1,xP.length)}
         }
@@ -868,8 +869,9 @@ function htmlExport(htmlXpr) { //convert MG format to HTML
     for (var nXf=0;nXf<sCount;nXf++) {htmlXpr = htmlXpr.replace(/Cs\[\d+\]/,eval(htmlXpr.match(/Cs\[\d+\]/)+""))}
     //scale and fix parens
     htmlXpr = htmlXpr.replace(/\(/g,"{").replace(/\)/g,"}");
-    var sCount = strCount(htmlXpr,"{");
-    for (var nXs=0;nXs<sCount;nXs++) { 
+    sCount = strCount(htmlXpr,"{");
+	var nXs = 0;
+    for (nXs=0;nXs<sCount;nXs++) { 
         var bSym = htmlXpr.indexOf("{");
         var lSym = htmlXpr.length;
         var iXs = parseParens(htmlXpr,bSym);
@@ -888,8 +890,8 @@ function htmlExport(htmlXpr) { //convert MG format to HTML
     }
     // format arrays
     htmlXpr = htmlXpr.replace(/\<Xcel\>/g,"").replace(/\<Xrow\>/g,"{").replace(/\<Xrwe\>/g,"}");
-    var sCount = strCount(htmlXpr,"<Xcle>");
-    for (var nXs=0;nXs<sCount;nXs++) {
+    sCount = strCount(htmlXpr,"<Xcle>");
+    for (nXs=0;nXs<sCount;nXs++) {
         if (nXs <sCount-1) {htmlXpr = htmlXpr.replace("<Xcle>",", ")}
         else {htmlXpr = htmlXpr.replace("<Xcle>","")}
     }
@@ -1266,30 +1268,34 @@ function dFunc(dXpr, prefix) { //map FUNC format to export format
     function udtL()  {return fAccentU("&#8226;")}
     function udtR()  {return fAccentL("<span style='line-height:50%'>&nbsp;</span>")}
     function tdrL(xA,xN) {
+		var xTmp = "";
         var tmpDivSym = mgConfig.divSymbol;mgConfig.divSymbol = "Over";
-        if (typeof xN =="undefined" || xN == 1) {var xTmp = cDivL("<i>d</i>","<i>d</i>"+xA)}
-        else {var xTmp = cDivL("<i>d</i><sup>"+xN+"</sup>","<i>d</i>"+xA+"<sup>"+xN+"</sup>")}
+        if (typeof xN =="undefined" || xN == 1) {xTmp = cDivL("<i>d</i>","<i>d</i>"+xA)}
+        else {xTmp = cDivL("<i>d</i><sup>"+xN+"</sup>","<i>d</i>"+xA+"<sup>"+xN+"</sup>")}
         mgConfig.divSymbol =  tmpDivSym;
         return xTmp
     }
     function idrL(xA,xN) {
+		var xTmp = "";
         var tmpDivSym = mgConfig.divSymbol;mgConfig.divSymbol = "Over";
-        if (typeof xN =="undefined" || xN == 1) {var xTmp = cDivL("&#8706;","&#8706;"+xA)}
-        else {var xTmp = cDivL("&#8706;<sup>"+xN+"</sup>","&#8706;"+xA+"<sup>"+xN+"</sup>")}
+        if (typeof xN =="undefined" || xN == 1) {xTmp = cDivL("&#8706;","&#8706;"+xA)}
+        else {xTmp = cDivL("&#8706;<sup>"+xN+"</sup>","&#8706;"+xA+"<sup>"+xN+"</sup>")}
         mgConfig.divSymbol =  tmpDivSym;
         return xTmp
     }
     function sdrL(xA,xB,xN) {
+		var xTmp = "";
         var tmpDivSym = mgConfig.divSymbol;mgConfig.divSymbol = "Over";
-        if (typeof xN =="undefined" || xN == 1) {var xTmp = cDivL("<i>d</i>"+xA,"<i>d</i>"+xB)}
-        else {var xTmp = cDivL("<i>d</i><sup>"+xN+"</sup>"+xA,"<i>d</i>"+xB+"<sup>"+xN+"</sup>")}
+        if (typeof xN =="undefined" || xN == 1) {xTmp = cDivL("<i>d</i>"+xA,"<i>d</i>"+xB)}
+        else {xTmp = cDivL("<i>d</i><sup>"+xN+"</sup>"+xA,"<i>d</i>"+xB+"<sup>"+xN+"</sup>")}
         mgConfig.divSymbol =  tmpDivSym;
         return xTmp
     }
     function psdL(xA,xB,xN) {
+		var xTmp = "";
         var tmpDivSym = mgConfig.divSymbol;mgConfig.divSymbol = "Over";
-        if (typeof xN =="undefined" || xN == 1) {var xTmp = cDivL("&#8706;"+xA,"&#8706;"+xB)}
-        else {var xTmp = cDivL("&#8706;<sup>"+xN+"</sup>"+xA,"&#8706;"+xB+"<sup>"+xN+"</sup>")}
+        if (typeof xN =="undefined" || xN == 1) {xTmp = cDivL("&#8706;"+xA,"&#8706;"+xB)}
+        else {xTmp = cDivL("&#8706;<sup>"+xN+"</sup>"+xA,"&#8706;"+xB+"<sup>"+xN+"</sup>")}
         mgConfig.divSymbol =  tmpDivSym;
         return xTmp
     }
@@ -1628,7 +1634,6 @@ function texImport(mgXpr) { //convert LaTeX to MG format
     var ulFuncs  =  ["itg(","sum(","prd(","cap(","cup("];
     var lBrackets = ["{","[","|"];
     var rBrackets = ["}","]","|"];
-    var brkSym  =   ["cbr(","sbr(","abs("];
     if (mgXpr == "NaN" || mgXpr == "undefined") {return "undefined"}
     mgXpr += " ";
     mgXpr = mgXpr.replace(/\\big/g,"\\");//fix big
@@ -1643,18 +1648,18 @@ function texImport(mgXpr) { //convert LaTeX to MG format
         mgXpr = mgXpr.replace("\\begin{bmatrix}"+mTemp+"\\end{bmatrix}",matI(mTemp));
     }
     mgXpr = mgXpr.replace(/\s+/g," ").replace(/\\/g," \\").replace(/ _/g,"_").replace(/_ /g,"_").replace(/ \^/g,"^").replace(/\^ /g,"^").replace(/ \[/g,"[").replace(/ \(/g,"(").replace(/\\left /g,"\\left").replace(/\\right /g,"\\right");//fix whitespaces
-    var sCount = strCount(mgXpr,"\\\\");//convert line breaks
+    sCount = strCount(mgXpr,"\\\\");//convert line breaks
     for (var nXs=0;nXs<sCount;nXs++) {mgXpr = mgXpr.replace(/\\\\/," ")}
     mgXpr = mgXpr.replace(/\\,/g," ").replace(/\\:/g," ").replace(/\\;/g," ").replace(/\\!/g," ").replace(/\\ /g,""); //fix special
     if (mgXpr.split("{").length != mgXpr.split("}").length) {Cs[9998] = "<span style='color:red'>Unmatched brackets</span>";return "Cv[9998]"} //check parens
     mgXpr = mgXpr.replace(/\\left\[/g,"sbr(").replace(/\\left\{/g,"cbr(").replace(/\\right\]/g,")").replace(/\\right\}/g,")");//convert brackets
-    var sCount = strCount(mgXpr,"\\");//convert left/right paren
+    sCount = strCount(mgXpr,"\\");//convert left/right paren
     for (var nXf=0;nXf<sCount;nXf++) {mgXpr = mgXpr.replace(/\\left\(/,"(").replace(/\\right\)/,")").replace(/\\left\\\(/,"(").replace(/\\right\\\)/,")")}
     for (var iBr in lBrackets){//convert left/right brackets
         var sCount = strCount(mgXpr,"\\left\\"+lBrackets[iBr]);
         for (var nXf=0;nXf<sCount;nXf++) {mgXpr = mgXpr.replace("\\left\\"+lBrackets[iBr],"cbr(").replace("\\right\\"+rBrackets[iBr],")")   }
     }
-    var sCount = strCount(mgXpr,"\\frac");//convert frac
+    sCount = strCount(mgXpr,"\\frac");//convert frac
     for (var nXs=0;nXs<sCount;nXs++) {
         var numerator = parseBrackets(mgXpr,mgXpr.indexOf("\\frac")+5);
         var denominator = parseBrackets(mgXpr,numerator.end+1);
@@ -1662,20 +1667,20 @@ function texImport(mgXpr) { //convert LaTeX to MG format
         if (denominator.inside.indexOf("+") > -1 || denominator.inside.indexOf("-") > -1){denominator.inside = "("+denominator.inside+")"}
         mgXpr = mgXpr.substr(0,mgXpr.indexOf("\\frac"))+" ("+numerator.inside+"/"+denominator.inside+") "+mgXpr.substr(denominator.end+1,mgXpr.length);
     }
-    var sCount = strCount(mgXpr,"\\sqrt[");//convert sqrt_n
+    sCount = strCount(mgXpr,"\\sqrt[");//convert sqrt_n
     for (var nXf=0;nXf<sCount;nXf++) {
         var parmU = parseBrackets(mgXpr,mgXpr.indexOf("\\sqrt[")+6);
         var parmL = parseBrackets(mgXpr,parmU.end+2);
         mgXpr = mgXpr.substr(0,mgXpr.indexOf("\\sqrt["))+" nrt("+parmU.inside+","+parmL.inside+") "+mgXpr.substr(parmL.end+1,mgXpr.length);
     }
-    var sCount = strCount(mgXpr,"\\log_");//convert log_n
+    sCount = strCount(mgXpr,"\\log_");//convert log_n
     for (var nXf=0;nXf<sCount;nXf++) {
         var parmU = parseBrackets(mgXpr,mgXpr.indexOf("\\log_")+5);
         var parmL = parseBrackets(mgXpr,parmU.end+1);
         mgXpr = mgXpr.substr(0,mgXpr.indexOf("\\log_"))+" lgn("+parmU.inside+","+parmL.inside+") "+mgXpr.substr(parmL.end+1,mgXpr.length);
     }
     for (var tFunc in funcMap) {//convert functions
-        var sCount = strCount(mgXpr,funcselect(tFunc,"texfunc"));
+        sCount = strCount(mgXpr,funcselect(tFunc,"texfunc"));
         for (var nXf=0;nXf<sCount;nXf++) {
             var symTemp = mgXpr.substr(mgXpr.indexOf(funcselect(tFunc,"texfunc")),mgXpr.length);
             for (var nXi=1;nXi<symTemp.length;nXi++) {if (tDelimiter.indexOf(symTemp.charAt(nXi)) > -1){break}}
@@ -1694,7 +1699,7 @@ function texImport(mgXpr) { //convert LaTeX to MG format
                 }
             }
             else {//convert all other fn
-                var symTemp = symTemp.substr(1,nXi-1);
+                symTemp = symTemp.substr(1,nXi-1);
                 if (funcselect(tFunc,"texfunc") == "\\"+symTemp) {
                     var operand = parseBrackets(mgXpr,mgXpr.indexOf(funcselect(tFunc,"texfunc"))+funcselect(tFunc,"texfunc").length);
                     mgXpr = mgXpr.substr(0,mgXpr.indexOf(funcselect(tFunc,"texfunc")))+" "+tFunc+"("+operand.inside+")"+mgXpr.substr(operand.end+1,mgXpr.length);
@@ -1711,7 +1716,7 @@ function texImport(mgXpr) { //convert LaTeX to MG format
             if (mgXpr.charAt(limitL.end+1) == "^") {mgXpr = mgXpr.substr(0,mgXpr.indexOf(ulSymbols[nXt]+"_"))+ulFuncs[nXt]+limitU.inside+","+limitL.inside+") "+mgXpr.substr(limitU.end+1,mgXpr.length)}
             else {mgXpr = mgXpr.substr(0,mgXpr.indexOf(ulSymbols[nXt]+"_"))+ulFuncs[nXt]+","+limitL.inside+") "+mgXpr.substr(limitL.end+1,mgXpr.length)}
         }
-        var sCount = strCount(mgXpr,ulSymbols[nXt]+"^");
+        sCount = strCount(mgXpr,ulSymbols[nXt]+"^");
         for (var nXf=0;nXf<sCount;nXf++) {
             var limitU= parseBrackets(mgXpr,mgXpr.indexOf(ulSymbols[nXt]+"^")+ulSymbols[nXt].length+1);
             var limitL = parseBrackets(mgXpr,limitU.end+1);
@@ -1729,7 +1734,7 @@ function texImport(mgXpr) { //convert LaTeX to MG format
         if (limitX.inside.indexOf("\\rightarrow") > -1) {limitU = limitX.inside.split("\\rightarrow")}
         mgXpr = mgXpr.substr(0,mgXpr.indexOf("\\lim_"))+" lim("+limitU[0]+","+limitU[1]+") "+mgXpr.substr(limitX.end+1,mgXpr.length)    
     }
-    var sCount = strCount(mgXpr,"_");//convert subscripts
+    sCount = strCount(mgXpr,"_");//convert subscripts
     for (var nXf=0;nXf<sCount;nXf++) {
         var tTemp = mgXpr.charAt(mgXpr.indexOf("_")+1)
         if (tTemp == "{" || tTemp == "(") {
@@ -1743,7 +1748,7 @@ function texImport(mgXpr) { //convert LaTeX to MG format
         }
     }
 
-    var sCount = strCount(mgXpr,"^");//convert superscripts
+    sCount = strCount(mgXpr,"^");//convert superscripts
     for (var nXf=0;nXf<sCount;nXf++) {
         var tTemp = mgXpr.charAt(mgXpr.indexOf("^")+1)
         if (tTemp == "{" || tTemp == "(") {
@@ -1751,14 +1756,14 @@ function texImport(mgXpr) { //convert LaTeX to MG format
             if (superscr.inside.length > 1) {mgXpr = mgXpr.substr(0,mgXpr.indexOf("^"))+" ^("+superscr.inside+") "+mgXpr.substr(superscr.end+1,mgXpr.length)}
         }
     }
-    var sCount = strCount(mgXpr,"\\");//convert symbols
+    sCount = strCount(mgXpr,"\\");//convert symbols
     for (var nXf=0;nXf<sCount;nXf++) {
         var symTemp = mgXpr.substr(mgXpr.indexOf("\\"),mgXpr.length);
         for (var nXi=1;nXi<symTemp.length;nXi++) {if (tDelimiter.indexOf(symTemp.charAt(nXi)) > -1){break}}
         symTemp = symTemp.substr(1,nXi-1);
         for (var iAl=1;iAl<=9500;iAl++) {if (typeof Ct[iAl] != "undefined" && (Ct[iAl] == "\\"+symTemp || Ct[iAl] == "\\"+symTemp+" ")) {mgXpr = mgXpr.replace("\\"+symTemp," Cv["+iAl+"]");break} }
     }
-    var sCount = strCount(mgXpr,"\\");//remove unknown tags
+    sCount = strCount(mgXpr,"\\");//remove unknown tags
     for (var nXf=0;nXf<sCount;nXf++) {
         var symTemp = mgXpr.substr(mgXpr.indexOf("\\"),mgXpr.length);
         for (var nXi=1;nXi<symTemp.length;nXi++) {if (",!=<>|+-*^/{}()\\ ".indexOf(symTemp.charAt(nXi)) > -1){break}}
@@ -1773,7 +1778,7 @@ function texImport(mgXpr) { //convert LaTeX to MG format
     }
     mgXpr = mgXpr.replace(/ /g,""); //cleanup spaces
     mgXpr = mgXpr.replace(/\(Cv\[10100\]\)/g,"Cv[10100]");
-    var sCount = strCount(mgXpr,"Cv[10100]");//convert derivatives
+    sCount = strCount(mgXpr,"Cv[10100]");//convert derivatives
     for (var nXf=0;nXf<sCount;nXf++) {
         mgXpr = mgXpr.replace(/\(Cv\[10100\]\/Cv\[10100\]Cv\[(\d+)\]\)/,"tdr(Cv[$1])");
         mgXpr = mgXpr.replace(/\(Cv\[10100\]Cv\[(\d+)\]\/Cv\[10100\]Cv\[(\d+)\]\)/,"sdr(Cv[$1],Cv[$2])");
@@ -1782,7 +1787,7 @@ function texImport(mgXpr) { //convert LaTeX to MG format
         mgXpr = mgXpr.replace(/\(Cv\[10100\]\^\d+Cv\[(\d+)\]\/Cv\[10100\]Cv\[(\d+)\]\^(\d+)\)/,"sdr(Cv[$1],Cv[$2],$3)");        
     }
     mgXpr = mgXpr.replace(/\(Cv\[8706\]\)/g,"Cv[8706]");
-    var sCount = strCount(mgXpr,"Cv[8706]");//convert partial derivatives
+    sCount = strCount(mgXpr,"Cv[8706]");//convert partial derivatives
     for (var nXf=0;nXf<sCount;nXf++) {
         mgXpr = mgXpr.replace(/\(Cv\[8706\]\/Cv\[8706\]Cv\[(\d+)\]\)/,"idr(Cv[$1])");
         mgXpr = mgXpr.replace(/\(Cv\[8706\]Cv\[(\d+)\]\/Cv\[8706\]Cv\[(\d+)\]\)/,"psd(Cv[$1],Cv[$2])");
@@ -1790,7 +1795,7 @@ function texImport(mgXpr) { //convert LaTeX to MG format
         mgXpr = mgXpr.replace(/\(Cv\[8706\]\^\d+\/Cv\[8706\]Cv\[(\d+)\]\^(\d+)\)/,"idr(Cv[$1],$2)");
         mgXpr = mgXpr.replace(/\(Cv\[8706\]\^\d+Cv\[(\d+)\]\/Cv\[8706\]Cv\[(\d+)\]\^(\d+)\)/,"psd(Cv[$1],Cv[$2],$3)");      
     }   
-    var sCount = strCount(mgXpr,"Cv[10100]");//convert differentials
+    sCount = strCount(mgXpr,"Cv[10100]");//convert differentials
     for (var nXf=0;nXf<sCount;nXf++) {
         mgXpr = mgXpr.replace(/\{Cv\[10100\]\}/,"Cv[10100]").replace(/Cv\[10100\]Cv\[(\d+)\]/,"Cv[8748]Cv[$1]");
     }
