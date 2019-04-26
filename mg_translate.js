@@ -1123,13 +1123,13 @@ function cFunc(cXpr) { //convert from MG format to FUNC format: a+bc/d -> cAdd(a
         var sbtOperand = parseParens(cXpr,cXpr.indexOf("]SBT("));
         cXpr = cXpr.replace(/Cv\[(\d+)\]SBT\(/,"cnt(Cv[$1]SBT(").replace("]SBT("+sbtOperand.inside,"]sbt("+oParens(sbtOperand.inside)+")");
     }
-    var sCount = strCount(cXpr,"Cv[8748]");//differential
+    sCount = strCount(cXpr,"Cv[8748]");//differential
     for (var nCf=0;nCf<sCount;nCf++) {cXpr = cXpr.replace(/Cv\[8748\]Cv\[(\d+)\]\/Cv\[8748\]Cv\[(\d+)\]/,"sdr(Cv[$1],Cv[$2])")} 
     cXpr = cXpr.replace(/!/g,"Cv[45]"); //factorial
     cXpr = cXpr.replace(/Cv\[8226\]/g,String.fromCharCode(8226)); //dot operator
     var relOperators = {"Cv[60]":"<","Cv[61]":"=","Cv[62]":">","Cv[8800]":String.fromCharCode(8800),"Cv[8804]":String.fromCharCode(8804),"Cv[8805]":String.fromCharCode(8805)};//relational operators
     for (var key in relOperators) {
-        var sCount = strCount(cXpr,key);
+        sCount = strCount(cXpr,key);
         for (var nCf=0;nCf<sCount;nCf++) {cXpr = cXpr.replace(key,relOperators[key])}
     }
     cXpr = cXpr.replace(/([\)\]])(\|?)(\d)/g,"$1$2#$3").replace(/([\)\]\d])(\|?)\(/g,"$1$2#(").replace(/([\)\]\d])(\|?)Cv\[/g,"$1$2#Cv[").replace(/([\)\]\d])(\|?)([a-z][a-z][a-z]\()/ig,"$1$2#$3");//terms to # multiply 
@@ -1146,7 +1146,7 @@ function cFunc(cXpr) { //convert from MG format to FUNC format: a+bc/d -> cAdd(a
         while (cXpr.search(rgx) != -1 || cXpr.search(rgy) != -1) {cXpr = cXpr.replace(rgx,"$1$2@").replace(rgy,"@$1$2")}
     }
     if (cXpr.charAt(0) == "+") {cXpr = cXpr.substr(1)} //remove + at beginning of expression
-    var sCount = strCount(cXpr,"-");//parse power negatives to cPow(x,cNeg())
+    sCount = strCount(cXpr,"-");//parse power negatives to cPow(x,cNeg())
     var nCases = ["^-","^|-"];
     for (nCf=0;nCf<sCount;nCf++) {
         for (var iXX in nCases) {
@@ -1156,7 +1156,7 @@ function cFunc(cXpr) { //convert from MG format to FUNC format: a+bc/d -> cAdd(a
     sCount = strCount(cXpr,"^");//convert powers to cPow()
     for (nCf=0;nCf<sCount;nCf++) {cXpr = cParse(cXpr,"^","cPow")}
     if (cXpr.charAt(0) == "-") {cXpr = nParse(cXpr,"-")}    
-    var sCount = strCount(cXpr,"-");//parse negatives to cNeg()
+    sCount = strCount(cXpr,"-");//parse negatives to cNeg()
     var nCases = ["~-","~|-","+-","*-","/-","(-",",-","+|-","*|-","/|-","(|-",",|-","=-","=|-","@-","@|-","e|-",">-","<-",">|-","<|-",
                   String.fromCharCode(8804)+"-",String.fromCharCode(8804)+"|-",String.fromCharCode(8805)+"-",String.fromCharCode(8805)+"|-",
                   String.fromCharCode(8800)+"-",String.fromCharCode(8800)+"|-",String.fromCharCode(8226)+"-",String.fromCharCode(8226)+"|-"];
@@ -1167,13 +1167,13 @@ function cFunc(cXpr) { //convert from MG format to FUNC format: a+bc/d -> cAdd(a
     }
     sCount = strCount(cXpr,"~");//convert angles to cAng()
     for (nCf=0;nCf<sCount;nCf++) {cXpr = cParse(cXpr,"~","cAng")}       
-    var sCount = strCount(cXpr,"#");//convert # to cMul() (multiply)
+    sCount = strCount(cXpr,"#");//convert # to cMul() (multiply)
     for (nCf=0;nCf<sCount;nCf++) {cXpr = cParse(cXpr,"#","cMul")}
-    var sCount = strCount(cXpr,"/");//convert / to cDiv()
+    sCount = strCount(cXpr,"/");//convert / to cDiv()
     for (nCf=0;nCf<sCount;nCf++) {cXpr = cParse(cXpr,"/","cDiv")}
-    var sCount = strCount(cXpr,"*");//convert * to cTms()
+    sCount = strCount(cXpr,"*");//convert * to cTms()
     for (nCf=0;nCf<sCount;nCf++) {cXpr = cParse(cXpr,"*","cTms")}
-    var sCount = strCount(cXpr,String.fromCharCode(8226));//convert dot to cDot()
+    sCount = strCount(cXpr,String.fromCharCode(8226));//convert dot to cDot()
     for (nCf=0;nCf<sCount;nCf++) {cXpr = cParse(cXpr,String.fromCharCode(8226),"cDot")}
     sCount = strCount(cXpr,"-") + strCount(cXpr,"+");//convert +- to cAdd() or cSub()
     var cIdx = 0;
@@ -1457,15 +1457,15 @@ Ct[41]="t_{P}";                                         //"Planck time";
 Ct[42]="V_{m}";                                         //"molar volume";
 Ct[43]="Z_{0}";                                         //"vacuum impedance";
 
-for (var iAl=48;iAl<10000;iAl++) {Ct[iAl]=""}
-for (var iAl=58;iAl<=127;iAl++)  {Ct[iAl]="\\textrm{"+String.fromCharCode(iAl)+"}"}//ascii
-for (var iAl=48;iAl<=57;iAl++)   {Ct[iAl]=String.fromCharCode(iAl)}//0-9
-for (var iAl=65;iAl<=90;iAl++) {Ct[iAl]="\\textbf{"+String.fromCharCode(iAl)+"}"}//A-Z
-for (var iAl=97;iAl<=122;iAl++) {Ct[iAl]="\\textbf{"+String.fromCharCode(iAl)+"}"}//a-z
-for (var iAl=10032;iAl<=10047;iAl++) {Ct[iAl]=String.fromCharCode(iAl-10000)}//punc
-for (var iAl=10065;iAl<=10090;iAl++) {Ct[iAl]=String.fromCharCode(iAl-10000)}//A-Z italic
-for (var iAl=10097;iAl<=10122;iAl++) {Ct[iAl]=String.fromCharCode(iAl-10000)}//a-z italic
-for (var iAl=10768;iAl<=10879;iAl++) {Ct[iAl]=""}//accents
+for (iAl=48;iAl<10000;iAl++) {Ct[iAl]=""}
+for (iAl=58;iAl<=127;iAl++)  {Ct[iAl]="\\textrm{"+String.fromCharCode(iAl)+"}"}//ascii
+for (iAl=48;iAl<=57;iAl++)   {Ct[iAl]=String.fromCharCode(iAl)}//0-9
+for (iAl=65;iAl<=90;iAl++) {Ct[iAl]="\\textbf{"+String.fromCharCode(iAl)+"}"}//A-Z
+for (iAl=97;iAl<=122;iAl++) {Ct[iAl]="\\textbf{"+String.fromCharCode(iAl)+"}"}//a-z
+for (iAl=10032;iAl<=10047;iAl++) {Ct[iAl]=String.fromCharCode(iAl-10000)}//punc
+for (iAl=10065;iAl<=10090;iAl++) {Ct[iAl]=String.fromCharCode(iAl-10000)}//A-Z italic
+for (iAl=10097;iAl<=10122;iAl++) {Ct[iAl]=String.fromCharCode(iAl-10000)}//a-z italic
+for (iAl=10768;iAl<=10879;iAl++) {Ct[iAl]=""}//accents
 var Greeks =   ["A","B","\\Gamma ","\\Delta ","E","Z","H","\\Theta ","I","K","\\Lambda ","M",
                 "N","\\Xi ","O","\\Pi ","","\\Rho ","\\Sigma ","T","\\Upsilon ","\\Phi ","X","\\Psi ","\\Omega ",
                 "","","","","","","",
@@ -1577,7 +1577,7 @@ Ct[9001] = "\\rangle ";
 Ct[9002] = "\\langle ";
 Ct[9476] = "\\ldots ";
 Ct[11100]="C";//constants of integration
-for (var iAl=11101;iAl<=11110;iAl++) {Ct[iAl]="C_{"+(iAl-11100)+"}"}//constants of integration
+for (iAl=11101;iAl<=11110;iAl++) {Ct[iAl]="C_{"+(iAl-11100)+"}"}//constants of integration
 var tDelimiter = ["_",",","!","=","<",">","|","+","-","*","^","/","{","}","(",")","\\"," "];
 //
 function texExport(latXpr) { //convert MG format to LaTeX
@@ -1634,6 +1634,8 @@ function texImport(mgXpr) { //convert LaTeX to MG format
     var ulFuncs  =  ["itg(","sum(","prd(","cap(","cup("];
     var lBrackets = ["{","[","|"];
     var rBrackets = ["}","]","|"];
+    var symTemp = "";
+	var tTemp = "";
     if (mgXpr == "NaN" || mgXpr == "undefined") {return "undefined"}
     mgXpr += " ";
     mgXpr = mgXpr.replace(/\\big/g,"\\");//fix big
@@ -1682,7 +1684,7 @@ function texImport(mgXpr) { //convert LaTeX to MG format
     for (var tFunc in funcMap) {//convert functions
         sCount = strCount(mgXpr,funcselect(tFunc,"texfunc"));
         for (var nXf=0;nXf<sCount;nXf++) {
-            var symTemp = mgXpr.substr(mgXpr.indexOf(funcselect(tFunc,"texfunc")),mgXpr.length);
+            symTemp = mgXpr.substr(mgXpr.indexOf(funcselect(tFunc,"texfunc")),mgXpr.length);
             for (var nXi=1;nXi<symTemp.length;nXi++) {if (tDelimiter.indexOf(symTemp.charAt(nXi)) > -1){break}}
             if (symTemp.charAt(nXi) == "^") {//convert inverse fn^-1
                 if (symTemp.substr(nXi,5) =="^{-1}") {
@@ -1708,7 +1710,7 @@ function texImport(mgXpr) { //convert LaTeX to MG format
         }
     }
     for (var nXt in ulSymbols) {//convert u/l functions
-        var sCount = strCount(mgXpr,ulSymbols[nXt]+"_");
+        sCount = strCount(mgXpr,ulSymbols[nXt]+"_");
         for (var nXf=0;nXf<sCount;nXf++) {
             var limitL= parseBrackets(mgXpr,mgXpr.indexOf(ulSymbols[nXt]+"_")+ulSymbols[nXt].length+1);
             var limitU = parseBrackets(mgXpr,limitL.end+1);
@@ -1736,7 +1738,7 @@ function texImport(mgXpr) { //convert LaTeX to MG format
     }
     sCount = strCount(mgXpr,"_");//convert subscripts
     for (var nXf=0;nXf<sCount;nXf++) {
-        var tTemp = mgXpr.charAt(mgXpr.indexOf("_")+1)
+        tTemp = mgXpr.charAt(mgXpr.indexOf("_")+1)
         if (tTemp == "{" || tTemp == "(") {
             var subscript = parseBrackets(mgXpr,mgXpr.indexOf("_"));
             mgXpr = mgXpr.substr(0,mgXpr.indexOf("_"))+" sbt("+subscript.inside+") "+mgXpr.substr(subscript.end+1,mgXpr.length)
@@ -1750,7 +1752,7 @@ function texImport(mgXpr) { //convert LaTeX to MG format
 
     sCount = strCount(mgXpr,"^");//convert superscripts
     for (var nXf=0;nXf<sCount;nXf++) {
-        var tTemp = mgXpr.charAt(mgXpr.indexOf("^")+1)
+        tTemp = mgXpr.charAt(mgXpr.indexOf("^")+1)
         if (tTemp == "{" || tTemp == "(") {
             var superscr = parseBrackets(mgXpr,mgXpr.indexOf("^")+1);
             if (superscr.inside.length > 1) {mgXpr = mgXpr.substr(0,mgXpr.indexOf("^"))+" ^("+superscr.inside+") "+mgXpr.substr(superscr.end+1,mgXpr.length)}
@@ -1758,14 +1760,14 @@ function texImport(mgXpr) { //convert LaTeX to MG format
     }
     sCount = strCount(mgXpr,"\\");//convert symbols
     for (var nXf=0;nXf<sCount;nXf++) {
-        var symTemp = mgXpr.substr(mgXpr.indexOf("\\"),mgXpr.length);
+        symTemp = mgXpr.substr(mgXpr.indexOf("\\"),mgXpr.length);
         for (var nXi=1;nXi<symTemp.length;nXi++) {if (tDelimiter.indexOf(symTemp.charAt(nXi)) > -1){break}}
         symTemp = symTemp.substr(1,nXi-1);
         for (var iAl=1;iAl<=9500;iAl++) {if (typeof Ct[iAl] != "undefined" && (Ct[iAl] == "\\"+symTemp || Ct[iAl] == "\\"+symTemp+" ")) {mgXpr = mgXpr.replace("\\"+symTemp," Cv["+iAl+"]");break} }
     }
     sCount = strCount(mgXpr,"\\");//remove unknown tags
     for (var nXf=0;nXf<sCount;nXf++) {
-        var symTemp = mgXpr.substr(mgXpr.indexOf("\\"),mgXpr.length);
+        symTemp = mgXpr.substr(mgXpr.indexOf("\\"),mgXpr.length);
         for (var nXi=1;nXi<symTemp.length;nXi++) {if (",!=<>|+-*^/{}()\\ ".indexOf(symTemp.charAt(nXi)) > -1){break}}
         symTemp = symTemp.substr(1,nXi-1);
         mgXpr = mgXpr.replace("\\"+symTemp,"");

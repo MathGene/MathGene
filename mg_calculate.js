@@ -149,6 +149,7 @@ var mgCalc = (function() {
         function xprCrawl(lExpr,rExpr,xVar) {
             if (rExpr.split(")").length-1 != rExpr.split("(").length-1) {return cError("Unmatched parentheses/brackets")}
             rExpr = xReduce(rExpr);
+            var strgI = "";
             var ineqSwap = 1; //-1 swap inequality, 1 no change, 0 or other undefined
             while (strTest(rExpr,"(")) {
                 var getOp = opExtract(rExpr);
@@ -160,13 +161,13 @@ var mgCalc = (function() {
                     }
                     else if (strTest(getOp.upper,xVar)) {
                         rExpr = getOp.upper;
-                        var strgI = getOp.lower;
+                        strgI = getOp.lower;
                         lExpr = eval(solverMap[getOp.func]["solverU"]);
                         ineqSwap = cMulS(ineqSwap,eval(solverMap[getOp.func]["ineqU"]))
                     }
                     else if (strTest(getOp.lower,xVar)) {       
                         rExpr = getOp.lower;
-                        var strgI = getOp.upper;
+                        strgI = getOp.upper;
                         lExpr = eval(solverMap[getOp.func]["solverL"]);
                         ineqSwap = cMulS(ineqSwap,eval(solverMap[getOp.func]["ineqL"]))
                     }
@@ -2400,7 +2401,6 @@ var mgCalc = (function() {
             var pFac = pFactor(xprExpand(xTract.lower));
             var termsL = parseTerms(pFac);
             if (termsL.length == 2 && (!pVariable(xTract.upper) || pVariable(xTract.upper) == pVariable(xTract.lower)) ) {
-                var termsU = parsePoly(xTract.upper);
                 var Z1 = relExtract(xprSolve(cEqlS("0",termsL[0]),fVar)).lower;
                 var Z2 = relExtract(xprSolve(cEqlS("0",termsL[1]),fVar)).lower;
                 var A1 = xReduce(cSubst(xTract.upper,fVar,Z1));
@@ -2685,7 +2685,6 @@ var mgCalc = (function() {
         }
         function cPowM(xU,xL) {
             var xTractU = opExtract(xU);
-            var xTractL = opExtract(xL);        
             if (strTest(xU,dV) && +xL == 2) {return xReduce(cSubS(cDivS(cMulS(cMulS(sUpper,cAddS(1,sUpper)),cAddS(cMulS(2,sUpper),1)),6), cDivS(cMulS(cMulS(cSubS(sLower,1),cAddS(1,cSubS(sLower,1))),cAddS(cMulS(2,cSubS(sLower,1)),1)),6))) }
             if (strTest(xU,dV) && +xL == 3) {return xReduce(cSubS(cDivS(cMulS(cPowS(sUpper,2),cPowS(cAddS(sUpper,1),2)),4) ,cDivS(cMulS(cPowS(cSubS(sLower,1),2),cPowS(cAddS(cSubS(sLower,1),1),2)),4))) }
             if (!strTest(xU,dV) && strTest(xL,dV)) {
