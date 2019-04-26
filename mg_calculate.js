@@ -379,7 +379,7 @@ var mgCalc = (function() {
         );
         var sTerms = {Terms:[],Factors:[],Divisors:[]}; //collector for segregated terms
         var tReturn = 0;
-		var tExtract = "";
+        var tExtract = "";
         for (var xI in tSum) { //extract factors from tSum array
             tExtract = opExtract(tSum[xI]);
             if      (nbrTest(tSum[xI])) {tReturn = (+tSum[xI])+(+tReturn)} //combine numerical terms into tReturn
@@ -454,7 +454,7 @@ var mgCalc = (function() {
         var tPrd = Pv[xU].split("_").sort(); //sort alpha
         var pTerms = {Terms:[],Exp:[]}; //collector for segregated terms
         var tReturn = 1;
-		var tExtract = "";
+        var tExtract = "";
         for (var xI in tPrd) {//collect and consolidate segregated terms from tPrd array
             tExtract = opExtract(tPrd[xI]);
             if (nbrTest(tPrd[xI])) {tReturn = cMulS(tPrd[xI],tReturn)} //combine numerical terms into tReturn
@@ -957,8 +957,8 @@ var mgCalc = (function() {
     function cSubS(xU,xL) { //subtract xU-xL
         var xTractU = opExtract(xU);
         var xTractL = opExtract(xL);
-		var xTractT = "";
-		var xTractB = "";
+        var xTractT = "";
+        var xTractB = "";
         if (xTractU.func == "mat" && xTractL.func == "mat") {return cAddS(xU,cMulS(xL,-1))} //matrix subtract
         if (xTractL.func == "cAdd") {xL = "("+xL+")"}
         if (xU == "Cv[8734]" && xL == "Cv[8734]" ) {return "undefined"}
@@ -1694,6 +1694,7 @@ var mgCalc = (function() {
         function cDivI(xU,xL) {
             var xTractU = opExtract(xU);
             var xTractL = opExtract(xL);
+			var sqTemp = "";
             //special cases
             var xTest = xprMatch(cDivS(xU,xL),cDivS(1,cSubS("Cv[9999]",sqtS(deeVar))));
             if (xTest && !strTest(xTest,deeVar)) {return cSubS(cNegS(cMulS(2,sqtS(deeVar))),cMulS(cMulS(2,xTest),lndS(cSubS(sqtS(deeVar),xTest))))}
@@ -1703,11 +1704,11 @@ var mgCalc = (function() {
             if (xTest && !strTest(xTest,deeVar)) {return cAddS(cMulS(2,sqtS(deeVar)),cMulS(cMulS(2,xTest),lndS(cSubS(sqtS(deeVar),xTest))))}
             if (cDivS(xU,xL) == cDivS(1,cMulS(cosS(deeVar),sinS(deeVar)))) {return lndS(tanS(deeVar))}
             if (strTest(xL,"sqt") && strTest(xL,deeVar) && strTest(xU,deeVar)) {
-                var iTemp = xReduce(cDivS(xU,cMulS(xL,drvS(xL,deeVar))));
-                if (drvS(cMulS(iTemp,xL),deeVar) == cDivS(xU,xL)) {return cMulS(iTemp,xL)}
+                var uTemp = xReduce(cDivS(xU,cMulS(xL,drvS(xL,deeVar))));
+                if (drvS(cMulS(uTemp,xL),deeVar) == cDivS(xU,xL)) {return cMulS(uTemp,xL)}
             }
             if (xTractU.func == "sqt" && xTractL.func == "sqt" && xTractU.upper == deeVar) {
-                var sqTemp = xprMatch(xTractL.upper, "cAdd(Cv[9999],"+deeVar+")");
+                sqTemp = xprMatch(xTractL.upper, "cAdd(Cv[9999],"+deeVar+")");
                 if (sqTemp && !strTest(sqTemp,deeVar)) {return cSubS(sqtS(cMulS(deeVar,cAddS(sqTemp,deeVar))),cMulS(sqTemp,lndS(sqtS(cMulS(deeVar,cAddS(sqTemp,deeVar))))))}
                 sqTemp = xprMatch(xTractL.upper,"cAdd("+deeVar+",Cv[9999])");
                 if (sqTemp && !strTest(sqTemp,deeVar)) {return cSubS(sqtS(cMulS(deeVar,cAddS(sqTemp,deeVar))),cMulS(sqTemp,lndS(sqtS(cMulS(deeVar,cAddS(sqTemp,deeVar))))))}
@@ -1717,7 +1718,7 @@ var mgCalc = (function() {
                 if (sqTemp && !strTest(sqTemp,deeVar)) {return cSubS(cNegS(sqtS(cMulS(deeVar,cSubS(sqTemp,deeVar)))),cMulS(sqTemp,atnS(cDivS(sqtS(cMulS(deeVar,cSubS(sqTemp,deeVar))),cSubS(sqTemp,deeVar)))))}
             }
             if (strTest(xL,deeVar) && !strTest(xU,deeVar)) {
-                var sqTemp = xprMatch(xTractL.upper, "cAdd(Cv[9999],"+deeVar+")");
+                sqTemp = xprMatch(xTractL.upper, "cAdd(Cv[9999],"+deeVar+")");
                 if (+xU != 1) {return cMulS(xU,ntgS(cDivS(1,xL),deeVar))}
                 var aTemp = cMulS(xU,lndS(xL));
                 var tTest = cDivS(drvS(aTemp,deeVar),cDivS(xU,xL));
@@ -1744,7 +1745,7 @@ var mgCalc = (function() {
                     if (xprMatch(xTractL.upper, "cSub(1,cPow(Cv[9999],2))") == deeVar) {return asnS(deeVar)}
                     if (xprMatch(xTractL.upper, "cAdd(cPow(Cv[9999],2),1)") == deeVar) {return ashS(deeVar)}
                     if (xprMatch(xTractL.upper, "cSub(cPow(Cv[9999],2),1)") == deeVar) {return achS(deeVar)}
-                    var sqTemp = xprMatch(xTractL.upper, "cSub(Cv[9999],cPow("+deeVar+",2))");
+                    sqTemp = xprMatch(xTractL.upper, "cSub(Cv[9999],cPow("+deeVar+",2))");
                     if (sqTemp && !strTest(sqTemp,deeVar)) {return atnS(cDivS(deeVar,xL))}
                     iIterations++;
                     sqTemp = cMulS(xU,cPowI(xTractL.upper,"cDiv(-1,2)"));

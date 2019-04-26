@@ -753,7 +753,6 @@ function parseParens(xB,bSym) {//parse parens and return inside string, begin in
     var oComma = 0,lPar = 0,rPar = 0,bDelim = " ",eDelim = " ";cFind = "";
     for (var iU=bSym;iU<xB.length;iU++) {
         cFind = xB.charAt(iU);
-        if (cFind == "," && lPar-1 == rPar) {oComma = iU-bSym}
         if (cFind == "(") {bDelim = "(";eDelim = ")";break}
         if (cFind == "{") {bDelim = "{";eDelim = "}";break}
     }
@@ -814,16 +813,17 @@ function parseBrackets(xB,bSym) {//parse brackets and return inside string, begi
 }
 function dedupBrackets(dB) { //remove redundant brackets
     var sCount = strCount(dB,"{");
-	var nXf = 0;
+    var nXf = 0;
+    var dparens = "";
     for (nXf=0;nXf<sCount;nXf++) {
-        var dparens = parseBrackets(dB,dB.lastIndexOf("{{")+1);
+        dparens = parseBrackets(dB,dB.lastIndexOf("{{")+1);
         if (dB.substr(dparens.end,2) == "}}" ) {
             dB = dB.substr(0,dB.lastIndexOf("{{")+1)+dparens.inside+dB.substr(dparens.end+1,dB.length)
         }
     }
     sCount = strCount(dB,"(");
     for (nXf=0;nXf<sCount;nXf++) {
-        var dparens = parseBrackets(dB,dB.lastIndexOf("((")+1);
+        dparens = parseBrackets(dB,dB.lastIndexOf("((")+1);
         if (dB.substr(dparens.end,2) == "))" ) {
             dB = dB.substr(0,dB.lastIndexOf("((")+1)+dparens.inside+dB.substr(dparens.end+1,dB.length)
         }
