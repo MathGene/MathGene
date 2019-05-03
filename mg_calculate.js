@@ -512,42 +512,52 @@ var mgCalc = (function() {
     }
     function SvTest(xTest) {if (xTest == "Sv["+(Sv.length-1)+"]") {return true};return false}
     function PvTest(xTest) {if (xTest == "Pv["+(Pv.length-1)+"]") {return true};return false}
+    function SvPointer(xP) { //resolve SV pointers
+        var svTemp = strConvert(xP).match(/Sv\[\d+\]/);
+        if (xP == svTemp && svTemp != "Sv["+(Sv.length-1)+"]") {return eval(xP)}
+        return [xP]
+    }
+    function PvPointer(xP) { //resolve PV pointers
+        var svTemp = strConvert(xP).match(/Pv\[\d+\]/);
+        if (xP == svTemp && svTemp != "Pv["+(Pv.length-1)+"]") {return eval(xP)}
+        return [xP]
+    }
     function vAddS(xU,xL) { //parse cAdd into Sv
-        if      (SvTest(xU) && !SvTest(xL)) {Sv[Sv.length-1].push(xL)}
-        else if (SvTest(xL) && !SvTest(xU)) {Sv[Sv.length-1].push(xU)}
-        else    {Sv.push([xU,xL])}
+        if      (SvTest(xU) && !SvTest(xL)) {Sv[Sv.length-1] = Sv[Sv.length-1].concat(SvPointer(xL))}
+        else if (SvTest(xL) && !SvTest(xU)) {Sv[Sv.length-1] = Sv[Sv.length-1].concat(SvPointer(xU))}
+        else    {Sv.push(SvPointer(xU).concat(SvPointer(xL)))}
         return "Sv["+(Sv.length-1)+"]";
     }
     function vSubS(xU,xL) { //parse cSub into Sv
         if      (SvTest(xU) && !SvTest(xL)) {Sv[Sv.length-1].push(cNegS(xL))}
         else if (SvTest(xL) && !SvTest(xU)) {
             var tDif = Sv[Sv.length-1];
-			Sv[Sv.length-1] = [xU];
+			Sv[Sv.length-1] = SvPointer(xU);
             for (var tD in tDif) {Sv[Sv.length-1].push(cNegS(tDif[tD]))}
         }
-        else    {Sv.push([xU,cNegS(xL)])}
+        else    {Sv.push(SvPointer(xU).concat([cNegS(xL)]))}
         return "Sv["+(Sv.length-1)+"]";
     }
     function vMulS(xU,xL) { //parse cMul into Pv
-        if      (PvTest(xU) && !PvTest(xL)) {Pv[Pv.length-1].push(xL)}
-        else if (PvTest(xL) && !PvTest(xU)) {Pv[Pv.length-1].push(xU)}
-        else    {Pv.push([xU,xL])}
+        if      (PvTest(xU) && !PvTest(xL)) {Pv[Pv.length-1] = Pv[Pv.length-1].concat(PvPointer(xL))}
+        else if (PvTest(xL) && !PvTest(xU)) {Pv[Pv.length-1] = Pv[Pv.length-1].concat(PvPointer(xU))}
+        else    {Pv.push(PvPointer(xU).concat(PvPointer(xL)))}
         return "Pv["+(Pv.length-1)+"]";
     }
     function vDivS(xU,xL) { //parse cDiv into Pv
         if      (PvTest(xU) && !PvTest(xL)) {Pv[Pv.length-1].push(cPowS(xL,-1))}
         else if (PvTest(xL) && !PvTest(xU)) {
             var tDiv = Pv[Pv.length-1];
-            Pv[Pv.length-1] = [xU];
+            Pv[Pv.length-1] = PvPointer(xU);
             for (var tD in tDiv) {Pv[Pv.length-1].push(cPowS(tDiv[tD],-1))}
         }
-        else    {Pv.push([xU,cPowS(xL,-1)])}
+        else    {Pv.push(PvPointer(xU).concat([cPowS(xL,-1)]))}
         return "Pv["+(Pv.length-1)+"]";
     }
     function vNegS(xU) { //parse cNeg into Pv
         if      (strTest(xU,"Cv[8734]")) {return "cNeg("+xU+")"}
         else if (PvTest(xU)) {Pv[Pv.length-1].push(-1)}
-        else    {Pv.push([xU,-1])}
+        else    {Pv.push(PvPointer(xU).concat([-1]))}
         return "Pv["+(Pv.length-1)+"]";
     }
     //Polynomials
