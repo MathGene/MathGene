@@ -362,17 +362,13 @@ var mgCalc = (function() {
         return iRdce
     }
     function smxS(xU) { //consolidate sum-difference terms 2a-b+c/d -> [(2a),(-b),(c/d)]
- 		/*
-		for (var xI in Sv) { //find and replace dupes
-			for (var yI in Sv) {
-				if (xI != yI && Sv[xI].sort().toString() == Sv[yI].sort().toString()) {
-					Sv[yI] = ["Sv["+xI+"]"]; 
-				}
-			}
-		}
-		*/
+ 		for (var xI in Sv) {for (var yI in Sv) { //resolve dupes
+			if (xI != yI && Sv[xI].sort().toString() == Sv[yI].sort().toString()) {
+			var rgx = new RegExp("Sv\\["+yI+"\\]","g");
+			Sv[xU] = Sv[xU].map(function(mP){return mP.toString().replace(rgx,"Sv["+xI+"]")})
+		}}}
         var tSum = Sv[xU].sort(
-            function(aS,bS){    
+            function(aS,bS){
                 if (strTest(aS,"cPow") || strTest(bS,"cPow")) {//sort alpha with powers in descending polynomial order
                     if (!strTest(bS,"cPow") && strTest(aS,"cPow")) {return 1}
                     else if (!strTest(aS,"cPow") && strTest(bS,"cPow")) {return -1}
@@ -456,15 +452,11 @@ var mgCalc = (function() {
         return tReturn
     }
     function pxpS(xU) { //consolidate product-quotient-exponent terms 2ab/(cd) -> [(2),(a),(b),(c^-1),(d^-1)]
-		/*
-		for (var xI in Pv) { //find and replace dupes
-			for (var yI in Pv) {
-				if (xI != yI && Pv[xI].sort().toString() == Pv[yI].sort().toString()) {
-					Pv[yI] = ["Pv["+xI+"]"]; 
-				}
-			}
-		}
-		*/
+		for (var xI in Pv) {for (var yI in Pv) { //resolve dupes
+			if (xI != yI && Pv[xI].sort().toString() == Pv[yI].sort().toString()) {
+			var rgx = new RegExp("Pv\\["+yI+"\\]","g");
+			Pv[xU] = Pv[xU].map(function(mP){return mP.toString().replace(rgx,"Pv["+xI+"]")})
+		}}}
         var tPrd = Pv[xU].sort(); //sort alpha
         var pTerms = {Terms:[],Exp:[]}; //collector for segregated terms
         var tReturn = 1;
@@ -543,28 +535,19 @@ var mgCalc = (function() {
         return "Pv["+(Pv.length-1)+"]";
     }
     function vDivS(xU,xL) { //parse cDiv into Pv
-        var xTractL = "";
-        if (PvTest(xU) && !PvTest(xL)) {
-            xTractL = opExtract(xL);
-            if (xTractL.func == "cPow") {Pv[Pv.length-1].push("cPow("+xTractL.upper+","+cNegS(xTractL.lower)+")") }
-            else {Pv[Pv.length-1].push("cPow("+xL+",-1)")}
-        }
+        if      (PvTest(xU) && !PvTest(xL)) {Pv[Pv.length-1].push(cPowS(xL,-1))}
         else if (PvTest(xL) && !PvTest(xU)) {
             var tDiv = Pv[Pv.length-1];
             Pv[Pv.length-1] = [xU];
-            for (var tD in tDiv) {
-                xTractL = opExtract(tDiv[tD]);
-                if (xTractL.func == "cPow") {Pv[Pv.length-1].push("cPow("+xTractL.upper+","+cNegS(xTractL.lower)+")") }
-                else {Pv[Pv.length-1].push("cPow("+tDiv[tD]+",-1)") }
-            }
+            for (var tD in tDiv) {Pv[Pv.length-1].push(cPowS(tDiv[tD],-1))}
         }
-        else {Pv.push([xU,"cPow("+xL+",-1)"])}
+        else    {Pv.push([xU,cPowS(xL,-1)])}
         return "Pv["+(Pv.length-1)+"]";
     }
     function vNegS(xU) { //parse cNeg into Pv
-        if (strTest(xU,"Cv[8734]")) {return "cNeg("+xU+")"}
+        if      (strTest(xU,"Cv[8734]")) {return "cNeg("+xU+")"}
         else if (PvTest(xU)) {Pv[Pv.length-1].push(-1)}
-        else {Pv.push([xU,-1])}
+        else    {Pv.push([xU,-1])}
         return "Pv["+(Pv.length-1)+"]";
     }
     //Polynomials
