@@ -529,7 +529,10 @@ var mgCalc = (function() {
         return "Sv["+(Sv.length-1)+"]";
     }
     function vSubS(xU,xL) { //parse cSub into Sv
-        if      (SvTest(xU) && !SvTest(xL)) {Sv[Sv.length-1].push(cNegS(xL))}
+        if  (SvTest(xU) && !SvTest(xL)) {
+            var tDif = SvPointer(xL);
+            for (var tD in tDif) {Sv[Sv.length-1].push(cNegS(tDif[tD]))}
+		}
         else if (SvTest(xL) && !SvTest(xU)) {
             var tDif = Sv[Sv.length-1];
 			Sv[Sv.length-1] = SvPointer(xU);
@@ -545,7 +548,10 @@ var mgCalc = (function() {
         return "Pv["+(Pv.length-1)+"]";
     }
     function vDivS(xU,xL) { //parse cDiv into Pv
-        if      (PvTest(xU) && !PvTest(xL)) {Pv[Pv.length-1].push(cPowS(xL,-1))}
+        if  (PvTest(xU) && !PvTest(xL)) {
+            var tDiv = PvPointer(xL);
+            for (var tD in tDiv) {Pv[Pv.length-1].push(cPowS(tDiv[tD],-1))}
+		}
         else if (PvTest(xL) && !PvTest(xU)) {
             var tDiv = Pv[Pv.length-1];
             Pv[Pv.length-1] = PvPointer(xU);
