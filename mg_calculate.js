@@ -157,7 +157,7 @@ var mgCalc = (function() {
                     if (strTest(getOp.upper,xVar) && strTest(getOp.lower,xVar)) {
                         rExpr = xprFactor(rExpr);
                         getOp = opExtract(rExpr);
-						break
+                        break
                     }
                     else if (strTest(getOp.upper,xVar)) {
                         rExpr = getOp.upper;
@@ -263,7 +263,7 @@ var mgCalc = (function() {
         if ((iDv > 64 && iDv < 91) || (iDv > 96 && iDv < 123) || (iDv > 10064 && iDv < 10091) || (iDv > 10096 && iDv < 10123) || (iDv > 913 && iDv < 969)) {return true}
         return false
     }
-	function varConst(iDv) { //test if string is a MG constant (Cv[xxx])
+    function varConst(iDv) { //test if string is a MG constant (Cv[xxx])
         iDv = strConvert(iDv);
         iDv = iDv.replace(/Cv\[(\d+)\]/,"$1");
         if (iDv > 0 && iDv < 44) {return true}
@@ -361,12 +361,12 @@ var mgCalc = (function() {
         }
         return iRdce
     }
-    function smxS(xU) { //consolidate sum-difference terms 2a-b+c/d -> [(2a),(-b),(c/d)]
- 		for (var xI in Sv) {for (var yI in Sv) { //resolve dupes
-			if (xI != yI && Sv[xI].sort().toString() == Sv[yI].sort().toString()) {
-			var rgx = new RegExp("Sv\\["+yI+"\\]","g");
-			Sv[xU] = Sv[xU].map(function(mP){return mP.toString().replace(rgx,"Sv["+xI+"]")})
-		}}}
+    function smxS(xU) { //consolidate sum-difference terms 2a-b+c/d -> [[2a],[-b],[c/d]]
+        for (var xI in Sv) {for (var yI=xI;yI<Sv.length;yI++) { //resolve dupes
+            if (xI != yI && Sv[xI].sort().toString() == Sv[yI].sort().toString()) {
+            var rgx = new RegExp("Sv\\["+yI+"\\]","g");
+            for (var zI in Sv ) {Sv[zI] = Sv[zI].map(function(mP){return mP.toString().replace(rgx,"Sv["+xI+"]")})}
+        }}}
         var tSum = Sv[xU].sort(
             function(aS,bS){
                 if (strTest(aS,"cPow") || strTest(bS,"cPow")) {//sort alpha with powers in descending polynomial order
@@ -451,12 +451,12 @@ var mgCalc = (function() {
         tReturn = cAddS(tReturn,xprIterate(fTempC.replace(/Sv\[(\d+)\]/g,"smx($1)")))//constants of integration
         return tReturn
     }
-    function pxpS(xU) { //consolidate product-quotient-exponent terms 2ab/(cd) -> [(2),(a),(b),(c^-1),(d^-1)]
-		for (var xI in Pv) {for (var yI in Pv) { //resolve dupes
-			if (xI != yI && Pv[xI].sort().toString() == Pv[yI].sort().toString()) {
-			var rgx = new RegExp("Pv\\["+yI+"\\]","g");
-			Pv[xU] = Pv[xU].map(function(mP){return mP.toString().replace(rgx,"Pv["+xI+"]")})
-		}}}
+    function pxpS(xU) { //consolidate product-quotient-exponent terms 2ab/(cd) -> [[2],[a],[b],[c^-1],[d^-1]]
+        for (var xI in Pv) {for (var yI=xI;yI<Pv.length;yI++) { //resolve dupes
+            if (xI != yI && Pv[xI].sort().toString() == Pv[yI].sort().toString()) {
+            var rgx = new RegExp("Pv\\["+yI+"\\]","g");
+            for (var zI in Pv) {Pv[zI] = Pv[zI].map(function(mP){return mP.toString().replace(rgx,"Pv["+xI+"]")})}
+        }}}
         var tPrd = Pv[xU].sort(); //sort alpha
         var pTerms = {Terms:[],Exp:[]}; //collector for segregated terms
         var tReturn = 1;
@@ -529,21 +529,21 @@ var mgCalc = (function() {
         return "Sv["+(Sv.length-1)+"]";
     }
     function vSubS(xU,xL) { //parse cSub into Sv
-		var tDiv = [];var tD = 0;
+        var tDiv = [];var tD = 0;
         if  (SvTest(xU) && !SvTest(xL)) {
             tDif = SvPointer(xL);
             for (tD in tDif) {Sv[Sv.length-1].push(cNegS(tDif[tD]))}
-		}
+        }
         else if (SvTest(xL) && !SvTest(xU)) {
             tDif = Sv[Sv.length-1];
-			Sv[Sv.length-1] = SvPointer(xU);
+            Sv[Sv.length-1] = SvPointer(xU);
             for (tD in tDif) {Sv[Sv.length-1].push(cNegS(tDif[tD]))}
         }
         else    {
-			Sv.push(SvPointer(xU));
+            Sv.push(SvPointer(xU));
             tDif = SvPointer(xL);
             for (tD in tDif) {Sv[Sv.length-1].push(cNegS(tDif[tD]))}
-		}
+        }
         return "Sv["+(Sv.length-1)+"]";
     }
     function vMulS(xU,xL) { //parse cMul into Pv
@@ -553,21 +553,21 @@ var mgCalc = (function() {
         return "Pv["+(Pv.length-1)+"]";
     }
     function vDivS(xU,xL) { //parse cDiv into Pv
-		var tDiv = [];var tD = 0;
+        var tDiv = [];var tD = 0;
         if  (PvTest(xU) && !PvTest(xL)) {
             tDiv = PvPointer(xL);
             for (tD in tDiv) {Pv[Pv.length-1].push(cPowS(tDiv[tD],-1))}
-		}
+        }
         else if (PvTest(xL) && !PvTest(xU)) {
             tDiv = Pv[Pv.length-1];
             Pv[Pv.length-1] = PvPointer(xU);
             for (tD in tDiv) {Pv[Pv.length-1].push(cPowS(tDiv[tD],-1))}
         }
         else    {
-			Pv.push(PvPointer(xU));
-		    tDiv = PvPointer(xL);
+            Pv.push(PvPointer(xU));
+            tDiv = PvPointer(xL);
             for (tD in tDiv) {Pv[Pv.length-1].push(cPowS(tDiv[tD],-1))}
-		}
+        }
         return "Pv["+(Pv.length-1)+"]";
     }
     function vNegS(xU) { //parse cNeg into Pv
@@ -1707,7 +1707,7 @@ var mgCalc = (function() {
         function cDivI(xU,xL) {
             var xTractU = opExtract(xU);
             var xTractL = opExtract(xL);
-			var sqTemp = "";
+            var sqTemp = "";
             //special cases
             var xTest = xprMatch(cDivS(xU,xL),cDivS(1,cSubS("Cv[9999]",sqtS(deeVar))));
             if (xTest && !strTest(xTest,deeVar)) {return cSubS(cNegS(cMulS(2,sqtS(deeVar))),cMulS(cMulS(2,xTest),lndS(cSubS(sqtS(deeVar),xTest))))}
@@ -2883,7 +2883,7 @@ var mgCalc = (function() {
                 if (Math.abs(cIn.r*1e6) < Math.abs(cIn.i)) {cIn.r = 0}
                 if (+cIn.i == 0) {return roundDecTo(cIn.r)}
                 if (+cIn.i == 1 && +cIn.r == 0) {return "Cv[46]"}
-				var tCmpx = "";
+                var tCmpx = "";
                 if (+cIn.r == 0) {tCmpx = roundDecTo(cIn.i,cT)+"Cv[46]"}
                 else {tCmpx = roundDecTo(cIn.r,cT)+"+"+roundDecTo(cIn.i,cT)+"Cv[46]"}
                 return cFunc(tCmpx.replace(/\+\-/g,"-").replace(/\-1Cv\[46\]/g,"-Cv[46]").replace(/\+1Cv\[46\]/g,"+Cv[46]"))
