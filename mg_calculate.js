@@ -1032,12 +1032,12 @@ var mgCalc = (function() {
         if (nbrTest(xU)) {return -(xU)}
         return "cNeg("+xU+")"
     }
-    function trcS(xU) { //trace
+    function trcS(xU) { //matrix trace
         if (typeof xU == "object") {return trc(xU)}
         if (opExtract(xU).func == "mat") {return trc(matArray(xU))}
         return "undefined"
     }
-    function detS(xU) { //determinant
+    function detS(xU) { //matrix determinant
         if (typeof xU == "object") {return det(xU)}
         if (opExtract(xU).func == "mat") {return det(matArray(xU))}
         return "undefined"
@@ -1236,23 +1236,25 @@ var mgCalc = (function() {
     }
     function asnS(xU) {
         var xTractU = opExtract(xU);
-        if (xU == 1) {return "cDiv(Cv[29],2)"}
-        if (xU == -1) {return "cNeg(cDiv(Cv[29],2))"}
+        if (+xU == 0) {return 0}
+        if (+xU == 1) {return "cDiv(Cv[29],2)"}
+        if (+xU == -1) {return "cNeg(cDiv(Cv[29],2))"}
         if (strTest(sinAngle,xU)) {return cMulS(invMult,iAngle[sinAngle.indexOf(xU)])}
         if (xTractU.func == "sin") {return xTractU.upper}
         return "asn("+xU+")"
     }
     function acsS(xU) {
         var xTractU = opExtract(xU);
-        if (xU == 0) {return "cDiv(Cv[29],2)"}
-        if (xU == -1) {return "Cv[29]"}
+        if (+xU == 0) {return "cDiv(Cv[29],2)"}
+        if (+xU == -1) {return "Cv[29]"}
         if (strTest(cosAngle,xU)) {return cMulS(invMult,iAngle[cosAngle.indexOf(xU)])}
         if (xTractU.func == "cos") {return xTractU.upper}
         return "acs("+xU+")"
     }
     function atnS(xU) {
         var xTractU = opExtract(xU);
-        if (xU == 1) {return "cDiv(Cv[29],4)"}
+        if (+xU == 0) {return 0}
+        if (+xU == 1) {return "cDiv(Cv[29],4)"}
         if (strTest(tanAngle,xU)) {return cMulS(invMult,iAngle[tanAngle.indexOf(xU)])}
         if (xTractU.func == "tan") {return xTractU.upper}
         return "atn("+xU+")"
@@ -1272,8 +1274,8 @@ var mgCalc = (function() {
     }
     function actS(xU) {
         var xTractU = opExtract(xU);
-        if (xU == 0) {return "cDiv(Cv[29],2)"}
-        if (xU == 1) {return "cDiv(Cv[29],4)"}
+        if (+xU == 0) {return "cDiv(Cv[29],2)"}
+        if (+xU == 1) {return "cDiv(Cv[29],4)"}
         if (strTest(cotAngle,xU)) {return cMulS(invMult,iAngle[cotAngle.indexOf(xU)])}
         if (xTractU.func == "cot") {return xTractU.upper}
         return "act("+xU+")"
@@ -1281,18 +1283,21 @@ var mgCalc = (function() {
 
     function snhS(xU) {
         var xTractU = opExtract(xU);
+        if (+xU == 0) {return 0}
         if (xTractU.func == "ash") {return xTractU.upper}
         if (xTractU.func == "cNeg") {return "cNeg(snh("+xTractU.upper+"))"}
         return "snh("+xU+")"
     }
     function cshS(xU) {
         var xTractU = opExtract(xU);
+        if (+xU == 0) {return 1}
         if (xTractU.func == "ach") {return xTractU.upper}
         if (xTractU.func == "cNeg") {return "csh("+xTractU.upper+")"}
         return "csh("+xU+")"
     }
     function tnhS(xU) {
         var xTractU = opExtract(xU);
+        if (+xU == 0) {return 0}
         if (xTractU.func == "ath") {return xTractU.upper}
         if (xTractU.func == "cNeg") {return "cNeg(tnh("+xTractU.upper+"))"}
         return "tnh("+xU+")"
@@ -1300,18 +1305,21 @@ var mgCalc = (function() {
 
     function schS(xU) {
         var xTractU = opExtract(xU);
+        if (+xU == 0) {return 1}
         if (xTractU.func == "axh") {return xTractU.upper}
         if (xTractU.func == "cNeg") {return "sch("+xTractU.upper+")"}
         return "sch("+xU+")"
     }
     function cchS(xU) {
         var xTractU = opExtract(xU);
+        if (+xU == 0) {return "undefined"}
         if (xTractU.func == "ayh") {return xTractU.upper}
         if (xTractU.func == "cNeg") {return "cNeg(cch("+xTractU.upper+"))"}
         return "cch("+xU+")"
     }
     function cthS(xU) {
         var xTractU = opExtract(xU);
+        if (+xU == 0) {return "undefined"}
         if (xTractU.func == "azh") {return xTractU.upper}
         if (xTractU.func == "cNeg") {return "cNeg(cth("+xTractU.upper+"))"}
         return "cth("+xU+")"
@@ -1319,32 +1327,38 @@ var mgCalc = (function() {
 
     function ashS(xU) {
         var xTractU = opExtract(xU);
+        if (+xU == 0) {return 0}
         if (xTractU.func == "snh") {return xTractU.upper}
         return "ash("+xU+")"
     }
     function achS(xU) {
         var xTractU = opExtract(xU);
+        if (+xU == 0) {return "undefined"}
         if (xTractU.func == "csh") {return xTractU.upper}
         return "ach("+xU+")"
     }
     function athS(xU) {
         var xTractU = opExtract(xU);
+        if (+xU == 0) {return 0}
         if (xTractU.func == "tnh") {return xTractU.upper}
         return "ath("+xU+")"
     }
 
     function axhS(xU) {
         var xTractU = opExtract(xU);
+        if (+xU == 0) {return "undefined"}
         if (xTractU.func == "sch") {return xTractU.upper}
         return "axh("+xU+")"
     }
     function ayhS(xU) {
         var xTractU = opExtract(xU);
+        if (+xU == 0) {return "undefined"}
         if (xTractU.func == "cch") {return xTractU.upper}
         return "ayh("+xU+")"
     }
     function azhS(xU) {
         var xTractU = opExtract(xU);
+        if (+xU == 0) {return "undefined"}
         if (xTractU.func == "cth") {return xTractU.upper}
         return "azh("+xU+")"
     }
@@ -1352,7 +1366,7 @@ var mgCalc = (function() {
         var xTractU = opExtract(xU);
         if (varConst(xU)) {return xU}
         if (nbrTest(xU)) {return abs(xU)}
-        if (xTractU.func == "abs") {return xU}
+        if (xTractU.func == "abs") {return absS(xTractU.upper)}
         if (xTractU.func == "cNeg") {return absS(xTractU.upper)}
         if (xTractU.func == "cPow" && +xTractU.lower/2 == Math.floor(+xTractU.lower/2)) {return xU}
         return "abs("+xU+")"
@@ -1404,7 +1418,7 @@ var mgCalc = (function() {
     function cLeqS(xU,xL) {return "cLeq("+xU+","+xL+")"}
     //
 
-    function piReduce(xAng) {
+    function piReduce(xAng) { //normalize degrees/grads to radians
         var xTractD = opExtract(xAng);
         var xTractT = opExtract(xTractD.upper);
         var reducedAng = "";
