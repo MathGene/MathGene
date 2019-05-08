@@ -1,5 +1,5 @@
 /*
-    MathGene Translation/Rendering Library - Version 1.10
+    MathGene Translation/Rendering Library - Version 1.30
     Copyright (C) 2018  George J. Paulos
 
     MathGene is free software: you can redistribute it and/or modify
@@ -37,14 +37,14 @@ function mgOutput(expression,scale) { //output MG, HTML, and LaTex from MG witho
 }
 
 // internal objects
-var mgConfig = 
+var mgConfig =
 {
     trigBase:   1,          //trig base 1=radians. Math.pi/180 for degrees, Math.pi/200 gradians
     divScale:   85,         //default scale factor for x/y division in percent
     divSymbol:  "Over",     //default HTML divide symbol "Slash" or "Over"
     fnFmt: "    fn x",      //function format "fn(x)" or "fn x"
     invFmt:     "asin",     //inverse trig function format "asin" or "sin<sup>-1</sup>"
-    cplxFmt:    "Rect",     //complex numbers "Rect" or "Polar"     
+    cplxFmt:    "Rect",     //complex numbers "Rect" or "Polar"
     pctFactor:  100,        //percent factor 100 for percent, 1 for n.nn decimal
     dPrecision: 16,         //decimal precision
     Domain:     "Complex",  //domain Complex or Real
@@ -92,7 +92,7 @@ Cv[25] = 2.17651e-8;        Cu[25]="kg";            Cs[25]="<i>M<span style='fon
 Cv[26] = 1.660538921e-27;   Cu[26]="kg";            Cs[26]="<i>M<span style='font-size:50%'>u</span></i>";  Cd[26]="atomic mass constant";
 Cv[27] = 6.02214129e23;     Cu[27]="/mol";          Cs[27]="<i>N<span style='font-size:50%'>a</span></i>";  Cd[27]="Avogadro constant";
 Cv[28] = 2.6867805e25;      Cu[28]="m&#179;";       Cs[28]="n<span style='font-size:50%'>0</span>";         Cd[28]="Loschmidt constant";
-Cv[29] = 3.141592653589793; Cu[29]="";              Cs[29]="&#960;";                                        Cd[29]="Archimedes constant"; 
+Cv[29] = 3.141592653589793; Cu[29]="";              Cs[29]="&#960;";                                        Cd[29]="Archimedes constant";
 
 Cv[30] = 6.283185307179586; Cu[30]="";              Cs[30]="2&#960;";                                       Cd[30]="2&times;&#960;";
 Cv[31] = 1.61803398874989;  Cu[31]="";              Cs[31]="&#966;";                                        Cd[31]="golden ratio";
@@ -122,8 +122,8 @@ var iAl = 0;
 for (iAl=47;iAl<10000;iAl++)    {Cs[iAl]="&#"+(iAl)+";"}
 for (iAl=58;iAl<=127;iAl++)     {Cs[iAl]=String.fromCharCode(iAl)}//ascii
 for (iAl=48;iAl<=57;iAl++)      {Cs[iAl]="<i>"+String.fromCharCode(iAl)+"</i>"}//0-9
-for (iAl=65;iAl<=90;iAl++)      {Cs[iAl]="<b>"+String.fromCharCode(iAl)+"</b>"}//A-Z bold 
-for (iAl=97;iAl<=122;iAl++)     {Cs[iAl]="<b>"+String.fromCharCode(iAl)+"</b>"}//a-z bold 
+for (iAl=65;iAl<=90;iAl++)      {Cs[iAl]="<b>"+String.fromCharCode(iAl)+"</b>"}//A-Z bold
+for (iAl=97;iAl<=122;iAl++)     {Cs[iAl]="<b>"+String.fromCharCode(iAl)+"</b>"}//a-z bold
 for (iAl=10032;iAl<=10047;iAl++){Cs[iAl]=String.fromCharCode(iAl-10000)}//punc
 for (iAl=10065;iAl<=10090;iAl++){Cs[iAl]="<i>"+String.fromCharCode(iAl-10000)+"</i>"}//A-Z italic
 for (iAl=10097;iAl<=10122;iAl++){Cs[iAl]="<i>"+String.fromCharCode(iAl-10000)+"</i>"}//a-z italic
@@ -170,8 +170,8 @@ cos:{   htmlL1:"'<Xfnc>cos<Xfnx>('",                htmlR1:"')'",
         latexL1:"'\\\\cos(<Xfnx>'",                 latexR1:"')'",
         latexL2:"'\\\\cos<Xfxp> {'",                latexR2:"'}'",
         },
-tan:{   htmlL1:"'<Xfnc>tan<Xfnx>('",                htmlR1:"')'",   
-        htmlL2:"'<Xfnc>tan<Xfxp> '",                htmlR2:"' '",   
+tan:{   htmlL1:"'<Xfnc>tan<Xfnx>('",                htmlR1:"')'",
+        htmlL2:"'<Xfnc>tan<Xfxp> '",                htmlR2:"' '",
         trig:true,
         invfunc:"atn",
         texfunc:"\\tan",
@@ -186,7 +186,7 @@ sec:{   htmlL1:"'<Xfnc>sec<Xfnx>('",                htmlR1:"')'",
         latexL1:"'\\\\sec(<Xfnx>'",                 latexR1:"')'",
         latexL2:"'\\\\sec<Xfxp> {'",                latexR2:"'}'",
         },
-csc:{   htmlL1:"'<Xfnc>csc<Xfnx>('",                htmlR1:"')'",   
+csc:{   htmlL1:"'<Xfnc>csc<Xfnx>('",                htmlR1:"')'",
         htmlL2:"'<Xfnc>csc<Xfxp> '",                htmlR2:"' '",
         trig:true,
         invfunc:"acc",
@@ -194,32 +194,32 @@ csc:{   htmlL1:"'<Xfnc>csc<Xfnx>('",                htmlR1:"')'",
         latexL1:"'\\\\csc(<Xfnx>'",                 latexR1:"')'",
         latexL2:"'\\\\csc<Xfxp> {'",                latexR2:"'}'",
         },
-cot:{   htmlL1:"'<Xfnc>cot<Xfnx>('",                htmlR1:"')'",   
-        htmlL2:"'<Xfnc>cot<Xfxp> '",                htmlR2:"' '",   
+cot:{   htmlL1:"'<Xfnc>cot<Xfnx>('",                htmlR1:"')'",
+        htmlL2:"'<Xfnc>cot<Xfxp> '",                htmlR2:"' '",
         trig:true,
         invfunc:"act",
         texfunc:"\\cot",
         latexL1:"'\\\\cot(<Xfnx>'",                 latexR1:"')'",
         latexL2:"'\\\\cot<Xfxp> {'",                latexR2:"'}'",
         },
-snh:{   htmlL1:"'<Xfnc>sinh<Xfnx>('",               htmlR1:"')'",   
-        htmlL2:"'<Xfnc>sinh<Xfxp> '",               htmlR2:"' '",   
+snh:{   htmlL1:"'<Xfnc>sinh<Xfnx>('",               htmlR1:"')'",
+        htmlL2:"'<Xfnc>sinh<Xfxp> '",               htmlR2:"' '",
         trig:true,
         invfunc:"ash",
         texfunc:"\\sinh",
         latexL1:"'\\\\sinh(<Xfnx>'",                latexR1:"')'",
         latexL2:"'\\\\sinh<Xfxp> {'",               latexR2:"'}'",
         },
-csh:{   htmlL1:"'<Xfnc>cosh<Xfnx>('",               htmlR1:"')'",   
-        htmlL2:"'<Xfnc>cosh<Xfxp> '",               htmlR2:"' '",   
+csh:{   htmlL1:"'<Xfnc>cosh<Xfnx>('",               htmlR1:"')'",
+        htmlL2:"'<Xfnc>cosh<Xfxp> '",               htmlR2:"' '",
         trig:true,
         invfunc:"ach",
         texfunc:"\\cosh",
         latexL1:"'\\\\cosh(<Xfnx>'",                latexR1:"')'",
         latexL2:"'\\\\cosh<Xfxp> {'",               latexR2:"'}'",
         },
-"tnh":{ htmlL1:"'<Xfnc>tanh<Xfnx>('",               htmlR1:"')'",   
-        htmlL2:"'<Xfnc>tanh<Xfxp> '",               htmlR2:"' '",   
+"tnh":{ htmlL1:"'<Xfnc>tanh<Xfnx>('",               htmlR1:"')'",
+        htmlL2:"'<Xfnc>tanh<Xfxp> '",               htmlR2:"' '",
         trig:true,
         invfunc:"ath",
         texfunc:"\\tanh",
@@ -234,15 +234,15 @@ sch:{   htmlL1:"'<Xfnc>sech<Xfnx>('",               htmlR1:"')'",
         latexL1:"'\\\\sech(<Xfnx>'",                latexR1:"')'",
         latexL2:"'\\\\sech<Xfxp> {'",               latexR2:"'}'",
         },
-cch:{   htmlL1:"'<Xfnc>csch<Xfnx>('",               htmlR1:"')'",   
-        htmlL2:"'<Xfnc>csch<Xfxp> '",               htmlR2:"' '",   
+cch:{   htmlL1:"'<Xfnc>csch<Xfnx>('",               htmlR1:"')'",
+        htmlL2:"'<Xfnc>csch<Xfxp> '",               htmlR2:"' '",
         trig:true,
         invfunc:"ayh",
         texfunc:"\\csch",
         latexL1:"'\\\\csch(<Xfnx>'",                latexR1:"')'",
         latexL2:"'\\\\csch<Xfxp> {'",               latexR2:"'}'",
         },
-cth:{   htmlL1:"'<Xfnc>coth<Xfnx>('",               htmlR1:"')'",   
+cth:{   htmlL1:"'<Xfnc>coth<Xfnx>('",               htmlR1:"')'",
         htmlL2:"'<Xfnc>coth<Xfxp> '",               htmlR2:"' '",
         trig:true,
         invfunc:"azh",
@@ -298,7 +298,7 @@ act:{   htmlL1:"'<Xfnc>acot<Xfnx>('",               htmlR1:"')'",
         latexL2:"'\\\\arccot {'",                   latexR2:"'}'",
         latexInv1:"'\\\\cot^{-1}(<Xfnx>'",          latexInv2:"'\\\\cot^{-1} {'",
         },
-ash:{   htmlL1:"'<Xfnc>asinh<Xfnx>('",              htmlR1:"')'",   
+ash:{   htmlL1:"'<Xfnc>asinh<Xfnx>('",              htmlR1:"')'",
         htmlL2:"'<Xfnc>asinh '",                    htmlR2:"' <Xfxp>'",
         htmlInv1:"'<Xfnc>sinh<sup>-1</sup><Xfnx>('",htmlInv2:"'<Xfnc>sinh<sup>-1</sup> <Xfnx>'",
         texfunc:"\\arcsinh",
@@ -338,7 +338,7 @@ ayh:{   htmlL1:"'<Xfnc>acsch<Xfnx>('",              htmlR1:"')'",
         latexL2:"'\\\\arccsch {'",                  latexR2:"'}'",
         latexInv1:"'\\\\csch^{-1}(<Xfnx>'",         latexInv2:"'\\\\csch^{-1} {'",
         },
-azh:{   htmlL1:"'<Xfnc>acoth<Xfnx>('",              htmlR1:"')'",   
+azh:{   htmlL1:"'<Xfnc>acoth<Xfnx>('",              htmlR1:"')'",
         htmlL2:"'<Xfnc>acoth '",                    htmlR2:"' <Xfxp>'",
         htmlInv1:"'<Xfnc>coth<sup>-1</sup><Xfnx>('",htmlInv2:"'<Xfnc>coth<sup>-1</sup> <Xfnx>'",
         texfunc:"\\arccoth",
@@ -408,7 +408,7 @@ erf:{   htmlL1:"'<Xfnc>erf<Xfnx>('",                htmlR1:"')'", //error functi
         },
 efc:{   htmlL1:"'<Xfnc>erfc<Xfnx>('",               htmlR1:"')'", //inverse error function
         htmlL2:"'<Xfnc>erfc<Xfnx>('",               htmlR2:"')'",
-        texfunc:"\\erfc",   
+        texfunc:"\\erfc",
         latexL1:"'\\\\erfc('",                      latexR1:"')'",
         latexL2:"'\\\\erfc('",                      latexR2:"')'",
         },
@@ -536,7 +536,7 @@ itg:{   htmlL1:"itgL(mA,mB)",                       htmlR1:"' '", //definite int
 drv:{   htmlL1:"''",                                htmlR1:"''", //partial derivative from func
         htmlL2:"''",                                htmlR2:"''",
         texfunc:"\\XXX",
-        latexL1:"''",                               latexR1:"''", 
+        latexL1:"''",                               latexR1:"''",
         latexL2:"''",                               latexR2:"''",
         },
 tdv:{   htmlL1:"''",                                htmlR1:"''", //total derivative from func
@@ -605,7 +605,7 @@ und:{   htmlL1:"undL()",                            htmlR1:"'</span>'", //underl
         latexL1:"'\\\\underline{'",                 latexR1:"'}'",
         latexL2:"'\\\\underline{'",                 latexR2:"'}'",
         },
-udt:{   htmlL1:"udtL()",                            htmlR1:"udtR()", 
+udt:{   htmlL1:"udtL()",                            htmlR1:"udtR()",
         htmlL2:"udtL()",                            htmlR2:"udtR()",
         texfunc:"\\dot",
         latexL1:"'\\\\dot{'",                       latexR1:"'}'",
@@ -778,7 +778,7 @@ function oParens(xP) {//remove outside parens
 function dNest(dN) {//count nested large elements
     var dDepth = 0,dSpan = 0;
     for (var iDp in dN) {
-        if (dN.substr(iDp,6) == "<Xdiv>") {dSpan++}     
+        if (dN.substr(iDp,6) == "<Xdiv>") {dSpan++}
         if (dN.substr(iDp,6) == "<Xdve>") {dSpan--}
         if (dSpan > dDepth) {dDepth = dSpan}
     }
@@ -799,7 +799,7 @@ function parseBrackets(xB,bSym) {//parse brackets and return inside string, begi
             for (var nXi=1;nXi<dTemp.length;nXi++) {if (tDelimiter.indexOf(dTemp.charAt(nXi)) > -1){break}}
             dTemp = dTemp.substr(0,nXi);
             return {begin:bSym,inside:dTemp,end:iU+dTemp.length,source:xB}
-        }           
+        }
         if (xB.charAt(iU) == "(") {bDelim = "(";eDelim = ")";break}
         if (xB.charAt(iU) == "{") {bDelim = "{";eDelim = "}";break}
         if (xB.charAt(iU) == "[") {bDelim = "[";eDelim = "]";break}
@@ -870,8 +870,8 @@ function htmlExport(htmlXpr) { //convert MG format to HTML
     //scale and fix parens
     htmlXpr = htmlXpr.replace(/\(/g,"{").replace(/\)/g,"}");
     sCount = strCount(htmlXpr,"{");
-	var nXs = 0;
-    for (nXs=0;nXs<sCount;nXs++) { 
+    var nXs = 0;
+    for (nXs=0;nXs<sCount;nXs++) {
         var bSym = htmlXpr.indexOf("{");
         var lSym = htmlXpr.length;
         var iXs = parseParens(htmlXpr,bSym);
@@ -928,8 +928,8 @@ function mgExport(xFn) { //convert from FUNC format to MG format
         if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "fac") {xU  = "(" + oParens(xU) + ")"}
         if (xTractL.func == "cAdd" || xTractL.func == "cSub" || xTractL.func == "fac") {xL  = "(" + oParens(xL) + ")"}
         if (xTractL.func == "cDiv" && xTractU.func == "cDiv") {xU  = "(" + oParens(xU) + ")";xL  = "(" + oParens(xL) + ")"}
-        if (xU.indexOf("Cv[45]") > -1 && xU.lastIndexOf("Cv[45]") == xU.length-6) {xU  = "(" + oParens(xU) + ")"}   
-        if (xL.indexOf("Cv[45]") > -1 && xL.lastIndexOf("Cv[45]") == xL.length-6) {xL  = "(" + oParens(xL) + ")"}   
+        if (xU.indexOf("Cv[45]") > -1 && xU.lastIndexOf("Cv[45]") == xU.length-6) {xU  = "(" + oParens(xU) + ")"}
+        if (xL.indexOf("Cv[45]") > -1 && xL.lastIndexOf("Cv[45]") == xL.length-6) {xL  = "(" + oParens(xL) + ")"}
         if (xTractL.func == "cPow" && numTest(xU) &&  numTest(xTractL.upper)) {xL  = "(" + oParens(xL) + ")"}
         return xU + "" + xL
     }
@@ -946,7 +946,7 @@ function mgExport(xFn) { //convert from FUNC format to MG format
         xTractU = oprExtract(cFunc(xU));
         xTractL = oprExtract(cFunc(xL));
         if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "cMul" || xTractU.func == "cDiv" || xTractU.func == "cNeg" || xTractU.func == "fac") {xU  = "(" + oParens(xU) + ")"}
-        if (xTractL.func == "cAdd" || xTractL.func == "cSub" || xTractL.func == "cMul" || xTractL.func == "cDiv" || xTractL.func == "cNeg") {xL  = "(" + oParens(xL) + ")"} 
+        if (xTractL.func == "cAdd" || xTractL.func == "cSub" || xTractL.func == "cMul" || xTractL.func == "cDiv" || xTractL.func == "cNeg") {xL  = "(" + oParens(xL) + ")"}
         return xU + "^" + xL
     }
     function cNegE(xU) { //negative
@@ -954,7 +954,7 @@ function mgExport(xFn) { //convert from FUNC format to MG format
         xTractU = oprExtract(cFunc(xU));
         if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "cDiv") {return "-(" + oParens(xU) + ")"}
         return "-" + xU
-    }	
+    }
     function cEqlE(xU,xL) {return xU + "=" + xL} //equal
     function cNqlE(xU,xL) {return xU + "Cv[8800]" + xL} //not equal
     function cGthE(xU,xL) {return xU + "Cv[62]" + xL} //greater than
@@ -963,7 +963,7 @@ function mgExport(xFn) { //convert from FUNC format to MG format
     function cLeqE(xU,xL) {return xU + "Cv[8804]" + xL} //less than or equal
     function cBndE(xU,xL) {return xU + "" + xL} //non-multiplying symbol bond
     function cAngE(xU,xL) {return xU + "~" + xL} //angle
-	//passthru	
+    //passthru
     function nrtE(xU,xL)  {return "nrt(" + xU + "," + xL + ")"} //nth root
     function lgnE(xU,xL)  {return "lgn(" + xU + "," + xL + ")"} //log to nth
     function sinE(xU) {return "sin(" + xU + ")"} //sin
@@ -1055,7 +1055,7 @@ function mgExport(xFn) { //convert from FUNC format to MG format
     function smmE(xU,mU,dV,mL) {return "sum(" + mU + "," + dV + "Cv[61]" + mL + ")" + xU} //summation from FUNC format
     function pmmE(xU,mU,dV,mL) {return "prd(" + mU + "," + dV + "Cv[61]" + mL + ")" + xU} //product from FUNC format
     function ntgE(xU,dV,mU,mL) { //integral from FUNC format
-        if (typeof mU == "undefined" && typeof mL == "undefined") {return "Cv[8747]" + xU + "Cv[8748]" + dV}    
+        if (typeof mU == "undefined" && typeof mL == "undefined") {return "Cv[8747]" + xU + "Cv[8748]" + dV}
         return "itg(" + mU + "," + mL + ")" + xU + "Cv[8748]" + dV
     }
     function ntpE(xU,dV,mU,mL) {return ntgE(xU,dV,mU,mL)} //wrapper for unsolved integral
@@ -1124,7 +1124,7 @@ function cFunc(cXpr) { //convert from MG format to FUNC format: a+bc/d -> cAdd(a
         cXpr = cXpr.replace(/Cv\[(\d+)\]SBT\(/,"cnt(Cv[$1]SBT(").replace("]SBT("+sbtOperand.inside,"]sbt("+oParens(sbtOperand.inside)+")");
     }
     sCount = strCount(cXpr,"Cv[8748]");//differential
-    for (var nCf=0;nCf<sCount;nCf++) {cXpr = cXpr.replace(/Cv\[8748\]Cv\[(\d+)\]\/Cv\[8748\]Cv\[(\d+)\]/,"sdr(Cv[$1],Cv[$2])")} 
+    for (var nCf=0;nCf<sCount;nCf++) {cXpr = cXpr.replace(/Cv\[8748\]Cv\[(\d+)\]\/Cv\[8748\]Cv\[(\d+)\]/,"sdr(Cv[$1],Cv[$2])")}
     cXpr = cXpr.replace(/!/g,"Cv[45]"); //factorial
     cXpr = cXpr.replace(/Cv\[8226\]/g,String.fromCharCode(8226)); //dot operator
     var relOperators = {"Cv[60]":"<","Cv[61]":"=","Cv[62]":">","Cv[8800]":String.fromCharCode(8800),"Cv[8804]":String.fromCharCode(8804),"Cv[8805]":String.fromCharCode(8805)};//relational operators
@@ -1132,7 +1132,7 @@ function cFunc(cXpr) { //convert from MG format to FUNC format: a+bc/d -> cAdd(a
         sCount = strCount(cXpr,key);
         for (var nCf=0;nCf<sCount;nCf++) {cXpr = cXpr.replace(key,relOperators[key])}
     }
-    cXpr = cXpr.replace(/([\)\]])(\|?)(\d)/g,"$1$2#$3").replace(/([\)\]\d])(\|?)\(/g,"$1$2#(").replace(/([\)\]\d])(\|?)Cv\[/g,"$1$2#Cv[").replace(/([\)\]\d])(\|?)([a-z][a-z][a-z]\()/ig,"$1$2#$3");//terms to # multiply 
+    cXpr = cXpr.replace(/([\)\]])(\|?)(\d)/g,"$1$2#$3").replace(/([\)\]\d])(\|?)\(/g,"$1$2#(").replace(/([\)\]\d])(\|?)Cv\[/g,"$1$2#Cv[").replace(/([\)\]\d])(\|?)([a-z][a-z][a-z]\()/ig,"$1$2#$3");//terms to # multiply
     // non-multiplying cBnd symbols
     var nBind = ["(Cv\\[8773\\])","(Cv\\[8750\\])","(Cv\\[8751\\])","(Cv\\[8752\\])",
                 "(Cv\\[8592\\])","(Cv\\[8747\\])","(Cv\\[8748\\])","(Cv\\[59\\])",
@@ -1155,7 +1155,7 @@ function cFunc(cXpr) { //convert from MG format to FUNC format: a+bc/d -> cAdd(a
     }
     sCount = strCount(cXpr,"^");//convert powers to cPow()
     for (nCf=0;nCf<sCount;nCf++) {cXpr = cParse(cXpr,"^","cPow")}
-    if (cXpr.charAt(0) == "-") {cXpr = nParse(cXpr,"-")}    
+    if (cXpr.charAt(0) == "-") {cXpr = nParse(cXpr,"-")}
     sCount = strCount(cXpr,"-");//parse negatives to cNeg()
     var nCases = ["~-","~|-","+-","*-","/-","(-",",-","+|-","*|-","/|-","(|-",",|-","=-","=|-","@-","@|-","e|-",">-","<-",">|-","<|-",
                   String.fromCharCode(8804)+"-",String.fromCharCode(8804)+"|-",String.fromCharCode(8805)+"-",String.fromCharCode(8805)+"|-",
@@ -1166,7 +1166,7 @@ function cFunc(cXpr) { //convert from MG format to FUNC format: a+bc/d -> cAdd(a
         }
     }
     sCount = strCount(cXpr,"~");//convert angles to cAng()
-    for (nCf=0;nCf<sCount;nCf++) {cXpr = cParse(cXpr,"~","cAng")}       
+    for (nCf=0;nCf<sCount;nCf++) {cXpr = cParse(cXpr,"~","cAng")}
     sCount = strCount(cXpr,"#");//convert # to cMul() (multiply)
     for (nCf=0;nCf<sCount;nCf++) {cXpr = cParse(cXpr,"#","cMul")}
     sCount = strCount(cXpr,"/");//convert / to cDiv()
@@ -1251,7 +1251,7 @@ function dFunc(dXpr, prefix) { //map FUNC format to export format
     function limL(xA,xB) {
         return "<Xfnc><span style='display:inline-block;'><span style='text-align:center;vertical-align:middle;display:inline-table;'><span style='display:table-row;font-size:40%'>&nbsp;</span><span style='line-height:50%;display:table-row;'>lim</span><span style='display:table-row;font-size:60%'>"+xA+"&#8594;"+xB+"</span></span></span>"
     }
-    function itgL(xA,xB) { 
+    function itgL(xA,xB) {
         return "<Xdiv><span style='display:inline-block;vertical-align:middle;'><table cellpadding='0' cellspacing='0'><tr><td rowspan='4'><span style='vertical-align:middle;display:inline-table;'><span style='display:table-row;line-height:90%'>&#8992;</span><span style='display:table-row;line-height:90%'>&#8993;</span></span></td><tr><td style='font-size:45%'>"
                 +xA+"</td></tr><tr><td>&nbsp;</td></tr><td style='font-size:45%'>"+xB+"</td></tr></table></span><Xdve>"
     }
@@ -1268,7 +1268,7 @@ function dFunc(dXpr, prefix) { //map FUNC format to export format
     function udtL()  {return fAccentU("&#8226;")}
     function udtR()  {return fAccentL("<span style='line-height:50%'>&nbsp;</span>")}
     function tdrL(xA,xN) {
-		var xTmp = "";
+        var xTmp = "";
         var tmpDivSym = mgConfig.divSymbol;mgConfig.divSymbol = "Over";
         if (typeof xN =="undefined" || xN == 1) {xTmp = cDivL("<i>d</i>","<i>d</i>"+xA)}
         else {xTmp = cDivL("<i>d</i><sup>"+xN+"</sup>","<i>d</i>"+xA+"<sup>"+xN+"</sup>")}
@@ -1276,7 +1276,7 @@ function dFunc(dXpr, prefix) { //map FUNC format to export format
         return xTmp
     }
     function idrL(xA,xN) {
-		var xTmp = "";
+        var xTmp = "";
         var tmpDivSym = mgConfig.divSymbol;mgConfig.divSymbol = "Over";
         if (typeof xN =="undefined" || xN == 1) {xTmp = cDivL("&#8706;","&#8706;"+xA)}
         else {xTmp = cDivL("&#8706;<sup>"+xN+"</sup>","&#8706;"+xA+"<sup>"+xN+"</sup>")}
@@ -1284,7 +1284,7 @@ function dFunc(dXpr, prefix) { //map FUNC format to export format
         return xTmp
     }
     function sdrL(xA,xB,xN) {
-		var xTmp = "";
+        var xTmp = "";
         var tmpDivSym = mgConfig.divSymbol;mgConfig.divSymbol = "Over";
         if (typeof xN =="undefined" || xN == 1) {xTmp = cDivL("<i>d</i>"+xA,"<i>d</i>"+xB)}
         else {xTmp = cDivL("<i>d</i><sup>"+xN+"</sup>"+xA,"<i>d</i>"+xB+"<sup>"+xN+"</sup>")}
@@ -1292,7 +1292,7 @@ function dFunc(dXpr, prefix) { //map FUNC format to export format
         return xTmp
     }
     function psdL(xA,xB,xN) {
-		var xTmp = "";
+        var xTmp = "";
         var tmpDivSym = mgConfig.divSymbol;mgConfig.divSymbol = "Over";
         if (typeof xN =="undefined" || xN == 1) {xTmp = cDivL("&#8706;"+xA,"&#8706;"+xB)}
         else {xTmp = cDivL("&#8706;<sup>"+xN+"</sup>"+xA,"&#8706;"+xB+"<sup>"+xN+"</sup>")}
@@ -1359,7 +1359,7 @@ function dFunc(dXpr, prefix) { //map FUNC format to export format
             }
             mReturn = mReturn + "\\end{bmatrix}"
         }
-        return mReturn 
+        return mReturn
     }
     // function handlers
     function lFunc(parm) {mA=parm[0];mB=parm[1];mC=parm[2];return eval(funcselect(funcKey,fnformatL))} //process left side function
@@ -1438,7 +1438,7 @@ Ct[25]="M_{P}";                                         //"Planck mass";
 Ct[26]="M_{u}";                                         //"atomic mass constant";
 Ct[27]="N_{a}";                                         //"Avogadro constant";
 Ct[28]="n_{0}";                                         //"Loschmidt constant";
-Ct[29]="\\pi ";                                         //"Archimedes constant"; 
+Ct[29]="\\pi ";                                         //"Archimedes constant";
 
 Ct[30]="2 \\pi ";                                       //"2&times;&#960;";
 Ct[31]="\\phi";                                         //"golden ratio";
@@ -1485,7 +1485,7 @@ Ct[92] = "\\setminus ";
 Ct[126] = "\\sim ";
 Ct[172] = "\\neg ";
 Ct[176] = "\\circ ";
-Ct[177] = "\\pm "; 
+Ct[177] = "\\pm ";
 Ct[215] = "\\times ";
 Ct[247] = "\\div ";
 Ct[420] = "\\mathfrak{P}";
@@ -1511,7 +1511,7 @@ Ct[8734] = "\\infty ";
 Ct[8801] = "\\equiv ";
 Ct[8594] = "\\to ";
 Ct[8592] = "\\gets ";
-Ct[8226] = "\\cdot"; 
+Ct[8226] = "\\cdot";
 Ct[8592] = "\\leftarrow ";
 Ct[8594] = "\\rightarrow ";
 Ct[8596] = "\\leftrightarrow ";
@@ -1541,16 +1541,16 @@ Ct[8477] = "\\Re ";
 Ct[8450] = "\\mathbb{C}";
 Ct[1488] = "\\aleph ";
 Ct[8743] = "\\wedge ";
-Ct[8744] = "\\vee "; 
-Ct[8745] = "\\cap "; 
+Ct[8744] = "\\vee ";
+Ct[8745] = "\\cap ";
 Ct[8746] = "\\cup ";
 Ct[8834] = "\\subset ";
 Ct[8835] = "\\supset ";
-Ct[8712] = "\\in "; 
+Ct[8712] = "\\in ";
 Ct[8715] = "\\ni ";
 Ct[8838] = "\\subseteq ";
 Ct[8839] = "\\supseteq ";
-Ct[8713] = "\\notin "; 
+Ct[8713] = "\\notin ";
 Ct[8716] = "";
 Ct[8728] = "\\circ ";
 Ct[8836] = "";
@@ -1604,7 +1604,7 @@ function texExport(latXpr) { //convert MG format to LaTeX
             latXpr = latXpr.substr(0,bSym-1)+strg+latXpr.substr(iXs+1,lSym);
         }
         else {
-            latXpr = latXpr.substr(0,bSym-1)+"("+strg+")"+latXpr.substr(iXs+1,lSym);    
+            latXpr = latXpr.substr(0,bSym-1)+"("+strg+")"+latXpr.substr(iXs+1,lSym);
         }
     }
     latXpr = latXpr.replace(/\<Xcel\>/g,",&").replace(/\<Xrow\>/g,"\\left\\{\\begin{array}{1}").replace(/\<Xrwe\>/g,"\\end{array}\\right\\}"); //resolve arrays
@@ -1635,7 +1635,7 @@ function texImport(mgXpr) { //convert LaTeX to MG format
     var lBrackets = ["{","[","|"];
     var rBrackets = ["}","]","|"];
     var symTemp = "";
-	var tTemp = "";
+    var tTemp = "";
     if (mgXpr == "NaN" || mgXpr == "undefined") {return "undefined"}
     mgXpr += " ";
     mgXpr = mgXpr.replace(/\\big/g,"\\");//fix big
@@ -1692,7 +1692,7 @@ function texImport(mgXpr) { //convert LaTeX to MG format
                     if (funcselect(tFunc,"texfunc") == "\\"+symTemp && funcselect(tFunc,"trig")) {
                         var operand = parseBrackets(mgXpr,mgXpr.indexOf(funcselect(tFunc,"texfunc"))+funcselect(tFunc,"texfunc").length+5);
                         mgXpr = mgXpr.substr(0,mgXpr.indexOf(funcselect(tFunc,"texfunc")))+" "+funcselect(tFunc,"invfunc")+"("+operand.inside+")"+mgXpr.substr(operand.end,mgXpr.length);
-                    }               
+                    }
                 }
                 else {//convert fn powers
                     var superscript = parseBrackets(mgXpr,mgXpr.indexOf(funcselect(tFunc,"texfunc"))+funcselect(tFunc,"texfunc").length+1);
@@ -1727,14 +1727,14 @@ function texImport(mgXpr) { //convert LaTeX to MG format
             else {mgXpr = mgXpr.substr(0,mgXpr.indexOf(ulSymbols[nXt]+"^"))+ulFuncs[nXt]+limitU.inside+",) "+mgXpr.substr(limitU.end+1,mgXpr.length)}
         }
     }
-    
+
     var sCount = strCount(mgXpr,"\\lim_");//convert /lim
     for (var nXf=0;nXf<sCount;nXf++) {
         var limitX = parseBrackets(mgXpr,mgXpr.indexOf("\\lim_")+5);
         var limitU = [limitX.inside,""];
         if (limitX.inside.indexOf("\\to") > -1) {limitU = limitX.inside.split("\\to")}
         if (limitX.inside.indexOf("\\rightarrow") > -1) {limitU = limitX.inside.split("\\rightarrow")}
-        mgXpr = mgXpr.substr(0,mgXpr.indexOf("\\lim_"))+" lim("+limitU[0]+","+limitU[1]+") "+mgXpr.substr(limitX.end+1,mgXpr.length)    
+        mgXpr = mgXpr.substr(0,mgXpr.indexOf("\\lim_"))+" lim("+limitU[0]+","+limitU[1]+") "+mgXpr.substr(limitX.end+1,mgXpr.length)
     }
     sCount = strCount(mgXpr,"_");//convert subscripts
     for (var nXf=0;nXf<sCount;nXf++) {
@@ -1786,7 +1786,7 @@ function texImport(mgXpr) { //convert LaTeX to MG format
         mgXpr = mgXpr.replace(/\(Cv\[10100\]Cv\[(\d+)\]\/Cv\[10100\]Cv\[(\d+)\]\)/,"sdr(Cv[$1],Cv[$2])");
         //nth derivative
         mgXpr = mgXpr.replace(/\(Cv\[10100\]\^\d+\/Cv\[10100\]Cv\[(\d+)\]\^(\d+)\)/,"tdr(Cv[$1],$2)");
-        mgXpr = mgXpr.replace(/\(Cv\[10100\]\^\d+Cv\[(\d+)\]\/Cv\[10100\]Cv\[(\d+)\]\^(\d+)\)/,"sdr(Cv[$1],Cv[$2],$3)");        
+        mgXpr = mgXpr.replace(/\(Cv\[10100\]\^\d+Cv\[(\d+)\]\/Cv\[10100\]Cv\[(\d+)\]\^(\d+)\)/,"sdr(Cv[$1],Cv[$2],$3)");
     }
     mgXpr = mgXpr.replace(/\(Cv\[8706\]\)/g,"Cv[8706]");
     sCount = strCount(mgXpr,"Cv[8706]");//convert partial derivatives
@@ -1795,8 +1795,8 @@ function texImport(mgXpr) { //convert LaTeX to MG format
         mgXpr = mgXpr.replace(/\(Cv\[8706\]Cv\[(\d+)\]\/Cv\[8706\]Cv\[(\d+)\]\)/,"psd(Cv[$1],Cv[$2])");
         //nth derivative
         mgXpr = mgXpr.replace(/\(Cv\[8706\]\^\d+\/Cv\[8706\]Cv\[(\d+)\]\^(\d+)\)/,"idr(Cv[$1],$2)");
-        mgXpr = mgXpr.replace(/\(Cv\[8706\]\^\d+Cv\[(\d+)\]\/Cv\[8706\]Cv\[(\d+)\]\^(\d+)\)/,"psd(Cv[$1],Cv[$2],$3)");      
-    }   
+        mgXpr = mgXpr.replace(/\(Cv\[8706\]\^\d+Cv\[(\d+)\]\/Cv\[8706\]Cv\[(\d+)\]\^(\d+)\)/,"psd(Cv[$1],Cv[$2],$3)");
+    }
     sCount = strCount(mgXpr,"Cv[10100]");//convert differentials
     for (var nXf=0;nXf<sCount;nXf++) {
         mgXpr = mgXpr.replace(/\{Cv\[10100\]\}/,"Cv[10100]").replace(/Cv\[10100\]Cv\[(\d+)\]/,"Cv[8748]Cv[$1]");
@@ -1815,7 +1815,7 @@ if (typeof module ==  "object") {
         Cs:         Cs,
         funcMap:    funcMap,
         parseParens:function(xB,bSym) {return parseParens(xB,bSym)},
-        cFunc:      function(expression) {return cFunc(expression)},    
+        cFunc:      function(expression) {return cFunc(expression)},
         mgExport:   function(expression) {return mgExport(expression)},
         htmlExport: function(expression) {return htmlExport(expression)},
         texExport:  function(expression) {return texExport(expression)},
