@@ -348,7 +348,7 @@ var mgCalc = (function() {
         return xRdce
     }
     function iReduce(iRdce) { //reduce by iterative expansion
-        var iInv = cDissect(iRdce),iCount = [],xFlag = true;iC = 0;
+        var iInv = cDissect(iRdce),iCount = [],xFlag = true,iC = 0;
         //count the number of occurrences of each element, if any greater than 1, run expansion
         for (iC in iInv) {if (nbrTest(iInv[iC]) || !iInv[iC] || !varTest(iInv[iC])) {iCount[iC] = 0} else {iCount[iC] = iRdce.split(iInv[iC]).length-1};if (iCount[iC] > 1) {xFlag = false}}
         if (xFlag) {return iRdce}
