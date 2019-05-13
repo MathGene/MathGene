@@ -2274,7 +2274,11 @@ var mgCalc = (function() {
     function lmtS(lXpr,lVar,xLim) {
         function cAddL(xU,xL) {return cAddS(lmtS(xU,lVar,xLim),lmtS(xL,lVar,xLim))}
         function cSubL(xU,xL) {return cSubS(lmtS(xU,lVar,xLim),lmtS(xL,lVar,xLim))}
-        function cMulL(xU,xL) {return cMulS(lmtS(xU,lVar,xLim),lmtS(xL,lVar,xLim))}
+        function cMulL(xU,xL) {
+			if (strTest(lmtS(xU,lVar,xLim),"Cv[8734]") && lmtS(xL,lVar,xLim) == 0) {return cDivL(xL,cPowS(xU,-1))}
+			if (lmtS(xU,lVar,xLim) == 0 && strTest(lmtS(xL,lVar,xLim),"Cv[8734]")) {return cDivL(xU,cPowS(xL,-1))}
+			return cMulS(lmtS(xU,lVar,xLim),lmtS(xL,lVar,xLim))
+		}
         function cDivL(xU,xL) {
             var xTractU = opExtract(xU);
             if (+xU == 0 && +xL != 0) {return 0}
@@ -2287,11 +2291,10 @@ var mgCalc = (function() {
                 if (polyU.length > polyL.length) {return xLim}
                 if (polyU.length < polyL.length) {return 0}
             }
-            if (xU == "cSub(tan("+lVar+"),sin("+lVar+"))" && xL == "cPow("+lVar+",2)" && +xLim == 0) {return "cDiv(1,2)"}
-            if (lmtS(xU,lVar,xLim) == 0 && lmtS(xL,lVar,xLim) == 0) {return lmtS(cDivS(drvS(xU,lVar),drvS(xL,lVar)),lVar,xLim)}
-            if (strTest(lmtS(xU,lVar,xLim),"Cv[8734]") && strTest(lmtS(xL,lVar,xLim),"Cv[8734]")) {return lmtS(cDivS(drvS(xU,lVar),drvS(xL,lVar)),lVar,xLim)}
+            if (lmtS(xU,lVar,xLim) == 0 && lmtS(xL,lVar,xLim) == 0) {return lmtS(cDivS(drvS(xU,lVar),drvS(xL,lVar)),lVar,xLim)} // l'Hopital
+            if (strTest(lmtS(xU,lVar,xLim),"Cv[8734]") && strTest(lmtS(xL,lVar,xLim),"Cv[8734]")) {return lmtS(cDivS(drvS(xU,lVar),drvS(xL,lVar)),lVar,xLim)} // l'Hopital
             if (lmtS(xL,lVar,xLim) != 0) {return cDivS(lmtS(xU,lVar,xLim),lmtS(xL,lVar,xLim))}
-            return lmtS(cDivS(drvS(xU,lVar),drvS(xL,lVar)),lVar,xLim)
+            return lmtS(cDivS(drvS(xU,lVar),drvS(xL,lVar)),lVar,xLim) // l'Hopital
         }
         function cPowL(xU,xL) {
             var xTractU = opExtract(xU);
@@ -2319,7 +2322,7 @@ var mgCalc = (function() {
             if (lmtS(xU,lVar,xLim) == 0 && lmtS(xL,lVar,xLim) == 0) {return cPowS("Cv[8]",lmtS(cMulS(xL,lneS(xU))),lVar,xLim)}
             if (strTest(lmtS(xU,lVar,xLim),"Cv[8734]") && lmtS(xL,lVar,xLim) == 0) {return cPowS("Cv[8]",lmtS(cMulS(xL,lneS(xU))),lVar,xLim)}
             if (lmtS(xU,lVar,xLim) == 1 && strTest(lmtS(xL,lVar,xLim),"Cv[8734]")) {return cPowS("Cv[8]",lmtS(cMulS(xL,lneS(xU))),lVar,xLim)}
-            return cPowS(lmtS(xU,lVar,xLim),lmtS(xL,lVar,xLim))
+            return cPowS(xU,xL)
         }
         function lneL(xU) {return lneS(lmtS(xU,lVar,xLim))}
         function sqtL(xU) {return sqtS(lmtS(xU,lVar,xLim))}
