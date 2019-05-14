@@ -1643,7 +1643,7 @@ function texImport(mgXpr) { //convert LaTeX to MG format
     mgXpr = mgXpr.replace(/\s+\{/g,"{").replace(/\s+\}/g,"}").replace(/\{\s+/g,"{").replace(/\}\s+/g,"}"); //fix brace whitespaces
     mgXpr = mgXpr.replace(/\{matrix\}/g,"{bmatrix}").replace(/\{pmatrix\}/g,"{bmatrix}").replace(/\{vmatrix\}/g,"{bmatrix}").replace(/\{Vmatrix\}/g,"{bmatrix}"); //convert all matrices to bmatrix
     var sCount = strCount(mgXpr,"\\begin{bmatrix}"); //convert matrices
-    for (var nXf=0;nXf<sCount;nXf++) {
+    for (nXf=0;nXf<sCount;nXf++) {
         var rTemp = mgXpr.substr(mgXpr.lastIndexOf("\\begin{bmatrix}")+"\\begin{bmatrix}".length,mgXpr.length);
         var mTemp = rTemp.substr(0,rTemp.indexOf("\\end{bmatrix}"));
         mgXpr = mgXpr.replace("\\begin{bmatrix}"+mTemp+"\\end{bmatrix}",matI(mTemp));
