@@ -813,8 +813,7 @@ function parseBrackets(xB,bSym) {//parse brackets and return inside string, begi
 }
 function dedupBrackets(dB) { //remove redundant brackets
     var sCount = strCount(dB,"{");
-    var nXf = 0;
-    var dparens = "";
+    var nXf = 0,dparens = "";
     for (nXf=0;nXf<sCount;nXf++) {
         dparens = parseBrackets(dB,dB.lastIndexOf("{{")+1);
         if (dB.substr(dparens.end,2) == "}}" ) {
@@ -1115,7 +1114,7 @@ function cFunc(cXpr) { //convert from MG format to FUNC format: a+bc/d -> cAdd(a
     }
     //
     cXpr += "";
-    var nCf = 0;
+    var nCf = 0,iXX = 0,key;
     var sCount = strCount(cXpr,"]sbt(");//var&subscripts into container cnt()
     cXpr = cXpr.replace(/\]sbt\(/g,"]SBT(");
     cXpr = cXpr.replace(/Infinity/g,"Cv[8734]");
@@ -1124,13 +1123,13 @@ function cFunc(cXpr) { //convert from MG format to FUNC format: a+bc/d -> cAdd(a
         cXpr = cXpr.replace(/Cv\[(\d+)\]SBT\(/,"cnt(Cv[$1]SBT(").replace("]SBT("+sbtOperand.inside,"]sbt("+oParens(sbtOperand.inside)+")");
     }
     sCount = strCount(cXpr,"Cv[8748]");//differential
-    for (var nCf=0;nCf<sCount;nCf++) {cXpr = cXpr.replace(/Cv\[8748\]Cv\[(\d+)\]\/Cv\[8748\]Cv\[(\d+)\]/,"sdr(Cv[$1],Cv[$2])")}
+    for (nCf=0;nCf<sCount;nCf++) {cXpr = cXpr.replace(/Cv\[8748\]Cv\[(\d+)\]\/Cv\[8748\]Cv\[(\d+)\]/,"sdr(Cv[$1],Cv[$2])")}
     cXpr = cXpr.replace(/!/g,"Cv[45]"); //factorial
     cXpr = cXpr.replace(/Cv\[8226\]/g,String.fromCharCode(8226)); //dot operator
     var relOperators = {"Cv[60]":"<","Cv[61]":"=","Cv[62]":">","Cv[8800]":String.fromCharCode(8800),"Cv[8804]":String.fromCharCode(8804),"Cv[8805]":String.fromCharCode(8805)};//relational operators
-    for (var key in relOperators) {
+    for (key in relOperators) {
         sCount = strCount(cXpr,key);
-        for (var nCf=0;nCf<sCount;nCf++) {cXpr = cXpr.replace(key,relOperators[key])}
+        for (nCf=0;nCf<sCount;nCf++) {cXpr = cXpr.replace(key,relOperators[key])}
     }
     cXpr = cXpr.replace(/([\)\]])(\|?)(\d)/g,"$1$2#$3").replace(/([\)\]\d])(\|?)\(/g,"$1$2#(").replace(/([\)\]\d])(\|?)Cv\[/g,"$1$2#Cv[").replace(/([\)\]\d])(\|?)([a-z][a-z][a-z]\()/ig,"$1$2#$3");//terms to # multiply
     // non-multiplying cBnd symbols
@@ -1149,7 +1148,7 @@ function cFunc(cXpr) { //convert from MG format to FUNC format: a+bc/d -> cAdd(a
     sCount = strCount(cXpr,"-");//parse power negatives to cPow(x,cNeg())
     var nCases = ["^-","^|-"];
     for (nCf=0;nCf<sCount;nCf++) {
-        for (var iXX in nCases) {
+        for (iXX in nCases) {
             if (cXpr.indexOf(nCases[iXX]) > -1) {cXpr = nParse(cXpr,nCases[iXX])}
         }
     }
@@ -1157,11 +1156,11 @@ function cFunc(cXpr) { //convert from MG format to FUNC format: a+bc/d -> cAdd(a
     for (nCf=0;nCf<sCount;nCf++) {cXpr = cParse(cXpr,"^","cPow")}
     if (cXpr.charAt(0) == "-") {cXpr = nParse(cXpr,"-")}
     sCount = strCount(cXpr,"-");//parse negatives to cNeg()
-    var nCases = ["~-","~|-","+-","*-","/-","(-",",-","+|-","*|-","/|-","(|-",",|-","=-","=|-","@-","@|-","e|-",">-","<-",">|-","<|-",
+    nCases = ["~-","~|-","+-","*-","/-","(-",",-","+|-","*|-","/|-","(|-",",|-","=-","=|-","@-","@|-","e|-",">-","<-",">|-","<|-",
                   String.fromCharCode(8804)+"-",String.fromCharCode(8804)+"|-",String.fromCharCode(8805)+"-",String.fromCharCode(8805)+"|-",
                   String.fromCharCode(8800)+"-",String.fromCharCode(8800)+"|-",String.fromCharCode(8226)+"-",String.fromCharCode(8226)+"|-"];
     for (nCf=0;nCf<sCount;nCf++) {
-        for (var iXX in nCases) {
+        for (iXX in nCases) {
             if (cXpr.indexOf(nCases[iXX]) > -1) {cXpr = nParse(cXpr,nCases[iXX])}
         }
     }
@@ -1189,7 +1188,7 @@ function cFunc(cXpr) { //convert from MG format to FUNC format: a+bc/d -> cAdd(a
     sCount = strCount(cXpr,"@");//convert @ symbol handler to cBnd()
     for (nCf=0;nCf<sCount;nCf++) {cXpr = cParse(cXpr,"@","cBnd")}
     var relOps = {"cEql":"=","cLth":"<","cGth":">","cNql":String.fromCharCode(8800),"cLeq":String.fromCharCode(8804),"cGeq":String.fromCharCode(8805)};//relational operators
-    for (var key in relOps) {
+    for (key in relOps) {
         sCount = strCount(cXpr,relOps[key]);
         for (nCf=0;nCf<sCount;nCf++) {
             cXpr = cParse(cXpr,relOps[key],key)
@@ -1471,7 +1470,7 @@ var Greeks =   ["A","B","\\Gamma ","\\Delta ","E","Z","H","\\Theta ","I","K","\\
                 "","","","","","","",
                 "\\alpha ","\\beta ","\\gamma ","\\delta ","\\epsilon ","\\zeta ","\\eta ","\\theta ","\\iota ","\\kappa ","\\lambda ","\\mu ",
                 "\\nu ","\\xi ","o","\\pi ","","\\rho ","\\sigma ","\\tau ","\\upsilon ","\\phi ","\\chi ","\\psi ","\\omega "];
-for (var iAl=0;iAl<=Greeks.length;iAl++) {Ct[iAl+913] = Greeks[iAl]}
+for (iAl=0;iAl<=Greeks.length;iAl++) {Ct[iAl+913] = Greeks[iAl]}
 
 Ct[10040] ="\\left(";
 Ct[10041] ="\\right)";
@@ -1630,12 +1629,12 @@ function texImport(mgXpr) { //convert LaTeX to MG format
         }
         return "mat(" + mReturn + ")"
     }
+    //
     var ulSymbols = ["\\int","\\sum","\\prod","\\cap","\\cup"];
     var ulFuncs  =  ["itg(","sum(","prd(","cap(","cup("];
     var lBrackets = ["{","[","|"];
     var rBrackets = ["}","]","|"];
-    var symTemp = "";
-    var tTemp = "";
+    var symTemp = "",tTemp = "",tFunc = 0,nXf = 0,nXs = 0,nXi = 0;
     if (mgXpr == "NaN" || mgXpr == "undefined") {return "undefined"}
     mgXpr += " ";
     mgXpr = mgXpr.replace(/\\big/g,"\\");//fix big
@@ -1644,25 +1643,25 @@ function texImport(mgXpr) { //convert LaTeX to MG format
     mgXpr = mgXpr.replace(/\s+\{/g,"{").replace(/\s+\}/g,"}").replace(/\{\s+/g,"{").replace(/\}\s+/g,"}"); //fix brace whitespaces
     mgXpr = mgXpr.replace(/\{matrix\}/g,"{bmatrix}").replace(/\{pmatrix\}/g,"{bmatrix}").replace(/\{vmatrix\}/g,"{bmatrix}").replace(/\{Vmatrix\}/g,"{bmatrix}"); //convert all matrices to bmatrix
     var sCount = strCount(mgXpr,"\\begin{bmatrix}"); //convert matrices
-    for (var nXf=0;nXf<sCount;nXf++) {
+    for (nXf=0;nXf<sCount;nXf++) {
         var rTemp = mgXpr.substr(mgXpr.lastIndexOf("\\begin{bmatrix}")+"\\begin{bmatrix}".length,mgXpr.length);
         var mTemp = rTemp.substr(0,rTemp.indexOf("\\end{bmatrix}"));
         mgXpr = mgXpr.replace("\\begin{bmatrix}"+mTemp+"\\end{bmatrix}",matI(mTemp));
     }
     mgXpr = mgXpr.replace(/\s+/g," ").replace(/\\/g," \\").replace(/ _/g,"_").replace(/_ /g,"_").replace(/ \^/g,"^").replace(/\^ /g,"^").replace(/ \[/g,"[").replace(/ \(/g,"(").replace(/\\left /g,"\\left").replace(/\\right /g,"\\right");//fix whitespaces
     sCount = strCount(mgXpr,"\\\\");//convert line breaks
-    for (var nXs=0;nXs<sCount;nXs++) {mgXpr = mgXpr.replace(/\\\\/," ")}
+    for (nXs=0;nXs<sCount;nXs++) {mgXpr = mgXpr.replace(/\\\\/," ")}
     mgXpr = mgXpr.replace(/\\,/g," ").replace(/\\:/g," ").replace(/\\;/g," ").replace(/\\!/g," ").replace(/\\ /g,""); //fix special
     if (mgXpr.split("{").length != mgXpr.split("}").length) {Cs[9998] = "<span style='color:red'>Unmatched brackets</span>";return "Cv[9998]"} //check parens
     mgXpr = mgXpr.replace(/\\left\[/g,"sbr(").replace(/\\left\{/g,"cbr(").replace(/\\right\]/g,")").replace(/\\right\}/g,")");//convert brackets
     sCount = strCount(mgXpr,"\\");//convert left/right paren
-    for (var nXf=0;nXf<sCount;nXf++) {mgXpr = mgXpr.replace(/\\left\(/,"(").replace(/\\right\)/,")").replace(/\\left\\\(/,"(").replace(/\\right\\\)/,")")}
+    for (nXf=0;nXf<sCount;nXf++) {mgXpr = mgXpr.replace(/\\left\(/,"(").replace(/\\right\)/,")").replace(/\\left\\\(/,"(").replace(/\\right\\\)/,")")}
     for (var iBr in lBrackets){//convert left/right brackets
-        var sCount = strCount(mgXpr,"\\left\\"+lBrackets[iBr]);
-        for (var nXf=0;nXf<sCount;nXf++) {mgXpr = mgXpr.replace("\\left\\"+lBrackets[iBr],"cbr(").replace("\\right\\"+rBrackets[iBr],")")   }
+        sCount = strCount(mgXpr,"\\left\\"+lBrackets[iBr]);
+        for (nXf=0;nXf<sCount;nXf++) {mgXpr = mgXpr.replace("\\left\\"+lBrackets[iBr],"cbr(").replace("\\right\\"+rBrackets[iBr],")")   }
     }
     sCount = strCount(mgXpr,"\\frac");//convert frac
-    for (var nXs=0;nXs<sCount;nXs++) {
+    for (nXs=0;nXs<sCount;nXs++) {
         var numerator = parseBrackets(mgXpr,mgXpr.indexOf("\\frac")+5);
         var denominator = parseBrackets(mgXpr,numerator.end+1);
         if (numerator.inside.indexOf("+") > -1 || numerator.inside.indexOf("-") > -1){numerator.inside = "("+numerator.inside+")"}
@@ -1670,22 +1669,22 @@ function texImport(mgXpr) { //convert LaTeX to MG format
         mgXpr = mgXpr.substr(0,mgXpr.indexOf("\\frac"))+" ("+numerator.inside+"/"+denominator.inside+") "+mgXpr.substr(denominator.end+1,mgXpr.length);
     }
     sCount = strCount(mgXpr,"\\sqrt[");//convert sqrt_n
-    for (var nXf=0;nXf<sCount;nXf++) {
+    for (nXf=0;nXf<sCount;nXf++) {
         var parmU = parseBrackets(mgXpr,mgXpr.indexOf("\\sqrt[")+6);
         var parmL = parseBrackets(mgXpr,parmU.end+2);
         mgXpr = mgXpr.substr(0,mgXpr.indexOf("\\sqrt["))+" nrt("+parmU.inside+","+parmL.inside+") "+mgXpr.substr(parmL.end+1,mgXpr.length);
     }
     sCount = strCount(mgXpr,"\\log_");//convert log_n
-    for (var nXf=0;nXf<sCount;nXf++) {
+    for (nXf=0;nXf<sCount;nXf++) {
         var parmU = parseBrackets(mgXpr,mgXpr.indexOf("\\log_")+5);
         var parmL = parseBrackets(mgXpr,parmU.end+1);
         mgXpr = mgXpr.substr(0,mgXpr.indexOf("\\log_"))+" lgn("+parmU.inside+","+parmL.inside+") "+mgXpr.substr(parmL.end+1,mgXpr.length);
     }
-    for (var tFunc in funcMap) {//convert functions
+    for (tFunc in funcMap) {//convert functions
         sCount = strCount(mgXpr,funcselect(tFunc,"texfunc"));
-        for (var nXf=0;nXf<sCount;nXf++) {
+        for (nXf=0;nXf<sCount;nXf++) {
             symTemp = mgXpr.substr(mgXpr.indexOf(funcselect(tFunc,"texfunc")),mgXpr.length);
-            for (var nXi=1;nXi<symTemp.length;nXi++) {if (tDelimiter.indexOf(symTemp.charAt(nXi)) > -1){break}}
+            for (nXi=1;nXi<symTemp.length;nXi++) {if (tDelimiter.indexOf(symTemp.charAt(nXi)) > -1){break}}
             if (symTemp.charAt(nXi) == "^") {//convert inverse fn^-1
                 if (symTemp.substr(nXi,5) =="^{-1}") {
                     var symTemp = symTemp.substr(1,nXi-1);
@@ -1711,7 +1710,7 @@ function texImport(mgXpr) { //convert LaTeX to MG format
     }
     for (var nXt in ulSymbols) {//convert u/l functions
         sCount = strCount(mgXpr,ulSymbols[nXt]+"_");
-        for (var nXf=0;nXf<sCount;nXf++) {
+        for (nXf=0;nXf<sCount;nXf++) {
             var limitL= parseBrackets(mgXpr,mgXpr.indexOf(ulSymbols[nXt]+"_")+ulSymbols[nXt].length+1);
             var limitU = parseBrackets(mgXpr,limitL.end+1);
             limitL.inside = limitL.inside.replace("=","Cv[61]");
@@ -1719,7 +1718,7 @@ function texImport(mgXpr) { //convert LaTeX to MG format
             else {mgXpr = mgXpr.substr(0,mgXpr.indexOf(ulSymbols[nXt]+"_"))+ulFuncs[nXt]+","+limitL.inside+") "+mgXpr.substr(limitL.end+1,mgXpr.length)}
         }
         sCount = strCount(mgXpr,ulSymbols[nXt]+"^");
-        for (var nXf=0;nXf<sCount;nXf++) {
+        for (nXf=0;nXf<sCount;nXf++) {
             var limitU= parseBrackets(mgXpr,mgXpr.indexOf(ulSymbols[nXt]+"^")+ulSymbols[nXt].length+1);
             var limitL = parseBrackets(mgXpr,limitU.end+1);
             limitL.inside = limitL.inside.replace("=","Cv[61]");
@@ -1728,8 +1727,8 @@ function texImport(mgXpr) { //convert LaTeX to MG format
         }
     }
 
-    var sCount = strCount(mgXpr,"\\lim_");//convert /lim
-    for (var nXf=0;nXf<sCount;nXf++) {
+    sCount = strCount(mgXpr,"\\lim_");//convert /lim
+    for (nXf=0;nXf<sCount;nXf++) {
         var limitX = parseBrackets(mgXpr,mgXpr.indexOf("\\lim_")+5);
         var limitU = [limitX.inside,""];
         if (limitX.inside.indexOf("\\to") > -1) {limitU = limitX.inside.split("\\to")}
@@ -1737,21 +1736,21 @@ function texImport(mgXpr) { //convert LaTeX to MG format
         mgXpr = mgXpr.substr(0,mgXpr.indexOf("\\lim_"))+" lim("+limitU[0]+","+limitU[1]+") "+mgXpr.substr(limitX.end+1,mgXpr.length)
     }
     sCount = strCount(mgXpr,"_");//convert subscripts
-    for (var nXf=0;nXf<sCount;nXf++) {
+    for (nXf=0;nXf<sCount;nXf++) {
         tTemp = mgXpr.charAt(mgXpr.indexOf("_")+1)
         if (tTemp == "{" || tTemp == "(") {
             var subscript = parseBrackets(mgXpr,mgXpr.indexOf("_"));
             mgXpr = mgXpr.substr(0,mgXpr.indexOf("_"))+" sbt("+subscript.inside+") "+mgXpr.substr(subscript.end+1,mgXpr.length)
         }
         else {
-            for (var nXi=mgXpr.indexOf("_")+1;nXi<mgXpr.length;nXi++) {if (tDelimiter.indexOf(mgXpr.charAt(nXi)) > -1){break}}
+            for (nXi=mgXpr.indexOf("_")+1;nXi<mgXpr.length;nXi++) {if (tDelimiter.indexOf(mgXpr.charAt(nXi)) > -1){break}}
             if (mgXpr.substr(mgXpr.indexOf("_"),nXi).search(/[a-z][a-z][a-z]\(\)/i) == -1) {mgXpr = mgXpr.substr(0,mgXpr.indexOf("_"))+" sbt("+tTemp+") "+mgXpr.substr(mgXpr.indexOf("_")+2,mgXpr.length)}
             else {mgXpr = mgXpr.replace(/_/,"")}
         }
     }
 
     sCount = strCount(mgXpr,"^");//convert superscripts
-    for (var nXf=0;nXf<sCount;nXf++) {
+    for (nXf=0;nXf<sCount;nXf++) {
         tTemp = mgXpr.charAt(mgXpr.indexOf("^")+1)
         if (tTemp == "{" || tTemp == "(") {
             var superscr = parseBrackets(mgXpr,mgXpr.indexOf("^")+1);
@@ -1759,21 +1758,21 @@ function texImport(mgXpr) { //convert LaTeX to MG format
         }
     }
     sCount = strCount(mgXpr,"\\");//convert symbols
-    for (var nXf=0;nXf<sCount;nXf++) {
+    for (nXf=0;nXf<sCount;nXf++) {
         symTemp = mgXpr.substr(mgXpr.indexOf("\\"),mgXpr.length);
-        for (var nXi=1;nXi<symTemp.length;nXi++) {if (tDelimiter.indexOf(symTemp.charAt(nXi)) > -1){break}}
+        for (nXi=1;nXi<symTemp.length;nXi++) {if (tDelimiter.indexOf(symTemp.charAt(nXi)) > -1){break}}
         symTemp = symTemp.substr(1,nXi-1);
         for (var iAl=1;iAl<=9500;iAl++) {if (typeof Ct[iAl] != "undefined" && (Ct[iAl] == "\\"+symTemp || Ct[iAl] == "\\"+symTemp+" ")) {mgXpr = mgXpr.replace("\\"+symTemp," Cv["+iAl+"]");break} }
     }
     sCount = strCount(mgXpr,"\\");//remove unknown tags
-    for (var nXf=0;nXf<sCount;nXf++) {
+    for (nXf=0;nXf<sCount;nXf++) {
         symTemp = mgXpr.substr(mgXpr.indexOf("\\"),mgXpr.length);
-        for (var nXi=1;nXi<symTemp.length;nXi++) {if (",!=<>|+-*^/{}()\\ ".indexOf(symTemp.charAt(nXi)) > -1){break}}
+        for (nXi=1;nXi<symTemp.length;nXi++) {if (",!=<>|+-*^/{}()\\ ".indexOf(symTemp.charAt(nXi)) > -1){break}}
         symTemp = symTemp.substr(1,nXi-1);
         mgXpr = mgXpr.replace("\\"+symTemp,"");
     }
-    for (var nXf=0;nXf<mgXpr.length;nXf++) {//convert variables
-        for (var tFunc in funcMap) {if (mgXpr.substr(nXf,4) == tFunc+"(") {nXf = nXf+3;break}}
+    for (nXf=0;nXf<mgXpr.length;nXf++) {//convert variables
+        for (tFunc in funcMap) {if (mgXpr.substr(nXf,4) == tFunc+"(") {nXf = nXf+3;break}}
         if (mgXpr.substr(nXf,3) == "Cv[") {nXf = nXf+3}
         var asciiChar = mgXpr.charAt(nXf).charCodeAt(0);
         if (asciiTest(asciiChar)) {mgXpr = mgXpr.substr(0,nXf)+"Cv["+(asciiChar+10000)+"]"+mgXpr.substr(nXf+1,mgXpr.length);nXf = nXf+6}
@@ -1781,7 +1780,7 @@ function texImport(mgXpr) { //convert LaTeX to MG format
     mgXpr = mgXpr.replace(/ /g,""); //cleanup spaces
     mgXpr = mgXpr.replace(/\(Cv\[10100\]\)/g,"Cv[10100]");
     sCount = strCount(mgXpr,"Cv[10100]");//convert derivatives
-    for (var nXf=0;nXf<sCount;nXf++) {
+    for (nXf=0;nXf<sCount;nXf++) {
         mgXpr = mgXpr.replace(/\(Cv\[10100\]\/Cv\[10100\]Cv\[(\d+)\]\)/,"tdr(Cv[$1])");
         mgXpr = mgXpr.replace(/\(Cv\[10100\]Cv\[(\d+)\]\/Cv\[10100\]Cv\[(\d+)\]\)/,"sdr(Cv[$1],Cv[$2])");
         //nth derivative
@@ -1790,7 +1789,7 @@ function texImport(mgXpr) { //convert LaTeX to MG format
     }
     mgXpr = mgXpr.replace(/\(Cv\[8706\]\)/g,"Cv[8706]");
     sCount = strCount(mgXpr,"Cv[8706]");//convert partial derivatives
-    for (var nXf=0;nXf<sCount;nXf++) {
+    for (nXf=0;nXf<sCount;nXf++) {
         mgXpr = mgXpr.replace(/\(Cv\[8706\]\/Cv\[8706\]Cv\[(\d+)\]\)/,"idr(Cv[$1])");
         mgXpr = mgXpr.replace(/\(Cv\[8706\]Cv\[(\d+)\]\/Cv\[8706\]Cv\[(\d+)\]\)/,"psd(Cv[$1],Cv[$2])");
         //nth derivative
@@ -1798,7 +1797,7 @@ function texImport(mgXpr) { //convert LaTeX to MG format
         mgXpr = mgXpr.replace(/\(Cv\[8706\]\^\d+Cv\[(\d+)\]\/Cv\[8706\]Cv\[(\d+)\]\^(\d+)\)/,"psd(Cv[$1],Cv[$2],$3)");
     }
     sCount = strCount(mgXpr,"Cv[10100]");//convert differentials
-    for (var nXf=0;nXf<sCount;nXf++) {
+    for (nXf=0;nXf<sCount;nXf++) {
         mgXpr = mgXpr.replace(/\{Cv\[10100\]\}/,"Cv[10100]").replace(/Cv\[10100\]Cv\[(\d+)\]/,"Cv[8748]Cv[$1]");
     }
     mgXpr = mgXpr.replace(/Cv\[10101\]/g,"Cv[8]").replace(/Cv\[10105\]/g,"Cv[46]").replace(/Cv\[215\]/g,"*"); //special variables
