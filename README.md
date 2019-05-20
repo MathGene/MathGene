@@ -306,7 +306,7 @@ for both output rendering and computations. Internally LaTeX is translated in th
 'Func' format is an internal representation that can be executed directly via the JavaScript 'exec' command. 
 Each mathematics operation is represented by a recursive JavaScript function. The following examples show how MG format translates into Func format.
 
-2+3/4-10 > cSub(cAdd(2,cDiv(3,4)),10)
+	2+3/4-10 > cSub(cAdd(2,cDiv(3,4)),10)
 
 The expression '2+3/4-10' has been translated into a functional expression that encodes the standard execution priority conventions. In this case the '3/4' operation is the first to be executed so it is the 'inside' function which will be executed first according to standard JavaScript function execution. 
 
