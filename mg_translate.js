@@ -1634,7 +1634,7 @@ function texImport(mgXpr) { //convert LaTeX to MG format
     var ulFuncs  =  ["itg(","sum(","prd(","cap(","cup("];
     var lBrackets = ["{","[","|"];
     var rBrackets = ["}","]","|"];
-    var symTemp = "",tTemp = "",tFunc = 0,nXf = 0,nXs = 0,nXi = 0;
+    var symTemp = "",tTemp = "",tFunc = 0,nXf = 0,nXs = 0,nXi = 0,parmU = {},parmL = {},limitL = {},limitU = {},limitX = {},operand = {};
     if (mgXpr == "NaN" || mgXpr == "undefined") {return "undefined"}
     mgXpr += " ";
     mgXpr = mgXpr.replace(/\\big/g,"\\");//fix big
@@ -1670,14 +1670,14 @@ function texImport(mgXpr) { //convert LaTeX to MG format
     }
     sCount = strCount(mgXpr,"\\sqrt[");//convert sqrt_n
     for (nXf=0;nXf<sCount;nXf++) {
-        var parmU = parseBrackets(mgXpr,mgXpr.indexOf("\\sqrt[")+6);
-        var parmL = parseBrackets(mgXpr,parmU.end+2);
+        parmU = parseBrackets(mgXpr,mgXpr.indexOf("\\sqrt[")+6);
+        parmL = parseBrackets(mgXpr,parmU.end+2);
         mgXpr = mgXpr.substr(0,mgXpr.indexOf("\\sqrt["))+" nrt("+parmU.inside+","+parmL.inside+") "+mgXpr.substr(parmL.end+1,mgXpr.length);
     }
     sCount = strCount(mgXpr,"\\log_");//convert log_n
     for (nXf=0;nXf<sCount;nXf++) {
-        var parmU = parseBrackets(mgXpr,mgXpr.indexOf("\\log_")+5);
-        var parmL = parseBrackets(mgXpr,parmU.end+1);
+        parmU = parseBrackets(mgXpr,mgXpr.indexOf("\\log_")+5);
+        parmL = parseBrackets(mgXpr,parmU.end+1);
         mgXpr = mgXpr.substr(0,mgXpr.indexOf("\\log_"))+" lgn("+parmU.inside+","+parmL.inside+") "+mgXpr.substr(parmL.end+1,mgXpr.length);
     }
     for (tFunc in funcMap) {//convert functions
@@ -1687,22 +1687,22 @@ function texImport(mgXpr) { //convert LaTeX to MG format
             for (nXi=1;nXi<symTemp.length;nXi++) {if (tDelimiter.indexOf(symTemp.charAt(nXi)) > -1){break}}
             if (symTemp.charAt(nXi) == "^") {//convert inverse fn^-1
                 if (symTemp.substr(nXi,5) =="^{-1}") {
-                    var symTemp = symTemp.substr(1,nXi-1);
+                    symTemp = symTemp.substr(1,nXi-1);
                     if (funcselect(tFunc,"texfunc") == "\\"+symTemp && funcselect(tFunc,"trig")) {
-                        var operand = parseBrackets(mgXpr,mgXpr.indexOf(funcselect(tFunc,"texfunc"))+funcselect(tFunc,"texfunc").length+5);
+                        operand = parseBrackets(mgXpr,mgXpr.indexOf(funcselect(tFunc,"texfunc"))+funcselect(tFunc,"texfunc").length+5);
                         mgXpr = mgXpr.substr(0,mgXpr.indexOf(funcselect(tFunc,"texfunc")))+" "+funcselect(tFunc,"invfunc")+"("+operand.inside+")"+mgXpr.substr(operand.end,mgXpr.length);
                     }
                 }
                 else {//convert fn powers
                     var superscript = parseBrackets(mgXpr,mgXpr.indexOf(funcselect(tFunc,"texfunc"))+funcselect(tFunc,"texfunc").length+1);
-                    var operand = parseBrackets(mgXpr,superscript.end+1);
+                    operand = parseBrackets(mgXpr,superscript.end+1);
                     mgXpr = mgXpr.substr(0,mgXpr.indexOf(funcselect(tFunc,"texfunc")))+" "+tFunc+"("+operand.inside+")^("+superscript.inside+")"+mgXpr.substr(operand.end+1,mgXpr.length);
                 }
             }
             else {//convert all other fn
                 symTemp = symTemp.substr(1,nXi-1);
                 if (funcselect(tFunc,"texfunc") == "\\"+symTemp) {
-                    var operand = parseBrackets(mgXpr,mgXpr.indexOf(funcselect(tFunc,"texfunc"))+funcselect(tFunc,"texfunc").length);
+                    operand = parseBrackets(mgXpr,mgXpr.indexOf(funcselect(tFunc,"texfunc"))+funcselect(tFunc,"texfunc").length);
                     mgXpr = mgXpr.substr(0,mgXpr.indexOf(funcselect(tFunc,"texfunc")))+" "+tFunc+"("+operand.inside+")"+mgXpr.substr(operand.end+1,mgXpr.length);
                 }
             }
@@ -1711,16 +1711,16 @@ function texImport(mgXpr) { //convert LaTeX to MG format
     for (var nXt in ulSymbols) {//convert u/l functions
         sCount = strCount(mgXpr,ulSymbols[nXt]+"_");
         for (nXf=0;nXf<sCount;nXf++) {
-            var limitL= parseBrackets(mgXpr,mgXpr.indexOf(ulSymbols[nXt]+"_")+ulSymbols[nXt].length+1);
-            var limitU = parseBrackets(mgXpr,limitL.end+1);
+            limitL = parseBrackets(mgXpr,mgXpr.indexOf(ulSymbols[nXt]+"_")+ulSymbols[nXt].length+1);
+            limitU = parseBrackets(mgXpr,limitL.end+1);
             limitL.inside = limitL.inside.replace("=","Cv[61]");
             if (mgXpr.charAt(limitL.end+1) == "^") {mgXpr = mgXpr.substr(0,mgXpr.indexOf(ulSymbols[nXt]+"_"))+ulFuncs[nXt]+limitU.inside+","+limitL.inside+") "+mgXpr.substr(limitU.end+1,mgXpr.length)}
             else {mgXpr = mgXpr.substr(0,mgXpr.indexOf(ulSymbols[nXt]+"_"))+ulFuncs[nXt]+","+limitL.inside+") "+mgXpr.substr(limitL.end+1,mgXpr.length)}
         }
         sCount = strCount(mgXpr,ulSymbols[nXt]+"^");
         for (nXf=0;nXf<sCount;nXf++) {
-            var limitU= parseBrackets(mgXpr,mgXpr.indexOf(ulSymbols[nXt]+"^")+ulSymbols[nXt].length+1);
-            var limitL = parseBrackets(mgXpr,limitU.end+1);
+            limitU= parseBrackets(mgXpr,mgXpr.indexOf(ulSymbols[nXt]+"^")+ulSymbols[nXt].length+1);
+            limitL = parseBrackets(mgXpr,limitU.end+1);
             limitL.inside = limitL.inside.replace("=","Cv[61]");
             if (mgXpr.charAt(limitU.end+1) == "_") {mgXpr = mgXpr.substr(0,mgXpr.indexOf(ulSymbols[nXt]+"^"))+ulFuncs[nXt]+limitU.inside+","+limitL.inside+") "+mgXpr.substr(limitL.end+1,mgXpr.length)}
             else {mgXpr = mgXpr.substr(0,mgXpr.indexOf(ulSymbols[nXt]+"^"))+ulFuncs[nXt]+limitU.inside+",) "+mgXpr.substr(limitU.end+1,mgXpr.length)}
@@ -1729,8 +1729,8 @@ function texImport(mgXpr) { //convert LaTeX to MG format
 
     sCount = strCount(mgXpr,"\\lim_");//convert /lim
     for (nXf=0;nXf<sCount;nXf++) {
-        var limitX = parseBrackets(mgXpr,mgXpr.indexOf("\\lim_")+5);
-        var limitU = [limitX.inside,""];
+        limitX = parseBrackets(mgXpr,mgXpr.indexOf("\\lim_")+5);
+        limitU = [limitX.inside,""];
         if (limitX.inside.indexOf("\\to") > -1) {limitU = limitX.inside.split("\\to")}
         if (limitX.inside.indexOf("\\rightarrow") > -1) {limitU = limitX.inside.split("\\rightarrow")}
         mgXpr = mgXpr.substr(0,mgXpr.indexOf("\\lim_"))+" lim("+limitU[0]+","+limitU[1]+") "+mgXpr.substr(limitX.end+1,mgXpr.length)

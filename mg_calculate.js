@@ -741,7 +741,7 @@ var mgCalc = (function() {
         if (!pxpFlag && +xL < 0 && +xU != 0) {return cDivS(1,cPowS(xU,cNegS(xL)))}
         if (!pxpFlag && xTractL.func == "cNeg") {return cDivS(1,cPowS(xU,xTractL.upper))}
         if (!pxpFlag && xTractL.func == "cDiv" && +xTractL.upper < 0 && +xTractL.lower != 0) {return cDivS(1,cPowS(xU,cDivS(cNegS(xTractL.upper),xTractL.lower)))}
-        if (xU == "Cv[46]" && +xL == int(+xL) && mgConfig.Domain == "Complex") {return ((fmtResult(cPow(Cv[46],xL))))}
+        if (xU == "Cv[46]" && +xL == int(+xL) && mgConfig.Domain == "Complex") {return (fmtResult(cPow(Cv[46],xL)))}
         if (xU == "Cv[8]" && xTractL.func == "lne") {return xTractL.upper}
         if (xU == "Cv[8]" && strTest(xL,"Cv[46]") && xprIterate(xL) == "cMul(Cv[46],Cv[29])") {return -1}
         if (xTractU.func == "cMul" && nbrTest(xL)) {return "cMul(cPow("+xTractU.upper+","+xL+"),cPow("+xTractU.lower+","+xL+"))" }
