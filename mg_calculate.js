@@ -2124,21 +2124,20 @@ var mgCalc = (function() {
         nXpr = strConvert(nXpr);
         if (!ntgTest(nXpr)) {return nXpr}
         if (iIterations > 20) {return "undefined"} //break integration recursion
-        iIterations++;
         if (typeof iU != "undefined" && typeof iL != "undefined") { //definite integral
             var iTmp = ntgS(xReduce(nXpr),deeVar);
             if (ntgTest(iTmp)) {return cReduce(cSubS(lmtS(iTmp,deeVar,iU),lmtS(iTmp,deeVar,iL)))}
             return "ntp("+nXpr+","+deeVar+","+iU+","+iL+")"
         }
-        else if (xReduce(nXpr) == deeVar) {return cDivS(cPowS(deeVar,2),2)}  //integral of deeVar
-        else if (!strTest(xReduce(nXpr),deeVar)) {return cMulS(nXpr,deeVar)} //integral of null expression
-        else { //indefinite integral
-            var dXpr = ntgExecute(xReduce(nXpr));
-            if (ntgCheck(dXpr)) {return cReduce(dXpr)}
-            dXpr = ntgExecute(xprExpand(nXpr));
-            if (ntgCheck(dXpr)) {return cReduce(dXpr)}
-            return "ntp("+nXpr+","+deeVar+")"
-        }
+        //indefinite integral
+        iIterations++;
+        if (xReduce(nXpr) == deeVar) {return cDivS(cPowS(deeVar,2),2)}  //integral of deeVar
+        if (!strTest(xReduce(nXpr),deeVar)) {return cMulS(nXpr,deeVar)} //integral of null expression
+        var dXpr = ntgExecute(xReduce(nXpr));
+        if (ntgCheck(dXpr)) {return cReduce(dXpr)}
+        dXpr = ntgExecute(xprExpand(nXpr));
+        if (ntgCheck(dXpr)) {return cReduce(dXpr)}
+        return "ntp("+nXpr+","+deeVar+")"
     }
 
     // Taylor series
