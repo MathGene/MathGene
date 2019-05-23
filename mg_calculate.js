@@ -2127,10 +2127,7 @@ var mgCalc = (function() {
         iIterations++;
         if (typeof iU != "undefined" && typeof iL != "undefined") { //definite integral
             var iTmp = ntgS(xReduce(nXpr),deeVar);
-            if (ntgTest(iTmp)) {
-                if (strTest(iU,"Cv[8734]") || strTest(iL,"Cv[8734]")) {return cReduce(cSubS(lmtS(iTmp,deeVar,iU),lmtS(iTmp,deeVar,iL)))} //improper integral
-                return cReduce(cSubS(cSubst(iTmp,deeVar,iU),cSubst(iTmp,deeVar,iL)))
-            }
+            if (ntgTest(iTmp)) {return cReduce(cSubS(lmtS(iTmp,deeVar,iU),lmtS(iTmp,deeVar,iL)))}
             return "ntp("+nXpr+","+deeVar+","+iU+","+iL+")"
         }
         else if (xReduce(nXpr) == deeVar) {return cDivS(cPowS(deeVar,2),2)}  //integral of deeVar
