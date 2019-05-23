@@ -1483,7 +1483,7 @@ var mgCalc = (function() {
             dExp = dExp.replace(/Cv\[8748\]Cv\[(\d+)\]/,"dif(Cv[$1])")
         }
         if (strTest(dExp,"Cv[8748]")) {return cError("Illegal differential")}
-        var sCount = dExp.split("Cv[8747]").length-1; //indefinite integral
+        sCount = dExp.split("Cv[8747]").length-1; //indefinite integral
         iConstant = 11100;
         for (nC=0;nC<sCount;nC++) {
             if (!strTest(dExp,"dif(")) {
@@ -3073,7 +3073,7 @@ var mgCalc = (function() {
         if (getType(xU) == "complex" || getType(xL) == "complex") {
             var cA = toCplx(xU);
             var cB = toCplx(xL);
-            if (Math.abs(cB.r)>=Math.abs(cB.i)) {
+            if (abs(cB.r)>=abs(cB.i)) {
                 var r=cB.i/cB.r;var s=+cB.r+r*cB.i;
                 return {r:(+cA.r+cA.i*r)/s, i:(cA.i-cA.r*r)/s}
             }
@@ -3279,8 +3279,8 @@ var mgCalc = (function() {
     }
     function cbt(xU) { //cube root
         if (getType(xU) == "complex" && +xU.i == 0) {xU = +xU.r}
-        if (Math.pow(xU,1/3) == cPow(xU,1/3)) {return cPow(xU,cDiv(1,3))}
-        return cPow(toCplx(xU),1/3)
+        if (Math.pow(xU,cDiv(1,3)) == cPow(xU,cDiv(1,3))) {return cPow(xU,cDiv(1,3))}
+        return cPow(toCplx(xU),cDiv(1,3))
     }
     function nrt(xU,xL) {return cPow(toCplx(xL),cDiv(1,toCplx(xU)))} //n'th root
     function abs(xU) {//absolute value
@@ -3370,7 +3370,7 @@ var mgCalc = (function() {
     //hyperbolic functions
     function hypRound(xU) {return cDiv(rou(cMul(xU,dRound)),dRound)}
     function snh(xU) {//sinh
-        if (getType(xU) == "complex") {return cDiv(cAdd(exp(xU),cMul(exp(cMul(xU,-1)),-1)),2)}
+        if (getType(xU) == "complex") {return cDiv(cSub(exp(xU),exp(cNeg(xU))),2)}
         if (getType(xU) == "real") {return hypRound(cDiv(cSub(exp(xU),exp(cNeg(xU))),2))}
         return "undefined"
     }
@@ -3381,7 +3381,7 @@ var mgCalc = (function() {
     }
     function tnh(xU) {//tanh
         if (getType(xU) == "complex") {return cDiv(snh(xU),csh(xU))}
-        if (getType(xU) == "real") {return hypRound(cDiv(cSub(exp(xU),exp(cNeg(xU))),cAdd(exp(xU),exp(cNeg(xU)))))}
+        if (getType(xU) == "real") {return hypRound(cDiv(snh(xU),csh(xU)))}
         return "undefined"
     }
     function sch(xU) {//sech
@@ -3396,7 +3396,7 @@ var mgCalc = (function() {
     }
     function cth(xU) {//coth
         if (getType(xU) == "complex") {return cDiv(1,tnh(xU))}
-        if (getType(xU) == "real") {return hypRound(cDiv(cAdd(exp(xU),exp(cNeg(xU))),cSub(exp(xU),exp(cNeg(xU)))))}
+        if (getType(xU) == "real") {return hypRound(cDiv(1,tnh(xU)))}
         return "undefined"
     }
     //inverse hyperbolic
@@ -3489,8 +3489,8 @@ var mgCalc = (function() {
         if (getType(xU) == "complex" && +xU.i == 0) {xU = +xU.r}
         if (getType(xU) == "real") {
             var fE=0;
-            if (xU>3.2) {return 1-Math.pow(3.14,cNeg(xU)*xU)}
-            else {for (var fn=0;fn<50;fn++){fE = fE+Math.pow(-1,fn)*(Math.pow(xU,2*fn+1)/(fac(fn)*(2*fn+1)))};return 1.1283796*fE};
+            if (xU>3.2) {return 1-cPow(3.14,cNeg(xU)*xU)}
+            else {for (var fn=0;fn<50;fn++){fE = fE+cPow(-1,fn)*(cPow(xU,2*fn+1)/(fac(fn)*(2*fn+1)))};return 1.1283796*fE};
         }
         return "undefined"
     }
