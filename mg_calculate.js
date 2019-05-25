@@ -2122,7 +2122,6 @@ var mgCalc = (function() {
         function ntgExecute(xIn) {return eval(strConvert(xIn).replace(/([a-z])\(/,"$1I(").replace(/([a-z])\(/g,"$1S(").replace(/(Cv\[\d+\])/g,"'$1'").replace(/(Pv\[\d+\])/g,"'$1'").replace(/(Sv\[\d+\])/g,"'$1'"))}
         //
         nXpr = strConvert(nXpr);
-        if (!ntgTest(nXpr)) {return nXpr}
         if (iIterations > 20) {return "undefined"} //break integration recursion
         if (typeof iU != "undefined" && typeof iL != "undefined") { //definite integral
             var iTmp = ntgS(xReduce(nXpr),deeVar);
@@ -3449,8 +3448,8 @@ var mgCalc = (function() {
         }
         if (getType(xU) == "real") {
             var z=1;
-            if ((xU>22)||(xU != rou(xU))) {z = sqt(Cv[30]/xU)*cPow(xU/Cv[8]*sqt(xU*snh(1/xU)+1/(810*cPow(xU,6))),xU)}
-            else {for (var g=1;g<=xU-1;g++) {z=z*g}}
+            if ((xU>22)||(xU != rou(xU))) {z = cMul(sqt(cDiv(Cv[30],xU)),cPow(cMul(cDiv(xU,Cv[8]),sqt(cAdd(cMul(xU,snh(cDiv(1,xU))),cDiv(1,(810*cPow(xU,6)))))),xU))}
+            else {for (var g=1;g<=xU-1;g++) {z=cMul(z,g)}}
             return z
         }
         return "undefined"
