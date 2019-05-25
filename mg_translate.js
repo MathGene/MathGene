@@ -54,7 +54,7 @@ var mgConfig =
     htmlFont:   "Times,Serif", //default HTML font-family
 	calcLogLevel: 0         //calculation logger level
 }
-var calcLog = {}; //calculation log
+var calcLog = []; //calculation log
 var Cv = new Array(11000); //symbol array
 var Cs = new Array(11000); //symbol rendering
 var Cd = new Array(50); //constant description

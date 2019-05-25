@@ -32,51 +32,51 @@ if (typeof module ==  "object") {
 
 //external callable functions
 function mgNumeric(expression) { //calculate numerical
-    calcLog = {};
+    calcLog = [];
     return mgOutput(mgCalc.Numeric(texImport(expression)));
 }
 function mgCalculate(expression) { //calculate numerical (deprecated)
-    calcLog = {};
+    calcLog = [];
     return mgOutput(mgCalc.Numeric(texImport(expression)));
 }
 function mgSolve(equation,variable) { //solve equation for variable
-    calcLog = {};
+    calcLog = [];
     return mgOutput(mgExport(mgCalc.Solve(texImport(equation),texImport(variable))));
 }
 function mgSimplify(expression) { //simplify or reduce expression and evaluate all calculus
-    calcLog = {};
+    calcLog = [];
     return mgOutput(mgExport(mgCalc.Simplify(texImport(expression))))
 }
 function mgSubstitute(expression,substTarget,substSource) { //substitute target with source within expression
-    calcLog = {};
+    calcLog = [];
     return mgOutput(mgCalc.Substitute(texImport(expression),texImport(substTarget),texImport(substSource)));
 }
 function mgFactor(expression) { //factor expression
-    calcLog = {};
+    calcLog = [];
     return mgOutput(mgExport(mgCalc.Factor(texImport(expression))));
 }
 function mgExpand(expression) { //expand expression
-    calcLog = {};
+    calcLog = [];
     return mgOutput(mgExport(mgCalc.Expand(texImport(expression))));
 }
 function mgTrigToExp(expression) { //convert trig functions to exponential form
-    calcLog = {};
+    calcLog = [];
     return mgOutput(mgExport(mgCalc.TrigToExp(texImport(expression))));
 }
 function mgExpToTrig(expression) { //convert exponential form to trig
-    calcLog = {};
+    calcLog = [];
     return mgOutput(mgExport(mgCalc.ExpToTrig(texImport(expression))));
 }
 function mgRange(expression) { //find range of expression
-    calcLog = {};
+    calcLog = [];
     return mgOutput(mgCalc.Range(texImport(expression)));
 }
 function mgDomain(expression) { //find domain of expression
-    calcLog = {};
+    calcLog = [];
     return mgOutput(mgCalc.Domain(texImport(expression)));
 }
 function mgSeries(expression,variable,center,order) { //find Taylor Series of expression
-    calcLog = {};
+    calcLog = [];
     return mgOutput(mgExport(mgCalc.Series(texImport(expression),texImport(variable),center,order)));
 }
 //internal functions-objects
