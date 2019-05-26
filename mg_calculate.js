@@ -223,6 +223,7 @@ var mgCalc = (function() {
         if (sXtract.func == "cLeq" && cRet.ineqSwap < 0) {sReturn = cGeqS(cRet.rExpr,xReduce(cRet.lExpr))}
         if (!sReturn) {return "undefined"}
         if (strTest(sReturn,"Cv[9998]")) {return "Cv[9998]"}
+        if (mgConfig.calcLogLevel > 0) {calcLog.push({xprSolve:{input:xSol,output:sReturn,variable:cSol}})}
         return sReturn
     }
     function relExtract(fExt) { //extract relational operators in FUNC format, returns func,upper,lower
@@ -344,7 +345,11 @@ var mgCalc = (function() {
         if (xIter.search(/,,/) > -1 || xIter.search(/,\)/) > -1 || xIter.search(/\(,/) > -1 || xIter.search(/\(\)/) > -1) {return cError("Missing operand(s)")}
         return strConvert(eval(xIter.replace(/([a-z])\(/g,"$1S(").replace(/(Cv\[\d+\])/g,"'$1'").replace(/(Pv\[\d+\])/g,"'$1'").replace(/(Sv\[\d+\])/g,"'$1'")));
     }
-    function cReduce(cRdce) {return iReduce(xReduce(cRdce))} //complete expression reduction
+    function cReduce(cRdce) {
+		var sReturn = iReduce(xReduce(cRdce));
+		if (mgConfig.calcLogLevel > 0) {calcLog.push({cReduce:{input:cRdce,output:sReturn}})}
+		return sReturn
+	} //complete expression reduction
     function pxpExecute(xIn) {Pv = [];return xprIterate(xprIterate(xIn.replace(/cMul\(/g,"vMul(").replace(/cDiv\(/g,"vDiv(").replace(/cNeg\(/g,"vNeg(")).replace(/Pv\[(\d+)\]/g,"pxp($1)"))}
     function smxExecute(xIn) {Sv = [];return xprIterate(xprIterate(xIn.replace(/cAdd\(/g,"vAdd(").replace(/cSub\(/g,"vSub(")).replace(/Sv\[(\d+)\]/g,"smx($1)"))}
     function xReduce(xRdce) { //basic expression reduction
@@ -2129,6 +2134,7 @@ var mgCalc = (function() {
             return "ntp("+nXpr+","+deeVar+","+iU+","+iL+")"
         }
         //indefinite integral
+		if (mgConfig.calcLogLevel > 0) {calcLog.push({ntgS:{input:nXpr,variable:deeVar,recursion:iIterations}})}
         iIterations++;
         if (xReduce(nXpr) == deeVar) {return cDivS(cPowS(deeVar,2),2)}  //integral of deeVar
         if (!strTest(xReduce(nXpr),deeVar)) {return cMulS(nXpr,deeVar)} //integral of null expression
