@@ -346,10 +346,10 @@ var mgCalc = (function() {
         return strConvert(eval(xIter.replace(/([a-z])\(/g,"$1S(").replace(/(Cv\[\d+\])/g,"'$1'").replace(/(Pv\[\d+\])/g,"'$1'").replace(/(Sv\[\d+\])/g,"'$1'")));
     }
     function cReduce(cRdce) {
-		var sReturn = iReduce(xReduce(cRdce));
-		if (mgConfig.calcLogLevel > 0) {calcLog.push({cReduce:{input:cRdce,output:sReturn}})}
-		return sReturn
-	} //complete expression reduction
+        var sReturn = iReduce(xReduce(cRdce));
+        if (mgConfig.calcLogLevel > 0) {calcLog.push({cReduce:{input:cRdce,output:sReturn}})}
+        return sReturn
+    } //complete expression reduction
     function pxpExecute(xIn) {Pv = [];return xprIterate(xprIterate(xIn.replace(/cMul\(/g,"vMul(").replace(/cDiv\(/g,"vDiv(").replace(/cNeg\(/g,"vNeg(")).replace(/Pv\[(\d+)\]/g,"pxp($1)"))}
     function smxExecute(xIn) {Sv = [];return xprIterate(xprIterate(xIn.replace(/cAdd\(/g,"vAdd(").replace(/cSub\(/g,"vSub(")).replace(/Sv\[(\d+)\]/g,"smx($1)"))}
     function xReduce(xRdce) { //basic expression reduction
@@ -993,8 +993,7 @@ var mgCalc = (function() {
     function cSubS(xU,xL) { //subtract xU-xL
         var xTractU = opExtract(xU);
         var xTractL = opExtract(xL);
-        var xTractT = "";
-        var xTractB = "";
+        var xTractT = "",xTractB = "";
         if (xTractU.func == "mat" && xTractL.func == "mat") {return cAddS(xU,cMulS(xL,-1))} //matrix subtract
         if (xTractL.func == "cAdd") {xL = "("+xL+")"}
         if (xU == "Cv[8734]" && xL == "Cv[8734]") {return "Cv[8734]"}
@@ -1522,8 +1521,7 @@ var mgCalc = (function() {
         }
         sCount = dExp.split("(").length-1; //derivatives,limits,summation
         for (nC=0;nC<sCount;nC++) {
-            var rIndex = -1;
-            var rFunc = -1;
+            var rIndex = -1,rFunc = -1;
             for (var cOp in calcOpsIn) {if (dExp.lastIndexOf(calcOpsIn[cOp]) > rIndex) {rFunc = cOp;rIndex = dExp.lastIndexOf(calcOpsIn[cOp])}}
             if (rFunc == -1) {break}
             dExp = dExp.substr(0,rIndex)+"tmp("+dExp.substr(rIndex+4);
@@ -2134,7 +2132,7 @@ var mgCalc = (function() {
             return "ntp("+nXpr+","+deeVar+","+iU+","+iL+")"
         }
         //indefinite integral
-		if (mgConfig.calcLogLevel > 0) {calcLog.push({ntgS:{input:nXpr,variable:deeVar,recursion:iIterations}})}
+        if (mgConfig.calcLogLevel > 0) {calcLog.push({ntgS:{input:nXpr,variable:deeVar,recursion:iIterations}})}
         iIterations++;
         if (xReduce(nXpr) == deeVar) {return cDivS(cPowS(deeVar,2),2)}  //integral of deeVar
         if (!strTest(xReduce(nXpr),deeVar)) {return cMulS(nXpr,deeVar)} //integral of null expression
@@ -2392,6 +2390,7 @@ var mgCalc = (function() {
         function matL() {return "mat(" + Array.prototype.slice.call(arguments) + ")"}
         //
         xLim = strConvert(xLim);lXpr = strConvert(lXpr);
+        var iXpr = lXpr;
         if (lXpr == lVar) {return xLim}
         if (!strTest(lXpr,lVar)) {return lXpr}
         limitFlag = true;
@@ -2399,6 +2398,7 @@ var mgCalc = (function() {
         lXpr = eval(strConvert(lXpr).replace(/([a-z])\(/,"$1L(").replace(/([a-z])\(/g,"$1S(").replace(/(Cv\[\d+\])/g,"'$1'").replace(/(Pv\[\d+\])/g,"'$1'").replace(/(Sv\[\d+\])/g,"'$1'"))
         lXpr = xReduce(cSubst(lXpr,lVar,xLim));
         limitFlag = false;
+        if (mgConfig.calcLogLevel > 0) {calcLog.push({lmtS:{input:iXpr,variable:lVar,output:lXpr}})}
         return lXpr
     }
 
@@ -2921,23 +2921,22 @@ var mgCalc = (function() {
 
     //Numerical Math Functions
     function fmtResult(xIn) { //format numerical output
+        var cIn = toCplx(xIn),cT = 7,tCmpx = "";;
         if (getType(xIn) == "real" || getType(xIn) == "complex") {
-            var cIn = toCplx(xIn);
             if (cIn.i != 0 && mgConfig.Domain == "Real") {return "undefined"}
-            if (mgConfig.dPrecision <= 6) {var cT = mgConfig.dPrecision} else {var cT = 7}
+            if (mgConfig.dPrecision <= 6) {cT = mgConfig.dPrecision}
             if (mgConfig.cplxFmt == "Polar") {
                 if (cIn.i == 0) {return roundDecTo(cIn.r)}
-                else {return cFunc(roundDecTo(abs(cIn),cT)+"~"+roundDecTo(arg(cMul(cIn,mgConfig.trigBase))/mgConfig.trigBase,cT))}
+                else {return cFunc(roundDecTo(abs(cIn),cT)+"~"+roundDecTo(cDiv(arg(cMul(cIn,mgConfig.trigBase)),mgConfig.trigBase),cT))}
             }
             else {
                 if (cIn.r == "NaN" || cIn.i == "NaN") {return "undefined"}
                 if (cIn.r == "Infinity" || cIn.i == "Infinity") {return "Cv[8734]"}
                 if (cIn.r == "-Infinity" || cIn.i == "-Infinity") {return "-Cv[8734]"}
-                if (Math.abs(cIn.i*1e6) < Math.abs(cIn.r)) {cIn.i = 0}
-                if (Math.abs(cIn.r*1e6) < Math.abs(cIn.i)) {cIn.r = 0}
+                if (abs(cIn.i*1e6) < abs(cIn.r)) {cIn.i = 0}
+                if (abs(cIn.r*1e6) < abs(cIn.i)) {cIn.r = 0}
                 if (+cIn.i == 0) {return roundDecTo(cIn.r)}
                 if (+cIn.i == 1 && +cIn.r == 0) {return "Cv[46]"}
-                var tCmpx = "";
                 if (+cIn.r == 0) {tCmpx = roundDecTo(cIn.i,cT)+"Cv[46]"}
                 else {tCmpx = roundDecTo(cIn.r,cT)+"+"+roundDecTo(cIn.i,cT)+"Cv[46]"}
                 return cFunc(tCmpx.replace(/\+\-/g,"-").replace(/\-1Cv\[46\]/g,"-Cv[46]").replace(/\+1Cv\[46\]/g,"+Cv[46]"))
@@ -2961,13 +2960,12 @@ var mgCalc = (function() {
     function roundDecTo(xD,xT) { //round decimal to xT digits
         function expNotation(xN) { //format number in N.NNe+-x
             xN = strConvert(xN);
-            var sgn = "";
-            var tmp = 0;
+            var sgn = "",tmp = 0;
             if (xN == "0") {return xN}
             for (var iSc=-323;iSc<308;iSc++) {
                 tmp = xN/Math.pow(10,iSc);
                 if (iSc >= 0) {sgn = "+"}
-                if ((Math.abs(tmp) >= 1)&&(Math.abs(tmp) < 10)) {return tmp + "e" + sgn + iSc}
+                if ((abs(tmp) >= 1)&&(abs(tmp) < 10)) {return tmp + "e" + sgn + iSc}
             }
         }
         if (typeof xT == "undefined" ) {xT = mgConfig.dPrecision}

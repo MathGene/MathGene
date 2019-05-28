@@ -294,6 +294,22 @@ translation and calculation. Internally MG format is translated in the following
 
 	MG > Func > processing > Func > output
 
+Some examples of MG format expressions are below. The advantage of this format is simplicity and familiarity.
+
+	"sqt(sin(Cv[10120])/cos(Cv[10121]))"
+	"(2Cv[10120]/3)+5"
+
+- Variables
+
+The variables in the above MG format expressions are represented as 'Cv[nnnn]'. The numeric index identifies the symbol that is associated with the variable. 
+Cv indexes are derived from the extended ASCII value using the following scheme:
+
+	Cv[97] to Cv[122] > lowercase plain a-z
+	Cv[10097] to Cv[10122] > lowercase italic a-z
+	Cv[20097] to Cv[20122] > lowercase bold a-z
+
+The same scheme is used for all other extended ASCII symbols that are relevant to math notation.
+
 - Func format
 
 'Func' format is an internal representation that can be executed directly via the JavaScript 'exec' command. 
@@ -308,7 +324,7 @@ When this expression is sent for numeric calculation, then the expression is exe
 
 	exec("cSub(cAdd(2,cDiv(3,4)),10)");
 
-The result of the above calculation will be a number that is represented as a string.
+The result of the above calculation will be a decimal number that is represented as a string.
 
 - HTML Format
 
@@ -337,16 +353,13 @@ The result of the above symbolic calculation is a the following string in Func f
 
 	"cDiv(cAdd('Cv[10097]',Cv[10099]'),'Cv[10098]')"
 
-- Variables
+This expression will be converted to the following for LaTex output:
 
-The variables in the above symbolic expression are represented as 'Cv[nnnn]'. The numeric index identifies the symbol that is associated with the variable. 
-Cv indexes are derived from the extended ASCII value using the following scheme:
+	exec("cDivL(cAddL('Cv[10097]',Cv[10099]'),'Cv[10098]')")
+	
+The output expression in LaTeX will be the following:
 
-	Cv[97] to Cv[122] > lowercase plain a-z
-	Cv[10097] to Cv[10122] > lowercase italic a-z
-	Cv[20097] to Cv[20122] > lowercase bold a-z
-
-The same scheme is used for all other extended ASCII symbols that are relevant to math notation.
+	"\frac{a+c}{b}"
 
 Most translation and computation actions in MathGene use some variant of the above algorithms to provide a consistent method of handling complex 
 recursive math processing.
