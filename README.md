@@ -299,9 +299,11 @@ Some examples of MG format expressions are below. The advantage of this format i
 	"sqt(sin(Cv[10120])/cos(Cv[10121]))"
 	"(2Cv[10120]/3)+5"
 
+In MD format, all functions are represented in a three-character form such as sin(), cos(), int(), etc. Standard operators +-/*^() are used for arithmetic operations.
+	
 - Variables
 
-The variables in the above MG format expressions are represented as 'Cv[nnnn]'. The numeric index identifies the symbol that is associated with the variable. 
+The variables in the above MG format expressions are represented as 'Cv[nnnn]'. The numeric index nnnn identifies the symbol that is associated with the variable. 
 Cv indexes are derived from the extended ASCII value using the following scheme:
 
 	Cv[97] to Cv[122] > lowercase plain a-z
@@ -318,7 +320,7 @@ Each mathematics operation is represented by a recursive JavaScript function. Th
 	2+3/4-10 > cSub(cAdd(2,cDiv(3,4)),10)
 
 The expression '2+3/4-10' has been translated into a functional expression that encodes the standard execution priority conventions. 
-In this case the '3/4' operation is the first to be executed so it is the 'inside' function which will be executed first according to standard JavaScript function execution. 
+In this case the '3/4' operation is the 'inside' function which will be executed first according to standard JavaScript function execution. 
 
 When this expression is sent for numeric calculation, then the expression is executed as a string with the following Javascript statement:
 
