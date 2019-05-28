@@ -294,16 +294,19 @@ translation and calculation. Internally MG format is translated in the following
 
 	MG > Func > processing > Func > output
 
-Some examples of MG format expressions are below. The advantage of this format is simplicity and familiarity.
+'output' is produced in 'HTML', 'LaTeX' and 'MG' formats for all MathGene operations.
+
+Some examples of MG format expressions are below. The advantage of this format is realtive simplicity and familiarity.
 
 	"sqt(sin(Cv[10120])/cos(Cv[10121]))"
 	"(2Cv[10120]/3)+5"
 
 In MD format, all functions are represented in a three-character form such as sin(), cos(), int(), etc. Standard operators +-/*^() are used for arithmetic operations.
+A list of all MG functions is in the Reference document.
 	
 - Variables
 
-The variables in the above MG format expressions are represented as 'Cv[nnnn]'. The numeric index nnnn identifies the symbol that is associated with the variable. 
+Variables in the above MG format expressions are represented as 'Cv[nnnn]'. The numeric index nnnn identifies the symbol that is associated with the variable. 
 Cv indexes are derived from the extended ASCII value using the following scheme:
 
 	Cv[97] to Cv[122] > lowercase plain a-z
@@ -311,6 +314,9 @@ Cv indexes are derived from the extended ASCII value using the following scheme:
 	Cv[20097] to Cv[20122] > lowercase bold a-z
 
 The same scheme is used for all other extended ASCII symbols that are relevant to math notation.
+
+Defined constants are represented by the range Cv[0] to Cv[46]. 
+A list of all defined constants is in the Reference document.
 
 - Func format
 
@@ -355,13 +361,11 @@ The result of the above symbolic calculation is a the following string in Func f
 
 	"cDiv(cAdd('Cv[10097]',Cv[10099]'),'Cv[10098]')"
 
-This expression will be converted to the following for LaTex output:
-
-	exec("cDivL(cAddL('Cv[10097]',Cv[10099]'),'Cv[10098]')")
-	
 The output expression in LaTeX will be the following:
 
 	"\frac{a+c}{b}"
+
+MathGene supports a subset of LaTeX for computation and translation. 
 
 Most translation and computation actions in MathGene use some variant of the above algorithms to provide a consistent method of handling complex 
 recursive math processing.

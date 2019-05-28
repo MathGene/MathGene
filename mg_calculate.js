@@ -212,17 +212,17 @@ var mgCalc = (function() {
         if (!nbrTest(cRet.ineqSwap)) {cRet.ineqSwap = 0}
         var sReturn = "";
         if (sXtract.func == "cEql") {sReturn = cEqlS(cRet.rExpr,xReduce(cRet.lExpr))}
-        if (sXtract.func == "cNql") {sReturn = cNqlS(cRet.rExpr,xReduce(cRet.lExpr))}
-        if (sXtract.func == "cGth" && cRet.ineqSwap > 0) {sReturn = cGthS(cRet.rExpr,xReduce(cRet.lExpr))}
-        if (sXtract.func == "cGth" && cRet.ineqSwap < 0) {sReturn = cLthS(cRet.rExpr,xReduce(cRet.lExpr))}
-        if (sXtract.func == "cLth" && cRet.ineqSwap > 0) {sReturn = cLthS(cRet.rExpr,xReduce(cRet.lExpr))}
-        if (sXtract.func == "cLth" && cRet.ineqSwap < 0) {sReturn = cGthS(cRet.rExpr,xReduce(cRet.lExpr))}
-        if (sXtract.func == "cGeq" && cRet.ineqSwap > 0) {sReturn = cGeqS(cRet.rExpr,xReduce(cRet.lExpr))}
-        if (sXtract.func == "cGeq" && cRet.ineqSwap < 0) {sReturn = cLeqS(cRet.rExpr,xReduce(cRet.lExpr))}
-        if (sXtract.func == "cLeq" && cRet.ineqSwap > 0) {sReturn = cLeqS(cRet.rExpr,xReduce(cRet.lExpr))}
-        if (sXtract.func == "cLeq" && cRet.ineqSwap < 0) {sReturn = cGeqS(cRet.rExpr,xReduce(cRet.lExpr))}
-        if (!sReturn) {return "undefined"}
-        if (strTest(sReturn,"Cv[9998]")) {return "Cv[9998]"}
+        else if (sXtract.func == "cNql") {sReturn = cNqlS(cRet.rExpr,xReduce(cRet.lExpr))}
+        else if (sXtract.func == "cGth" && cRet.ineqSwap > 0) {sReturn = cGthS(cRet.rExpr,xReduce(cRet.lExpr))}
+        else if (sXtract.func == "cGth" && cRet.ineqSwap < 0) {sReturn = cLthS(cRet.rExpr,xReduce(cRet.lExpr))}
+        else if (sXtract.func == "cLth" && cRet.ineqSwap > 0) {sReturn = cLthS(cRet.rExpr,xReduce(cRet.lExpr))}
+        else if (sXtract.func == "cLth" && cRet.ineqSwap < 0) {sReturn = cGthS(cRet.rExpr,xReduce(cRet.lExpr))}
+        else if (sXtract.func == "cGeq" && cRet.ineqSwap > 0) {sReturn = cGeqS(cRet.rExpr,xReduce(cRet.lExpr))}
+        else if (sXtract.func == "cGeq" && cRet.ineqSwap < 0) {sReturn = cLeqS(cRet.rExpr,xReduce(cRet.lExpr))}
+        else if (sXtract.func == "cLeq" && cRet.ineqSwap > 0) {sReturn = cLeqS(cRet.rExpr,xReduce(cRet.lExpr))}
+        else if (sXtract.func == "cLeq" && cRet.ineqSwap < 0) {sReturn = cGeqS(cRet.rExpr,xReduce(cRet.lExpr))}
+        else {sReturn = "undefined"}
+        if (strTest(sReturn,"Cv[9998]")) {sReturn = "Cv[9998]"}
         if (mgConfig.calcLogLevel > 0) {calcLog.push({xprSolve:{input:xSol,output:sReturn,variable:cSol}})}
         return sReturn
     }
@@ -347,7 +347,7 @@ var mgCalc = (function() {
     }
     function cReduce(cRdce) {
         var sReturn = iReduce(xReduce(cRdce));
-        if (mgConfig.calcLogLevel > 0) {calcLog.push({cReduce:{input:cRdce,output:sReturn}})}
+        if (mgConfig.calcLogLevel > 2) {calcLog.push({cReduce:{input:cRdce,output:sReturn}})}
         return sReturn
     } //complete expression reduction
     function pxpExecute(xIn) {Pv = [];return xprIterate(xprIterate(xIn.replace(/cMul\(/g,"vMul(").replace(/cDiv\(/g,"vDiv(").replace(/cNeg\(/g,"vNeg(")).replace(/Pv\[(\d+)\]/g,"pxp($1)"))}
@@ -1637,13 +1637,16 @@ var mgCalc = (function() {
         function drvExecute(xIn) {return eval(xIn.replace(/([a-z])\(/,"$1D(").replace(/([a-z])\(/g,"$1S(").replace(/(Cv\[\d+\])/g,"'$1'").replace(/(Pv\[\d+\])/g,"'$1'").replace(/(Sv\[\d+\])/g,"'$1'"))}
         //
         if (typeof nTh == "undefined" || nTh == "undefined") {nTh = 1}
-        if (nTh == 0) {return dXpr}
         if (deeVar) {deeVarP = deeVar}
-        if (solverFlag) {return drvS("drv("+dXpr+")",deeVar,nTh-1)} //return nested derivatives for solver
-        dXpr = cReduce(dXpr);
-        if (dXpr == deeVar) {return 1}
-        if (!strTest(dXpr,deeVar)) {return 0}
-        return drvS(cReduce(drvExecute(dXpr)),deeVar,nTh-1) //recurse derivatives greater than 1st
+        var sReturn = dXpr;
+        if (!solverFlag) {dXpr = cReduce(dXpr)}
+        if (nTh == 0) {sReturn = dXpr}
+        else if (solverFlag) {sReturn = drvS("drv("+dXpr+")",deeVar,nTh-1)} //return nested derivatives for solver
+        else if (dXpr == deeVar) {sReturn = 1} //identity
+        else if (!strTest(dXpr,deeVar)) {sReturn = 0} //no derivative variable
+        else {sReturn = drvS(cReduce(drvExecute(dXpr)),deeVar,nTh-1)} //recurse derivatives greater than 1st
+        if (mgConfig.calcLogLevel > 1) {calcLog.push({drvS:{input:dXpr,output:sReturn,variable:deeVar}})}
+        return sReturn
     }
 
     //Integrals
@@ -2124,23 +2127,26 @@ var mgCalc = (function() {
         }
         function ntgExecute(xIn) {return eval(strConvert(xIn).replace(/([a-z])\(/,"$1I(").replace(/([a-z])\(/g,"$1S(").replace(/(Cv\[\d+\])/g,"'$1'").replace(/(Pv\[\d+\])/g,"'$1'").replace(/(Sv\[\d+\])/g,"'$1'"))}
         //
-        nXpr = strConvert(nXpr);
-        if (iIterations > 20) {return "undefined"} //break integration recursion
-        if (typeof iU != "undefined" && typeof iL != "undefined") { //definite integral
+        var sReturn = "ntp("+nXpr+","+deeVar+")";
+        if (iIterations > 20) {sReturn = "undefined"} //break integration recursion
+        else if (typeof iU != "undefined" && typeof iL != "undefined") { //definite integral
             var iTmp = ntgS(xReduce(nXpr),deeVar);
-            if (ntgTest(iTmp)) {return cReduce(cSubS(lmtS(iTmp,deeVar,iU),lmtS(iTmp,deeVar,iL)))}
-            return "ntp("+nXpr+","+deeVar+","+iU+","+iL+")"
+            if (ntgTest(iTmp)) {sReturn = cReduce(cSubS(lmtS(iTmp,deeVar,iU),lmtS(iTmp,deeVar,iL)))}
+            else {sReturn = "ntp("+nXpr+","+deeVar+","+iU+","+iL+")"}
         }
-        //indefinite integral
-        if (mgConfig.calcLogLevel > 0) {calcLog.push({ntgS:{input:nXpr,variable:deeVar,recursion:iIterations}})}
-        iIterations++;
-        if (xReduce(nXpr) == deeVar) {return cDivS(cPowS(deeVar,2),2)}  //integral of deeVar
-        if (!strTest(xReduce(nXpr),deeVar)) {return cMulS(nXpr,deeVar)} //integral of null expression
-        var dXpr = ntgExecute(xReduce(nXpr));
-        if (ntgCheck(dXpr)) {return cReduce(dXpr)}
-        dXpr = ntgExecute(xprExpand(nXpr));
-        if (ntgCheck(dXpr)) {return cReduce(dXpr)}
-        return "ntp("+nXpr+","+deeVar+")"
+        else if (xReduce(nXpr) == deeVar) {sReturn = cDivS(cPowS(deeVar,2),2)}  //identity
+        else if (!strTest(xReduce(nXpr),deeVar)) {sReturn = cMulS(nXpr,deeVar)} //no integration variable
+        else { //indefinite integral
+            iIterations++;
+            var dXpr = ntgExecute(xReduce(nXpr));
+            if (ntgCheck(dXpr)) {sReturn = cReduce(dXpr)}
+            else {
+                dXpr = ntgExecute(xprExpand(nXpr));
+                if (ntgCheck(dXpr)) {sReturn = cReduce(dXpr)}
+            }
+        }
+        if (mgConfig.calcLogLevel > 0) {calcLog.push({ntgS:{input:nXpr,output:sReturn,variable:deeVar,recursion:iIterations}})}
+        return sReturn
     }
 
     // Taylor series
@@ -2389,31 +2395,33 @@ var mgCalc = (function() {
         function ntpL(nXpr,deeVar,iU,iL) {return ntpS(nXpr,deeVar,iU,iL)}
         function matL() {return "mat(" + Array.prototype.slice.call(arguments) + ")"}
         //
-        xLim = strConvert(xLim);lXpr = strConvert(lXpr);
-        var iXpr = lXpr;
+        xLim = strConvert(xLim);
+        var sReturn = strConvert(lXpr);
         if (lXpr == lVar) {return xLim}
-        if (!strTest(lXpr,lVar)) {return lXpr}
+        if (!strTest(sReturn,lVar)) {return sReturn}
         limitFlag = true;
-        lXpr = xReduce(lXpr);
-        lXpr = eval(strConvert(lXpr).replace(/([a-z])\(/,"$1L(").replace(/([a-z])\(/g,"$1S(").replace(/(Cv\[\d+\])/g,"'$1'").replace(/(Pv\[\d+\])/g,"'$1'").replace(/(Sv\[\d+\])/g,"'$1'"))
-        lXpr = xReduce(cSubst(lXpr,lVar,xLim));
+        sReturn = xReduce(sReturn);
+        sReturn = eval(strConvert(sReturn).replace(/([a-z])\(/,"$1L(").replace(/([a-z])\(/g,"$1S(").replace(/(Cv\[\d+\])/g,"'$1'").replace(/(Pv\[\d+\])/g,"'$1'").replace(/(Sv\[\d+\])/g,"'$1'"))
+        sReturn = xReduce(cSubst(sReturn,lVar,xLim));
         limitFlag = false;
-        if (mgConfig.calcLogLevel > 0) {calcLog.push({lmtS:{input:iXpr,variable:lVar,output:lXpr}})}
-        return lXpr
+        if (mgConfig.calcLogLevel > 0) {calcLog.push({lmtS:{input:lXpr,variable:lVar,output:sReturn}})}
+        return sReturn
     }
 
     // Factor
     function xprFactor(cFac) {
         cFac = xReduce(cFac);
         factorFlag = true;
+        var sReturn = cFac;
         var facTemp = mdFactor(cFac);
-        if (facTemp != cFac && !strTest(facTemp, "undefined")) {factorFlag = false;return facTemp}
-        facTemp = mdFactor(asFactor(xprExpand(cFac)));
-        if (facTemp != cFac && !strTest(facTemp, "undefined")) {factorFlag = false;return facTemp}
-        facTemp = facTerms(facTerms(cFac));
-        if (facTemp != cFac && !strTest(facTemp, "undefined")) {factorFlag = false;return facTemp}
+        if (facTemp != cFac && !strTest(facTemp, "undefined")) {factorFlag = false;sReturn = facTemp}
+        else {facTemp = mdFactor(asFactor(xprExpand(cFac)))}
+        if (factorFlag == true && facTemp != cFac && !strTest(facTemp, "undefined")) {factorFlag = false;sReturn = facTemp}
+        else {facTemp = facTerms(facTerms(cFac))}
+        if (factorFlag == true && facTemp != cFac && !strTest(facTemp, "undefined")) {factorFlag = false;sReturn = facTemp}
         factorFlag = false;
-        return cFac
+        if (mgConfig.calcLogLevel > 0) {calcLog.push({xprFactor:{input:cFac,output:sReturn}})}
+        return sReturn
     }
     function pFactor(xFac) { //factor polynomials
         function fAddMul(D2,D1,D0) {
@@ -2809,17 +2817,23 @@ var mgCalc = (function() {
         function difM(xU) {return "undefined"}
         //
         sXpr = strConvert(sXpr);sUpper = strConvert(sUpper);dV = strConvert(dV);sLower = strConvert(sLower);
-        if (sIterations > 30) {return "smm("+sXpr+","+sUpper+","+dV+","+sLower+")"} //break infinite loop
+        var sReturn = "smm("+xReduce(sXpr)+","+sUpper+","+dV+","+sLower+")";
         sIterations++;
-        if (strTest(sLower,"Cv[8734]")) {return "smm("+xReduce(sXpr)+","+sUpper+","+dV+","+sLower+")"}
-        if (sXpr == dV && sUpper != "Cv[8734]" && +sLower != 0) {return xReduce(cDivS(cSubS(cAddS(cAddS(sUpper,cPowS(sUpper,2)),sLower),cPowS(sLower,2)),2))}
-        if (sXpr == dV && sUpper == "Cv[8734]" && +sLower != 0) {return "Cv[8734]"}
-        if (!strTest(sXpr,dV)) {return xReduce(cMulS(sXpr,cAddS(cSubS(sUpper,sLower),1)))}
-        var sumReturn = eval(sXpr.replace(/([a-z])\(/,"$1M(").replace(/([a-z])\(/g,"$1S(").replace(/(Cv\[\d+\])/g,"'$1'").replace(/(Pv\[\d+\])/g,"'$1'").replace(/(Sv\[\d+\])/g,"'$1'"))
-        if (!strTest(sumReturn,"undefined") && !strTest(sumReturn,"NaN")) {return xReduce(sumReturn)}
-        sumReturn = sumIterate(sXpr,sUpper,dV,sLower);
-        if (!strTest(sumReturn,"undefined") && !strTest(sumReturn,"NaN")) {return xReduce(sumReturn)}
-        return "smm("+xReduce(sXpr)+","+sUpper+","+dV+","+sLower+")"
+        if (sIterations > 30) {sReturn = "smm("+sXpr+","+sUpper+","+dV+","+sLower+")"} //break infinite loop
+        else if (strTest(sLower,"Cv[8734]")) {sReturn = "smm("+xReduce(sXpr)+","+sUpper+","+dV+","+sLower+")"}
+        else if (sXpr == dV && sUpper != "Cv[8734]" && +sLower != 0) {sReturn = xReduce(cDivS(cSubS(cAddS(cAddS(sUpper,cPowS(sUpper,2)),sLower),cPowS(sLower,2)),2))}
+        else if (sXpr == dV && sUpper == "Cv[8734]" && +sLower != 0) {sReturn = "Cv[8734]"}
+        else if (!strTest(sXpr,dV)) {sReturn = xReduce(cMulS(sXpr,cAddS(cSubS(sUpper,sLower),1)))}
+        else {
+            var sumReturn = eval(sXpr.replace(/([a-z])\(/,"$1M(").replace(/([a-z])\(/g,"$1S(").replace(/(Cv\[\d+\])/g,"'$1'").replace(/(Pv\[\d+\])/g,"'$1'").replace(/(Sv\[\d+\])/g,"'$1'"))
+            if (!strTest(sumReturn,"undefined") && !strTest(sumReturn,"NaN")) {sReturn = xReduce(sumReturn)}
+            else {
+                sumReturn = sumIterate(sXpr,sUpper,dV,sLower);
+                if (!strTest(sumReturn,"undefined") && !strTest(sumReturn,"NaN")) {sReturn = xReduce(sumReturn)}
+            }
+        }
+        if (mgConfig.calcLogLevel > 0) {calcLog.push({smmS:{input:sXpr,output:sReturn}})}
+        return sReturn
     }
     //Pi Products
     function pmmS(pXpr,pUpper,dV,pLower) {
@@ -2906,17 +2920,23 @@ var mgCalc = (function() {
         function difP(xU) {return "undefined"}
         //
         pXpr = strConvert(pXpr);pUpper = strConvert(pUpper);dV = strConvert(dV);pLower = strConvert(pLower);
-        if (pIterations > 30) {return "pmm("+pXpr+","+pUpper+","+dV+","+pLower+")"} //break infinite loop
         pIterations++;
-        if (strTest(pLower,"Cv[8734]") || strTest(pUpper,"Cv[8734]")) {return "pmm("+pXpr+","+pUpper+","+dV+","+pLower+")"}
-        if (pXpr == dV && +pLower == 0) {return 0}
-        if (pXpr == dV) {return cDivS(facS(pUpper),facS(cSubS(pLower,1)))} //factorial
-        if (!strTest(pXpr,dV)) {return cPowS(xReduce(pXpr),cAddS(cNegS(pLower),cAddS(pUpper,1)))}
-        var prdReturn = eval(pXpr.replace(/([a-z])\(/,"$1P(").replace(/([a-z])\(/g,"$1S(").replace(/(Cv\[\d+\])/g,"'$1'").replace(/(Pv\[\d+\])/g,"'$1'").replace(/(Sv\[\d+\])/g,"'$1'"))
-        if (!strTest(prdReturn,"undefined") && !strTest(prdReturn,"NaN")) {return xReduce(prdReturn)}
-        prdReturn = prdIterate(pXpr,pUpper,dV,pLower);
-        if (!strTest(prdReturn,"undefined") && !strTest(prdReturn,"NaN")) {return xReduce(prdReturn)}
-        return "pmm("+xReduce(pXpr)+","+pUpper+","+dV+","+pLower+")"
+        var sReturn = "pmm("+xReduce(pXpr)+","+pUpper+","+dV+","+pLower+")";
+        if (pIterations > 30) {sReturn = "pmm("+pXpr+","+pUpper+","+dV+","+pLower+")"} //break infinite loop
+        else if (strTest(pLower,"Cv[8734]") || strTest(pUpper,"Cv[8734]")) {sReturn = "pmm("+pXpr+","+pUpper+","+dV+","+pLower+")"}
+        else if (pXpr == dV && +pLower == 0) {sReturn = 0}
+        else if (pXpr == dV) {sReturn = cDivS(facS(pUpper),facS(cSubS(pLower,1)))} //factorial
+        else if (!strTest(pXpr,dV)) {sReturn = cPowS(xReduce(pXpr),cAddS(cNegS(pLower),cAddS(pUpper,1)))}
+        else {
+            var prdReturn = eval(pXpr.replace(/([a-z])\(/,"$1P(").replace(/([a-z])\(/g,"$1S(").replace(/(Cv\[\d+\])/g,"'$1'").replace(/(Pv\[\d+\])/g,"'$1'").replace(/(Sv\[\d+\])/g,"'$1'"))
+            if (!strTest(prdReturn,"undefined") && !strTest(prdReturn,"NaN")) {sReturn = xReduce(prdReturn)}
+            else {
+                prdReturn = prdIterate(pXpr,pUpper,dV,pLower);
+                if (!strTest(prdReturn,"undefined") && !strTest(prdReturn,"NaN")) {sReturn = xReduce(prdReturn)}
+            }
+        }
+        if (mgConfig.calcLogLevel > 0) {calcLog.push({pmmS:{input:pXpr,output:sReturn}})}
+        return sReturn
     }
 
     //Numerical Math Functions
