@@ -1,0 +1,98 @@
+<html>
+<head>
+<title>MathGene Reference</title>
+<body>
+
+<p><b>MathGene Reference</b></p>
+
+<p><b>Arithmetic Operators</b></p>
+<ul>
+  <li>+  add</li>
+  <li>-  subtract/negative</li>
+  <li>*  multiply</li>
+  <li>/  divide</li>
+  <li>^  exponent</li>
+  <li>!  factorial (Lanczos approximation)</li>
+ </ul>
+
+<p><b>Relational Operators</b></p>
+<ul>
+  <li>=  equal</li>
+  <li><  </li>
+  <li>>   </li>
+  <li>    </li>
+  <li>  </li>
+  <li>  </li>
+ </ul>
+
+<p><b>Operator Precedence</b></p>
+<p>Expressions are evaluated from left to right. Math operators have a precedence value that determines which operations are performed first.</p>
+<p>Operator precedence from first to last:</p>
+<ol>
+<li>() → Operations inside parentheses</li>
+<li>x<sup>n</sup> → Exponents</li>
+<li>&minus;x → Negative numbers: &minus;4<sup>2</sup> = &minus;(4<sup>2</sup>)</li>
+<li>xN → Terms such as 2π: 2π/4<i>i</i> = (2π)/(4<i>i</i>)</li>
+<li>&#8736; → angle operator (see complex numbers)</li>
+<li>/ → Divide</li>
+<li>× → Multiply</li>
+<li>+&minus; → Add/Subtract</li>
+</ol>
+
+<p><b>Complex Numbers</b></p>
+<p>MathGene has full support for complex and imaginary numbers and their operations when in the Complex domain mode is set in mgConfig. 
+By default, complex numbers are represented in rectangular form a+b<i>i</i>, where <i>i</i> is the imaginary constant.
+Polar forms are also supported using the notation A&#8736;B where A is the magnitude and B is the angle. 
+The mgConfig object selects which form is displayed by default as a calculation result.
+Angles can be represented in Radians (default), Degrees, or Gradians which are also selected in mgConfig.
+Expressions can be entered using either rectangular or polar form and they can be mixed together.
+The result will be converted to form selected in the Settings menu. This allows easy conversions between rectangular and polar forms.
+</p>
+
+<p><b>MG Format Math Functions</b></p>
+
+<p>Included functions:</p>
+<ul>
+  <li>sin(x) - sine</li>
+  <li>cos(x) - cosine</li>
+  <li>tan(x) - tangent</li>
+  <li>sec(x) - secant</li>
+  <li>csc(x) - cosecant</li>
+  <li>cot(x) - cotangent</li>
+  <li>asn(x) - arcsine or inverse sine</li>
+  <li>acs(x) - arccosine or inverse cosine</li>
+  <li>atn(x) - arctangent or inverse tangent</li>
+  <li>asc(x) - arcsecant or inverse secant</li>
+  <li>acs(x) - arccosecant or inverse cosecant</li>
+  <li>act(x) - arccotangent or inverse cotangent</li>  
+  <li>snh(x) - hyperbolic sine</li>
+  <li>csh(x) - hyperbolic cosine</li>
+  <li>tnh(x) - hyperbolic tangent</li>
+  <li>ash(x) - hyperbolic arcsine</li>
+  <li>ach(x) - hyperbolic arccosine</li>
+  <li>ath(x) - hyperbolic arctangent</li>
+  <li>lne(x) - natural log</li>
+  <li>lgn(x,n) - log to base n</li>
+  <li>log(x) - natural log</li>
+  <li>exp(x) - ℮<sup>n</sup></li>  
+  <li>gam(x) - gamma function (Lanczos approximation)</li>
+  <li>abs(x) - absolute value</li>
+  <li>rex(x) - real component of complex number</li>
+  <li>imx(x) - imaginary component of complex number</li>
+  <li>arg(x) - complex argument or phase</li>
+  <li>sqt(x) - square root</li>
+  <li>cbt(x) - cube root</li>
+  <li>nrt(n,x) - nth root</li>
+  <li>erf(x) - error function (real numbers only)</li>
+  <li>efc(x) - complementary error function (real numbers only)</li>
+  <li>rnd(x) - randomized function</li>
+  <li>rou(x) - round to nearest integer</li>
+  <li>int(x) - floor, nearest lesser integer</li>
+  <li>cei(x) - ceiling, nearest greater integer</li>
+</ul>
+
+<p><b>MG Format Constants</b></p>
+
+
+</body>
+</html>
