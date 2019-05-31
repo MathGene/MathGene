@@ -25,6 +25,7 @@ function mgTranslate(expression,scale) { //translate between MG, HTML, and LaTex
         html:   "<span title='MathGene HTML' style='font-family:"+mgConfig.htmlFont+";font-size:"+scale+"%'>"+htmlExport(mgFmt)+"</span>",
         latex:  texExport(mgFmt),
         mg:     mgFmt,
+        log:    calcLog,
         }
 }
 function mgOutput(expression,scale) { //output MG, HTML, and LaTex from MG without LaTex import
@@ -33,6 +34,7 @@ function mgOutput(expression,scale) { //output MG, HTML, and LaTex from MG witho
         html:   "<span title='MathGene HTML' style='font-family:"+mgConfig.htmlFont+";font-size:"+scale+"%'>"+htmlExport(expression)+"</span>",
         latex:  texExport(expression),
         mg:     expression,
+        log:    calcLog,
         }
 }
 
@@ -50,8 +52,9 @@ var mgConfig =
     Domain:     "Complex",  //domain Complex or Real
     editMode:   false,      //edit mode formatting
     htmlFont:   "Times,Serif", //default HTML font-family
+	calcLogLevel: 0         //calculation logger level
 }
-
+var calcLog = []; //calculation log
 var Cv = new Array(11000); //symbol array
 var Cs = new Array(11000); //symbol rendering
 var Cd = new Array(50); //constant description
@@ -1072,10 +1075,9 @@ function mgExport(xFn) { //convert from FUNC format to MG format
 function cFunc(cXpr) { //convert from MG format to FUNC format: a+bc/d -> cAdd(a,cDiv(cMul(b,c),d)))
     function cParse(xInp,xOp,xFunc) {//parse operators
         var zDelim = ["^","-","#","*","/","+",",","~","@","=","<",">",String.fromCharCode(8800),String.fromCharCode(8804),String.fromCharCode(8805),String.fromCharCode(8226)];
-        var ztmp = "";
-        var lPar = 0,rPar = 0;
-        if (xOp == "^") {var bSym = xInp.lastIndexOf(xOp)+1}
-        else  {var bSym = xInp.indexOf(xOp)+1;}
+        var ztmp = "",bSym = "",lPar = 0,rPar = 0;
+        if (xOp == "^") {bSym = xInp.lastIndexOf(xOp)+1}
+        else  {bSym = xInp.indexOf(xOp)+1;}
         var aSym = bSym-2;
         var lSym = xInp.length;
         for (var iCp=bSym;iCp<=lSym;iCp++) {

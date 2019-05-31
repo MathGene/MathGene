@@ -278,13 +278,13 @@ Pipeline tests run against multiple versions of NodeJS and include coverage repo
 
 MathGene utilizes four distinct representational math formats to perform computations and translations:
 
-	'MG' format - This is the default input format that is similar to standard computer math. example: sin(3/2)*10^2
+'MG' format - The default input format that is similar to standard computer math. example: sin(3/2)*10^2
 
-	'LaTeX' - this is the standardized rendering format for math publishing. example: \\frac{x}{y} \\geq z^{2}
+'LaTeX' - A standardized markup language for math publishing. example: \\frac{x}{y} \\geq z^{2}
 
-	'Func' format - this is the internal processing format for both calculation and rendering. example: cMul(sin(cDiv3,2),cPow(10,2))
-	
-	'HTML' format - this is an output format to send into a browser to render an expression in conventional math format
+'Func' format - The internal processing format for both calculation and rendering. example: cMul(sin(cDiv3,2),cPow(10,2))
+
+'HTML' format - Math as generated into HTML for rendering in browsers
 
 - MG Format
 
@@ -294,12 +294,29 @@ translation and calculation. Internally MG format is translated in the following
 
 	MG > Func > processing > Func > output
 
-- LaTeX format
+'output' is produced in 'HTML', 'LaTeX' and 'MG' formats for all MathGene operations.
 
-LaTeX is a standardized represetational format for use in mathematics publishing. MathGene supports a subset of LaTeX which can be used 
-for both output rendering and computations. Internally LaTeX is translated in the following sequence:
+Some examples of MG format expressions are below. The advantage of this format is realtive simplicity and familiarity.
 
-	LaTeX > MG > Func > processing > Func > output
+	"sqt(sin(Cv[10120])/cos(Cv[10121]))"
+	"(2Cv[10120]/3)+5"
+
+In MD format, all functions are represented in a three-character form such as sin(), cos(), int(), etc. Standard operators +-/*^() are used for arithmetic operations.
+A list of all MG functions is in the Reference document.
+	
+- Variables
+
+Variables in the above MG format expressions are represented as 'Cv[nnnn]'. The numeric index nnnn identifies the symbol that is associated with the variable. 
+Cv indexes are derived from the extended ASCII value using the following scheme:
+
+	Cv[97] to Cv[122] > lowercase plain a-z
+	Cv[10097] to Cv[10122] > lowercase italic a-z
+	Cv[20097] to Cv[20122] > lowercase bold a-z
+
+The same scheme is used for all other extended ASCII symbols that are relevant to math notation.
+
+Defined constants are represented by the range Cv[0] to Cv[46]. 
+A list of all defined constants is in the Reference document.
 
 - Func format
 
@@ -308,13 +325,14 @@ Each mathematics operation is represented by a recursive JavaScript function. Th
 
 	2+3/4-10 > cSub(cAdd(2,cDiv(3,4)),10)
 
-The expression '2+3/4-10' has been translated into a functional expression that encodes the standard execution priority conventions. In this case the '3/4' operation is the first to be executed so it is the 'inside' function which will be executed first according to standard JavaScript function execution. 
+The expression '2+3/4-10' has been translated into a functional expression that encodes the standard execution priority conventions. 
+In this case the '3/4' operation is the 'inside' function which will be executed first according to standard JavaScript function execution. 
 
 When this expression is sent for numeric calculation, then the expression is executed as a string with the following Javascript statement:
 
 	exec("cSub(cAdd(2,cDiv(3,4)),10)");
 
-The result of the above calculation will be a number that is represnted as a string.
+The result of the above calculation will be a decimal number that is represented as a string.
 
 - HTML Format
 
@@ -324,31 +342,30 @@ If the above expression is sent for HTML output processing then the string is co
 
 The output of the above expression will be a string containg HTML code that will render the expression in standard math noation on a web browser.
 
-Similar processing is used for symbolic simplification. In this example a latex symbolic math expression is converted to func format for computation:
+The conversion sequence for HTML is:
 
-	'\frac{a}{b}+\frac{c}{b}' -> exec("cAddS(cDivS('Cv[10097]',Cv[10098]'),cDivS('Cv[10099','Cv[10098]'))");
+	MG > Func > processing > Func > HTML
+
+- LaTeX format
+
+LaTeX is a standardized representational format for use in mathematics publishing. MathGene supports a subset of LaTeX which can be used 
+for both output rendering and computations. Internally LaTeX is translated in the following sequence:
+
+	LaTeX > MG > Func > processing > Func > output
+	
+In this example a latex symbolic math expression is converted to func format for computation:
+
+	"\frac{a}{b}+\frac{c}{b}" -> exec("cAddS(cDivS('Cv[10097]',Cv[10098]'),cDivS('Cv[10099','Cv[10098]'))");
 
 The result of the above symbolic calculation is a the following string in Func format:
 
-	"cDiv(cAdd('Cv[10097]',Cv[10099]'),'Cv[10098')"
+	"cDiv(cAdd('Cv[10097]',Cv[10099]'),'Cv[10098]')"
 
-If this expression is to be output in LaTeX, then the expression is processed in the following sequence:
+The output expression in LaTeX will be the following:
 
-	LaTex > MG > Func > exec(funcS) > exec(funcL) > LaTeX
+	"\frac{a+c}{b}"
 
-This will produce the output string: 
-
-	'\frac{a+c}{b}'
-
-- Variables
-
-The variables in the above symbolic expression are represented as 'Cv[xxxx]'. The numeric index identifies the symbol that is associated with the variable. Cv indexes are derived from the extended ASCII value using the following scheme:
-
-	Cv[97] to Cv[122] > lowercase plain a-z
-	Cv[10097] to Cv[10122] > lowercase italic a-z
-	Cv[20097] to Cv[20122] > lowercase bold a-z
-
-The same scheme is used for all other extended ASCII symbols that are relevant to math notation.
+MathGene supports a subset of LaTeX for computation and translation. 
 
 Most translation and computation actions in MathGene use some variant of the above algorithms to provide a consistent method of handling complex 
 recursive math processing.
