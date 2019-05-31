@@ -755,7 +755,7 @@ var mgCalc = (function() {
         if (xTractL.func == "cDiv" && xTractL.upper == 1 && xTractL.lower == 3) {return cbtS(xU)}
         if (!pxpFlag && xL == 1.5 && nbrTest(xU)) {return cMulS(xU,sqtS(xU))}
         if (!pxpFlag && nbrTest(xL) && xL != int(xL) && cMul(xL,2) == int(cMul(xL,2))) {return cPowS(xU,cDivS(cMul(xL,2),2))}
-        if (!pxpFlag && xL < 0 && xU != 0) {return cDivS(1,cPowS(xU,cNegS(xL)))}
+        if (!pxpFlag && xL < 0) {return cDivS(1,cPowS(xU,cNegS(xL)))}
         if (!pxpFlag && xTractL.func == "cNeg") {return cDivS(1,cPowS(xU,xTractL.upper))}
         if (xU == "Cv[46]" && xL == int(xL) && mgConfig.Domain == "Complex") {return (fmtResult(cPow(Cv[46],xL)))}
         if (xU == "Cv[8]" && xTractL.func == "lne") {return xTractL.upper}
@@ -1632,7 +1632,7 @@ var mgCalc = (function() {
         //
         if (typeof nTh == "undefined" || nTh == "undefined") {nTh = 1}
         if (deeVar) {deeVarP = deeVar}
-        var sReturn = dXpr;
+        var sReturn = "";
         if (!solverFlag) {dXpr = cReduce(dXpr)}
         if (nTh == 0) {sReturn = dXpr}
         else if (solverFlag) {sReturn = drvS("drv("+dXpr+")",deeVar,nTh-1)} //return nested derivatives for solver
