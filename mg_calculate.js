@@ -201,10 +201,10 @@ var mgCalc = (function() {
         if (sXtract.upper.split(cVar).length > 2) {sXtract.upper = xprFactor(sXtract.upper)}
         solverFlag = true;
         if (strTest(sXtract.lower,cVar)) {
-            cRet = xprCrawl("0",xReduce(cSubS(sXtract.upper,sXtract.lower)),cVar);
+            cRet = xprCrawl("0",cSubS(sXtract.upper,sXtract.lower),cVar);
         }
         else {
-            cRet = xprCrawl("0",xReduce(cSubS(sXtract.lower,sXtract.upper)),cVar);
+            cRet = xprCrawl("0",cSubS(sXtract.lower,sXtract.upper),cVar);
             cRet.ineqSwap = cNegS(cRet.ineqSwap);
         }
         solverFlag = false;
@@ -317,12 +317,13 @@ var mgCalc = (function() {
     function cSubst(sXpr,xI,xO) {sXpr+="";var sCount = sXpr.split(xI).length-1;for (var nXs=0;nXs<sCount;nXs++) {sXpr = sXpr.replace(xI,xO)};return sXpr} //substitution in MG format
     function nbrTest(xT) {if (+xT == +xT*1) {return true}; return false} //test for numerical string
     function nbrEven(xE) {if (cDiv(xE,2) == int(cDiv(xE,2))) {return true};return false} //test for even number
+	function toNumeric(xD) {return eval(strConvert(xD).replace(/(Cv\[\d+\])/g,"'$1'").replace(/(Pv\[\d+\])/g,"'$1'").replace(/(Sv\[\d+\])/g,"'$1'"))} //convert symbolic value to numeric
     function strConvert(xS) {return xS + ""} //convert to string
     function strTest(xTarget,xSearch) { //test if xSearch string is in xTarget
         if (typeof xTarget == "undefined") {return false}
-        if (nbrTest(xTarget) && xTarget == xSearch) {return true};
-        if (!nbrTest(xTarget) && xTarget.indexOf(xSearch) > -1) {return true};
-        return false
+        else if (xTarget == xSearch) {return true}
+        else if (!nbrTest(xTarget) && xTarget.indexOf(xSearch) > -1) {return true}
+        else {return false}
     }
     function matFunc(xA) { //matrix array to FUNC conversion
         if (typeof xA[0] == "object") {
@@ -376,7 +377,7 @@ var mgCalc = (function() {
         }
         return iRdce
     }
-    function smxS(xU) { //consolidate sum-difference terms into array Sv, convert subtrahend to negative value: 2a-b+c/d -> [[2a],[-b],[c/d]]
+    function smxS(xU) { //consolidate sum-difference terms into Sum array Sv, convert subtrahend to negative value: 2a-b+c/d -> [[2a],[-b],[c/d]]
         for (var xI in Sv) {for (var yI=xI;yI<Sv.length;yI++) { //resolve SV dupes
             if (xI != yI && Sv[xI].sort().toString() == Sv[yI].sort().toString()) {
             var rgx = new RegExp("Sv\\["+yI+"\\]","g");
@@ -399,7 +400,7 @@ var mgCalc = (function() {
         var tReturn = 0,tExtract = "";
         for (var xI in tSum) { //extract factors from tSum array
             tExtract = opExtract(tSum[xI]);
-            if      (nbrTest(tSum[xI])) {tReturn = (+tSum[xI])+(+tReturn)} //combine numerical terms into tReturn
+            if      (nbrTest(tSum[xI])) {tReturn = cAdd(tSum[xI],tReturn)} //combine numerical terms into tReturn
             else if (tExtract.func == "cMul" && nbrTest(tExtract.upper)) { //extract term factors
                 if  (strTest(sTerms.Terms,tExtract.lower)) {sTerms.Factors[sTerms.Terms.indexOf(tExtract.lower)] = cAddS(sTerms.Factors[sTerms.Terms.indexOf(tExtract.lower)],(+tExtract.upper))} //combine factors of identical terms
                 else {sTerms.Terms.push(tExtract.lower);sTerms.Factors.push(+tExtract.upper);sTerms.Divisors.push(1)} //push unique terms
@@ -462,10 +463,10 @@ var mgCalc = (function() {
         tReturn = cAddS(cAddS(fTempA,cNegS(fTempB)),tReturn);
         tReturn = strConvert(tReturn);fTempC = strConvert(fTempC);
         tReturn = xprIterate(tReturn.replace(/Sv\[(\d+)\]/g,"smx($1)"));
-        tReturn = cAddS(tReturn,xprIterate(fTempC.replace(/Sv\[(\d+)\]/g,"smx($1)")))//constants of integration
+        tReturn = cAddS(tReturn,fTempC.replace(/Sv\[(\d+)\]/g,"smx($1)"))//constants of integration
         return tReturn
     }
-    function pxpS(xU) { //consolidate product-quotient-exponent terms into array PV, convert denominator to negative exponent: 2ab/(cd) -> [[2],[a],[b],[c^-1],[d^-1]]
+    function pxpS(xU) { //consolidate product-quotient-exponent terms into Product array PV, convert denominator to negative exponent: 2ab/(cd) -> [[2],[a],[b],[c^-1],[d^-1]]
         for (var xI in Pv) {for (var yI=xI;yI<Pv.length;yI++) { //resolve PV dupes
             if (xI != yI && Pv[xI].sort().toString() == Pv[yI].sort().toString()) {
             var rgx = new RegExp("Pv\\["+yI+"\\]","g");
@@ -478,16 +479,16 @@ var mgCalc = (function() {
             tExtract = opExtract(tPrd[xI]);
             if (nbrTest(tPrd[xI])) {tReturn = cMulS(tPrd[xI],tReturn)} //combine numerical terms into tReturn
             else if  (tExtract.func == "cPow") { //collect exponents
-                if (strTest(pTerms.Terms,tExtract.upper)) {pTerms.Exp[pTerms.Terms.indexOf(tExtract.upper)] = cAddS(pTerms.Exp[pTerms.Terms.indexOf(tExtract.upper)],tExtract.lower)} //combine duplicates into exponents
+                if (strTest(pTerms.Terms,tExtract.upper)) {pTerms.Exp[pTerms.Terms.indexOf(tExtract.upper)] = cAddS(pTerms.Exp[pTerms.Terms.indexOf(tExtract.upper)],tExtract.lower)} //combine duplicates of exponent terms
                 else {pTerms.Terms.push(tExtract.upper);pTerms.Exp.push(tExtract.lower)} //push unique terms with exponents
             }
-            else if (strTest(pTerms.Terms,tPrd[xI])) {(pTerms.Exp[pTerms.Terms.indexOf(tPrd[xI])]) = cAddS(pTerms.Exp[pTerms.Terms.indexOf(tPrd[xI])],1)}
+            else if (strTest(pTerms.Terms,tPrd[xI])) {(pTerms.Exp[pTerms.Terms.indexOf(tPrd[xI])]) = cAddS(pTerms.Exp[pTerms.Terms.indexOf(tPrd[xI])],1)} //combine duplicate nonexponent terms into exponents
             else    {pTerms.Terms.push(tPrd[xI]);pTerms.Exp.push(1)} //push unique terms without exponents
         }
         if (!pxpFlag) {
             for (var xI in pTerms.Terms) { // Iterate divisors
                 for (var yI in pTerms.Terms) {
-                    if (xI != yI && +pTerms.Exp[yI] == -1 && +pTerms.Exp[xI] == 1 && cDivS(pTerms.Terms[xI],pTerms.Terms[yI]) != "cDiv("+pTerms.Terms[xI]+","+pTerms.Terms[yI]+")") {
+                    if (xI != yI && pTerms.Exp[yI] == -1 && pTerms.Exp[xI] == 1 && cDivS(pTerms.Terms[xI],pTerms.Terms[yI]) != "cDiv("+pTerms.Terms[xI]+","+pTerms.Terms[yI]+")") {
                         pTerms.Terms[yI] = cDivS(pTerms.Terms[xI],pTerms.Terms[yI]);
                         pTerms.Exp[yI] = 1;pTerms.Terms[xI] = 1;pTerms.Exp[xI] = 1;
                     }
@@ -500,25 +501,20 @@ var mgCalc = (function() {
         var fTempU = 1,fTempL = 1; //upper and lower accumulators
         for (var xI in pTerms.Terms) { //consolidate terms into accumulaters
             tExtract = opExtract(pTerms.Exp[xI]);
-            if  (nbrTest(pTerms.Terms[xI]) && pTerms.Exp[xI] == -1) {//calculate GCF on integers
+            if  (nbrTest(pTerms.Terms[xI]) && pTerms.Exp[xI] == -1) {//calculate GCF on integer divisors
                 var tGcf = cGcf(tReturn,pTerms.Terms[xI]);
                 tReturn = cDivS(tReturn,tGcf);
                 fTempL = cMulS(fTempL,cDivS(pTerms.Terms[xI],tGcf))
             }
-            else if (+pTerms.Exp[xI] == 1)  {fTempU = cMulS(fTempU,cPowS(pTerms.Terms[xI],1))}
-            else if (+pTerms.Exp[xI] > 0)   {fTempU = cMulS(fTempU,cPowS(pTerms.Terms[xI],pTerms.Exp[xI]))}
-            else if (+pTerms.Exp[xI] < 0)   {fTempL = cMulS(fTempL,cPowS(pTerms.Terms[xI],cNegS(pTerms.Exp[xI])))}
-            else if (tExtract.func == "cNeg") {fTempL = cMulS(fTempL,cPowS(pTerms.Terms[xI],tExtract.upper))}
-            else    {fTempU = cMulS(fTempU,cPowS(pTerms.Terms[xI],pTerms.Exp[xI]))}
+            else if (pTerms.Exp[xI] == 1)  {fTempU = cMulS(fTempU,cPowS(pTerms.Terms[xI],1))} //populate numerator
+            else if (pTerms.Exp[xI] > 0)   {fTempU = cMulS(fTempU,cPowS(pTerms.Terms[xI],pTerms.Exp[xI]))} //populate numerator
+            else if (pTerms.Exp[xI] < 0)   {fTempL = cMulS(fTempL,cPowS(pTerms.Terms[xI],cNegS(pTerms.Exp[xI])))} //populate divisor
+            else if (tExtract.func == "cNeg") {fTempL = cMulS(fTempL,cPowS(pTerms.Terms[xI],tExtract.upper))} //populate divisor
+            else    {fTempU = cMulS(fTempU,cPowS(pTerms.Terms[xI],pTerms.Exp[xI]))} //populate exponents
         }
-        if (+tReturn < 0 && abs(tReturn) > 1) {
-            if (expFlag) {tReturn = cNegS(xprIterate(cMulS(cMulS(cNegS(tReturn),fTempU),"cPow("+fTempL+",-1)")))}
-            else {tReturn = cNegS(xprIterate(cDivS(cMulS(cNegS(tReturn),fTempU),fTempL)))}
-        }
-        else {
-            if (expFlag) {tReturn = cMulS(cMulS(tReturn,fTempU),"cPow("+fTempL+",-1)")}
-            else {tReturn = cDivS(cMulS(tReturn,fTempU),fTempL)}
-        }
+        if      (tReturn < 0 && abs(tReturn) > 1) {tReturn = cNegS(xprIterate(cDivS(cMulS(cNegS(tReturn),fTempU),fTempL)))} //move negative from numerator to outside
+        else if (expFlag) {tReturn = cMulS(cMulS(tReturn,fTempU),"cPow("+fTempL+",-1)")}
+        else    {tReturn = cDivS(cMulS(tReturn,fTempU),fTempL)}
         tReturn = strConvert(tReturn);
         tReturn = xprIterate(tReturn.replace(/Pv\[(\d+)\]/g,"pxp($1)"));
         return tReturn
@@ -542,7 +538,7 @@ var mgCalc = (function() {
         return "Sv["+(Sv.length-1)+"]";
     }
     function vSubS(xU,xL) { //parse cSub into Sv
-        var tDiv = [], tD = 0;
+        var tDif = [], tD = 0;
         if  (SvTest(xU) && !SvTest(xL)) {
             tDif = SvPointer(xL);
             for (tD in tDif) {Sv[Sv.length-1].push(cNegS(tDif[tD]))}
@@ -2321,15 +2317,15 @@ var mgCalc = (function() {
                 lTemp = xReduce("cMul(cSub("+xU+",1),"+lVar+")");
                 if (xL == lVar && !strTest(lTemp,lVar)) {return cPowS("Cv[8]",lTemp)} //limit definitions for e^n as x>inf
                 if (xTractL.func == "cDiv" && xTractL.lower == lVar) {return 1}
-                if (strTest(xL,lVar) && xLim == "Cv[8734]" && xU > 1) {return "Cv[8734]"}
-                if (strTest(xL,lVar) && xLim == "Cv[8734]" && xU > -1 && xU < 1) {return 0}
-                if (strTest(xU,lVar) && xLim == "Cv[8734]" && xL > 0 && xL < 1) {return 0}
-                if (strTest(xU,lVar) && xLim == "Cv[8734]" && xL > 1) {return "Cv[8734]"}
-                if (strTest(xU,lVar) && xLim == "cNeg(Cv[8734])" && xL > 1 && nbrEven(xL)) {return "Cv[8734]"}
-                if (strTest(xU,lVar) && xLim == "cNeg(Cv[8734])" && xL > 1 && !nbrEven(xL)) {return "cNeg(Cv[8734])"}
-                if (strTest(xU,lVar) && xLim == "cNeg(Cv[8734])" && xL > 1) {return "cNeg(Cv[8734])"}
-                if (strTest(xL,lVar) && xLim == "cNeg(Cv[8734])" && xU > 1) {return 0}
-                if (strTest(xL,lVar) && xLim == "cNeg(Cv[8734])" && xU > -1 && xU < 1) {return "Cv[8734]"}
+                if (strTest(xL,lVar) && xLim == "Cv[8734]" && toNumeric(xU) > 1) {return "Cv[8734]"}
+                if (strTest(xL,lVar) && xLim == "Cv[8734]" && toNumeric(xU) > -1 && toNumeric(xU) < 1) {return 0}
+                if (strTest(xU,lVar) && xLim == "Cv[8734]" && toNumeric(xL) > 0 && toNumeric(xL) < 1) {return 0}
+                if (strTest(xU,lVar) && xLim == "Cv[8734]" && toNumeric(xL) > 1) {return "Cv[8734]"}
+                if (strTest(xU,lVar) && xLim == "cNeg(Cv[8734])" && toNumeric(xL) > 1 && nbrEven(toNumeric(xL))) {return "Cv[8734]"}
+                if (strTest(xU,lVar) && xLim == "cNeg(Cv[8734])" && toNumeric(xL) > 1 && !nbrEven(toNumeric(xL))) {return "cNeg(Cv[8734])"}
+                if (strTest(xU,lVar) && xLim == "cNeg(Cv[8734])" && toNumeric(xL) > 1) {return "cNeg(Cv[8734])"}
+                if (strTest(xL,lVar) && xLim == "cNeg(Cv[8734])" && toNumeric(xU) > 1) {return 0}
+                if (strTest(xL,lVar) && xLim == "cNeg(Cv[8734])" && toNumeric(xU) > -1 && toNumeric(xU) < 1) {return "Cv[8734]"}
             }
             if (xLim == 0 && xTractL.func == "cDiv" && xTractL.lower == lVar) { //limit definitions for e^n as x>0
                 if (xTractU.func == "cAdd" && xReduce("cSub("+xU+",1)") == lVar) {return cPowS("Cv[8]",xTractL.upper)}
@@ -3503,27 +3499,27 @@ var mgCalc = (function() {
         return "undefined"
     }
     function cdf(xU) { //normalized cumulative density function
-        if (getType(xU) == "complex" && +xU.i == 0) {xU = +xU.r}
+        if (getType(xU) == "complex" && xU.i == 0) {xU = +xU.r}
         if (getType(xU) == "real") {return normCDF(1,toReal(xU),0)}
         return "undefined"
     }
     function pdf(xU) { //normalized probability density function
-        if (getType(xU) == "complex" && +xU.i == 0) {xU = +xU.r}
+        if (getType(xU) == "complex" && xU.i == 0) {xU = +xU.r}
         if (getType(xU) == "real") {return normPDF(1,toReal(xU),0)}
         return "undefined"
     }
     function lcf(xU) { //normalized log cumulative density function
-        if (getType(xU) == "complex" && +xU.i == 0) {xU = +xU.r}
+        if (getType(xU) == "complex" && xU.i == 0) {xU = +xU.r}
         if (getType(xU) == "real") {return lognCDF(1,toReal(xU),0)}
         return "undefined"
     }
     function lpf(xU) { //normalized log probability density function
-        if (getType(xU) == "complex" && +xU.i == 0) {xU = +xU.r}
+        if (getType(xU) == "complex" && xU.i == 0) {xU = +xU.r}
         if (getType(xU) == "real") {return lognPDF(1,toReal(xU),0)}
         return "undefined"
     }
     function erf(xU) {//error function
-        if (getType(xU) == "complex" && +xU.i == 0) {xU = +xU.r}
+        if (getType(xU) == "complex" && xU.i == 0) {xU = +xU.r}
         if (getType(xU) == "real") {
             var fE=0;
             if (xU>3.2) {return 1-cPow(3.14,cNeg(xU)*xU)}
@@ -3532,7 +3528,7 @@ var mgCalc = (function() {
         return "undefined"
     }
     function efc(xU) {//inverse error function
-        if (getType(xU) == "complex" && +xU.i == 0) {xU = +xU.r}
+        if (getType(xU) == "complex" && xU.i == 0) {xU = +xU.r}
         if (getType(xU) == "real") {return iSolve('erf(iSlv)',toReal(xU),0,7)}
         return "undefined"
     }
