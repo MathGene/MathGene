@@ -317,7 +317,6 @@ var mgCalc = (function() {
     function cSubst(sXpr,xI,xO) {sXpr+="";var sCount = sXpr.split(xI).length-1;for (var nXs=0;nXs<sCount;nXs++) {sXpr = sXpr.replace(xI,xO)};return sXpr} //substitution in MG format
     function nbrTest(xT) {if (+xT == +xT*1) {return true}; return false} //test for numerical string
     function nbrEven(xE) {if (cDiv(xE,2) == int(cDiv(xE,2))) {return true};return false} //test for even number
-	function toNumeric(xD) {return eval(strConvert(xD).replace(/(Cv\[\d+\])/g,"'$1'").replace(/(Pv\[\d+\])/g,"'$1'").replace(/(Sv\[\d+\])/g,"'$1'"))} //convert symbolic value to numeric
     function strConvert(xS) {return xS + ""} //convert to string
     function strTest(xTarget,xSearch) { //test if xSearch string is in xTarget
         if (typeof xTarget == "undefined") {return false}
@@ -732,18 +731,18 @@ var mgCalc = (function() {
             return mReturn
         }
         if (xU == "Cv[8734]") {
-			if (!strTest(xL,"Cv[8734]")) {return "Cv[8734]"}
-			if (xL <= -1) {return 0}
-			else {return "undefined"}
-		}
-		if (xU == "cNeg(Cv[8734])") {
-			if (!nbrEven(xL)) {return "cNeg(Cv[8734])"}
-			else if (nbrEven(xL)) {return "Cv[8734]"}
-			else {return "undefined"}
-		}
+            if (!strTest(xL,"Cv[8734]")) {return "Cv[8734]"}
+            else if (xL <= -1) {return 0}
+            else {return "undefined"}
+        }
+        if (xU == "cNeg(Cv[8734])") {
+            if (!nbrEven(xL)) {return "cNeg(Cv[8734])"}
+            else if (nbrEven(xL)) {return "Cv[8734]"}
+            else {return "undefined"}
+        }
         if (xL == "Cv[8734]" && xU != 0) {
             if (!nbrEven(xU) && xU < 0) {return "cNeg(Cv[8734])"}
-			if (nbrEven(xU) && xU < 0) {return "Cv[8734]"}
+            else if (nbrEven(xU) && xU < 0) {return "Cv[8734]"}
             else {return "Cv[8734]"}
         }
         if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "cTms" || xTractU.func == "cDiv" || xTractU.func == "cMul" || xTractU.func == "cPow") {xU = "("+xU+")"}
@@ -811,8 +810,8 @@ var mgCalc = (function() {
         if (xL == 0 || xU == 0) {return 0}
         if (xU == "Cv[8734]" || xL == "Cv[8734]" ) {
             if (xU < 0) {return "cNeg(Cv[8734])"}
-            if (xL < 0) {return "cNeg(Cv[8734])"}
-            return "Cv[8734]"
+            else if (xL < 0) {return "cNeg(Cv[8734])"}
+            else {return "Cv[8734]"}
         }
         if (nbrTest(xU) && nbrTest(xL)) {return cMul(xU,xL)}
         if (nbrTest(xU) && xTractL.func == "cPow" && nbrTest(xTractL.upper)) {xL = "("+xL+")"}
@@ -3007,7 +3006,6 @@ var mgCalc = (function() {
         return cMul(-1,xU)
     }
     function cSub(xU,xL) { //subtract
-        if (getType(xU) == "real" && getType(xL) == "real" && xU == rou(xU) && xL == rou(xL)) {return rou(cAdd(xU,cNeg(xL)))} //preserve integers
         return cAdd(xU,cNeg(xL))
     }
     function cAdd(xU,xL) { //add
