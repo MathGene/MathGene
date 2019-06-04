@@ -508,12 +508,12 @@ var mgCalc = (function() {
             }
             else if (pTerms.Exp[xI] == 1)  {fTempU = cMulS(fTempU,cPowS(pTerms.Terms[xI],1))} //populate numerator
             else if (pTerms.Exp[xI] > 0)   {fTempU = cMulS(fTempU,cPowS(pTerms.Terms[xI],pTerms.Exp[xI]))} //populate numerator
-            else if (pTerms.Exp[xI] < 0)   {fTempL = cMulS(fTempL,cPowS(pTerms.Terms[xI],cNegS(pTerms.Exp[xI])))} //populate divisor
-            else if (tExtract.func == "cNeg") {fTempL = cMulS(fTempL,cPowS(pTerms.Terms[xI],tExtract.upper))} //populate divisor
+            else if (pTerms.Exp[xI] < 0)   {fTempL = cMulS(fTempL,cPowS(pTerms.Terms[xI],cNegS(pTerms.Exp[xI])))} //populate denominator
+            else if (tExtract.func == "cNeg") {fTempL = cMulS(fTempL,cPowS(pTerms.Terms[xI],tExtract.upper))} //populate denominator
             else    {fTempU = cMulS(fTempU,cPowS(pTerms.Terms[xI],pTerms.Exp[xI]))} //populate exponents
         }
-        if      (tReturn < 0 && abs(tReturn) > 1) {tReturn = cNegS(xprIterate(cDivS(cMulS(cNegS(tReturn),fTempU),fTempL)))} //move negative from numerator to outside
-        else if (expFlag) {tReturn = cMulS(cMulS(tReturn,fTempU),"cPow("+fTempL+",-1)")}
+        if      (tReturn < -1) {tReturn = cNegS(xprIterate(cDivS(cMulS(cNegS(tReturn),fTempU),fTempL)))} //move negative from numerator to outside
+        else if (expFlag) {tReturn = cMulS(cMulS(tReturn,fTempU),"cPow("+fTempL+",-1)")} //use negative power for denominator if neccesary
         else    {tReturn = cDivS(cMulS(tReturn,fTempU),fTempL)}
         tReturn = strConvert(tReturn);
         tReturn = xprIterate(tReturn.replace(/Pv\[(\d+)\]/g,"pxp($1)"));
@@ -731,11 +731,20 @@ var mgCalc = (function() {
             for (var iM=1;iM<xL;iM++) {mReturn = cMulS(mReturn,xU)}
             return mReturn
         }
-        if (xU == "Cv[8734]") {return "Cv[8734]"}
+        if (xU == "Cv[8734]") {
+			if (!strTest(xL,"Cv[8734]")) {return "Cv[8734]"}
+			if (xL <= -1) {return 0}
+			else {return "undefined"}
+		}
+		if (xU == "cNeg(Cv[8734])") {
+			if (!nbrEven(xL)) {return "cNeg(Cv[8734])"}
+			else if (nbrEven(xL)) {return "Cv[8734]"}
+			else {return "undefined"}
+		}
         if (xL == "Cv[8734]" && xU != 0) {
-            if (xU == "cNeg(Cv[8734])" && !nbrEven(xL)) {return "cNeg(Cv[8734])"}
-            if (xU == "cNeg(Cv[8734])" && nbrEven(xL)) {return "Cv[8734]"}
-            return "Cv[8734]"
+            if (!nbrEven(xU) && xU < 0) {return "cNeg(Cv[8734])"}
+			if (nbrEven(xU) && xU < 0) {return "Cv[8734]"}
+            else {return "Cv[8734]"}
         }
         if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "cTms" || xTractU.func == "cDiv" || xTractU.func == "cMul" || xTractU.func == "cPow") {xU = "("+xU+")"}
         if (xTractL.func == "cAdd" || xTractL.func == "cSub" || xTractL.func == "cTms" || xTractL.func == "cDiv" || xTractL.func == "cMul" || xTractL.func == "cNeg") {xL = "("+xL+")"}
@@ -2317,15 +2326,6 @@ var mgCalc = (function() {
                 lTemp = xReduce("cMul(cSub("+xU+",1),"+lVar+")");
                 if (xL == lVar && !strTest(lTemp,lVar)) {return cPowS("Cv[8]",lTemp)} //limit definitions for e^n as x>inf
                 if (xTractL.func == "cDiv" && xTractL.lower == lVar) {return 1}
-                if (strTest(xL,lVar) && xLim == "Cv[8734]" && toNumeric(xU) > 1) {return "Cv[8734]"}
-                if (strTest(xL,lVar) && xLim == "Cv[8734]" && toNumeric(xU) > -1 && toNumeric(xU) < 1) {return 0}
-                if (strTest(xU,lVar) && xLim == "Cv[8734]" && toNumeric(xL) > 0 && toNumeric(xL) < 1) {return 0}
-                if (strTest(xU,lVar) && xLim == "Cv[8734]" && toNumeric(xL) > 1) {return "Cv[8734]"}
-                if (strTest(xU,lVar) && xLim == "cNeg(Cv[8734])" && toNumeric(xL) > 1 && nbrEven(toNumeric(xL))) {return "Cv[8734]"}
-                if (strTest(xU,lVar) && xLim == "cNeg(Cv[8734])" && toNumeric(xL) > 1 && !nbrEven(toNumeric(xL))) {return "cNeg(Cv[8734])"}
-                if (strTest(xU,lVar) && xLim == "cNeg(Cv[8734])" && toNumeric(xL) > 1) {return "cNeg(Cv[8734])"}
-                if (strTest(xL,lVar) && xLim == "cNeg(Cv[8734])" && toNumeric(xU) > 1) {return 0}
-                if (strTest(xL,lVar) && xLim == "cNeg(Cv[8734])" && toNumeric(xU) > -1 && toNumeric(xU) < 1) {return "Cv[8734]"}
             }
             if (xLim == 0 && xTractL.func == "cDiv" && xTractL.lower == lVar) { //limit definitions for e^n as x>0
                 if (xTractU.func == "cAdd" && xReduce("cSub("+xU+",1)") == lVar) {return cPowS("Cv[8]",xTractL.upper)}
@@ -3007,15 +3007,12 @@ var mgCalc = (function() {
         return cMul(-1,xU)
     }
     function cSub(xU,xL) { //subtract
-        if (getType(xU) == "real" && getType(xL) == "real") {
-            if (xU == rou(xU) && xL == rou(xL)) {return rou((+xU)-(+xL))}
-            return (+xU)-(+xL)
-        }
-        return cAdd(xU,cMul(-1,xL))
+        if (getType(xU) == "real" && getType(xL) == "real" && xU == rou(xU) && xL == rou(xL)) {return rou(cAdd(xU,cNeg(xL)))} //preserve integers
+        return cAdd(xU,cNeg(xL))
     }
     function cAdd(xU,xL) { //add
         if (getType(xU) == "real" && getType(xL) == "real") {
-            if (xU == rou(xU) && xL == rou(xL)) {return rou((+xU)+(+xL))}
+            if (xU == rou(xU) && xL == rou(xL)) {return rou((+xU)+(+xL))} //preserve integers
             return (+xU)+(+xL)
         }
         if (getType(xU) == "complex" || getType(xL) == "complex") {
@@ -3043,7 +3040,7 @@ var mgCalc = (function() {
         }
         if (xL == Cv[45]) {return fac(xU)} //factorial
         if (getType(xU) == "real" && getType(xL) == "real") {
-            if (xU == rou(xU) && xL == rou(xL)) {return rou((+xU)*(+xL))}
+            if (xU == rou(xU) && xL == rou(xL)) {return rou((+xU)*(+xL))} //preserve integers
             return (+xU)*(+xL)
         }
         if (getType(xU) == "complex" || getType(xL) == "complex") {
