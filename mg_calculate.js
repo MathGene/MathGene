@@ -2293,7 +2293,7 @@ var mgCalc = (function() {
     //Limits
     function lmtS(lXpr,lVar,xLim) {
         function cAddL(xU,xL) {return cAddS(lmtS(xU,lVar,xLim),lmtS(xL,lVar,xLim))}
-        function cSubL(xU,xL) {return cAddS(lmtS(xU,lVar,xLim),cNegS(lmtS(xL,lVar,xLim)))}
+        function cSubL(xU,xL) {return cSubS(lmtS(xU,lVar,xLim),lmtS(xL,lVar,xLim))}
         function cMulL(xU,xL) {
             if (!strTest(xU,lVar)) {return cMulS(xU,lmtS(xL,lVar,xLim))} //constant rule
             if (!strTest(xL,lVar)) {return cMulS(xL,lmtS(xU,lVar,xLim))} //constant rule
@@ -2304,8 +2304,6 @@ var mgCalc = (function() {
         function cDivL(xU,xL) {
             var xTractU = opExtract(xU);
             var xTractL = opExtract(xL);
-            if (xU == 0 && xL != 0) {return 0}
-            if (xL == 0) {return "Cv[8734]"}
             if (strTest(xLim,"Cv[8734]") && strTest(xL,lVar) && !strTest(xU,lVar)) {return 0}
             if (xTractL.func == "sqt" && xTractU.func != "sqt") {return sqtS(cDivL(xprExpand(cPowS(xU,2)),xTractL.upper))}
             if (xTractL.func != "sqt" && xTractU.func == "sqt") {return sqtS(cDivL(xTractU.upper,xprExpand(cPowS(xL,2))))}
@@ -3088,7 +3086,7 @@ var mgCalc = (function() {
         if (getType(xU) == "real" && getType(xL) == "real" && Math.pow((+xU),(+xL)) == Math.pow((+xU),(+xL))) {return Math.pow((+xU),(+xL))}
         if (getType(xU) == "complex" && xU.i == 0) {xU = xU.r}
         if (getType(xL) == "complex" && xL.i == 0) {xL = xL.r}
-        if (xU == rou(xU) && xL == rou(xL)) {return Math.pow(xU,xL)}
+        if (xU == rou(xU) && xL == rou(xL)) {return Math.pow(xU,xL)} //preserve integers
         if (getType(xU) == "matrix" && getType(xL) == "real") {
             if (xL != int(xL)) {return "undefined"}
             if (xL <= -1) {return cPow(inv(xU),cNeg(xL))} //inverse matrix powers
