@@ -1285,12 +1285,16 @@ var mgCalc = (function() {
         var xTractU = opExtract(xU);
         if (xU == 0) {return 0}
         if (xU == 1) {return "cDiv(Cv[29],4)"}
+		if (xU == "Cv[8734]") {return "cDiv(Cv[29],2)"}
+		if (xU == "cNeg(Cv[8734])") {return "cNeg(cDiv(Cv[29],2))"}
         if (strTest(tanAngle,xU)) {return cMulS(invMult,iAngle[tanAngle.indexOf(xU)])}
         if (xTractU.func == "tan") {return xTractU.upper}
         return "atn("+xU+")"
     }
     function ascS(xU) {//asec
         var xTractU = opExtract(xU);
+		if (xU == "Cv[8734]") {return "cDiv(Cv[29],2)"}
+		if (xU == "cNeg(Cv[8734])") {return "cNeg(cDiv(Cv[29],2))"}
         if (strTest(secAngle,xU)) {return cMulS(invMult,iAngle[secAngle.indexOf(xU)])}
         if (xTractU.func == "sec") {return xTractU.upper}
         return "asc("+xU+")"
@@ -1298,6 +1302,8 @@ var mgCalc = (function() {
     function accS(xU) {//acosec
         var xTractU = opExtract(xU);
         if (xU == 1) {return "cDiv(Cv[29],2)"}
+		if (xU == "Cv[8734]") {return 0}
+		if (xU == "cNeg(Cv[8734])") {return 0}
         if (strTest(cscAngle,xU)) {return cMulS(invMult,iAngle[cscAngle.indexOf(xU)])}
         if (xTractU.func == "csc") {return xTractU.upper}
         return "acc("+xU+")"
@@ -1306,6 +1312,8 @@ var mgCalc = (function() {
         var xTractU = opExtract(xU);
         if (xU == 0) {return "cDiv(Cv[29],2)"}
         if (xU == 1) {return "cDiv(Cv[29],4)"}
+		if (xU == "Cv[8734]") {return 0}
+		if (xU == "cNeg(Cv[8734])") {return 0}
         if (strTest(cotAngle,xU)) {return cMulS(invMult,iAngle[cotAngle.indexOf(xU)])}
         if (xTractU.func == "cot") {return xTractU.upper}
         return "act("+xU+")"
@@ -2348,7 +2356,7 @@ var mgCalc = (function() {
         function cthL(xU) {return cthS(lmtS(xU,lVar,xLim))}
         function asnL(xU) {return asnS(lmtS(xU,lVar,xLim))}
         function acsL(xU) {return acsS(lmtS(xU,lVar,xLim))}
-        function atnL(xU) {var lTmp = atnS(lmtS(xU,lVar,xLim));if (lTmp == "atn(Cv[8734])")  {return cDivS("Cv[29]","2")};if (lTmp == "atn(cNeg(Cv[8734]))") {return cNegS(cDivS("Cv[29]","2"))};return lTmp}
+        function atnL(xU) {return atnS(lmtS(xU,lVar,xLim))}
         function actL(xU) {return actS(lmtS(xU,lVar,xLim))}
         function ascL(xU) {return ascS(lmtS(xU,lVar,xLim))}
         function accL(xU) {return accS(lmtS(xU,lVar,xLim))}
@@ -3083,10 +3091,6 @@ var mgCalc = (function() {
         return "undefined"
     }
     function cPow(xU,xL) { //powers xU^xL
-        if (getType(xU) == "real" && getType(xL) == "real" && Math.pow((+xU),(+xL)) == Math.pow((+xU),(+xL))) {return Math.pow((+xU),(+xL))}
-        if (getType(xU) == "complex" && xU.i == 0) {xU = xU.r}
-        if (getType(xL) == "complex" && xL.i == 0) {xL = xL.r}
-        if (xU == rou(xU) && xL == rou(xL)) {return Math.pow(xU,xL)} //preserve integers
         if (getType(xU) == "matrix" && getType(xL) == "real") {
             if (xL != int(xL)) {return "undefined"}
             if (xL <= -1) {return cPow(inv(xU),cNeg(xL))} //inverse matrix powers
@@ -3094,11 +3098,11 @@ var mgCalc = (function() {
             var mReturn = xU;
             for (var iM=1;iM<xL;iM++) {mReturn = cMul(mReturn,xU)}
             return mReturn
-        }
-        var cTmp = exp(cMul(lne(toCplx(xU)),toCplx(xL)));
-        cTmp.r = cDiv(rou(cMul(cTmp.r,dRound)),dRound);
-        cTmp.i = cDiv(rou(cMul(cTmp.i,dRound)),dRound);
-        return cTmp;
+        }	
+        if (getType(xU) == "real" && getType(xL) == "real" && nbrTest(Math.pow(xU,xL))) {return Math.pow(xU,xL)}
+        var cTmp = cMul(lne(toCplx(xU)),toCplx(xL));
+		var eTmp = {r:cMul(Math.pow(Cv[8],cTmp.r),cos(cTmp.i)), i:cMul(Math.pow(Cv[8],cTmp.r),sin(cTmp.i))};
+		return cDiv(rou(cMul(eTmp,dRound)),dRound);
     }
 
     //matrix operations
@@ -3245,11 +3249,7 @@ var mgCalc = (function() {
         return "undefined"
     }
     function exp(xU) { //exp(x)
-        if (getType(xU) == "complex" && xU.i != 0) {
-            var cA = toCplx(xU);
-            return {r:cMul(cPow(Cv[8],cA.r),cos(cA.i)), i:cMul(cPow(Cv[8],cA.r),sin(cA.i))}
-        }
-        if (getType(xU) == "complex" && xU.i == 0) {return cPow(Cv[8],toReal(xU))}
+        if (getType(xU) == "complex") {return {r:cMul(cPow(Cv[8],xU.r),cos(xU.i)), i:cMul(cPow(Cv[8],xU.r),sin(xU.i))}}
         if (getType(xU) == "real")  {return cPow(Cv[8],xU)}
         return "undefined"
     }
