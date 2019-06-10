@@ -742,7 +742,6 @@ var mgCalc = (function() {
         }
         if (xL == "Cv[8734]" && xU != 0) {
             if (!nbrEven(xU) && xU < 0) {return "cNeg(Cv[8734])"}
-            else if (nbrEven(xU) && xU < 0) {return "Cv[8734]"}
             else {return "Cv[8734]"}
         }
         if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "cTms" || xTractU.func == "cDiv" || xTractU.func == "cMul" || xTractU.func == "cPow") {xU = "("+xU+")"}
