@@ -1021,6 +1021,7 @@ var exptotrig =
 var limits =
 [
 //"lim(Cv[10120],Cv[8734])(3Cv[10120]+sin(Cv[10120]))/2Cv[10120]","3/2", //squeeze
+//"lim(Cv[10120],Cv[8734])sin(Cv[10120])/Cv[10120]","0", //squeeze
 //"lim(Cv[10120],-Cv[8734])(Cv[10120]+3)/sqt(9Cv[10120]^2-5Cv[10120])","-(1/3)",
 //"lim(Cv[10120],Cv[8734])Cv[10120]-sqt(Cv[10120]^2+7)","-Cv[8734]",
 
@@ -2032,7 +2033,6 @@ var internal =
 "mgCalc.RoundDec(1.123456789,6)","1.123457",
 "mgCalc.RoundDec(1.123456789e-21,6)","1.123457e-21",
 "mgCalc.RoundDec(123.45678901234e-21,6)","1.234568e-19",
-"mgCalc.RoundDec(mgCalc.irSolver('fac(iSlv)',120,0,120),10)","4.999999999",
 "mgCalc.GCF(120,76)","4",
 "mgCalc.GCF(2049,333)","3",
 "mgCalc.GCF(450,225)","225",

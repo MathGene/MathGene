@@ -1167,6 +1167,7 @@ var mgCalc = (function() {
         if (rAngle == "0") {return 0}
         if (strTest(iAngle,rAngle)) {return sinAngle[iAngle.indexOf(rAngle)]}
         if (xU == 0) {return 0}
+		if (strTest(xU,"Cv[8734]")) {return "undefined"}
         return "sin("+xU+")"
     }
     var cosAngle = [
@@ -1186,6 +1187,7 @@ var mgCalc = (function() {
         if (rAngle == "0") {return 1}
         if (strTest(iAngle,rAngle)) {return cosAngle[iAngle.indexOf(rAngle)]}
         if (xU == 0) {return 1}
+		if (strTest(xU,"Cv[8734]")) {return "undefined"}
         return "cos("+xU+")"
     }
     var tanAngle = [
@@ -1205,6 +1207,7 @@ var mgCalc = (function() {
         if (rAngle == "0") {return 0}
         if (strTest(iAngle,rAngle)) {return tanAngle[iAngle.indexOf(rAngle)]}
         if (xU == 0) {return 0}
+		if (strTest(xU,"Cv[8734]")) {return "undefined"}
         return "tan("+xU+")"
     }
     var secAngle = [
@@ -1224,6 +1227,7 @@ var mgCalc = (function() {
         if (rAngle == "0") {return 1}
         if (strTest(iAngle,rAngle)) {return secAngle[iAngle.indexOf(rAngle)]}
         if (xU == 0) {return 1}
+		if (strTest(xU,"Cv[8734]")) {return "undefined"}
         return "sec("+xU+")"
     }
     var cscAngle = [
@@ -1242,6 +1246,7 @@ var mgCalc = (function() {
         if (rAngle == "0") {return "undefined"}
         if (strTest(iAngle,rAngle)) {return cscAngle[iAngle.indexOf(rAngle)]}
         if (xU == 0) {return "undefined"}
+		if (strTest(xU,"Cv[8734]")) {return "undefined"}
         return "csc("+xU+")"
     }
     var cotAngle = [
@@ -1260,6 +1265,7 @@ var mgCalc = (function() {
         if (rAngle == "0") {return "undefined"}
         if (strTest(iAngle,rAngle)) {return cotAngle[iAngle.indexOf(rAngle)]}
         if (xU == 0) {return "undefined"}
+		if (strTest(xU,"Cv[8734]")) {return "undefined"}
         return "cot("+xU+")"
     }
     //inverse trig
@@ -3368,6 +3374,7 @@ var mgCalc = (function() {
     }
     function atn(xU) {//atan
         if (getType(xU) == "complex") {return cDiv(cMul(cDiv(Cv[46],2),cAdd(lne(cAdd(1,cMul(-1,cMul(Cv[46],xU)))),cMul(-1,(lne(cAdd(1,cMul(Cv[46],xU))))))),mgConfig.trigBase)}
+		//if (getType(xU) == "real") {return trigRound(cDiv(iSolve(function (a){return tan(a)},toReal(xU),-Cv[29]/2,Cv[29]/2),mgConfig.trigBase))}
         if (getType(xU) == "real") {return trigRound(cDiv(Math.atan(toReal(xU)),mgConfig.trigBase))}
         return "undefined"
     }
@@ -3514,7 +3521,7 @@ var mgCalc = (function() {
     }
     function efc(xU) {//inverse error function
         if (getType(xU) == "complex" && xU.i == 0) {xU = +xU.r}
-        if (getType(xU) == "real") {return iSolve('erf(iSlv)',toReal(xU),0,7)}
+        if (getType(xU) == "real") {return iSolve(function(a){return erf(a)},toReal(xU),0,7)}
         return "undefined"
     }
     function normPDF(sigma,xV,mu) { //probability density function
@@ -3635,30 +3642,21 @@ var mgCalc = (function() {
         if (Ux == 500) {return "Cv[8734]"}
         return rou(Ux*100)/100
     }
-    //use iSlv for iSolve variable Example: iSolve('10*exp(iSlv)',100,0,10) nL=low limit, nH=high limit
+    //inverse functions iSolve Example: iSolve(function(a){return fn(a)},100,0,10) nL=low limit, nH=high limit
     function iSolve(expr,result,nL,nH) {//iterative solver
         var result = toReal(result);
         if (getType(result) != "real") {return "undefined"}
         if (getType(nL) != "real") {nL = 1e-322}
         if (getType(nH) != "real") {nH = 1e301}
         var t1 = 0, iSlv = nL, ix = 0;
-        var tLo =  toReal(eval(expr));
+        var tLo =  toReal(expr(iSlv));
         iSlv = nH;
-        var tHi =  toReal(eval(expr));
-        if (tHi > tLo) {
-            for (ix=1;ix<100;ix++) {
-                iSlv = (nH+nL)/2;
-                t1 = toReal(eval(expr));
-                if (t1 > result) {nH = (nH+nL)/2} else {nL = (nH+nL)/2}
-            }
-        }
-        else {
-            for (ix=1;ix<100;ix++) {
-                iSlv = (nH+nL)/2;
-                t1 = toReal(eval(expr));
-                if (t1 < result) {nH = (nH+nL)/2} else {nL = (nH+nL)/2}
-            }
-        }
+        var tHi =  toReal(expr(iSlv));
+		for (ix=1;ix<100;ix++) {
+			iSlv = (nH+nL)/2;
+			t1 = toReal(expr(iSlv));
+			if (t1 > result) {nH = (nH+nL)/2} else {nL = (nH+nL)/2}
+		}
         return iSlv
     }
     function cGcf(xU,xL) {//greatest common factor
@@ -3723,7 +3721,6 @@ var mgCalc = (function() {
     var PutTheta    = function(p1,p2,p3,p4,p5,p6) {return finPUTtheta(p1,p2,p3,p4,p5,p6)};
     var OptionGamma = function(p1,p2,p3,p4,p5,p6) {return finOPTgamma(p1,p2,p3,p4,p5,p6)};
     var OptionVega  = function(p1,p2,p3,p4,p5,p6) {return finOPTvega(p1,p2,p3,p4,p5,p6)};
-    var irSolver    = function(p1,p2,p3,p4) {return iSolve(p1,p2,p3,p4)  };
     var GCF         = function(p1,p2) {return cGcf(p1,p2)}
 
     return {
@@ -3755,7 +3752,6 @@ var mgCalc = (function() {
         PutTheta:PutTheta,
         OptionGamma:OptionGamma,
         OptionVega:OptionVega,
-        irSolver:irSolver,
         GCF:GCF,
     }
 }) ();
