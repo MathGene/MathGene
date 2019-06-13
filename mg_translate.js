@@ -52,7 +52,7 @@ var mgConfig =
     Domain:     "Complex",  //domain Complex or Real
     editMode:   false,      //edit mode formatting
     htmlFont:   "Times,Serif", //default HTML font-family
-	calcLogLevel: 0         //calculation logger level
+    calcLogLevel: 0         //calculation logger level
 }
 var calcLog = []; //calculation log
 var Cv = new Array(11000); //symbol array
@@ -746,6 +746,8 @@ cNql:{  htmlL1:"mA+' &#8800; '+mB",                 htmlR1:"''", //not equal
         latexL1:"mA+'\\\\neq'+mB",                  latexR1:"''",
         latexL2:"mA+'\\\\neq'+mB",                  latexR2:"''",
         },
+ntg:{},
+ntp:{},
 }
 
 // internal functions
