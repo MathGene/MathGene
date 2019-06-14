@@ -854,6 +854,10 @@ var mgCalc = (function() {
         if (xTractL.func == "cAdd" || xTractL.func == "cSub") {xL = "("+xL+")"}
         if (!pxpFlag && xU < 0) {return cNegS(cDivS(cNegS(xU),xL))}
         if (!pxpFlag && xTractU.func == "cNeg") {return cNegS(cDivS(xTractU.upper,xL))}
+        if (xL == "Cv[8734]" || xL == "cNeg(Cv[8734])") {
+            if (xU == "Cv[8734]" || xU == "cNeg(Cv[8734])") {return "undefined"}
+            else {return 0}
+        }
         if (xL == 0) {return "undefined"}
         if (xU == 0) {return 0}
         if (xL == 1) {return xU}
@@ -930,7 +934,7 @@ var mgCalc = (function() {
             }
             return matFunc(mReturn)
         }
-        if (xU == "Cv[8734]" && xL == "Cv[8734]" ) {return "Cv[8734]"}
+        if (xU == "Cv[8734]" && xL == "Cv[8734]") {return "Cv[8734]"}
         if (xU == "cNeg(Cv[8734])" && xL == "cNeg(Cv[8734])") {return "cNeg(Cv[8734])"}
         if (!strTest(xU,"Cv[8734]") && xL == "cNeg(Cv[8734])") {return "cNeg(Cv[8734])"}
         if (!strTest(xU,"Cv[8734]") && xL == "Cv[8734]") {return "Cv[8734]"}
@@ -2321,8 +2325,6 @@ var mgCalc = (function() {
         cMulL: function(xU,xL) {
             if (!strTest(xU,lVar)) {return cMulS(xU,lmtS(xL,lVar,xLim))} //constant rule
             if (!strTest(xL,lVar)) {return cMulS(xL,lmtS(xU,lVar,xLim))} //constant rule
-            if (strTest(lmtS(xU,lVar,xLim),"Cv[8734]") && lmtS(xL,lVar,xLim) == 0) {return lmtS(cDivS(xL,cPowS(xU,-1)),lVar,xLim)}
-            if (lmtS(xU,lVar,xLim) == 0 && strTest(lmtS(xL,lVar,xLim),"Cv[8734]")) {return lmtS(cDivS(xU,cPowS(xL,-1)),lVar,xLim)}
             return cMulS(lmtS(xU,lVar,xLim),lmtS(xL,lVar,xLim))
         },
         cDivL: function(xU,xL) {
@@ -2330,7 +2332,6 @@ var mgCalc = (function() {
             var xTractL = opExtract(xL);
             if (xTractL.func == "sqt" && xTractU.func != "sqt") {return sqtS(lmtS(cDivS(xprExpand(cPowS(xU,2)),xTractL.upper)),lVar,xLim)}
             if (xTractL.func != "sqt" && xTractU.func == "sqt") {return sqtS(lmtS(cDivS(xTractU.upper,xprExpand(cPowS(xL,2)))),lVar,xLim)}
-            if (lmtS(xU,lVar,xLim) == 0 && lmtS(xL,lVar,xLim) == 0) {return lmtS(cDivS(drvS(xU,lVar),drvS(xL,lVar)),lVar,xLim)} // l'Hopital
             if (strTest(lmtS(xU,lVar,xLim),"Cv[8734]") && strTest(lmtS(xL,lVar,xLim),"Cv[8734]")) {return lmtS(cDivS(drvS(xU,lVar),drvS(xL,lVar)),lVar,xLim)} // l'Hopital
             if (lmtS(xL,lVar,xLim) != 0) {return cDivS(lmtS(xU,lVar,xLim),lmtS(xL,lVar,xLim))} //quotient rule
             return lmtS(cDivS(drvS(xU,lVar),drvS(xL,lVar)),lVar,xLim) // l'Hopital
@@ -3705,66 +3706,36 @@ var mgCalc = (function() {
     if (mgConfig.trigBase == Cv[29]/180) {invMult = "180"}
     if (mgConfig.trigBase == Cv[29]/200) {invMult = "200"}
 
-    var Numeric     = function(xprA) {return mgExport(fmtResult(eval(cFunc(xprA))))};
-    var Simplify    = function(xprA) {return cReduce(cFunc(parseCalculus(xprA))) };
-    var Solve       = function(xprA,xprB) {return xprSolve(cFunc(parseCalculus(xprA)),xprB)};
-    var Substitute  = function(xprA,xprB,xprC) {return cSubst(xprA,xprB,xprC)    };
-    var Factor      = function(xprA) {return xprFactor(cFunc(parseCalculus(xprA)))   };
-    var Expand      = function(xprA) {return xprExpand(cFunc(parseCalculus(xprA)))   };
-    var TrigToExp   = function(xprA) {return xprTrigToExp(cFunc(parseCalculus(xprA)))};
-    var ExpToTrig   = function(xprA) {return xprExpToTrig(cFunc(parseCalculus(xprA)))};
-    var Range       = function(xprA) {return xprRange(xprA)                      };
-    var Domain      = function(xprA) {return xprDomain(xprA)                     };
-    var Series      = function(xprA,xprB,xprC,xprD) {return xprSeries(cFunc(parseCalculus(xprA)),xprB,xprC,xprD)};
-    var Inventory   = function(xprA) {return cInventory(xprA)                    };
-    var RoundDec    = function(p1,p2) {return roundDecTo(p1,p2)                  };
-    var Payment     = function(p1,p2,p3,p4,p5,p6) {return finPMT(p1,p2,p3,p4,p5,p6)};
-    var Term        = function(p1,p2,p3,p4,p5,p6) {return finTERM(p1,p2,p3,p4,p5,p6)};
-    var Rate        = function(p1,p2,p3,p4,p5,p6) {return finRATE(p1,p2,p3,p4,p5,p6)};
-    var PresentValue= function(p1,p2,p3,p4,p5,p6) {return finPV(p1,p2,p3,p4,p5,p6)};
-    var FutureValue = function(p1,p2,p3,p4,p5,p6) {return finFV(p1,p2,p3,p4,p5,p6)};
-    var Call        = function(p1,p2,p3,p4,p5,p6) {return finCALL(p1,p2,p3,p4,p5,p6)};
-    var Put         = function(p1,p2,p3,p4,p5,p6) {return finPUT(p1,p2,p3,p4,p5,p6)};
-    var CallDelta   = function(p1,p2,p3,p4,p5,p6) {return finCALLdelta(p1,p2,p3,p4,p5,p6)};
-    var CallRho     = function(p1,p2,p3,p4,p5,p6) {return finCALLrho(p1,p2,p3,p4,p5,p6)};
-    var CallTheta   = function(p1,p2,p3,p4,p5,p6) {return finCALLtheta(p1,p2,p3,p4,p5,p6)};
-    var PutDelta    = function(p1,p2,p3,p4,p5,p6) {return finPUTdelta(p1,p2,p3,p4,p5,p6)};
-    var PutRho      = function(p1,p2,p3,p4,p5,p6) {return finPUTrho(p1,p2,p3,p4,p5,p6)};
-    var PutTheta    = function(p1,p2,p3,p4,p5,p6) {return finPUTtheta(p1,p2,p3,p4,p5,p6)};
-    var OptionGamma = function(p1,p2,p3,p4,p5,p6) {return finOPTgamma(p1,p2,p3,p4,p5,p6)};
-    var OptionVega  = function(p1,p2,p3,p4,p5,p6) {return finOPTvega(p1,p2,p3,p4,p5,p6)};
-    var GCF         = function(p1,p2) {return cGcf(p1,p2)}
-
     return {
-        Numeric:Numeric,
-        Simplify: Simplify,
-        Solve:Solve,
-        Substitute:Substitute,
-        Factor:Factor,
-        Expand:Expand,
-        TrigToExp:TrigToExp,
-        ExpToTrig:ExpToTrig,
-        Range:Range,
-        Domain:Domain,
-        Series:Series,
-        RoundDec:RoundDec,
-        Inventory:Inventory,
-        Payment:Payment,
-        Term:Term,
-        Rate:Rate,
-        PresentValue:PresentValue,
-        FutureValue:FutureValue,
-        Call:Call,
-        Put:Put,
-        CallDelta:CallDelta,
-        CallRho:CallRho,
-        CallTheta:CallTheta,
-        PutDelta:PutDelta,
-        PutRho:PutRho,
-        PutTheta:PutTheta,
-        OptionGamma:OptionGamma,
-        OptionVega:OptionVega,
-        GCF:GCF,
+        Numeric:    function(xprA) {return mgExport(fmtResult(eval(cFunc(xprA))))},
+        Simplify:   function(xprA) {return cReduce(cFunc(parseCalculus(xprA))) },
+        Solve:      function(xprA,xprB) {return xprSolve(cFunc(parseCalculus(xprA)),xprB)},
+        Substitute: function(xprA,xprB,xprC) {return cSubst(xprA,xprB,xprC)},
+        Factor:     function(xprA) {return xprFactor(cFunc(parseCalculus(xprA)))},
+        Expand:     function(xprA) {return xprExpand(cFunc(parseCalculus(xprA)))},
+        TrigToExp:  function(xprA) {return xprTrigToExp(cFunc(parseCalculus(xprA)))},
+        ExpToTrig:  function(xprA) {return xprExpToTrig(cFunc(parseCalculus(xprA)))},
+        Range:      function(xprA) {return xprRange(xprA)},
+        Domain:     function(xprA) {return xprDomain(xprA)},
+        Series:     function(xprA,xprB,xprC,xprD) {return xprSeries(cFunc(parseCalculus(xprA)),xprB,xprC,xprD)},
+        RoundDec:   function(p1,p2) {return roundDecTo(p1,p2)                  },
+        Inventory:  function(xprA) {return cInventory(xprA)                    },
+        Payment:    function(p1,p2,p3,p4,p5,p6) {return finPMT(p1,p2,p3,p4,p5,p6)},
+        Term:       function(p1,p2,p3,p4,p5,p6) {return finTERM(p1,p2,p3,p4,p5,p6)},
+        Rate:       function(p1,p2,p3,p4,p5,p6) {return finRATE(p1,p2,p3,p4,p5,p6)},
+        PresentValue:function(p1,p2,p3,p4,p5,p6) {return finPV(p1,p2,p3,p4,p5,p6)},
+        FutureValue:function(p1,p2,p3,p4,p5,p6) {return finFV(p1,p2,p3,p4,p5,p6)},
+        Call:       function(p1,p2,p3,p4,p5,p6) {return finCALL(p1,p2,p3,p4,p5,p6)},
+        Put:        function(p1,p2,p3,p4,p5,p6) {return finPUT(p1,p2,p3,p4,p5,p6)},
+        CallDelta:  function(p1,p2,p3,p4,p5,p6) {return finCALLdelta(p1,p2,p3,p4,p5,p6)},
+        CallRho:    function(p1,p2,p3,p4,p5,p6) {return finCALLrho(p1,p2,p3,p4,p5,p6)},
+        CallTheta:  function(p1,p2,p3,p4,p5,p6) {return finCALLtheta(p1,p2,p3,p4,p5,p6)},
+        PutDelta:   function(p1,p2,p3,p4,p5,p6) {return finPUTdelta(p1,p2,p3,p4,p5,p6)},
+        PutRho:     function(p1,p2,p3,p4,p5,p6) {return finPUTrho(p1,p2,p3,p4,p5,p6)},
+        PutTheta:   function(p1,p2,p3,p4,p5,p6) {return finPUTtheta(p1,p2,p3,p4,p5,p6)},
+        OptionGamma:function(p1,p2,p3,p4,p5,p6) {return finOPTgamma(p1,p2,p3,p4,p5,p6)},
+        OptionVega: function(p1,p2,p3,p4,p5,p6) {return finOPTvega(p1,p2,p3,p4,p5,p6)},
+        GCF:        function(p1,p2) {return cGcf(p1,p2)},
     }
 }) ();
 // node.js export
