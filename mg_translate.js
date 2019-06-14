@@ -1767,8 +1767,8 @@ function dFunc(dXpr, prefix) { //map FUNC format to export format
         return mReturn
     }
     // function handlers
-    function lFunc(parm) {mA=parm[0];mB=parm[1];mC=parm[2];return eval(funcselect(funcKey,fnformatL))} //process left side function
-    function rFunc(parm) {mA=parm[0];mB=parm[1];mC=parm[2];return eval(funcselect(funcKey,fnformatR))} //process right side function
+    function lFunc(parm) {var mA=parm[0],mB=parm[1],mC=parm[2];return eval(funcselect(funcKey,fnformatL))} //process left side function
+    function rFunc(parm) {var mA=parm[0],mB=parm[1],mC=parm[2];return eval(funcselect(funcKey,fnformatR))} //process right side function
     function funcselect(func,key) {return funcMap[func][key]}
     //
     var fnformatL = prefix+"L1";
