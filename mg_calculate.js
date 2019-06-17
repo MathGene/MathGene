@@ -2274,31 +2274,24 @@ var mgCalc = (function() {
         function achE(xU) {return lneS(cAddS(xU,sqtS(cSubS(cPowS(xU,"2"),1))))}
         function athE(xU) {return cDivS(cMulS(lneS(cAddS(1,xU)),lneS(cSubS(1,xU))),"2")}
         //
-        xU = strConvert(xU).replace(/([a-z])\(/g,"$1S(");
-        for (var xFn in trigFn) {
-            var rgx = new RegExp(trigFn[xFn]+"S","g");
-            xU = xU.replace(rgx,trigFn[xFn]+"E")
-        }
-        return xReduce(eval(xU.replace(/(Cv\[\d+\])/g,"'$1'")))
+        var xReturn = strConvert(xU).replace(/([a-z])\(/g,"$1S(");
+		trigFn.forEach(function(xFn) {var rgx = new RegExp(xFn+"S","g");xReturn = xReturn.replace(rgx,xFn+"E")})
+        return xReduce(eval(xReturn.replace(/(Cv\[\d+\])/g,"'$1'")))
     }
     function xprExpToTrig(xU) { //convert exponential forms to trig
         var expFn = ["sin","cos","tan","sec","csc","cot"]
         var expFnh = ["snh","csh","tnh","sch","cch","cth"]
-        xU = xReduce(xU);var xFn = 0;
-        var opMatch = xprSearch(xU,"cPow(Cv[8],Cv[9999])")
+        var xReturn = xReduce(xU);var xFn = 0;
+        var opMatch = xprSearch(xReturn,"cPow(Cv[8],Cv[9999])")
         if (opExtract(opMatch).func == "cMul" && opExtract(opMatch).upper < 0) {opMatch = xReduce(cNegS(opMatch))} //fix for negative numerical coeff
         if (opMatch && !strTest(opMatch,"Cv[46]")) {
-            for (xFn in expFnh) {
-                xU = xU.replace(xReduce(xprTrigToExp(expFnh[xFn]+"("+opMatch+")")),expFnh[xFn]+"("+opMatch+")")
-            }
+			expFnh.forEach(function (xFn) {xReturn = xReturn.replace(xReduce(xprTrigToExp(xFn+"("+opMatch+")")),xFn+"("+opMatch+")")})
         }
         if (opMatch && strTest(opMatch,"Cv[46]")) {
             opMatch = xReduce(cDivS(opMatch,"Cv[46]"))
-            for (xFn in expFn) {
-                xU = xU.replace(xReduce(xprTrigToExp(expFn[xFn]+"("+opMatch+")")),expFn[xFn]+"("+opMatch+")")
-            }
+			expFn.forEach(function(xFn) {xReturn = xReturn.replace(xReduce(xprTrigToExp(xFn+"("+opMatch+")")),xFn+"("+opMatch+")")})
         }
-        return xU
+        return xReturn
     }
 
     //Limits
