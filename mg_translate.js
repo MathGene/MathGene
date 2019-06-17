@@ -1271,8 +1271,7 @@ function htmlExport(htmlXpr) { //convert MG format to HTML
     htmlXpr = dFunc(htmlXpr, "html") //process functions
     //render symbols
     var sCount = strCount(htmlXpr,"Cv[");
-    htmlXpr = htmlXpr.replace(/Cv\[/g,"Cs[");
-    for (var nXf=0;nXf<sCount;nXf++) {htmlXpr = htmlXpr.replace(/Cs\[\d+\]/,eval(htmlXpr.match(/Cs\[\d+\]/)+""))}
+    for (var nXf=0;nXf<sCount;nXf++) {htmlXpr = htmlXpr.replace(/Cv\[\d+\]/,Cs[(htmlXpr.match(/Cv\[\d+\]/)+"").replace(/Cv\[(\d+)\]/,"$1")])} //resolve Cv[] symbols
     //scale and fix parens
     htmlXpr = htmlXpr.replace(/\(/g,"{").replace(/\)/g,"}");
     sCount = strCount(htmlXpr,"{");
@@ -2016,8 +2015,7 @@ function texExport(latXpr) { //convert MG format to LaTeX
     latXpr = latXpr.replace(/\<X\w\w\w\>/g,"").replace(/\%/g,"("); //clean up tags
     //resolve symbols
     sCount = strCount(latXpr,"Cv[");
-    latXpr = latXpr.replace(/Cv\[/g,"Ct[");
-    for (var nXf=0;nXf<sCount;nXf++) {latXpr = latXpr.replace(/Ct\[\d+\]/,eval(latXpr.match(/Ct\[\d+\]/)+""))}
+    for (var nXf=0;nXf<sCount;nXf++) {latXpr = latXpr.replace(/Cv\[\d+\]/,Ct[(latXpr.match(/Cv\[\d+\]/)+"").replace(/Cv\[(\d+)\]/,"$1")])} //resolve Cv[] symbols
     latXpr = latXpr.replace(/\(/g,"\\left(").replace(/\)/g,"\\right)").replace(/\\/g," \\").replace(/  /g," ").replace(/ _/g,"_").replace(/_ /g,"_").replace(/ \^/g,"^").replace(/\^ /g,"^").replace(/ \[/g,"[").replace(/\\ \\/g,"\\\\");//cleanup
     return latXpr;
 }
