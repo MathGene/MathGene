@@ -168,7 +168,6 @@ var mgCalc = (function() {
                 if (typeof solverMap[getOp.func]["solverL"] != "undefined") {
                     if (strTest(getOp.upper,xVar) && strTest(getOp.lower,xVar)) {
                         rExpr = xprFactor(rExpr);
-                        getOp = opExtract(rExpr);
                         break
                     }
                     else if (strTest(getOp.upper,xVar)) {
@@ -2292,8 +2291,8 @@ var mgCalc = (function() {
         cDivL: function(xU,xL) {
             var xTractU = opExtract(xU);
             var xTractL = opExtract(xL);
-            if (xTractL.func == "sqt" && xTractU.func != "sqt") {return sqtS(lmtS(cDivS(xprExpand(cPowS(xU,2)),xTractL.upper)),lVar,xLim)}
-            if (xTractL.func != "sqt" && xTractU.func == "sqt") {return sqtS(lmtS(cDivS(xTractU.upper,xprExpand(cPowS(xL,2)))),lVar,xLim)}
+            if (xTractL.func == "sqt" && xTractU.func != "sqt") {return sqtS(lmtS(cDivS(xprExpand(cPowS(xU,2)),xTractL.upper),lVar,xLim))}
+            if (xTractL.func != "sqt" && xTractU.func == "sqt") {return sqtS(lmtS(cDivS(xTractU.upper,xprExpand(cPowS(xL,2))),lVar,xLim))}
             if (strTest(lmtS(xU,lVar,xLim),"Cv[8734]") && strTest(lmtS(xL,lVar,xLim),"Cv[8734]")) {return lmtS(cDivS(drvS(xU,lVar),drvS(xL,lVar)),lVar,xLim)} // l'Hopital
             if (lmtS(xL,lVar,xLim) != 0) {return cDivS(lmtS(xU,lVar,xLim),lmtS(xL,lVar,xLim))} //quotient rule
             return lmtS(cDivS(drvS(xU,lVar),drvS(xL,lVar)),lVar,xLim) // l'Hopital
@@ -3624,9 +3623,7 @@ var mgCalc = (function() {
         if (getType(nL) != "real") {nL = 1e-322}
         if (getType(nH) != "real") {nH = 1e301}
         var t1 = 0, iSlv = nL, ix = 0;
-        var tLo =  toReal(expr(iSlv));
         iSlv = nH;
-        var tHi =  toReal(expr(iSlv));
         for (ix=1;ix<100;ix++) {
             iSlv = (nH+nL)/2;
             t1 = toReal(expr(iSlv));
