@@ -937,7 +937,6 @@ var mgCalc = (function() {
         if (xU == xL) {return cMulS(2,xU)}
         if (nbrTest(xL) && xL < 0) {return cSubS(xU,cNegS(xL))}
         if (nbrTest(xU) && nbrTest(xL)) {return cAdd(xU,xL)}
-        if (!seriesFlag && nbrTest(xU) && !nbrTest(xL)) {return cAddS(xL,xU)}
         if (xTractL.func == "cNeg") {return cSubS(xU,xTractL.upper)}
         if (xTractL.func == "cMul" && xTractL.upper < 0) {return cSubS(xU,cMulS(cNegS(xTractL.upper),xTractL.lower))}
         if (xTractU.func == "cMul" && xTractU.upper < 0) {return cSubS(xL,cMulS(cNegS(xTractU.upper),xTractU.lower))}
@@ -2158,7 +2157,6 @@ var mgCalc = (function() {
 
     // Taylor series
     function xprSeries(xS,sVar,sCenter,sOrder) {
-        seriesFlag = true;
         if (typeof sCenter == "undefined") {sCenter = 0} //default center = 0
         if (typeof sOrder == "undefined") {sOrder = 6} //default order = 6
         if (typeof sVar == "undefined") {sVar = pVariable(sVar)} //select primary variable if not specified
@@ -2170,7 +2168,6 @@ var mgCalc = (function() {
             sTerm = xReduce(cDivS(cMulS(cSubst(sDerivative,sVar,sCenter),cPowS(cSubS(sVar,sCenter),iSeries)),fac(iSeries)));
             sReturn = cAddS(sReturn,sTerm)
         }
-        seriesFlag = false;
         if (strTest(sReturn,"undefined")) {return xS}
         return "cAdd("+sReturn+",Cv[8230])"
     }
@@ -3622,8 +3619,7 @@ var mgCalc = (function() {
         if (getType(result) != "real") {return "undefined"}
         if (getType(nL) != "real") {nL = 1e-322}
         if (getType(nH) != "real") {nH = 1e301}
-        var t1 = 0, iSlv = nL, ix = 0;
-        iSlv = nH;
+        var t1 = 0, iSlv = nH, ix = 0;
         for (ix=1;ix<100;ix++) {
             iSlv = (nH+nL)/2;
             t1 = toReal(expr(iSlv));
@@ -3654,7 +3650,7 @@ var mgCalc = (function() {
     }
 
     var Sv = [],Pv = [];
-    var pxpFlag = false,expFlag = false,factorFlag = false,solverFlag = false;seriesFlag = false;
+    var pxpFlag = false,expFlag = false,factorFlag = false,solverFlag = false;
     var deeVarP = "";
     var dRound = 1e12; //rounding for complex number arithmetic
     var iConstant = 11100; //constant of integration variable index
