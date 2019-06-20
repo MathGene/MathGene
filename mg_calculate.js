@@ -731,13 +731,14 @@ var mgCalc = (function() {
             else if (xL <= -1) {return 0}
             else {return "undefined"}
         }
-        if (xL == "Cv[8734]" && xU != 0) {
+        if (xL == "Cv[8734]") {
             if (abs(xU) > 0 && abs(xL) < 1) {return 0}
-            if (!nbrEven(xU) && xU < 0) {return "cNeg(Cv[8734])"}
+            else if (!nbrEven(xU) && xU < 0) {return "cNeg(Cv[8734])"}
             else {return "Cv[8734]"}
         }
-        if (xL == "cNeg(Cv[8734])" && xU != 0) {
-            if (abs(xU) > 0 && abs(xL) < 1) {return "Cv[8734]"}
+        if (xL == "cNeg(Cv[8734])") {
+            if (xU == 0) {return "Cv[8734]"}
+            else if (abs(xU) > 0 && abs(xL) < 1) {return "Cv[8734]"}
             else {return 0}
         }
         if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "cTms" || xTractU.func == "cDiv" || xTractU.func == "cMul" || xTractU.func == "cPow") {xU = "("+xU+")"}
@@ -993,7 +994,8 @@ var mgCalc = (function() {
         var xTractT = "",xTractB = "";
         if (xTractU.func == "mat" && xTractL.func == "mat") {return cAddS(xU,cMulS(xL,-1))} //matrix subtract
         if (xTractL.func == "cAdd") {xL = "("+xL+")"}
-        if (xU == "Cv[8734]" && xL == "Cv[8734]") {return "Cv[8734]"}
+        if (xU == "Cv[8734]" && xL == "Cv[8734]") {return "Cv[8734]"} //?
+        if (xU == "cNeg(Cv[8734])" && xL == "cNeg(Cv[8734])") {return "cNeg(Cv[8734])"} //?
         if (xU == "cNeg(Cv[8734])" && xL == "Cv[8734]") {return "cNeg(Cv[8734])"}
         if (!strTest(xU,"Cv[8734]") && xL == "Cv[8734]") {return "cNeg(Cv[8734])"}
         if (!strTest(xU,"Cv[8734]") && xL == "cNeg(Cv[8734])") {return "Cv[8734]"}
