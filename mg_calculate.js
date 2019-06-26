@@ -995,7 +995,6 @@ var mgCalc = (function() {
         if (xTractL.func == "cAdd") {xL = "("+xL+")"}
         if (xU == "Cv[8734]" && xL == "cNeg(Cv[8734])") {return "Cv[8734]"} //infinity handlers for limits
         if (xU == "cNeg(Cv[8734])" && xL == "Cv[8734]") {return "cNeg(Cv[8734])"}
-        if (xU == "cNeg(Cv[8734])" && xL == "Cv[8734]") {return "cNeg(Cv[8734])"}
         if (!strTest(xU,"Cv[8734]") && xL == "Cv[8734]") {return "cNeg(Cv[8734])"}
         if (!strTest(xU,"Cv[8734]") && xL == "cNeg(Cv[8734])") {return "Cv[8734]"}
         if (!strTest(xL,"Cv[8734]") && xU == "Cv[8734]") {return "Cv[8734]"}
@@ -1448,7 +1447,6 @@ var mgCalc = (function() {
     function rexS(xU) {return "rex("+xU+")"}
     function frcS(xU) {return "frc("+xU+")"}
     function ceiS(xU) {return "cei("+xU+")"}
-    function cBndS(xU,xL) {return "cBnd("+xU+","+xL+")"}
     function cEqlS(xU,xL) {return "cEql("+xU+","+xL+")"}
     function cNqlS(xU,xL) {return "cNql("+xU+","+xL+")"}
     function cGthS(xU,xL) {return "cGth("+xU+","+xL+")"}
@@ -2284,8 +2282,7 @@ var mgCalc = (function() {
         var lmtFunc = {
         cAddL: function(xU,xL) {return cAddS(lmtS(xU,lVar,xLim),lmtS(xL,lVar,xLim))},
         cSubL: function(xU,xL) {
-            if (lmtS(xU,lVar,xLim) == "Cv[8734]" && lmtS(xL,lVar,xLim) == "Cv[8734]") {return lneS(cDivS(cPowS("Cv[8]",lmtS(xU,lVar,xLim)),cPowS("Cv[8]",lmtS(xL,lVar,xLim))))}
-            if (lmtS(xU,lVar,xLim) == "cNeg(Cv[8734])" && lmtS(xL,lVar,xLim) == "cNeg(Cv[8734])") {return lneS(cDivS(cPowS("Cv[8]",lmtS(xU,lVar,xLim)),cPowS("Cv[8]",lmtS(xL,lVar,xLim))))}
+            if (lmtS(xU,lVar,xLim) == "Cv[8734]" && lmtS(xL,lVar,xLim) == "Cv[8734]") {return lneS(cDivS(cPowS("Cv[8]",lmtS(xU,lVar,xLim)),cPowS("Cv[8]",lmtS(xL,lVar,xLim))))} //inf-inf
             return cSubS(lmtS(xU,lVar,xLim),lmtS(xL,lVar,xLim))
         },
         cMulL: function(xU,xL) {
@@ -2293,7 +2290,7 @@ var mgCalc = (function() {
             if (lmtS(xL,lVar,xLim) == 0 && lmtS(xU,lVar,xLim) == "Cv[8734]") {return lmtFunc["cDivL"](xL,cDivS(1,xU))} //inf*0
             if (!strTest(xU,lVar)) {return cMulS(xU,lmtS(xL,lVar,xLim))} //constant rule
             if (!strTest(xL,lVar)) {return cMulS(xL,lmtS(xU,lVar,xLim))} //constant rule
-            return cMulS(lmtS(xU,lVar,xLim),lmtS(xL,lVar,xLim))
+            return cMulS(lmtS(xU,lVar,xLim),lmtS(xL,lVar,xLim)) //product rule
         },
         cDivL: function(xU,xL) {
             var xTractU = opExtract(xU);
