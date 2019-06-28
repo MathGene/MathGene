@@ -2322,8 +2322,6 @@ var mgCalc = (function() {
             return cPowS(xU,lmtS(xL,lVar,xLim))
         },
         cNegL: function(xU) {return cNegS(lmtS(xU,lVar,xLim))},
-        nrtL: function(xU,xL) {return nrtL(xU,lmtS(xL,lVar,xLim))},
-        lgnL: function(xU,xL) {return lgnL(xU,lmtS(xL,lVar,xLim))},
         lneL: function(xU) {return lneS(lmtS(xU,lVar,xLim))},
         sqtL: function(xU) {return sqtS(lmtS(xU,lVar,xLim))},
         cbtL: function(xU) {return cbtS(lmtS(xU,lVar,xLim))},
@@ -2744,10 +2742,7 @@ var mgCalc = (function() {
             return "undefined"
         },
         cNegM: function(xU) {return cNegS(smmS(xU,sUpper,dV,sLower))},
-        nrtM: function(xU,xL) {return "undefined"},
         lneM: function(xU) {return lneS(pmmS(xU,sUpper,dV,sLower))},
-        logM: function(xU) {return logS(pmmS(xU,sUpper,dV,sLower))},
-        lgnM: function(xU,xL) {return lgnS(pmmS(xL,sUpper,dV,sLower),xU)},
         sqtM: function(xU) {return "undefined"},
         cbtM: function(xU) {return "undefined"},
         sinM: function(xU) {return "undefined"},
@@ -2849,10 +2844,7 @@ var mgCalc = (function() {
             if (+pLower == 0 && strTest(xU,dV)) {return 0}
             return cMulS(pmmS(-1,pUpper,dV,pLower),pmmS(xU,pUpper,dV,pLower))
         },
-        nrtP: function(xU,xL) {return "undefined"},
-        lgnP: function(xU,xL) {return "undefined"},
         lneP: function(xU) {return "undefined"},
-        logP: function(xU) {return "undefined"},
         sqtP: function(xU) {return "undefined"},
         cbtP: function(xU) {return "undefined"},
         sinP: function(xU) {return "undefined"},
