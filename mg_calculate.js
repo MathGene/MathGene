@@ -83,7 +83,7 @@ function mgSeries(expression,variable,center,order) { //find Taylor Series of ex
 var mgCalc = (function() {
 
     function xprSolve(xSol,cVar) {//solve equation/inequality xSol in FUNC format for variable cVar
-        var solverMap =
+        const solverMap =
         {
         sin:{solverU:"asnS(lExpr)",ineqU:0},
         cos:{solverU:"acsS(lExpr)",ineqU:0},
@@ -227,7 +227,7 @@ var mgCalc = (function() {
         return sReturn
     }
     function relExtract(fExt) { //extract relational operators in FUNC format, returns func,upper,lower
-        var rOps = ["cEql","cGth","cGeq","cLth","cLeq","cNql"];
+        const rOps = ["cEql","cGth","cGeq","cLth","cLeq","cNql"];
         fExt = strConvert(fExt);
         for (var cI in rOps) {
             if (fExt.indexOf(rOps[cI]) == 0 ) {
@@ -1143,7 +1143,7 @@ var mgCalc = (function() {
         return "exp("+xU+")"
     }
     //trig exact values
-    var iAngle = [
+    const iAngle = [
     "cDiv(1,12)","cDiv(5,12)","cDiv(7,12)","cDiv(11,12)","cDiv(13,12)","cDiv(17,12)","cDiv(19,12)","cDiv(23,12)",
     "cDiv(1,10)","cDiv(3,10)","cDiv(7,10)","cDiv(9,10)","cDiv(11,10)","cDiv(13,10)","cDiv(17,10)","cDiv(19,10)",
     "cDiv(1,6)","cDiv(5,6)","cDiv(7,6)","cDiv(11,6)",
@@ -1151,7 +1151,7 @@ var mgCalc = (function() {
     "cDiv(1,3)","cDiv(2,3)","cDiv(4,3)","cDiv(5,3)",
     "cDiv(1,2)","cDiv(3,2)",
     ];
-    var sinAngle = [
+    const sinAngle = [
     "cDiv(cSub(sqt(6),sqt(2)),4)","cDiv(cAdd(sqt(6),sqt(2)),4)","cDiv(cAdd(sqt(6),sqt(2)),4)","cDiv(cSub(sqt(6),sqt(2)),4)","cDiv(cSub(sqt(2),sqt(6)),4)","cDiv(cSub(cNeg(sqt(2)),sqt(6)),4)","cDiv(cSub(cNeg(sqt(2)),sqt(6)),4)","cDiv(cSub(sqt(2),sqt(6)),4)",
     "cDiv(cSub(sqt(5),1),4)","cDiv(cAdd(sqt(5),1),4)","cDiv(cAdd(sqt(5),1),4)","cDiv(cSub(sqt(5),1),4)","cDiv(cSub(1,sqt(5)),4)","cDiv(cSub(cNeg(sqt(5)),1),4)","cDiv(cSub(cNeg(sqt(5)),1),4)","cDiv(cSub(1,sqt(5)),4)",
     "cDiv(1,2)","cDiv(1,2)","cNeg(cDiv(1,2))","cNeg(cDiv(1,2))",
@@ -1171,7 +1171,7 @@ var mgCalc = (function() {
         if (xU == "Cv[8734]") {return "undefined"}
         return "sin("+xU+")"
     }
-    var cosAngle = [
+    const cosAngle = [
     "cDiv(cAdd(sqt(6),sqt(2)),4)","cDiv(cSub(sqt(6),sqt(2)),4)","cDiv(cSub(sqt(2),sqt(6)),4)","cDiv(cSub(cNeg(sqt(2)),sqt(6)),4)","cDiv(cSub(cNeg(sqt(2)),sqt(6)),4)","cDiv(cSub(sqt(2),sqt(6)),4)","cDiv(cSub(sqt(6),sqt(2)),4)","cDiv(cAdd(sqt(6),sqt(2)),4)",
     "cDiv(sqt(cAdd(cMul(sqt(5),2),10)),4)","cDiv(sqt(cSub(10,cMul(sqt(5),2))),4)","cNeg(cDiv(sqt(cSub(10,cMul(sqt(5),2))),4))","cNeg(cDiv(sqt(cAdd(cMul(sqt(5),2),10)),4))","cNeg(cDiv(sqt(cAdd(cMul(sqt(5),2),10)),4))","cNeg(cDiv(sqt(cSub(10,cMul(sqt(5),2))),4))","cDiv(sqt(cSub(10,cMul(sqt(5),2))),4)","cDiv(sqt(cAdd(cMul(sqt(5),2),10)),4)",
     "cDiv(sqt(3),2)","cNeg(cDiv(sqt(3),2))","cNeg(cDiv(sqt(3),2))","cDiv(sqt(3),2)",
@@ -1190,7 +1190,7 @@ var mgCalc = (function() {
         if (xU == "Cv[8734]") {return "undefined"}
         return "cos("+xU+")"
     }
-    var tanAngle = [
+    const tanAngle = [
     "cSub(2,sqt(3))","cAdd(sqt(3),2)","cSub(cNeg(sqt(3)),2)","cSub(sqt(3),2)","cSub(2,sqt(3))","cAdd(sqt(3),2)","cSub(cNeg(sqt(3)),2)","cSub(sqt(3),2)",
     "cDiv(cSub(sqt(10),sqt(2)),cMul(2,sqt(cAdd(5,sqt(5)))))","cDiv(cAdd(sqt(2),sqt(10)),cMul(2,sqt(cSub(5,sqt(5)))))","cNeg(cDiv(cAdd(sqt(2),sqt(10)),cMul(2,sqt(cSub(5,sqt(5))))))","cDiv(cSub(sqt(2),sqt(10)),cMul(2,sqt(cAdd(5,sqt(5)))))","cDiv(cSub(sqt(10),sqt(2)),cMul(2,sqt(cAdd(5,sqt(5)))))","cDiv(cAdd(sqt(2),sqt(10)),cMul(2,sqt(cSub(5,sqt(5)))))","cNeg(cDiv(cAdd(sqt(2),sqt(10)),cMul(2,sqt(cSub(5,sqt(5))))))","cDiv(cSub(sqt(2),sqt(10)),cMul(2,sqt(cAdd(5,sqt(5)))))",
     "cDiv(1,sqt(3))","cNeg(cDiv(1,sqt(3)))","cDiv(1,sqt(3))","cNeg(cDiv(1,sqt(3)))",
@@ -1209,7 +1209,7 @@ var mgCalc = (function() {
         if (xU == "Cv[8734]") {return "undefined"}
         return "tan("+xU+")"
     }
-    var secAngle = [
+    const secAngle = [
     "cSub(sqt(6),sqt(2))","cAdd(sqt(2),sqt(6))","cSub(sqt(2),sqt(6))","cSub(cNeg(sqt(2)),sqt(6))","cSub(sqt(2),sqt(6))","cSub(cNeg(sqt(2)),sqt(6))","cAdd(sqt(2),sqt(6))","cSub(sqt(6),sqt(2))",
     "cDiv(cMul(2,sqt(2)),sqt(cAdd(sqt(5),5)))","cDiv(cMul(2,sqt(2)),sqt(cSub(5,sqt(5))))","cNeg(cDiv(cMul(2,sqt(2)),sqt(cSub(5,sqt(5)))))","cNeg(cDiv(cMul(2,sqt(2)),sqt(cAdd(5,sqt(5)))))","cNeg(cDiv(cMul(2,sqt(2)),sqt(cAdd(5,sqt(5)))))","cNeg(cDiv(cMul(2,sqt(2)),sqt(cSub(5,sqt(5)))))","cDiv(cMul(2,sqt(2)),sqt(cSub(5,sqt(5))))","cDiv(cMul(2,sqt(2)),sqt(cAdd(sqt(5),5)))",
     "cDiv(2,sqt(3))","cNeg(cDiv(2,sqt(3)))","cNeg(cDiv(2,sqt(3)))","cDiv(2,sqt(3))",
@@ -1228,7 +1228,7 @@ var mgCalc = (function() {
         if (xU == "Cv[8734]") {return "undefined"}
         return "sec("+xU+")"
     }
-    var cscAngle = [
+    const cscAngle = [
     "cAdd(sqt(6),sqt(2))","cSub(sqt(6),sqt(2))","cSub(sqt(6),sqt(2))","cAdd(sqt(6),sqt(2))","cSub(cNeg(sqt(6)),sqt(2))","cSub(sqt(2),sqt(6))","cSub(sqt(2),sqt(6))","cSub(cNeg(sqt(6)),sqt(2))",
     "cAdd(sqt(5),1)","cSub(sqt(5),1)","cSub(sqt(5),1)","cAdd(sqt(5),1)","cSub(cNeg(sqt(5)),1)","cSub(1,sqt(5))","cSub(1,sqt(5))","cSub(cNeg(sqt(5)),1)",
     "2","2","-2","-2",
@@ -1246,7 +1246,7 @@ var mgCalc = (function() {
         if (xU == "Cv[8734]") {return "undefined"}
         return "csc("+xU+")"
     }
-    var cotAngle = [
+    const cotAngle = [
     "cAdd(sqt(3),2)","cSub(2,sqt(3))","cSub(sqt(3),2)","cSub(cNeg(sqt(3)),2)","cAdd(sqt(3),2)","cSub(2,sqt(3))","cSub(sqt(3),2)","cSub(cNeg(sqt(3)),2)",
     "cDiv(cMul(cAdd(sqt(2),sqt(10)),sqt(cAdd(sqt(5),5))),4)","cDiv(cMul(cSub(sqt(10),sqt(2)),sqt(cSub(5,sqt(5)))),4)","cDiv(cMul(cSub(sqt(10),sqt(2)),sqt(cSub(5,sqt(5)))),4)","cDiv(cMul(cAdd(sqt(2),sqt(10)),sqt(cAdd(sqt(5),5))),4)","cDiv(cMul(cAdd(sqt(2),sqt(10)),sqt(cAdd(sqt(5),5))),4)","cDiv(cMul(cSub(sqt(2),sqt(10)),sqt(cSub(5,sqt(5)))),4)","cDiv(cMul(cSub(sqt(2),sqt(10)),sqt(cSub(5,sqt(5)))),4)","cDiv(cMul(cAdd(sqt(2),sqt(10)),sqt(cAdd(sqt(5),5))),4)",
     "sqt(3)","cNeg(sqt(3))","sqt(3)","cNeg(sqt(3))",
@@ -1482,8 +1482,8 @@ var mgCalc = (function() {
         iIterations = 0;
         sIterations = 0;
         pIterations = 0;
-        var calcOpsIn  = ["idr(","tdr(","lim(","sum(","prd("];
-        var calcOpsOut = ["drv(","tdv(","lmt(","smm(","pmm("];
+        const calcOpsIn  = ["idr(","tdr(","lim(","sum(","prd("];
+        const calcOpsOut = ["drv(","tdv(","lmt(","smm(","pmm("];
         var dV = "",invTemp = [],nC = 0;
         var sCount = dExp.split("Cv[8748]").length-1; //differential
         for (nC=0;nC<sCount;nC++) {
@@ -2234,7 +2234,7 @@ var mgCalc = (function() {
 
     //Exponential trig conversion
     function xprTrigToExp(xU) { //convert trig to exponential forms
-        var trigFn = ["sin","cos","tan","sec","csc","cot","snh","csh","tnh","sch","cch","cth","asn","acs","atn","asc","acc","act","ash","ach","ath"]
+        const trigFn = ["sin","cos","tan","sec","csc","cot","snh","csh","tnh","sch","cch","cth","asn","acs","atn","asc","acc","act","ash","ach","ath"]
         function sinE(xU) {return cDivS(cSubS(cPowS("Cv[8]",cMulS("Cv[46]",xU)),cPowS("Cv[8]",cMulS(cNegS("Cv[46]"),xU))),cMulS("2","Cv[46]"))}
         function cosE(xU) {return cDivS(cAddS(cPowS("Cv[8]",cMulS("Cv[46]",xU)),cPowS("Cv[8]",cMulS(cNegS("Cv[46]"),xU))),"2")}
         function tanE(xU) {return cDivS(cSubS(cPowS("Cv[8]",cMulS("Cv[46]",xU)),cPowS("Cv[8]",cMulS(cNegS("Cv[46]"),xU))),cMulS("Cv[46]",cAddS(cPowS("Cv[8]",cMulS("Cv[46]",xU)),cPowS("Cv[8]",cMulS(cNegS("Cv[46]"),xU)))))  }
@@ -2262,8 +2262,8 @@ var mgCalc = (function() {
         return xReduce(eval(xReturn.replace(/(Cv\[\d+\])/g,"'$1'")))
     }
     function xprExpToTrig(xU) { //convert exponential forms to trig
-        var expFn = ["sin","cos","tan","sec","csc","cot"]
-        var expFnh = ["snh","csh","tnh","sch","cch","cth"]
+        const expFn = ["sin","cos","tan","sec","csc","cot"]
+        const expFnh = ["snh","csh","tnh","sch","cch","cth"]
         var xReturn = xReduce(xU);var xFn = 0;
         var opMatch = xprSearch(xReturn,"cPow(Cv[8],Cv[9999])")
         if (opExtract(opMatch).func == "cMul" && opExtract(opMatch).upper < 0) {opMatch = xReduce(cNegS(opMatch))} //fix for negative numerical coeff
@@ -3438,7 +3438,7 @@ var mgCalc = (function() {
         if (getType(xU) == "complex") {
             xU = toCplx(xU);
             var gC = 7;
-            var pC = [0.99999999999980993,676.5203681218851,-1259.1392167224028,771.32342877765313,-176.61502916214059,12.507343278686905,-0.13857109526572012,9.9843695780195716e-6,1.5056327351493116e-7];
+            const pC = [0.99999999999980993,676.5203681218851,-1259.1392167224028,771.32342877765313,-176.61502916214059,12.507343278686905,-0.13857109526572012,9.9843695780195716e-6,1.5056327351493116e-7];
             if (xU.r < 0.5) {return cDiv(Cv[29],cMul(sin(cMul(Cv[29],xU)),gam(cAdd(1,cMul(-1,xU)))))}
             else {
                 xU = cAdd(xU,-1);
