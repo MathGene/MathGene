@@ -1766,38 +1766,36 @@ function dFunc(dXpr, prefix) { //map FUNC format to export format
         return mReturn
     }
     // function handlers
-    function lFunc(parm) {var mA=parm[0],mB=parm[1],mC=parm[2];return eval(funcselect(funcKey,fnformatL))} //process left side function
+    function lFunc(parm) {var mA=parm[0],mB=parm[1],mC=parm[2];return eval(funcselect(funcKey,fnformatLx))} //process left side function
     function rFunc(parm) {var mA=parm[0],mB=parm[1],mC=parm[2];return eval(funcselect(funcKey,fnformatR))} //process right side function
     function funcselect(func,key) {return funcMap[func][key]}
     //
-    var fnformatL = prefix+"L1";
-    var fnformatR = prefix+"R1";
     dXpr = dXpr.replace(/ /g,"").replace(/([a-z][a-z][a-z])\(/ig,"$1@");
     var sCount = strCount(dXpr,"@");
+    var bSym = 0, lSym = 0,lPar = 1,rPar = 0,iXf = 0,strg = "",strgS = "",funcKey = "",fParams = "",rTmp = "",fnformatL = "",fnformatR = "",fnformatLx = "";
+    if (mgConfig.fnFmt == "fn(x)") {fnformatL = prefix+"L1";fnformatR = prefix+"R1"}
+    else {fnformatL = prefix+"L2";fnformatR = prefix+"R2"}  	
     for (var nXf=0;nXf<sCount;nXf++) {
-        if (mgConfig.fnFmt == "fn(x)") {fnformatL = prefix+"L1";fnformatR = prefix+"R1"}
-        else {fnformatL = prefix+"L2";fnformatR = prefix+"R2"}
-        var lPar = 1,rPar = 0,iXf = 0;
-        var bSym = dXpr.lastIndexOf("@")+1;
-        var lSym = dXpr.length;
+        fnformatLx = fnformatL;
+        lPar = 1,rPar = 0,iXf = 0,fParams = "",rTmp = "";
+        bSym = dXpr.lastIndexOf("@")+1;
+        lSym = dXpr.length;
         for (iXf=bSym;iXf<lSym;iXf++) {
             if (dXpr.charAt(iXf) == "@" || dXpr.charAt(iXf) == "(") {lPar++}
             if (dXpr.charAt(iXf) == ")") {rPar++}
             if (lPar == rPar) {break;}
         }
-        var strg = dXpr.substr(bSym,iXf-bSym);
+        funcKey = dXpr.substr(bSym-4,3); //functions
+        strg = dXpr.substr(bSym,iXf-bSym); //parms
         if (lPar > rPar) {strg = strg.substr(0,strg.lastIndexOf(")"))+strg.substr(strg.lastIndexOf(")")+1)} //unmatched left parens
-        var strgS = strg.split(",");
-        if (typeof strgS[0] == "undefined") {strgS[0] = strg}
+        strgS = strg.split(","); //parse parms
+        if (typeof strgS[0] == "undefined") {strgS[0] = strg} 
         for (var tXi=0;tXi<strgS.length;tXi++) {if (typeof strgS[tXi] == "undefined") {strgS[tXi]= ""}}
-        var funcKey = dXpr.substr(bSym-4,3); //functions
         if (!funcTest(funcKey)) {funcKey = dXpr.substr(bSym-5,4)} //operators
-        if (typeof funcselect(funcKey,prefix+"Inv1") != "undefined" && mgConfig.invFmt == "sin<sup>-1</sup>" && mgConfig.fnFmt == "fn(x)") {fnformatL = prefix+"Inv1"}
-        if (typeof funcselect(funcKey,prefix+"Inv1") != "undefined" && mgConfig.invFmt == "sin<sup>-1</sup>" && mgConfig.fnFmt == "fn x")  {fnformatL = prefix+"Inv2"}
-        var fParams = "";
-        if (typeof strgS[0] == "string" && funcselect(funcKey,fnformatL).search("mA") == -1 && funcselect(funcKey,fnformatL).search("(parm)") == -1){fParams = fParams+strgS[0]}
-        if (typeof strgS[1] == "string" && funcselect(funcKey,fnformatL).search("mB") == -1 && funcselect(funcKey,fnformatL).search("(parm)") == -1){fParams = fParams+strgS[1]}
-        var rTmp = "";
+        if (typeof funcselect(funcKey,prefix+"Inv1") != "undefined" && mgConfig.invFmt == "sin<sup>-1</sup>" && mgConfig.fnFmt == "fn(x)") {fnformatLx = prefix+"Inv1"}
+        if (typeof funcselect(funcKey,prefix+"Inv1") != "undefined" && mgConfig.invFmt == "sin<sup>-1</sup>" && mgConfig.fnFmt == "fn x")  {fnformatLx = prefix+"Inv2"}
+        if (typeof strgS[0] == "string" && funcselect(funcKey,fnformatLx).search("mA") == -1 && funcselect(funcKey,fnformatLx).search("(parm)") == -1){fParams = fParams+strgS[0]}
+        if (typeof strgS[1] == "string" && funcselect(funcKey,fnformatLx).search("mB") == -1 && funcselect(funcKey,fnformatLx).search("(parm)") == -1){fParams = fParams+strgS[1]}
         if (mgConfig.fnFmt == "fn x" && iXf < lSym && funcselect(funcKey,fnformatR).search(" ") > -1 && fParams.replace(/[\|\(\{](.*)[\|\)\}]/g,"").search(/[+(&minus;)]/) > -1 ) {fParams = "("+fParams+")"} //add parens to inside functions
         if (iXf < lSym) {rTmp = rFunc(strgS)}
         dXpr = dXpr.substr(0,bSym-(funcKey.length+1))+lFunc(strgS)+fParams+rTmp+dXpr.substr(iXf+1,lSym);
