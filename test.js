@@ -2124,7 +2124,7 @@ function runNumerical() {
 		if (nodejs) {
 			const rceivd = mgNumeric(numerical[index]).mg;
 			const xpectd = numerical[index+1];
-			test("Numerical:"+numerical[index], () => {expect(xpectd).toBe(rceivd)})	
+			test("Numerical:"+numerical[index], function () {return expect(xpectd).toBe(rceivd)})	
 		}
 		else {
 			runTest(mgTranslate(numerical[index]).html,mgNumeric(numerical[index]).html,mgTranslate(numerical[index+1]).html)
@@ -2141,7 +2141,7 @@ function runRange() {
 		if (nodejs) {
 			const rceivd = mgRange(range[index]).html;
 			const xpectd = mgTranslate(range[index+1]).html;
-			test("Range:"+range[index], () => {expect(xpectd).toBe(rceivd)})	
+			test("Range:"+range[index], function () {return expect(xpectd).toBe(rceivd)})	
 		}
 		else {
 			runTest(mgTranslate(range[index]).html,mgRange(range[index]).html,mgTranslate(range[index+1]).html)
@@ -2157,7 +2157,7 @@ function runDomain() {
 		if (nodejs) {
 			const rceivd = mgDomain(domain[index]).html;
 			const xpectd = mgTranslate(domain[index+1]).html;
-			test("Domain:"+domain[index], () => {expect(xpectd).toBe(rceivd)})	
+			test("Domain:"+domain[index], function () {return expect(xpectd).toBe(rceivd)})	
 		}
 		else {
 			runTest(mgTranslate(domain[index]).html,mgDomain(domain[index]).html,mgTranslate(domain[index+1]).html)
@@ -2173,7 +2173,7 @@ function runMatrix() {
 		if (nodejs) {
 			const rceivd = mgSimplify(matrix[index]).html;
 			const xpectd = mgTranslate(matrix[index+1]).html;
-			test("Matrix:"+matrix[index], () => {expect(xpectd).toBe(rceivd)})	
+			test("Matrix:"+matrix[index], function () {return expect(xpectd).toBe(rceivd)})	
 		}
 		else {
 			runTest(mgTranslate(matrix[index]).html,mgSimplify(matrix[index]).html,mgTranslate(matrix[index+1]).html)
@@ -2189,7 +2189,7 @@ function runReduce() {
 		if (nodejs) {
 			const rceivd = mgSimplify(reduce[index]).html;
 			const xpectd = mgTranslate(reduce[index+1]).html;
-			test("Reduce:"+reduce[index], () => {expect(xpectd).toBe(rceivd)})	
+			test("Reduce:"+reduce[index], function () {return expect(xpectd).toBe(rceivd)})	
 		}
 		else {
         runTest(mgTranslate(reduce[index]).html,mgSimplify(reduce[index]).html,mgTranslate(reduce[index+1]).html)
@@ -2205,7 +2205,7 @@ function runFactor() {
 		if (nodejs) {
 			const rceivd = mgFactor(factor[index]).html;
 			const xpectd = mgTranslate(factor[index+1]).html;
-			test("Factor:"+factor[index], () => {expect(xpectd).toBe(rceivd)})	
+			test("Factor:"+factor[index], function () {return expect(xpectd).toBe(rceivd)})	
 		}
 		else {
 			runTest(mgTranslate(factor[index]).html,mgFactor(factor[index]).html,mgTranslate(factor[index+1]).html)
@@ -2220,7 +2220,7 @@ function runExpand() {
 		if (nodejs) {
 			const rceivd = mgExpand(expand[index]).html;
 			const xpectd = mgTranslate(expand[index+1]).html;
-			test("Expand:"+expand[index], () => {expect(xpectd).toBe(rceivd)})	
+			test("Expand:"+expand[index], function () {return expect(xpectd).toBe(rceivd)})	
 		}
 		else {
 			runTest(mgTranslate(expand[index]).html,mgExpand(expand[index]).html,mgTranslate(expand[index+1]).html)
@@ -2235,7 +2235,7 @@ function runSolve() {
 		if (nodejs) {
 			const rceivd = mgSolve(solve[index],solve[index+1]).html;
 			const xpectd = mgTranslate(solve[index+2]).html;
-			test("Solve:"+solve[index]+" for "+solve[index+2], () => {expect(xpectd).toBe(rceivd)})	
+			test("Solve:"+solve[index]+" for "+solve[index+2], function() {return expect(xpectd).toBe(rceivd)})	
 		}
 		else {
 			runTest(mgTranslate(solve[index]).html,mgSolve(solve[index],solve[index+1]).html,mgTranslate(solve[index+2]).html)
@@ -2258,7 +2258,7 @@ function runTrigtoexp() {
 		if (nodejs) {
 			const rceivd = mgTrigToExp(trigtoexp[index]).html;
 			const xpectd = mgTranslate(trigtoexp[index+1]).html;
-			test("Trig2exp:"+trigtoexp[index], () => {expect(xpectd).toBe(rceivd)})	
+			test("Trig2exp:"+trigtoexp[index], function() {return expect(xpectd).toBe(rceivd)})	
 		}
 		else {
 			runTest(mgTranslate(trigtoexp[index]).html,mgTrigToExp(trigtoexp[index]).html,mgTranslate(trigtoexp[index+1]).html)
@@ -2273,7 +2273,7 @@ function runExptotrig() {
 		if (nodejs) {
 			const rceivd = mgExpToTrig(exptotrig[index]).html;
 			const xpectd = mgTranslate(exptotrig[index+1]).html;
-			test("Exp2trig:"+exptotrig[index], () => {expect(xpectd).toBe(rceivd)})	
+			test("Exp2trig:"+exptotrig[index], function() {return expect(xpectd).toBe(rceivd)})	
 		}
 		else {
 			runTest(mgTranslate(exptotrig[index]).html,mgExpToTrig(exptotrig[index]).html,mgTranslate(exptotrig[index+1]).html)
@@ -2288,7 +2288,7 @@ function runLimits() {
 		if (nodejs) {
 			const rceivd = mgSimplify(limits[index]).html;
 			const xpectd = mgTranslate(limits[index+1]).html;
-			test("Limits:"+limits[index], () => {expect(xpectd).toBe(rceivd)})	
+			test("Limits:"+limits[index], function() {return expect(xpectd).toBe(rceivd)})	
 		}
 		else {
 			runTest(mgTranslate(limits[index]).html,mgSimplify(limits[index]).html,mgTranslate(limits[index+1]).html)
@@ -2303,7 +2303,7 @@ function runDerivatives() {
 		if (nodejs) {
 			const rceivd = mgSimplify(derivatives[index]).html;
 			const xpectd = mgTranslate(derivatives[index+1]).html;
-			test("Derivatives:"+derivatives[index], () => {expect(xpectd).toBe(rceivd)})	
+			test("Derivatives:"+derivatives[index], function() {return expect(xpectd).toBe(rceivd)})	
 		}
 		else {
 			runTest(mgTranslate(derivatives[index]).html,mgSimplify(derivatives[index]).html,mgTranslate(derivatives[index+1]).html)
@@ -2318,7 +2318,7 @@ function runIntegrals() {
 		if (nodejs) {
 			const rceivd = mgSimplify(integrals[index]).html;
 			const xpectd = mgTranslate(integrals[index+1]).html;
-			test("Integrals:"+integrals[index], () => {expect(xpectd).toBe(rceivd)})	
+			test("Integrals:"+integrals[index], function() {return expect(xpectd).toBe(rceivd)})	
 		}
 		else {
 			runTest(mgTranslate(integrals[index]).html,mgSimplify(integrals[index]).html,mgTranslate(integrals[index+1]).html)
@@ -2334,7 +2334,7 @@ function runRealCalculus() {
 		if (nodejs) {
 			const rceivd = mgSimplify(real_calculus[index]).html;
 			const xpectd = mgTranslate(real_calculus[index+1]).html;
-			test("RealCalculus:"+real_calculus[index], () => {expect(xpectd).toBe(rceivd)})	
+			test("RealCalculus:"+real_calculus[index], function() {return expect(xpectd).toBe(rceivd)})	
 		}
 		else {
 			runTest(mgTranslate(real_calculus[index]).html,mgSimplify(real_calculus[index]).html,mgTranslate(real_calculus[index+1]).html)
@@ -2350,7 +2350,7 @@ function runSummation() {
 		if (nodejs) {
 			const rceivd = mgSimplify(summation[index]).html;
 			const xpectd = mgTranslate(summation[index+1]).html;
-			test("Summation:"+summation[index], () => {expect(xpectd).toBe(rceivd)})	
+			test("Summation:"+summation[index], function() {return expect(xpectd).toBe(rceivd)})	
 		}
 		else {
 			runTest(mgTranslate(summation[index]).html,mgSimplify(summation[index]).html,mgTranslate(summation[index+1]).html)
@@ -2367,7 +2367,7 @@ function runHTML() {
 		if (nodejs) {
 			const xpectd = mgTranslate(html[index]).html;
 			const rceivd = html[index+1];
-			test("html:"+html[index], () => {expect(xpectd).toBe(rceivd)})	
+			test("html:"+html[index], function() {return expect(xpectd).toBe(rceivd)})	
 		}
 		else {
 			runTest(html[index],mgTranslate(html[index]).html,html[index+1])
@@ -2379,7 +2379,7 @@ function runHTML() {
 		if (nodejs) {
 			const rceivd = mgTranslate(htmlx[index]).html;
 			const xpectd = htmlx[index+1];
-			test("html:"+htmlx[index], () => {expect(xpectd).toBe(rceivd)})	
+			test("html:"+htmlx[index], function() {return expect(xpectd).toBe(rceivd)})	
 		}
 		else {
 			runTest(htmlx[index],mgTranslate(htmlx[index]).html,htmlx[index+1])
@@ -2392,7 +2392,7 @@ function runHTML() {
 		if (nodejs) {
 			const rceivd = mgTranslate(htmly[index]).html;
 			const xpectd = htmly[index+1];
-			test("html:"+htmly[index], () => {expect(xpectd).toBe(rceivd)})	
+			test("html:"+htmly[index], function() {return expect(xpectd).toBe(rceivd)})	
 		}
 		else {
 			runTest(htmly[index],mgTranslate(htmly[index]).html,htmly[index+1])
@@ -2405,7 +2405,7 @@ function runHTML() {
 		if (nodejs) {
 			const rceivd = mgTranslate(htmlz[index]).html;
 			const xpectd = htmlz[index+1];
-			test("html:"+htmlz[index], () => {expect(xpectd).toBe(rceivd)})	
+			test("html:"+htmlz[index], function() {return expect(xpectd).toBe(rceivd)})	
 		}
 		else {
 			runTest(htmlz[index],mgTranslate(htmlz[index]).html,htmlz[index+1])
@@ -2422,7 +2422,7 @@ function runExport() {
 		if (nodejs) {
 			const rceivd = mgTranslate(xport[index]).latex.replace(/ /g,"");
 			const xpectd = xport[index+1].replace(/ /g,"");
-			test("Latex-xport:"+xport[index], () => {expect(xpectd).toBe(rceivd)})	
+			test("Latex-xport:"+xport[index], function() {return expect(xpectd).toBe(rceivd)})	
 		}
 		else {
 			runTest(mgTranslate(xport[index]).html,mgTranslate(xport[index]).latex.replace(/ /g,""),xport[index+1].replace(/ /g,""))
@@ -2434,7 +2434,7 @@ function runExport() {
 		if (nodejs) {
 			const rceivd = mgTranslate(xportx[index]).latex.replace(/ /g,"");
 			const xpectd = xportx[index+1].replace(/ /g,"");
-			test("Latex-xport:"+xportx[index], () => {expect(xpectd).toBe(rceivd)})	
+			test("Latex-xport:"+xportx[index], function() {return expect(xpectd).toBe(rceivd)})	
 		}
 		else {
 			runTest(mgTranslate(xportx[index]).html,mgTranslate(xportx[index]).latex.replace(/ /g,""),xportx[index+1].replace(/ /g,""))
@@ -2447,7 +2447,7 @@ function runExport() {
 		if (nodejs) {
 			const rceivd = mgTranslate(xporty[index]).latex.replace(/ /g,"");
 			const xpectd = xporty[index+1].replace(/ /g,"");
-			test("Latex-xport:"+xporty[index], () => {expect(xpectd).toBe(rceivd)})	
+			test("Latex-xport:"+xporty[index], function() {return expect(xpectd).toBe(rceivd)})	
 		}
 		else {
 			runTest(mgTranslate(xporty[index]).html,mgTranslate(xporty[index]).latex.replace(/ /g,""),xporty[index+1].replace(/ /g,""))
@@ -2460,7 +2460,7 @@ function runExport() {
 		if (nodejs) {
 			const rceivd = mgTranslate(xportz[index]).latex.replace(/ /g,"");
 			const xpectd = xportz[index+1].replace(/ /g,"");
-			test("Latex-xport:"+xportz[index], () => {expect(xpectd).toBe(rceivd)})	
+			test("Latex-xport:"+xportz[index], function() {return expect(xpectd).toBe(rceivd)})	
 		}
 		else {
 			runTest(mgTranslate(xportz[index]).html,mgTranslate(xportz[index]).latex.replace(/ /g,""),xportz[index+1].replace(/ /g,""))
@@ -2478,7 +2478,7 @@ function runImport() {
 		if (nodejs) {
 			const rceivd = mgTranslate(mport[index]).html;		    
 			const xpectd = mgTranslate(mport[index+1]).html;
-			test("Latex-import:"+mport[index], () => {expect(xpectd).toBe(rceivd)})	
+			test("Latex-import:"+mport[index], function() {return expect(xpectd).toBe(rceivd)})	
 		}
 		else {
 			runTest(mport[index],mgTranslate(mport[index]).html,mgTranslate(mport[index+1]).html)
@@ -2494,7 +2494,7 @@ function runFinancial() {
 		if (nodejs) {
 			const rceivd = eval(financial[index])+"";
 			const xpectd = financial[index+1];
-			test("Financial:"+financial[index], () => {expect(xpectd).toBe(rceivd)})	
+			test("Financial:"+financial[index], function() {return expect(xpectd).toBe(rceivd)})	
 		}
 		else {
 			runTest(financial[index],eval(financial[index]),financial[index+1])
@@ -2511,7 +2511,7 @@ function runInternal() {
 		if (nodejs) {
 			const rceivd = eval(internal[index])+"";		
 			const xpectd = internal[index+1];
-			test("Internal:"+internal[index], () => {expect(xpectd).toBe(rceivd)})	
+			test("Internal:"+internal[index], function() {return expect(xpectd).toBe(rceivd)})	
 		}
 		else {
 			runTest(internal[index],eval(internal[index]),internal[index+1])
