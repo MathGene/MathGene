@@ -1789,8 +1789,7 @@ function dFunc(dXpr, prefix) { //map FUNC format to export format
         strg = dXpr.substr(bSym,iXf-bSym); //parms
         if (lPar > rPar) {strg = strg.substr(0,strg.lastIndexOf(")"))+strg.substr(strg.lastIndexOf(")")+1)} //unmatched left parens
         strgS = strg.split(","); //parse parms
-        if (typeof strgS[0] == "undefined") {strgS[0] = strg} 
-        for (var tXi=0;tXi<strgS.length;tXi++) {if (typeof strgS[tXi] == "undefined") {strgS[tXi]= ""}}
+        for (var tXi in strgS) {if (typeof strgS[tXi] == "undefined") {strgS[tXi]= ""}}
         if (!funcTest(funcKey)) {funcKey = dXpr.substr(bSym-5,4)} //operators
         if (typeof funcselect(funcKey,prefix+"Inv1") != "undefined" && mgConfig.invFmt == "sin<sup>-1</sup>" && mgConfig.fnFmt == "fn(x)") {fnformatLx = prefix+"Inv1"}
         if (typeof funcselect(funcKey,prefix+"Inv1") != "undefined" && mgConfig.invFmt == "sin<sup>-1</sup>" && mgConfig.fnFmt == "fn x")  {fnformatLx = prefix+"Inv2"}
@@ -1984,7 +1983,6 @@ const tDelimiter = ["_",",","!","=","<",">","|","+","-","*","^","/","{","}","(",
 //
 function texExport(latXpr) { //convert MG format to LaTeX
     latXpr += "";
-    if (latXpr.search("Infinity") > -1) {return latXpr.replace(/Infinity/g,"\\infty")}
     if (latXpr == "NaN" || latXpr == "undefined") {return "undefined"}
     latXpr = cFunc(latXpr); //convert to func format
     latXpr = dFunc(latXpr, "latex"); //process functions
