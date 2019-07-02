@@ -2305,11 +2305,8 @@ var mgCalc = (function() {
             var xTractU = opExtract(xU);
             var xTractL = opExtract(xL);
             if (strTest(xLim,"Cv[8734]")) {
-                var lTemp = xReduce("cSub(cMul("+lVar+","+xU+"),"+lVar+")");
-                if (xL == lVar && !strTest(lTemp,lVar)) {return cPowS("Cv[8]",lTemp)} //limit definitions for e^n as x>inf
-                lTemp = xReduce("cMul(cSub("+xU+",1),"+lVar+")");
-                if (xL == lVar && !strTest(lTemp,lVar)) {return cPowS("Cv[8]",lTemp)} //limit definitions for e^n as x>inf
-                if (xTractL.func == "cDiv" && xTractL.lower == lVar) {return 1}
+                var lTemp = xReduce("cMul(cSub("+xU+",1),"+lVar+")");//limit definition for e^n as x>inf
+                if (xL == lVar && !strTest(lTemp,lVar)) {return cPowS("Cv[8]",lTemp)} 
             }
             if (xLim == 0 && xTractL.func == "cDiv" && xTractL.lower == lVar) { //limit definitions for e^n as x>0
                 if (xTractU.func == "cAdd" && xReduce("cSub("+xU+",1)") == lVar) {return cPowS("Cv[8]",xTractL.upper)}
@@ -2598,13 +2595,11 @@ var mgCalc = (function() {
         function matR() {return "mat(" + Array.prototype.slice.call(arguments) + ")"}
         //
         xR = strConvert(xR);
-        var xRang = "";
+        var xRang = "",dArray = [],xArray = [];
         if (strTest(xR,"=")) {xRang = cFunc(xR.split("=")[1])}
         else {xRang = cFunc(xR)}
-        var dArray = [];
         eval(xRang.replace(/([a-z])\(/g,"$1R(").replace(/(Cv\[\d+\])/g,"'$1'"));
-        var xArray = [];// fix dups/blanks
-        for (var xC in dArray) {
+        for (var xC in dArray) {// fix dups/blanks
             if (!strTest(xArray,dArray[xC]) && dArray[xC] && !strTest(dArray[xC],"undefined") && !strTest(dArray[xC],"Cv[8734]")) {xArray.push(dArray[xC])}
         }
         var rString = "";
@@ -2653,23 +2648,19 @@ var mgCalc = (function() {
             }
             return "Cv[9999]"
         }
-        //
+        //z
         xD = strConvert(xD);
-        var iV = 0;
+        var iV = 0,realVars = [],integerVars = [],dString = "",rString = "",iString = "";
         if (strTest(xD,"=")) {xDom = cFunc(xD.split("=")[1])}
         else {xDom = cFunc(parseCalculus(xD))}
         var allVars = cInventory(xD);
         for (iV in allVars) {allVars[iV] = "Cv["+allVars[iV]+"]"}
-        var realVars = [];
-        var integerVars = [];
         eval(xDom.replace(/([a-z])\(/g,"$1S(").replace(/(Cv\[\d+\])/g,"'$1'").replace(/ntgS/g,"ntgO").replace(/smmS/g,"smmO").replace(/pmmS/g,"pmmO").replace(/lmtS/g,"lmtO"));
-        var dString = "";
         for (iV in allVars) { //collect master domain vars
             dString = dString + allVars[iV]
             if (iV < allVars.length-1 && allVars[iV]) {dString = dString + "Cv[10044]"} //add comma between terms
         }
         if (mgConfig.Domain == "Complex" && dString) {dString = dString+"Cv[8712]Cv[8450]"}
-        var rString = "";
         for (iV in realVars) {
             rString = rString + realVars[iV];
             if (iV < realVars.length-1) {rString = rString + "Cv[10044]"} //add comma between terms
@@ -2677,7 +2668,6 @@ var mgCalc = (function() {
         if (!rString && dString && mgConfig.Domain != "Complex") {dString = dString + "Cv[8712]Cv[8477]"}
         else if (rString && !dString) {dString = rString + "Cv[8712]Cv[8477]"}
         else if (rString && dString) {dString = dString + "Cv[59]" + rString + "Cv[8712]Cv[8477]"}
-        var iString = "";
         for (iV in integerVars) {
             iString = iString + integerVars[iV];
             if (iV < integerVars.length-1) {iString = iString + "Cv[10044]"} //add comma between terms
