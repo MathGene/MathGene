@@ -469,8 +469,8 @@ azh:{   htmlL1:"'<Xfnc>acoth<Xfnx>('",
         latexInv1:"'\\\\coth^{-1}(<Xfnx>'",
         latexInv2:"'\\\\coth^{-1} {'",
         },
-sqt:{   htmlL1:"radL(0,strg)",
-        htmlR1:"radR()", //square root
+sqt:{   htmlL1:"radL(0,strg)", //square root
+        htmlR1:"radR()",
         htmlL2:"radL(0,strg)",
         htmlR2:"radR()",
         texfunc:"\\sqrt",
@@ -509,7 +509,7 @@ lgn:{   htmlL1:"'<Xfnc>log<sub>'+mA+'</sub><Xfnx>('", //nth log
         latexL2:"'\\\\log_{'+mA+'}{'",
         latexR2:"'}<Xfxp>'",
         },
-log:{   htmlL1:"'<Xfnc>log<Xfnx>('",
+log:{   htmlL1:"'<Xfnc>log<Xfnx>('", //natural log
         htmlR1:"')'",
         htmlL2:"'<Xfnc>log '",
         htmlR2:"' <Xfxp>'",
@@ -519,7 +519,7 @@ log:{   htmlL1:"'<Xfnc>log<Xfnx>('",
         latexL2:"'\\\\log {'",
         latexR2:"'}<Xfxp>'",
         },
-lne:{   htmlL1:"'<Xfnc>ln<Xfnx>('",     //natural log
+lne:{   htmlL1:"'<Xfnc>ln<Xfnx>('", //natural log
         htmlR1:"')'",
         htmlL2:"'<Xfnc>ln '",
         htmlR2:"' <Xfxp>'",
@@ -539,7 +539,7 @@ int:{   htmlL1:"brkt('&#8970;',strg)",
         latexL2:"'\\\\left\\\\lfloor '",
         latexR2:"'\\\\right\\\\rfloor '",
         },
-cei:{   htmlL1:"brkt('&#8968;',strg)",    //ceiling
+cei:{   htmlL1:"brkt('&#8968;',strg)",  //ceiling
         htmlR1:"brkt('&#8969;',strg)",
         htmlL2:"brkt('&#8968;',strg)",
         htmlR2:"brkt('&#8969;',strg)",
@@ -549,7 +549,7 @@ cei:{   htmlL1:"brkt('&#8968;',strg)",    //ceiling
         latexL2:"'\\\\left\\\\lceil '",
         latexR2:"'\\\\right\\\\rceil '",
         },
-abs:{   htmlL1:"brkt('&#124;',strg)",   //absolute value
+abs:{   htmlL1:"brkt('&#124;',strg)", //absolute value
         htmlR1:"brkt('&#124;',strg)",
         htmlL2:"brkt('&#124;',strg)",
         htmlR2:"brkt('&#124;',strg)",
@@ -559,7 +559,7 @@ abs:{   htmlL1:"brkt('&#124;',strg)",   //absolute value
         latexL2:"'\\\\left|'",
         latexR2:"'\\\\right|'",
         },
-erf:{   htmlL1:"'<Xfnc>erf<Xfnx>('",    //error function
+erf:{   htmlL1:"'<Xfnc>erf<Xfnx>('", //error function
         htmlR1:"')'",
         htmlL2:"'<Xfnc>erf<Xfnx>('",
         htmlR2:"')<Xfxp>'",
@@ -579,7 +579,7 @@ efc:{   htmlL1:"'<Xfnc>erfc<Xfnx>('",  //inverse error function
         latexL2:"'\\\\erfc('",
         latexR2:"')'",
         },
-arg:{   htmlL1:"'<Xfnc>arg<Xfnx>('",    //arg
+arg:{   htmlL1:"'<Xfnc>arg<Xfnx>('",  //arg
         htmlR1:"')'",
         htmlL2:"'<Xfnc>arg<Xfnx>('",
         htmlR2:"')<Xfxp>'",
@@ -589,7 +589,7 @@ arg:{   htmlL1:"'<Xfnc>arg<Xfnx>('",    //arg
         latexL2:"'\\\\arg {'",
         latexR2:"'}<Xfxp>'",
         },
-exp:{   htmlL1:"'<Xfnc>exp<Xfnx>('",   //e^x
+exp:{   htmlL1:"'<Xfnc>exp<Xfnx>('", //e^x
         htmlR1:"')'",
         htmlL2:"'<Xfnc>exp<Xfnx>('",
         htmlR2:"')<Xfxp>'",
@@ -599,7 +599,7 @@ exp:{   htmlL1:"'<Xfnc>exp<Xfnx>('",   //e^x
         latexL2:"'\\\\exp {'",
         latexR2:"'}<Xfxp>'",
         },
-con:{   htmlL1:"conL()",       //conjugate
+con:{   htmlL1:"conL()",   //conjugate
         htmlR1:"'</span>'",
         htmlL2:"conL()",
         htmlR2:"'</span>'",
@@ -609,7 +609,7 @@ con:{   htmlL1:"conL()",       //conjugate
         latexL2:"'\\\\overline{'",
         latexR2:"'}'",
         },
-gam:{   htmlL1:"'<Xfnc>&#915;<Xfnx>('",    //gamma
+gam:{   htmlL1:"'<Xfnc>&#915;<Xfnx>('",  //gamma
         htmlR1:"')'",
         htmlL2:"'<Xfnc>&#915;<Xfnx>('",
         htmlR2:"')'",
@@ -619,7 +619,7 @@ gam:{   htmlL1:"'<Xfnc>&#915;<Xfnx>('",    //gamma
         latexL2:"'\\\\Gamma(<Xfnx>'",
         latexR2:"')'",
         },
-cdf:{   htmlL1:"'<Xfnc>&#934;<Xfnx>('",   //cumulative density function
+cdf:{   htmlL1:"'<Xfnc>&#934;<Xfnx>('",  //cumulative density function
         htmlR1:"')'",
         htmlL2:"'<Xfnc>&#934;<Xfnx>('",
         htmlR2:"')'",
@@ -960,7 +960,7 @@ det:{   htmlL1:"'det'",  //matrix determinant
         latexL2:"'\\\\det{'",
         latexR2:"'}'",
         },
-trc:{   htmlL1:"'tr'",   //matrix trace
+trc:{   htmlL1:"'tr'",  //matrix trace
         htmlR1:"''",
         htmlL2:"'tr'",
         htmlR2:"''",
@@ -990,7 +990,7 @@ cSub:{  htmlL1:"mA+'&minus;'+mB",  //subtract
         latexL2:"mA+'-'+mB",
         latexR2:"''",
         },
-cTms:{  htmlL1:"mA+'&times;'+mB",   //multiply by x
+cTms:{  htmlL1:"mA+'&times;'+mB",  //multiply by x
         htmlR1:"''",
         htmlL2:"mA+'&times;'+mB",
         htmlR2:"''",
@@ -1000,7 +1000,7 @@ cTms:{  htmlL1:"mA+'&times;'+mB",   //multiply by x
         latexL2:"mA+'\\\\times '+mB",
         latexR2:"''",
         },
-cDot:{  htmlL1:"mA+'&#8226;'+mB",    //multiply by dot
+cDot:{  htmlL1:"mA+'&#8226;'+mB",  //multiply by dot
         htmlR1:"''",
         htmlL2:"mA+'&#8226;'+mB",
         htmlR2:"''",
@@ -1020,7 +1020,7 @@ cMul:{  htmlL1:"cMulL(mA,mB)",  //multiply
         latexL2:"mA+' '+mB",
         latexR2:"''",
         },
-cDiv:{  htmlL1:"cDivL(mA,mB)",   //divide
+cDiv:{  htmlL1:"cDivL(mA,mB)", //divide
         htmlR1:"''",
         htmlL2:"cDivL(mA,mB)",
         htmlR2:"''",
@@ -1030,7 +1030,7 @@ cDiv:{  htmlL1:"cDivL(mA,mB)",   //divide
         latexL2:"'<Xdiv>\\\\frac{'+oBrackets(mA)+'}{'+oBrackets(mB)+'}<Xdve>'",
         latexR2:"''",
         },
-cPow:{  htmlL1:"cPowL(mA,mB)",    //x^n
+cPow:{  htmlL1:"cPowL(mA,mB)",  //x^n
         htmlR1:"''",
         htmlL2:"cPowL(mA,mB)",
         htmlR2:"''",
@@ -1090,7 +1090,7 @@ cGth:{  htmlL1:"mA+' &gt; '+mB",  //greater than
         latexL2:"mA+'>'+mB",
         latexR2:"''",
         },
-cLth:{  htmlL1:"mA+' &lt; '+mB",    //less than
+cLth:{  htmlL1:"mA+' &lt; '+mB",  //less than
         htmlR1:"''",
         htmlL2:"mA+' &lt; '+mB",
         htmlR2:"''",
@@ -1100,7 +1100,7 @@ cLth:{  htmlL1:"mA+' &lt; '+mB",    //less than
         latexL2:"mA+'<'+mB",
         latexR2:"''",
         },
-cGeq:{  htmlL1:"mA+' &#8805; '+mB",  //greater than or equal
+cGeq:{  htmlL1:"mA+' &#8805; '+mB", //greater than or equal
         htmlR1:"''",
         htmlL2:"mA+' &#8805; '+mB",
         htmlR2:"''",
@@ -1477,7 +1477,7 @@ function mgExport(xFn) { //convert from FUNC format to MG format
 //
 function cFunc(cXpr) { //convert from MG format to FUNC format: a+bc/d -> cAdd(a,cDiv(cMul(b,c),d)))
     function cParse(xInp,xOp,xFunc) {//parse operators
-        var zDelim = ["^","-","#","*","/","+",",","~","@","=","<",">",String.fromCharCode(8800),String.fromCharCode(8804),String.fromCharCode(8805),String.fromCharCode(8226)];
+        const zDelim = ["^","-","#","*","/","+",",","~","@","=","<",">",String.fromCharCode(8800),String.fromCharCode(8804),String.fromCharCode(8805),String.fromCharCode(8226)];
         var ztmp = "",bSym = "",lPar = 0,rPar = 0;
         if (xOp == "^") {bSym = xInp.lastIndexOf(xOp)+1}
         else  {bSym = xInp.indexOf(xOp)+1;}
@@ -1502,7 +1502,7 @@ function cFunc(cXpr) { //convert from MG format to FUNC format: a+bc/d -> cAdd(a
         return xInp;
     }
     function nParse(xInp,xOp) {//parse negatives as cNeg()
-        var zDelim = ["(",")","^","-","#","*","/","+",",","~","@","=","<",">",String.fromCharCode(8800),String.fromCharCode(8804),String.fromCharCode(8805),String.fromCharCode(8226)];
+        const zDelim = ["(",")","^","-","#","*","/","+",",","~","@","=","<",">",String.fromCharCode(8800),String.fromCharCode(8804),String.fromCharCode(8805),String.fromCharCode(8226)];
         var ztmp = "";
         var iNp = 0,lPar = 0,rPar = 0;
         var bSym = xInp.indexOf(xOp)+xOp.length;
@@ -1531,14 +1531,14 @@ function cFunc(cXpr) { //convert from MG format to FUNC format: a+bc/d -> cAdd(a
     for (nCf=0;nCf<sCount;nCf++) {cXpr = cXpr.replace(/Cv\[8748\]Cv\[(\d+)\]\/Cv\[8748\]Cv\[(\d+)\]/,"sdr(Cv[$1],Cv[$2])")}
     cXpr = cXpr.replace(/!/g,"Cv[45]"); //factorial
     cXpr = cXpr.replace(/Cv\[8226\]/g,String.fromCharCode(8226)); //dot operator
-    var relOperators = {"Cv[60]":"<","Cv[61]":"=","Cv[62]":">","Cv[8800]":String.fromCharCode(8800),"Cv[8804]":String.fromCharCode(8804),"Cv[8805]":String.fromCharCode(8805)};//relational operators
+    const relOperators = {"Cv[60]":"<","Cv[61]":"=","Cv[62]":">","Cv[8800]":String.fromCharCode(8800),"Cv[8804]":String.fromCharCode(8804),"Cv[8805]":String.fromCharCode(8805)};//relational operators
     for (key in relOperators) {
         sCount = strCount(cXpr,key);
         for (nCf=0;nCf<sCount;nCf++) {cXpr = cXpr.replace(key,relOperators[key])}
     }
     cXpr = cXpr.replace(/([\)\]])(\|?)(\d)/g,"$1$2#$3").replace(/([\)\]\d])(\|?)\(/g,"$1$2#(").replace(/([\)\]\d])(\|?)Cv\[/g,"$1$2#Cv[").replace(/([\)\]\d])(\|?)([a-z][a-z][a-z]\()/ig,"$1$2#$3");//terms to # multiply
     // non-multiplying cBnd symbols
-    var nBind = ["(Cv\\[8773\\])","(Cv\\[8750\\])","(Cv\\[8751\\])","(Cv\\[8752\\])",
+    const nBind = ["(Cv\\[8773\\])","(Cv\\[8750\\])","(Cv\\[8751\\])","(Cv\\[8752\\])",
                 "(Cv\\[8592\\])","(Cv\\[8747\\])","(Cv\\[8748\\])","(Cv\\[59\\])",
                 "(idr\\([^\\)]*\\))","(tdr\\([^\\)]*\\))","(lim\\([^\\)]*\\,[^\\)]*\\))",
                 "(itg\\([^\\)]*\\,[^\\)]*\\))","(sdr\\([^\\)]*\\,[^\\)]*\\))","(sum\\([^\\)]*\\,[^\\)]*\\))",
@@ -1551,17 +1551,17 @@ function cFunc(cXpr) { //convert from MG format to FUNC format: a+bc/d -> cAdd(a
     }
     if (cXpr.charAt(0) == "+") {cXpr = cXpr.substr(1)} //remove + at beginning of expression
     sCount = strCount(cXpr,"-");//parse power negatives to cPow(x,cNeg())
-    var nCases = ["^-","^|-"];
+    const pCases = ["^-","^|-"];
     for (nCf=0;nCf<sCount;nCf++) {
-        for (iXX in nCases) {
-            if (cXpr.indexOf(nCases[iXX]) > -1) {cXpr = nParse(cXpr,nCases[iXX])}
+        for (iXX in pCases) {
+            if (cXpr.indexOf(pCases[iXX]) > -1) {cXpr = nParse(cXpr,pCases[iXX])}
         }
     }
     sCount = strCount(cXpr,"^");//convert powers to cPow()
     for (nCf=0;nCf<sCount;nCf++) {cXpr = cParse(cXpr,"^","cPow")}
     if (cXpr.charAt(0) == "-") {cXpr = nParse(cXpr,"-")}
     sCount = strCount(cXpr,"-");//parse negatives to cNeg()
-    nCases = ["~-","~|-","+-","*-","/-","(-",",-","+|-","*|-","/|-","(|-",",|-","=-","=|-","@-","@|-","e|-",">-","<-",">|-","<|-",
+    const nCases = ["~-","~|-","+-","*-","/-","(-",",-","+|-","*|-","/|-","(|-",",|-","=-","=|-","@-","@|-","e|-",">-","<-",">|-","<|-",
                   String.fromCharCode(8804)+"-",String.fromCharCode(8804)+"|-",String.fromCharCode(8805)+"-",String.fromCharCode(8805)+"|-",
                   String.fromCharCode(8800)+"-",String.fromCharCode(8800)+"|-",String.fromCharCode(8226)+"-",String.fromCharCode(8226)+"|-"];
     for (nCf=0;nCf<sCount;nCf++) {
@@ -1766,38 +1766,35 @@ function dFunc(dXpr, prefix) { //map FUNC format to export format
         return mReturn
     }
     // function handlers
-    function lFunc(parm) {var mA=parm[0],mB=parm[1],mC=parm[2];return eval(funcselect(funcKey,fnformatL))} //process left side function
+    function lFunc(parm) {var mA=parm[0],mB=parm[1],mC=parm[2];return eval(funcselect(funcKey,fnformatLx))} //process left side function
     function rFunc(parm) {var mA=parm[0],mB=parm[1],mC=parm[2];return eval(funcselect(funcKey,fnformatR))} //process right side function
     function funcselect(func,key) {return funcMap[func][key]}
     //
-    var fnformatL = prefix+"L1";
-    var fnformatR = prefix+"R1";
     dXpr = dXpr.replace(/ /g,"").replace(/([a-z][a-z][a-z])\(/ig,"$1@");
     var sCount = strCount(dXpr,"@");
+    var bSym = 0, lSym = 0,lPar = 1,rPar = 0,iXf = 0,strg = "",strgS = "",funcKey = "",fParams = "",rTmp = "",fnformatL = "",fnformatR = "",fnformatLx = "";
+    if (mgConfig.fnFmt == "fn(x)") {fnformatL = prefix+"L1";fnformatR = prefix+"R1"}
+    else {fnformatL = prefix+"L2";fnformatR = prefix+"R2"}  	
     for (var nXf=0;nXf<sCount;nXf++) {
-        if (mgConfig.fnFmt == "fn(x)") {fnformatL = prefix+"L1";fnformatR = prefix+"R1"}
-        else {fnformatL = prefix+"L2";fnformatR = prefix+"R2"}
-        var lPar = 1,rPar = 0,iXf = 0;
-        var bSym = dXpr.lastIndexOf("@")+1;
-        var lSym = dXpr.length;
+        fnformatLx = fnformatL;
+        lPar = 1,rPar = 0,iXf = 0,fParams = "",rTmp = "";
+        bSym = dXpr.lastIndexOf("@")+1;
+        lSym = dXpr.length;
         for (iXf=bSym;iXf<lSym;iXf++) {
             if (dXpr.charAt(iXf) == "@" || dXpr.charAt(iXf) == "(") {lPar++}
             if (dXpr.charAt(iXf) == ")") {rPar++}
             if (lPar == rPar) {break;}
         }
-        var strg = dXpr.substr(bSym,iXf-bSym);
+        funcKey = dXpr.substr(bSym-4,3); //functions
+        strg = dXpr.substr(bSym,iXf-bSym); //parms
         if (lPar > rPar) {strg = strg.substr(0,strg.lastIndexOf(")"))+strg.substr(strg.lastIndexOf(")")+1)} //unmatched left parens
-        var strgS = strg.split(",");
-        if (typeof strgS[0] == "undefined") {strgS[0] = strg}
-        for (var tXi=0;tXi<strgS.length;tXi++) {if (typeof strgS[tXi] == "undefined") {strgS[tXi]= ""}}
-        var funcKey = dXpr.substr(bSym-4,3); //functions
+        strgS = strg.split(","); //parse parms
+        for (var tXi in strgS) {if (typeof strgS[tXi] == "undefined") {strgS[tXi]= ""}}
         if (!funcTest(funcKey)) {funcKey = dXpr.substr(bSym-5,4)} //operators
-        if (typeof funcselect(funcKey,prefix+"Inv1") != "undefined" && mgConfig.invFmt == "sin<sup>-1</sup>" && mgConfig.fnFmt == "fn(x)") {fnformatL = prefix+"Inv1"}
-        if (typeof funcselect(funcKey,prefix+"Inv1") != "undefined" && mgConfig.invFmt == "sin<sup>-1</sup>" && mgConfig.fnFmt == "fn x")  {fnformatL = prefix+"Inv2"}
-        var fParams = "";
-        if (typeof strgS[0] == "string" && funcselect(funcKey,fnformatL).search("mA") == -1 && funcselect(funcKey,fnformatL).search("(parm)") == -1){fParams = fParams+strgS[0]}
-        if (typeof strgS[1] == "string" && funcselect(funcKey,fnformatL).search("mB") == -1 && funcselect(funcKey,fnformatL).search("(parm)") == -1){fParams = fParams+strgS[1]}
-        var rTmp = "";
+        if (typeof funcselect(funcKey,prefix+"Inv1") != "undefined" && mgConfig.invFmt == "sin<sup>-1</sup>" && mgConfig.fnFmt == "fn(x)") {fnformatLx = prefix+"Inv1"}
+        if (typeof funcselect(funcKey,prefix+"Inv1") != "undefined" && mgConfig.invFmt == "sin<sup>-1</sup>" && mgConfig.fnFmt == "fn x")  {fnformatLx = prefix+"Inv2"}
+        if (typeof strgS[0] == "string" && funcselect(funcKey,fnformatLx).search("mA") == -1 && funcselect(funcKey,fnformatLx).search("(parm)") == -1){fParams = fParams+strgS[0]}
+        if (typeof strgS[1] == "string" && funcselect(funcKey,fnformatLx).search("mB") == -1 && funcselect(funcKey,fnformatLx).search("(parm)") == -1){fParams = fParams+strgS[1]}
         if (mgConfig.fnFmt == "fn x" && iXf < lSym && funcselect(funcKey,fnformatR).search(" ") > -1 && fParams.replace(/[\|\(\{](.*)[\|\)\}]/g,"").search(/[+(&minus;)]/) > -1 ) {fParams = "("+fParams+")"} //add parens to inside functions
         if (iXf < lSym) {rTmp = rFunc(strgS)}
         dXpr = dXpr.substr(0,bSym-(funcKey.length+1))+lFunc(strgS)+fParams+rTmp+dXpr.substr(iXf+1,lSym);
@@ -1982,11 +1979,10 @@ Ct[9002] = "\\langle ";
 Ct[9476] = "\\ldots ";
 Ct[11100]="C";//constants of integration
 for (iAl=11101;iAl<=11110;iAl++) {Ct[iAl]="C_{"+(iAl-11100)+"}"}//constants of integration
-var tDelimiter = ["_",",","!","=","<",">","|","+","-","*","^","/","{","}","(",")","\\"," "];
+const tDelimiter = ["_",",","!","=","<",">","|","+","-","*","^","/","{","}","(",")","\\"," "];
 //
 function texExport(latXpr) { //convert MG format to LaTeX
     latXpr += "";
-    if (latXpr.search("Infinity") > -1) {return latXpr.replace(/Infinity/g,"\\infty")}
     if (latXpr == "NaN" || latXpr == "undefined") {return "undefined"}
     latXpr = cFunc(latXpr); //convert to func format
     latXpr = dFunc(latXpr, "latex"); //process functions
@@ -2034,10 +2030,10 @@ function texImport(mgXpr) { //convert LaTeX to MG format
         return "mat(" + mReturn + ")"
     }
     //
-    var ulSymbols = ["\\int","\\sum","\\prod","\\cap","\\cup"];
-    var ulFuncs  =  ["itg(","sum(","prd(","cap(","cup("];
-    var lBrackets = ["{","[","|"];
-    var rBrackets = ["}","]","|"];
+    const ulSymbols = ["\\int","\\sum","\\prod","\\cap","\\cup"];
+    const ulFuncs  =  ["itg(","sum(","prd(","cap(","cup("];
+    const lBrackets = ["{","[","|"];
+    const rBrackets = ["}","]","|"];
     var symTemp = "",tTemp = "",tFunc = 0,nXf = 0,nXs = 0,nXi = 0,parmU = {},parmL = {},limitL = {},limitU = {},limitX = {},operand = {};
     if (mgXpr == "NaN" || mgXpr == "undefined") {return "undefined"}
     mgXpr += " ";
