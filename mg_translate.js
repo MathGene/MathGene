@@ -810,7 +810,7 @@ smm:{   htmlL1:"''", //summation from FUNC
         latexR1:"''",
         latexL2:"''",
         latexR2:"''",
-        mg: "'sum('+mB+','+mC+'Cv[61]'+mC+')'+mA",
+        mg: "'sum('+mB+','+mC+'Cv[61]'+mD+')'+mA",
         },
 prd:{   htmlL1:"prdL(mA,mB)",  //product
         htmlR1:"' '",
@@ -832,7 +832,7 @@ pmm:{   htmlL1:"''", //product from FUNC
         latexR1:"''",
         latexL2:"''",
         latexR2:"''",
-        mg: "'prd('+mB+','+mC+'Cv[61]'+mC+')'+mA",
+        mg: "'prd('+mB+','+mC+'Cv[61]'+mD+')'+mA",
         },
 lim:{   htmlL1:"limL(mA,mB)",  //limit
         htmlR1:"' '",
@@ -1261,7 +1261,7 @@ ntg:{   htmlL1:"''",  //integral from func
         latexR1:"''",
         latexL2:"''",
         latexR2:"''",
-        mg: "'ntg('+mA+','+mB+','+mC+','+mD+')'",
+        mg: "ntgE(mA,mB,mC,mD)",
 },
 ntp:{   htmlL1:"''",  //integral container from func
         htmlR1:"''",
@@ -1272,7 +1272,7 @@ ntp:{   htmlL1:"''",  //integral container from func
         latexR1:"''",
         latexL2:"''",
         latexR2:"''",
-        mg: "'ntp('+mA+','+mB+','+mC+','+mD+')'",
+        mg: "ntgE(mA,mB,mC,mD)",
 },
 }
 
@@ -1661,6 +1661,10 @@ function dFunc(dXpr, prefix) { //map FUNC format to export format
         if (typeof xN == "undefined") {return "(idr(" + dV + ")" + xU + ")"}
         return "(idr(" + dV + "," + xN + ")" + xU + ")"
     }
+    function ntgE(xU,dV,mU,mL) { //integral from FUNC format
+        if (typeof mU == "undefined" && typeof mL == "undefined") {return "Cv[8747]" + xU + "Cv[8748]" + dV}
+        return "itg(" + mU + "," + mL + ")" + xU + "Cv[8748]" + dV
+}
     //html handlers
     function cMulL(xU,xL) {
         if (xL.indexOf("<Xfnc>") == 0) {return xU+" "+xL}
@@ -1842,9 +1846,9 @@ function dFunc(dXpr, prefix) { //map FUNC format to export format
         if (!funcTest(funcKey)) {funcKey = dXpr.substr(bSym-5,4)} //operators cXxx()
         if (typeof funcselect(funcKey,prefix+"Inv1") != "undefined" && mgConfig.invFmt == "sin<sup>-1</sup>" && mgConfig.fnFmt == "fn(x)") {fnformatLx = prefix+"Inv1"} //inverse fn(x)
         if (typeof funcselect(funcKey,prefix+"Inv1") != "undefined" && mgConfig.invFmt == "sin<sup>-1</sup>" && mgConfig.fnFmt == "fn x")  {fnformatLx = prefix+"Inv2"} //inverse fn x
-        if (typeof strgS[0] == "string" && funcKey != "mat" && funcselect(funcKey,fnformatLx).indexOf("mA") == -1){fParams += strgS[0]} //xxx(x)
+        if (prefix != "mg" && typeof strgS[0] == "string" && funcKey != "mat" && funcselect(funcKey,fnformatLx).indexOf("mA") == -1){fParams += strgS[0]} //xxx(x)
         if (typeof strgS[1] == "string" && funcKey != "mat" && funcselect(funcKey,fnformatLx).indexOf("mB") == -1){fParams += strgS[1]} //xxx(x,y)
-        if (mgConfig.fnFmt == "fn x" && iXf < lSym && funcselect(funcKey,fnformatR).indexOf(" ") > -1 && fParams.replace(/[\|\(\{](.*)[\|\)\}]/g,"").search(/[+(&minus;)]/) > -1 ) {fParams = "("+fParams+")"} //add parens to inside functions
+        if (prefix != "mg" && mgConfig.fnFmt == "fn x" && iXf < lSym && funcselect(funcKey,fnformatR).indexOf(" ") > -1 && fParams.replace(/[\|\(\{](.*)[\|\)\}]/g,"").search(/[+(&minus;)]/) > -1 ) {fParams = "("+fParams+")"} //add parens to inside functions
         if (iXf < lSym && prefix != "mg") {rTmp = rFunc(strgS)} //right side function
         dXpr = dXpr.substr(0,bSym-(funcKey.length+1))+lFunc(strgS)+fParams+rTmp+dXpr.substr(iXf+1,lSym); //assemble output
     }
