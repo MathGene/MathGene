@@ -1118,7 +1118,7 @@ cDot:{  htmlL1:"mA+'&#8226;'+mB",  //multiply by dot
         latexR1:"''",
         latexL2:"mA+'\\\\cdot '+mB",
         latexR2:"''",
-        mg: "mA+'.'+mB",
+        mg: "mA+'Cv[8226]'+mB",
         },
 cMul:{  htmlL1:"cMulL(mA,mB)",  //multiply
         htmlR1:"''",
@@ -1570,7 +1570,7 @@ function cFunc(cXpr) { //convert from MG format to FUNC format: a+bc/d -> cAdd(a
 function dFunc(dXpr, prefix) { //map FUNC format to export format
     function oprExtract(fExt) {//extract inside function in FUNC format, returns func,upper,lower
         function fTest(tFunc) {if (typeof funcMap[tFunc] == "undefined") {return false}; return true} //test for valid function key
-        fExt += "";
+        fExt = oParens(fExt);
         var opReturn = {func:"",upper:"",lower:""};
         var funcKey = fExt.substr(0,fExt.indexOf("("))
         if (funcKey != "" && fTest(funcKey)) {
