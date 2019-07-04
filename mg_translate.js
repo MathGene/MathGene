@@ -1633,6 +1633,10 @@ function dFunc(dXpr, prefix) { //map FUNC format to export format
         if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "cDiv") {return "-(" + oParens(xU) + ")"}
         return "-" + xU
     }
+    function facE(xU) { //factorial
+        if (!numTest(xU) && cFunc(xU) != oParens(xU)) {return "(" + oParens(xU) +")Cv[45]"}
+        return xU + "Cv[45]"
+    }
     function tdvE(xU,dV,xN) { //total derivative from FUNC format
         if (typeof xN == "undefined") {return "(tdr(" + dV + ")" + xU + ")"}
         return "(tdr(" + dV + "," + xN + ")" + xU + ")"
@@ -1640,10 +1644,6 @@ function dFunc(dXpr, prefix) { //map FUNC format to export format
     function drvE(xU,dV,xN) { //partial derivative from FUNC format
         if (typeof xN == "undefined") {return "(idr(" + dV + ")" + xU + ")"}
         return "(idr(" + dV + "," + xN + ")" + xU + ")"
-    }
-    function facE(xU) { //factorial
-        if (!numTest(xU) && cFunc(xU) != oParens(xU)) {return "(" + oParens(xU) +")Cv[45]"}
-        return xU + "Cv[45]"
     }
     function idrE(xU,xN) { //partial derivative
         if (typeof xN == "undefined") {return "idr(" + xU + ")"}
@@ -1664,7 +1664,8 @@ function dFunc(dXpr, prefix) { //map FUNC format to export format
     function ntgE(xU,dV,mU,mL) { //integral from FUNC format
         if (typeof mU == "undefined" && typeof mL == "undefined") {return "Cv[8747]" + xU + "Cv[8748]" + dV}
         return "itg(" + mU + "," + mL + ")" + xU + "Cv[8748]" + dV
-}
+    }
+	function matE() {return "mat(" + Array.prototype.slice.call(arguments) + ")"} // matrix object
     //html handlers
     function cMulL(xU,xL) {
         if (xL.indexOf("<Xfnc>") == 0) {return xU+" "+xL}
@@ -1846,7 +1847,7 @@ function dFunc(dXpr, prefix) { //map FUNC format to export format
         if (!funcTest(funcKey)) {funcKey = dXpr.substr(bSym-5,4)} //operators cXxx()
         if (typeof funcselect(funcKey,prefix+"Inv1") != "undefined" && mgConfig.invFmt == "sin<sup>-1</sup>" && mgConfig.fnFmt == "fn(x)") {fnformatLx = prefix+"Inv1"} //inverse fn(x)
         if (typeof funcselect(funcKey,prefix+"Inv1") != "undefined" && mgConfig.invFmt == "sin<sup>-1</sup>" && mgConfig.fnFmt == "fn x")  {fnformatLx = prefix+"Inv2"} //inverse fn x
-        if (prefix != "mg" && typeof strgS[0] == "string" && funcKey != "mat" && funcselect(funcKey,fnformatLx).indexOf("mA") == -1){fParams += strgS[0]} //xxx(x)
+        if (typeof strgS[0] == "string" && funcKey != "mat" && funcselect(funcKey,fnformatLx).indexOf("mA") == -1){fParams += strgS[0]} //xxx(x)
         if (typeof strgS[1] == "string" && funcKey != "mat" && funcselect(funcKey,fnformatLx).indexOf("mB") == -1){fParams += strgS[1]} //xxx(x,y)
         if (prefix != "mg" && mgConfig.fnFmt == "fn x" && iXf < lSym && funcselect(funcKey,fnformatR).indexOf(" ") > -1 && fParams.replace(/[\|\(\{](.*)[\|\)\}]/g,"").search(/[+(&minus;)]/) > -1 ) {fParams = "("+fParams+")"} //add parens to inside functions
         if (iXf < lSym && prefix != "mg") {rTmp = rFunc(strgS)} //right side function
