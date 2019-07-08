@@ -1281,7 +1281,7 @@ function strCount(xTarget,xSearch) {xTarget +="";xSearch+="";return xTarget.spli
 function funcTest(tFunc) {if (typeof funcMap[tFunc] == "undefined") {return false}; return true} //test for valid function key
 function parseParens(xB,bSym) {//parse parens and return inside string, begin index, end index, source string, upper/lower args
     xB += "";
-    var oComma = 0,lPar = 0,rPar = 0,bDelim = " ",eDelim = " ";cFind = "";
+    var oComma = 0,lPar = 0,rPar = 0,bDelim = " ",eDelim = " ";cFind = "",ins = "";
     for (var iU=bSym;iU<xB.length;iU++) {
         cFind = xB.charAt(iU);
         if (cFind == "(") {bDelim = "(";eDelim = ")";break}
@@ -1294,7 +1294,7 @@ function parseParens(xB,bSym) {//parse parens and return inside string, begin in
         if (cFind == eDelim ) {rPar++}
         if (lPar > 0 && lPar == rPar) {break}
     }
-    var ins = xB.substr(bSym+1,iU-bSym-1)
+    ins = xB.substr(bSym+1,iU-bSym-1)
     return {begin:bSym,end:iU,source:xB,inside:ins,upper:ins.substr(0,oComma-1),lower:ins.substr(oComma)}
 }
 function oParens(xP) {//remove outside parens
@@ -1306,14 +1306,14 @@ function oParens(xP) {//remove outside parens
     return xP
 }
 function parseArgs(xP) { //parse comma-delimited arguments into array
-	var args = [];
-	var strSplit = xP.split(",");
-	args[0] = strSplit[0];
-	for (var nXf=1;nXf<strSplit.length;nXf++) {
-		if (strCount(args[args.length-1],"(") > strCount(args[args.length-1],")")) {args[args.length-1] = args[args.length-1]+","+strSplit[nXf]}
-		else {args.push(strSplit[nXf])}
-	}
-	return args
+    var args = [];
+    var strSplit = xP.split(",");
+    args[0] = strSplit[0];
+    for (var nXf=1;nXf<strSplit.length;nXf++) {
+        if (strCount(args[args.length-1],"(") > strCount(args[args.length-1],")")) {args[args.length-1] = args[args.length-1]+","+strSplit[nXf]} //reassemble inside parens
+        else {args.push(strSplit[nXf])}
+    }
+    return args
 }
 function parseBrackets(xB,bSym) {//parse brackets and return inside string, begin index, end index, source string
     xB += "";
@@ -1674,7 +1674,7 @@ function dFunc(dXpr, prefix) { //map FUNC format to export format
         if (typeof mU == "undefined" && typeof mL == "undefined") {return "Cv[8747]" + xU + "Cv[8748]" + dV}
         return "itg(" + mU + "," + mL + ")" + xU + "Cv[8748]" + dV
     }
-	function matE() {return "mat(" + Array.prototype.slice.call(arguments) + ")"} // matrix object
+    function matE() {return "mat(" + Array.prototype.slice.call(arguments) + ")"} // matrix object
     //html handlers
     function cMulL(xU,xL) {
         if (xL.indexOf("<Xfnc>") == 0) {return xU+" "+xL}
@@ -1829,8 +1829,8 @@ function dFunc(dXpr, prefix) { //map FUNC format to export format
         return mReturn
     }
     // function handlers
-    function lFunc(parm) {var mA=parm[0],mB=parm[1],mC=parm[2],mD=parm[3];return eval(funcselect(funcKey,fnformatLx))} //process left side function
-    function rFunc(parm) {var mA=parm[0],mB=parm[1],mC=parm[2],mD=parm[3];return eval(funcselect(funcKey,fnformatR))} //process right side function
+    function lFunc(strg,parm) {var mA=parm[0],mB=parm[1],mC=parm[2],mD=parm[3];return eval(funcselect(funcKey,fnformatLx))} //process left side function
+    function rFunc(strg,parm) {var mA=parm[0],mB=parm[1],mC=parm[2],mD=parm[3];return eval(funcselect(funcKey,fnformatR))} //process right side function
     function funcselect(func,key) {return funcMap[func][key]}
     //
     dXpr = dXpr.replace(/ /g,"").replace(/([a-z][a-z][a-z])\(/ig,"$1@"); //mark left parens with @
@@ -1852,15 +1852,15 @@ function dFunc(dXpr, prefix) { //map FUNC format to export format
         strg = dXpr.substr(bSym,iXf-bSym); //parameters between parens
         if (lPar > rPar) {strg = strg.substr(0,strg.lastIndexOf(")"))+strg.substr(strg.lastIndexOf(")")+1)} //unmatched left parens
         strgS = parseArgs(strg); //parse parms
-        funcKey = dXpr.substr(bSym-4,3); //functions xxx()
-        if (!funcTest(funcKey)) {funcKey = dXpr.substr(bSym-5,4)} //operators cXxx()
+        funcKey = dXpr.substr(bSym-4,3); //extract functions xxx()
+        if (!funcTest(funcKey)) {funcKey = dXpr.substr(bSym-5,4)} //extract operators cXxx()
         if (typeof funcselect(funcKey,prefix+"Inv1") != "undefined" && mgConfig.invFmt == "sin<sup>-1</sup>" && mgConfig.fnFmt == "fn(x)") {fnformatLx = prefix+"Inv1"} //inverse fn(x)
         if (typeof funcselect(funcKey,prefix+"Inv1") != "undefined" && mgConfig.invFmt == "sin<sup>-1</sup>" && mgConfig.fnFmt == "fn x")  {fnformatLx = prefix+"Inv2"} //inverse fn x
         if (typeof strgS[0] == "string" && funcKey != "mat" && funcselect(funcKey,fnformatLx).indexOf("mA") == -1){fParams += strgS[0]} //incomplete xxx(x)
         if (typeof strgS[1] == "string" && funcKey != "mat" && funcselect(funcKey,fnformatLx).indexOf("mB") == -1){fParams += strgS[1]} //incomplete xxx(x,y)
         if (prefix != "mg" && mgConfig.fnFmt == "fn x" && iXf < lSym && funcselect(funcKey,fnformatR).indexOf(" ") > -1 && fParams.replace(/[\|\(\{](.*)[\|\)\}]/g,"").search(/[+(&minus;)]/) > -1 ) {fParams = "("+fParams+")"} //add parens to inside functions
-        if (iXf < lSym && prefix != "mg") {rTmp = rFunc(strgS)} //right side function
-        dXpr = dXpr.substr(0,bSym-(funcKey.length+1))+lFunc(strgS)+fParams+rTmp+dXpr.substr(iXf+1,lSym); //assemble output
+        if (iXf < lSym && prefix != "mg") {rTmp = rFunc(strg,strgS)} //right side function
+        dXpr = dXpr.substr(0,bSym-(funcKey.length+1))+lFunc(strg,strgS)+fParams+rTmp+dXpr.substr(iXf+1,lSym); //assemble output
     }
     return dXpr
 }
@@ -2277,6 +2277,7 @@ if (typeof module ==  "object") {
         Cs:         Cs,
         funcMap:    funcMap,
         parseParens:function(xB,bSym) {return parseParens(xB,bSym)},
+        parseArgs:  function(xP) {return parseArgs(xP)},
         cFunc:      function(expression) {return cFunc(expression)},
         mgExport:   function(expression) {return mgExport(expression)},
         htmlExport: function(expression) {return htmlExport(expression)},
