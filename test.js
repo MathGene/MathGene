@@ -2022,7 +2022,7 @@ var mport =
 "- \\frac{b}{3 a}+ \\frac{1- \\imath \\sqrt{3}}{6 a} \\sqrt[3]{ \\frac{1}{2} \\left(2 b^{3}-9 a b c+27 a^{2} d+ \\sqrt{\\Delta} \\right)}+ \\frac{1+ \\imath \\sqrt{3}}{6 a} \\sqrt[3]{ \\frac{1}{2} \\left(2 b^{3}-9 a b c+27 a^{2} d- \\sqrt{ \\Delta } \\right)}","-(Cv[10098]/3Cv[10097])+((1-Cv[46]sqt(3))/6Cv[10097])nrt(3,(1/2)(2Cv[10098]^3-9Cv[10097]Cv[10098]Cv[10099]+27Cv[10097]^2Cv[10100]+sqt(Cv[916])))+((1+Cv[46]sqt(3))/6Cv[10097])nrt(3,(1/2)(2Cv[10098]^3-9Cv[10097]Cv[10098]Cv[10099]+27Cv[10097]^2Cv[10100]-sqt(Cv[916])))",
 "(x_0 x_1 x_2 x_3)\\leftrightarrow\\begin{pmatrix} x_0+x_3&x_1+ix_2\\\\x_1-ix_2&x_0-x_3\\end{pmatrix}","(Cv[10120]sbt(0)Cv[10120]sbt(1)Cv[10120]sbt(2)Cv[10120]sbt(3))Cv[8596]mat(mat(Cv[10120]sbt(0)+Cv[10120]sbt(3),Cv[10120]sbt(1)+Cv[46]Cv[10120]sbt(2)),mat(Cv[10120]sbt(1)-Cv[46]Cv[10120]sbt(2),Cv[10120]sbt(0)-Cv[10120]sbt(3)))",
 "\\arg {\\Gamma (x)}","arg(gam(Cv[10120]))",
-"\\exp {x}","exp(Cv[10120])",
+"\\exp {{x}}","exp(Cv[10120])",
 ];
 
 var financial =
@@ -2076,6 +2076,15 @@ var internal =
 "mgExport('cMul(sbr(Cv[10120]),cbr(Cv[10120]))')","sbr(Cv[10120])cbr(Cv[10120])",
 "mgExport('cMul(udt(Cv[10120]),tld(Cv[10120]))')","udt(Cv[10120])tld(Cv[10120])",
 "mgExport('cMul(cup(Cv[10120],Cv[10121]),cap(Cv[10120],Cv[10121]))')","cup(Cv[10120],Cv[10121])cap(Cv[10120],Cv[10121])",
+"mgExport('tdv(cPow(Cv[10120],2),Cv[10120])')","(tdr(Cv[10120])Cv[10120]^2)",
+"mgExport('drv(cPow(Cv[10120],2),Cv[10120])')","(idr(Cv[10120])Cv[10120]^2)",
+"mgExport('tdv(cPow(Cv[10120],2),Cv[10120],2)')","(tdr(Cv[10120],2)Cv[10120]^2)",
+"mgExport('drv(cPow(Cv[10120],2),Cv[10120],2)')","(idr(Cv[10120],2)Cv[10120]^2)",
+"mgExport('tdr(Cv[10120])')","tdr(Cv[10120])",
+"mgExport('idr(Cv[10120])')","idr(Cv[10120])",
+"mgExport('tdr(Cv[10120],2)')","tdr(Cv[10120],2)",
+"mgExport('idr(Cv[10120],2)')","idr(Cv[10120],2)",
+"mgExport('mat(mat(1,2,3,4,5),mat(4,5,6,7,8))')","mat(mat(1,2,3,4,5),mat(4,5,6,7,8))",
 ];
 
 
