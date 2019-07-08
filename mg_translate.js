@@ -1297,7 +1297,6 @@ function parseParens(xB,bSym) {//parse parens and return inside string, begin in
     var ins = xB.substr(bSym+1,iU-bSym-1)
     return {begin:bSym,end:iU,source:xB,inside:ins,upper:ins.substr(0,oComma-1),lower:ins.substr(oComma)}
 }
-
 function oParens(xP) {//remove outside parens
     xP += "";
     if (xP.charAt(0) == "(" && xP.charAt(xP.length-1) == ")") {
@@ -1306,14 +1305,15 @@ function oParens(xP) {//remove outside parens
     }
     return xP
 }
-function dNest(dN) {//count nested large elements
-    var dDepth = 0,dSpan = 0;
-    for (var iDp in dN) {
-        if (dN.substr(iDp,6) == "<Xdiv>") {dSpan++}
-        if (dN.substr(iDp,6) == "<Xdve>") {dSpan--}
-        if (dSpan > dDepth) {dDepth = dSpan}
-    }
-    return dDepth
+function parseArgs(xP) { //parse comma-delimited arguments into array
+	var args = [];
+	var strSplit = xP.split(",");
+	args[0] = strSplit[0];
+	for (var nXf=1;nXf<strSplit.length;nXf++) {
+		if (strCount(args[args.length-1],"(") > strCount(args[args.length-1],")")) {args[args.length-1] = args[args.length-1]+","+strSplit[nXf]}
+		else {args.push(strSplit[nXf])}
+	}
+	return args
 }
 function parseBrackets(xB,bSym) {//parse brackets and return inside string, begin index, end index, source string
     xB += "";
@@ -1375,6 +1375,15 @@ function brkt(xS,xO) {//scale brackets
     if (mgConfig.divScale == 50 || iNest == 0) {return xS}
     else {return "<span style='vertical-align:middle;display:inline-block;font-weight:100;font-size:"+Math.floor(100+(iNest*mgConfig.divScale*1.3))+"%'>"+xS+"</span>"}
 }
+function dNest(dN) {//count nested large elements
+    var dDepth = 0,dSpan = 0;
+    for (var iDp in dN) {
+        if (dN.substr(iDp,6) == "<Xdiv>") {dSpan++}
+        if (dN.substr(iDp,6) == "<Xdve>") {dSpan--}
+        if (dSpan > dDepth) {dDepth = dSpan}
+    }
+    return dDepth
+}
 //
 
 function htmlExport(htmlXpr) { //convert MG format to HTML
@@ -1428,7 +1437,7 @@ function htmlExport(htmlXpr) { //convert MG format to HTML
     return htmlXpr
 }
 //
-function mgExport(xFn) {
+function mgExport(xFn) { //export from FUNC to MG format
     function toSciNot(xU) {xU+="";return xU.replace(/(\d+)e(\d+)/g,"$1*10^$2").replace(/(\d+)e\-(\d+)/g,"$1*10^-$2").replace(/(\d+)e\+(\d+)/g,"$1*10^$2")} //convert N.NNe+-NN notation to scientific
     if (xFn == "NaN" || xFn == "undefined") {return "undefined"}
     xFn += "";
@@ -1842,13 +1851,13 @@ function dFunc(dXpr, prefix) { //map FUNC format to export format
         }
         strg = dXpr.substr(bSym,iXf-bSym); //parameters between parens
         if (lPar > rPar) {strg = strg.substr(0,strg.lastIndexOf(")"))+strg.substr(strg.lastIndexOf(")")+1)} //unmatched left parens
-        strgS = strg.split(","); //parse parms
+        strgS = parseArgs(strg); //parse parms
         funcKey = dXpr.substr(bSym-4,3); //functions xxx()
         if (!funcTest(funcKey)) {funcKey = dXpr.substr(bSym-5,4)} //operators cXxx()
         if (typeof funcselect(funcKey,prefix+"Inv1") != "undefined" && mgConfig.invFmt == "sin<sup>-1</sup>" && mgConfig.fnFmt == "fn(x)") {fnformatLx = prefix+"Inv1"} //inverse fn(x)
         if (typeof funcselect(funcKey,prefix+"Inv1") != "undefined" && mgConfig.invFmt == "sin<sup>-1</sup>" && mgConfig.fnFmt == "fn x")  {fnformatLx = prefix+"Inv2"} //inverse fn x
-        if (typeof strgS[0] == "string" && funcKey != "mat" && funcselect(funcKey,fnformatLx).indexOf("mA") == -1){fParams += strgS[0]} //xxx(x)
-        if (typeof strgS[1] == "string" && funcKey != "mat" && funcselect(funcKey,fnformatLx).indexOf("mB") == -1){fParams += strgS[1]} //xxx(x,y)
+        if (typeof strgS[0] == "string" && funcKey != "mat" && funcselect(funcKey,fnformatLx).indexOf("mA") == -1){fParams += strgS[0]} //incomplete xxx(x)
+        if (typeof strgS[1] == "string" && funcKey != "mat" && funcselect(funcKey,fnformatLx).indexOf("mB") == -1){fParams += strgS[1]} //incomplete xxx(x,y)
         if (prefix != "mg" && mgConfig.fnFmt == "fn x" && iXf < lSym && funcselect(funcKey,fnformatR).indexOf(" ") > -1 && fParams.replace(/[\|\(\{](.*)[\|\)\}]/g,"").search(/[+(&minus;)]/) > -1 ) {fParams = "("+fParams+")"} //add parens to inside functions
         if (iXf < lSym && prefix != "mg") {rTmp = rFunc(strgS)} //right side function
         dXpr = dXpr.substr(0,bSym-(funcKey.length+1))+lFunc(strgS)+fParams+rTmp+dXpr.substr(iXf+1,lSym); //assemble output
