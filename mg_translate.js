@@ -1281,7 +1281,7 @@ function strCount(xTarget,xSearch) {xTarget +="";xSearch+="";return xTarget.spli
 function funcTest(tFunc) {if (typeof funcMap[tFunc] == "undefined") {return false}; return true} //test for valid function key
 function parseParens(xB,bSym) {//parse parens and return inside string, begin index, end index, source string, upper/lower args
     xB += "";
-    var oComma = 0,lPar = 0,rPar = 0,bDelim = " ",eDelim = " ";cFind = "",ins = "";
+    var oComma = 0,lPar = 0,rPar = 0,bDelim = " ",eDelim = " ",cFind = "",ins = "";
     for (var iU=bSym;iU<xB.length;iU++) {
         cFind = xB.charAt(iU);
         if (cFind == "(") {bDelim = "(";eDelim = ")";break}
@@ -1317,17 +1317,14 @@ function parseArgs(xP) { //parse comma-delimited arguments into array
 }
 function parseBrackets(xB,bSym) {//parse brackets and return inside string, begin index, end index, source string
     xB += "";
-    var lPar = 0;
-    var rPar = 0;
-    var bDelim = " ";
-    var eDelim = " ";
+    var lPar = 0,rPar = 0,bDelim = " ",eDelim = " ",iU = 0,dTemp = "",nXi = 0;
     var lSym = xB.length;
-    for (var iU=bSym;iU<lSym;iU++) {
+    for (iU=bSym;iU<lSym;iU++) {
         if (xB.charAt(iU) == " ") {iU++}
         if (xB.charAt(iU).charCodeAt(0) > 47 && tDelimiter.indexOf(xB.charAt(iU)) == -1){return {begin:bSym,inside:xB.charAt(iU),end:iU,source:xB}}
         if (xB.charAt(iU) == "\\") {
-            var dTemp = xB.substr(iU,xB.length);
-            for (var nXi=1;nXi<dTemp.length;nXi++) {if (tDelimiter.indexOf(dTemp.charAt(nXi)) > -1){break}}
+            dTemp = xB.substr(iU,xB.length);
+            for (nXi=1;nXi<dTemp.length;nXi++) {if (tDelimiter.indexOf(dTemp.charAt(nXi)) > -1){break}}
             dTemp = dTemp.substr(0,nXi);
             return {begin:bSym,inside:dTemp,end:iU+dTemp.length,source:xB}
         }
@@ -1335,7 +1332,7 @@ function parseBrackets(xB,bSym) {//parse brackets and return inside string, begi
         if (xB.charAt(iU) == "{") {bDelim = "{";eDelim = "}";break}
         if (xB.charAt(iU) == "[") {bDelim = "[";eDelim = "]";break}
     }
-    for (var iU=bSym;iU<lSym;iU++) {
+    for (iU=bSym;iU<lSym;iU++) {
         if (xB.charAt(iU) == bDelim ) {lPar++;if(lPar == 1) {bSym = iU}}
         if (xB.charAt(iU) == eDelim ) {rPar++}
         if (lPar > 0 && lPar == rPar) {break}
@@ -1376,8 +1373,8 @@ function brkt(xS,xO) {//scale brackets
     else {return "<span style='vertical-align:middle;display:inline-block;font-weight:100;font-size:"+Math.floor(100+(iNest*mgConfig.divScale*1.3))+"%'>"+xS+"</span>"}
 }
 function dNest(dN) {//count nested large elements
-    var dDepth = 0,dSpan = 0;
-    for (var iDp in dN) {
+    var dDepth = 0,dSpan = 0,iDp = 0;
+    for (iDp in dN) {
         if (dN.substr(iDp,6) == "<Xdiv>") {dSpan++}
         if (dN.substr(iDp,6) == "<Xdve>") {dSpan--}
         if (dSpan > dDepth) {dDepth = dSpan}
@@ -1389,9 +1386,10 @@ function dNest(dN) {//count nested large elements
 function htmlExport(htmlXpr) { //convert MG format to HTML
     function dedupParens(xP) {//remove duplicate parens
         xP += "";
+		var nXf = 0,nXs = 0,sCount = 0,dparens = "";
         var dCount = strCount(xP,"(");
-        for (var nXf=0;nXf<dCount;nXf++) {
-            var dparens = parseParens(xP,xP.lastIndexOf("((")+1);
+        for (nXf=0;nXf<dCount;nXf++) {
+            dparens = parseParens(xP,xP.lastIndexOf("((")+1);
             if (xP.substr(dparens.end,2) == "))" ) {xP = xP.substr(0,xP.lastIndexOf("((")+1)+dparens.inside+xP.substr(dparens.end+1,xP.length)}
         }
         return xP
@@ -1403,12 +1401,11 @@ function htmlExport(htmlXpr) { //convert MG format to HTML
     if (!mgConfig.editMode) {htmlXpr = dedupParens(htmlXpr);htmlXpr = oParens(htmlXpr)}
     htmlXpr = dFunc(htmlXpr, "html") //process functions
     //render symbols
-    var sCount = strCount(htmlXpr,"Cv[");
-    for (var nXf=0;nXf<sCount;nXf++) {htmlXpr = htmlXpr.replace(/Cv\[\d+\]/,Cs[(htmlXpr.match(/Cv\[\d+\]/)+"").replace(/Cv\[(\d+)\]/,"$1")])} //resolve Cv[] symbols
+    sCount = strCount(htmlXpr,"Cv[");
+    for (nXf=0;nXf<sCount;nXf++) {htmlXpr = htmlXpr.replace(/Cv\[\d+\]/,Cs[(htmlXpr.match(/Cv\[\d+\]/)+"").replace(/Cv\[(\d+)\]/,"$1")])} //resolve Cv[] symbols
     //scale and fix parens
     htmlXpr = htmlXpr.replace(/\(/g,"{").replace(/\)/g,"}");
     sCount = strCount(htmlXpr,"{");
-    var nXs = 0;
     for (nXs=0;nXs<sCount;nXs++) {
         var bSym = htmlXpr.indexOf("{");
         var lSym = htmlXpr.length;
@@ -1452,12 +1449,12 @@ function mgExport(xFn) { //export from FUNC to MG format
 function cFunc(cXpr) { //convert from MG format to FUNC format: a+bc/d -> cAdd(a,cDiv(cMul(b,c),d)))
     function cParse(xInp,xOp,xFunc) {//parse operators
         const zDelim = ["^","-","#","*","/","+",",","~","@","=","<",">",String.fromCharCode(8800),String.fromCharCode(8804),String.fromCharCode(8805),String.fromCharCode(8226)];
-        var ztmp = "",bSym = "",lPar = 0,rPar = 0;
+        var ztmp = "",bSym = "",lPar = 0,rPar = 0,dCp = 0,iCp = 0;
         if (xOp == "^") {bSym = xInp.lastIndexOf(xOp)+1}
         else  {bSym = xInp.indexOf(xOp)+1;}
         var aSym = bSym-2;
         var lSym = xInp.length;
-        for (var iCp=bSym;iCp<=lSym;iCp++) {
+        for (iCp=bSym;iCp<=lSym;iCp++) {
             ztmp = xInp.charAt(iCp);
             if (ztmp == "(") {lPar++}
             if (ztmp == ")") {rPar++}
@@ -1465,7 +1462,7 @@ function cFunc(cXpr) { //convert from MG format to FUNC format: a+bc/d -> cAdd(a
             if (lPar == rPar && xInp.charAt(iCp-1)!= "e") { if (zDelim.indexOf(ztmp) > -1) {break} }
         }
         lPar = 0;rPar = 0;
-        for (var dCp=aSym;dCp>=0;dCp--) {
+        for (dCp=aSym;dCp>=0;dCp--) {
             ztmp = xInp.charAt(dCp);
             if (ztmp == "(") {lPar++}
             if (ztmp == ")") {rPar++}
@@ -1477,8 +1474,7 @@ function cFunc(cXpr) { //convert from MG format to FUNC format: a+bc/d -> cAdd(a
     }
     function nParse(xInp,xOp) {//parse negatives as cNeg()
         const zDelim = ["(",")","^","-","#","*","/","+",",","~","@","=","<",">",String.fromCharCode(8800),String.fromCharCode(8804),String.fromCharCode(8805),String.fromCharCode(8226)];
-        var ztmp = "";
-        var iNp = 0,lPar = 0,rPar = 0;
+        var iNp = 0,lPar = 0,rPar = 0,ztmp = "";
         var bSym = xInp.indexOf(xOp)+xOp.length;
         var lSym = xInp.length;
         for (iNp=bSym;iNp<=lSym;iNp++) {
@@ -1491,7 +1487,6 @@ function cFunc(cXpr) { //convert from MG format to FUNC format: a+bc/d -> cAdd(a
         xInp = xInp.substr(0,bSym-1)+"cNeg("+xInp.substr(bSym,iNp-bSym)+")"+xInp.substr(iNp);
         return xInp;
     }
-    //
     // non-multiplying cBnd symbols
     const nBind = ["(Cv\\[8773\\])","(Cv\\[8750\\])","(Cv\\[8751\\])","(Cv\\[8752\\])",
                 "(Cv\\[8592\\])","(Cv\\[8747\\])","(Cv\\[8748\\])","(Cv\\[59\\])",
@@ -1507,9 +1502,9 @@ function cFunc(cXpr) { //convert from MG format to FUNC format: a+bc/d -> cAdd(a
     const nCases = ["~-","~|-","+-","*-","/-","(-",",-","+|-","*|-","/|-","(|-",",|-","=-","=|-","@-","@|-","e|-",">-","<-",">|-","<|-",
                   String.fromCharCode(8804)+"-",String.fromCharCode(8804)+"|-",String.fromCharCode(8805)+"-",String.fromCharCode(8805)+"|-",
                   String.fromCharCode(8800)+"-",String.fromCharCode(8800)+"|-",String.fromCharCode(8226)+"-",String.fromCharCode(8226)+"|-"];
-    var nCf = 0,iXX = 0,key = 0,sbtOperand = "",cIdx = 0,aIdx = 0;
-    var sCount = strCount(cXpr,"]sbt(");//var&subscripts into container cnt()
-    cXpr += "";
+    var nCf = 0,iXX = 0,key = 0,sbtOperand = "",cIdx = 0,aIdx = 0,sCount = 0;
+	cXpr += "";
+    sCount = strCount(cXpr,"]sbt(");//var&subscripts into container cnt()
     cXpr = cXpr.replace(/\]sbt\(/g,"]SBT(");
     cXpr = cXpr.replace(/Infinity/g,"Cv[8734]");
     for (nCf=0;nCf<sCount;nCf++) {
@@ -2079,7 +2074,7 @@ function texImport(mgXpr) { //convert LaTeX to MG format
     const ulFuncs  =  ["itg(","sum(","prd(","cap(","cup("];
     const lBrackets = ["{","[","|"];
     const rBrackets = ["}","]","|"];
-    var symTemp = "",tTemp = "",tFunc = 0,nXf = 0,nXs = 0,nXi = 0,parmU = {},parmL = {},limitL = {},limitU = {},limitX = {},operand = {};
+    var sCount = 0,symTemp = "",tTemp = "",tFunc = 0,nXf = 0,nXs = 0,nXi = 0,parmU = {},parmL = {},limitL = {},limitU = {},limitX = {},operand = {};
     if (mgXpr == "NaN" || mgXpr == "undefined") {return "undefined"}
     mgXpr += " ";
     mgXpr = mgXpr.replace(/\\big/g,"\\");//fix big
@@ -2087,7 +2082,7 @@ function texImport(mgXpr) { //convert LaTeX to MG format
     mgXpr = mgXpr.replace(/\\(.)/g," \\$1").replace(/ \\\{/g,"\\{").replace(/ \\\}/g,"\\}");//fix slash whitespace
     mgXpr = mgXpr.replace(/\s+\{/g,"{").replace(/\s+\}/g,"}").replace(/\{\s+/g,"{").replace(/\}\s+/g,"}"); //fix brace whitespaces
     mgXpr = mgXpr.replace(/\{matrix\}/g,"{bmatrix}").replace(/\{pmatrix\}/g,"{bmatrix}").replace(/\{vmatrix\}/g,"{bmatrix}").replace(/\{Vmatrix\}/g,"{bmatrix}"); //convert all matrices to bmatrix
-    var sCount = strCount(mgXpr,"\\begin{bmatrix}"); //convert matrices
+    sCount = strCount(mgXpr,"\\begin{bmatrix}"); //convert matrices
     for (nXf=0;nXf<sCount;nXf++) {
         var rTemp = mgXpr.substr(mgXpr.lastIndexOf("\\begin{bmatrix}")+"\\begin{bmatrix}".length,mgXpr.length);
         var mTemp = rTemp.substr(0,rTemp.indexOf("\\end{bmatrix}"));
