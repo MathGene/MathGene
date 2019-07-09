@@ -790,9 +790,9 @@ fac:{   htmlL1:"''",   //factorial
         latexR2:"'!'",
         mg: "facE(mA)",
         },
-sum:{   htmlL1:"sumL(mA,mB)", //summation
+sum:{   htmlL1:"overUnder(mA,mB,'&#8721;',125)", //summation
         htmlR1:"' '",
-        htmlL2:"sumL(mA,mB)",
+        htmlL2:"overUnder(mA,mB,'&#8721;',125)",
         htmlR2:"' '",
         texfunc:"\\XXX",
         latexL1:"'\\\\sum_{'+mB+'}^{'+mA+'}'",
@@ -812,9 +812,9 @@ smm:{   htmlL1:"''", //summation from FUNC
         latexR2:"''",
         mg: "'sum('+mB+','+mC+'Cv[61]'+mD+')'+mA",
         },
-prd:{   htmlL1:"prdL(mA,mB)",  //product
+prd:{   htmlL1:"overUnder(mA,mB,'&#8719;',125)",  //product
         htmlR1:"' '",
-        htmlL2:"prdL(mA,mB)",
+        htmlL2:"overUnder(mA,mB,'&#8719;',125)",
         htmlR2:"''",
         texfunc:"\\XXX",
         latexL1:"'\\\\prod_{'+mB+'}^{'+mA+'}'",
@@ -944,9 +944,9 @@ sbt:{   htmlL1:"'<sub><sub>'+mA+'</sub></sub>'" ,  //subscript
         latexR2:"''",
         mg: "'sbt('+mA+')'",
         },
-cup:{   htmlL1:"cupL(mA,mB)", //cup
+cup:{   htmlL1:"overUnder(mA,mB,'&#8746;',150)", //cup
         htmlR1:"''",
-        htmlL2:"cupL(mA,mB)",
+        htmlL2:"overUnder(mA,mB,'&#8746;',150)",
         htmlR2:"' '",
         texfunc:"\\XXX",
         latexL1:"'\\\\cup_{'+mB+'}^{'+mA+'}'",
@@ -955,9 +955,9 @@ cup:{   htmlL1:"cupL(mA,mB)", //cup
         latexR2:"''",
         mg: "'cup('+mA+','+mB+')'",
         },
-cap:{   htmlL1:"capL(mA,mB)",  //cap
+cap:{   htmlL1:"overUnder(mA,mB,'&#8745;',150)",  //cap
         htmlR1:"''",
-        htmlL2:"capL(mA,mB)",
+        htmlL2:"overUnder(mA,mB,'&#8745;',150)",
         htmlR2:"' '",
         texfunc:"\\XXX",
         latexL1:"'\\\\cap_{'+mB+'}^{'+mA+'}'",
@@ -1085,7 +1085,7 @@ cAdd:{  htmlL1:"mA+'+'+mB", //add
         latexR1:"''",
         latexL2:"mA+'+'+mB",
         latexR2:"''",
-        mg: "cAddE(mA,mB)",
+        mg: "mA+'+'+mB",
         },
 cSub:{  htmlL1:"mA+'&minus;'+mB",  //subtract
         htmlR1:"''",
@@ -1492,25 +1492,6 @@ function cFunc(cXpr) { //convert from MG format to FUNC format: a+bc/d -> cAdd(a
         return xInp;
     }
     //
-    cXpr += "";
-    var nCf = 0,iXX = 0,key;
-    var sCount = strCount(cXpr,"]sbt(");//var&subscripts into container cnt()
-    cXpr = cXpr.replace(/\]sbt\(/g,"]SBT(");
-    cXpr = cXpr.replace(/Infinity/g,"Cv[8734]");
-    for (nCf=0;nCf<sCount;nCf++) {
-        var sbtOperand = parseParens(cXpr,cXpr.indexOf("]SBT("));
-        cXpr = cXpr.replace(/Cv\[(\d+)\]SBT\(/,"cnt(Cv[$1]SBT(").replace("]SBT("+sbtOperand.inside,"]sbt("+oParens(sbtOperand.inside)+")");
-    }
-    sCount = strCount(cXpr,"Cv[8748]");//differential
-    for (nCf=0;nCf<sCount;nCf++) {cXpr = cXpr.replace(/Cv\[8748\]Cv\[(\d+)\]\/Cv\[8748\]Cv\[(\d+)\]/,"sdr(Cv[$1],Cv[$2])")}
-    cXpr = cXpr.replace(/!/g,"Cv[45]"); //factorial
-    cXpr = cXpr.replace(/Cv\[8226\]/g,String.fromCharCode(8226)); //dot operator
-    const relOperators = {"Cv[60]":"<","Cv[61]":"=","Cv[62]":">","Cv[8800]":String.fromCharCode(8800),"Cv[8804]":String.fromCharCode(8804),"Cv[8805]":String.fromCharCode(8805)};//relational operators
-    for (key in relOperators) {
-        sCount = strCount(cXpr,key);
-        for (nCf=0;nCf<sCount;nCf++) {cXpr = cXpr.replace(key,relOperators[key])}
-    }
-    cXpr = cXpr.replace(/([\)\]])(\|?)(\d)/g,"$1$2#$3").replace(/([\)\]\d])(\|?)\(/g,"$1$2#(").replace(/([\)\]\d])(\|?)Cv\[/g,"$1$2#Cv[").replace(/([\)\]\d])(\|?)([a-z][a-z][a-z]\()/ig,"$1$2#$3");//terms to # multiply
     // non-multiplying cBnd symbols
     const nBind = ["(Cv\\[8773\\])","(Cv\\[8750\\])","(Cv\\[8751\\])","(Cv\\[8752\\])",
                 "(Cv\\[8592\\])","(Cv\\[8747\\])","(Cv\\[8748\\])","(Cv\\[59\\])",
@@ -1518,6 +1499,32 @@ function cFunc(cXpr) { //convert from MG format to FUNC format: a+bc/d -> cAdd(a
                 "(itg\\([^\\)]*\\,[^\\)]*\\))","(sdr\\([^\\)]*\\,[^\\)]*\\))","(sum\\([^\\)]*\\,[^\\)]*\\))",
                 "(prd\\([^\\)]*\\,[^\\)]*\\))","(psd\\([^\\)]*\\,[^\\)]*\\))","(cap\\([^\\)]*\\,[^\\)]*\\))",
                 "(cup\\([^\\)]*\\,[^\\)]*\\))","(dif\\([^\\)]*\\,[^\\)]*\\))","(Cv\\[10044])"];
+    //relational operators
+    const relOps = {"cEql":"=","cLth":"<","cGth":">","cNql":String.fromCharCode(8800),"cLeq":String.fromCharCode(8804),"cGeq":String.fromCharCode(8805)};//relational operators
+    const relOperators = {"Cv[60]":"<","Cv[61]":"=","Cv[62]":">","Cv[8800]":String.fromCharCode(8800),"Cv[8804]":String.fromCharCode(8804),"Cv[8805]":String.fromCharCode(8805)};//relational operators
+    //editing
+    const pCases = ["^-","^|-"];
+    const nCases = ["~-","~|-","+-","*-","/-","(-",",-","+|-","*|-","/|-","(|-",",|-","=-","=|-","@-","@|-","e|-",">-","<-",">|-","<|-",
+                  String.fromCharCode(8804)+"-",String.fromCharCode(8804)+"|-",String.fromCharCode(8805)+"-",String.fromCharCode(8805)+"|-",
+                  String.fromCharCode(8800)+"-",String.fromCharCode(8800)+"|-",String.fromCharCode(8226)+"-",String.fromCharCode(8226)+"|-"];
+    var nCf = 0,iXX = 0,key = 0,sbtOperand = "",cIdx = 0,aIdx = 0;
+    var sCount = strCount(cXpr,"]sbt(");//var&subscripts into container cnt()
+    cXpr += "";
+    cXpr = cXpr.replace(/\]sbt\(/g,"]SBT(");
+    cXpr = cXpr.replace(/Infinity/g,"Cv[8734]");
+    for (nCf=0;nCf<sCount;nCf++) {
+        sbtOperand = parseParens(cXpr,cXpr.indexOf("]SBT("));
+        cXpr = cXpr.replace(/Cv\[(\d+)\]SBT\(/,"cnt(Cv[$1]SBT(").replace("]SBT("+sbtOperand.inside,"]sbt("+oParens(sbtOperand.inside)+")");
+    }
+    sCount = strCount(cXpr,"Cv[8748]");//differential
+    for (nCf=0;nCf<sCount;nCf++) {cXpr = cXpr.replace(/Cv\[8748\]Cv\[(\d+)\]\/Cv\[8748\]Cv\[(\d+)\]/,"sdr(Cv[$1],Cv[$2])")}
+    cXpr = cXpr.replace(/!/g,"Cv[45]"); //factorial
+    cXpr = cXpr.replace(/Cv\[8226\]/g,String.fromCharCode(8226)); //dot operator
+    for (key in relOperators) {
+        sCount = strCount(cXpr,key);
+        for (nCf=0;nCf<sCount;nCf++) {cXpr = cXpr.replace(key,relOperators[key])}
+    }
+    cXpr = cXpr.replace(/([\)\]])(\|?)(\d)/g,"$1$2#$3").replace(/([\)\]\d])(\|?)\(/g,"$1$2#(").replace(/([\)\]\d])(\|?)Cv\[/g,"$1$2#Cv[").replace(/([\)\]\d])(\|?)([a-z][a-z][a-z]\()/ig,"$1$2#$3");//terms to # multiply
     for (nCf in nBind) {//add @ between bind symbols
         var rgx = new RegExp(nBind[nCf]+"(\\|?)#");
         var rgy = new RegExp("#(\\|?)"+nBind[nCf]);
@@ -1525,7 +1532,6 @@ function cFunc(cXpr) { //convert from MG format to FUNC format: a+bc/d -> cAdd(a
     }
     if (cXpr.charAt(0) == "+") {cXpr = cXpr.substr(1)} //remove + at beginning of expression
     sCount = strCount(cXpr,"-");//parse power negatives to cPow(x,cNeg())
-    const pCases = ["^-","^|-"];
     for (nCf=0;nCf<sCount;nCf++) {
         for (iXX in pCases) {
             if (cXpr.indexOf(pCases[iXX]) > -1) {cXpr = nParse(cXpr,pCases[iXX])}
@@ -1535,9 +1541,6 @@ function cFunc(cXpr) { //convert from MG format to FUNC format: a+bc/d -> cAdd(a
     for (nCf=0;nCf<sCount;nCf++) {cXpr = cParse(cXpr,"^","cPow")}
     if (cXpr.charAt(0) == "-") {cXpr = nParse(cXpr,"-")}
     sCount = strCount(cXpr,"-");//parse negatives to cNeg()
-    const nCases = ["~-","~|-","+-","*-","/-","(-",",-","+|-","*|-","/|-","(|-",",|-","=-","=|-","@-","@|-","e|-",">-","<-",">|-","<|-",
-                  String.fromCharCode(8804)+"-",String.fromCharCode(8804)+"|-",String.fromCharCode(8805)+"-",String.fromCharCode(8805)+"|-",
-                  String.fromCharCode(8800)+"-",String.fromCharCode(8800)+"|-",String.fromCharCode(8226)+"-",String.fromCharCode(8226)+"|-"];
     for (nCf=0;nCf<sCount;nCf++) {
         for (iXX in nCases) {
             if (cXpr.indexOf(nCases[iXX]) > -1) {cXpr = nParse(cXpr,nCases[iXX])}
@@ -1554,8 +1557,6 @@ function cFunc(cXpr) { //convert from MG format to FUNC format: a+bc/d -> cAdd(a
     sCount = strCount(cXpr,String.fromCharCode(8226));//convert dot to cDot()
     for (nCf=0;nCf<sCount;nCf++) {cXpr = cParse(cXpr,String.fromCharCode(8226),"cDot")}
     sCount = strCount(cXpr,"-") + strCount(cXpr,"+");//convert +- to cAdd() or cSub()
-    var cIdx = 0;
-    var aIdx = 0;
     for (nCf=0;nCf<sCount;nCf++) {
         aIdx = cXpr.indexOf("+");
         cIdx = cXpr.indexOf("-");
@@ -1566,8 +1567,7 @@ function cFunc(cXpr) { //convert from MG format to FUNC format: a+bc/d -> cAdd(a
     }
     sCount = strCount(cXpr,"@");//convert @ symbol handler to cBnd()
     for (nCf=0;nCf<sCount;nCf++) {cXpr = cParse(cXpr,"@","cBnd")}
-    var relOps = {"cEql":"=","cLth":"<","cGth":">","cNql":String.fromCharCode(8800),"cLeq":String.fromCharCode(8804),"cGeq":String.fromCharCode(8805)};//relational operators
-    for (key in relOps) {
+    for (key in relOps) { //relational operators
         sCount = strCount(cXpr,relOps[key]);
         for (nCf=0;nCf<sCount;nCf++) {
             cXpr = cParse(cXpr,relOps[key],key)
@@ -1602,21 +1602,15 @@ function dFunc(dXpr, prefix) { //map FUNC format to export format
     function xParens(xA) {return "(" + oParens(xA) + ")"}
     
     //MG handlers
-    function cAddE(xU,xL) {return xU + "+" + xL} //addition
     function cSubE(xU,xL) { //subtraction
         xTractL = oprExtract(cFunc(xL));
         if (xTractL.func == "cAdd") {return xU + "-" + xParens(xL)}
         return xU + "-" + xL
     }
-    function cTmsE(xU,xL) {return xU + "*" + xL} //multiplication using *
     function cMulE(xU,xL) { //multiplication by term
-        xU += "";xL += "";
         xTractU = oprExtract(cFunc(xU));
         xTractL = oprExtract(cFunc(xL));
-        if (xTractL.func.length == 3) {xL  = oParens(xL)}
-        if (xTractU.func.length == 3) {xU  = oParens(xU)}
-        if (xTractL.func == "cPow") {xL  = oParens(xL)}
-        if (xTractU.func == "cPow") {xU  = oParens(xU)}
+        xL = oParens(xL);xU = oParens(xU);
         if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "fac") {xU  = xParens(xU)}
         if (xTractL.func == "cAdd" || xTractL.func == "cSub" || xTractL.func == "fac") {xL  = xParens(xL)}
         if (xTractL.func == "cDiv" && xTractU.func == "cDiv") {xU  = xParens(xU);xL  = xParens(xL)}
@@ -1626,7 +1620,6 @@ function dFunc(dXpr, prefix) { //map FUNC format to export format
         return xU + "" + xL
     }
     function cDivE(xU,xL) { //division
-        xU += "";xL += "";
         xTractU = oprExtract(cFunc(xU));
         xTractL = oprExtract(cFunc(xL));
         if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "cMul" || xTractU.func == "cDiv" || xTractU.func == "cNeg" || xU.indexOf("Cv[8747]") > -1) {xU  = xParens(xU)}
@@ -1634,7 +1627,6 @@ function dFunc(dXpr, prefix) { //map FUNC format to export format
         return xU + "/" + xL
     }
     function cPowE(xU,xL) { //powers
-        xU += "";xL += "";
         xTractU = oprExtract(cFunc(xU));
         xTractL = oprExtract(cFunc(xL));
         if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "cMul" || xTractU.func == "cDiv" || xTractU.func == "cNeg" || xTractU.func == "fac") {xU  = xParens(xU)}
@@ -1642,7 +1634,6 @@ function dFunc(dXpr, prefix) { //map FUNC format to export format
         return xU + "^" + xL
     }
     function cNegE(xU) { //negative
-        xU += "";
         xTractU = oprExtract(cFunc(xU));
         if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "cDiv") {return "-" + xParens(xU)}
         return "-" + xU
@@ -1719,10 +1710,6 @@ function dFunc(dXpr, prefix) { //map FUNC format to export format
         return "<Xdiv><span style='display:inline-block;vertical-align:middle;'><table cellpadding='0' cellspacing='0'><tr><td rowspan='4'><span style='vertical-align:middle;display:inline-table;'><span style='display:table-row;line-height:90%'>&#8992;</span><span style='display:table-row;line-height:90%'>&#8993;</span></span></td><tr><td style='font-size:45%'>"
                 +xA+"</td></tr><tr><td>&nbsp;</td></tr><td style='font-size:45%'>"+xB+"</td></tr></table></span><Xdve>"
     }
-    function prdL(xA,xB) {return overUnder(xA,xB,"&#8719;",125)}
-    function sumL(xA,xB) {return overUnder(xA,xB,"&#8721;",125)}
-    function capL(xA,xB) {return overUnder(xA,xB,"&#8745;",150)}
-    function cupL(xA,xB) {return overUnder(xA,xB,"&#8746;",150)}
     function vecL()  {return fAccentU("<i>&#8594;</i>")}
     function vecR()  {return fAccentL("<span style='line-height:50%'>&nbsp;</span>")}
     function hatL()  {return fAccentU("<i>&#8963;</i>")}
@@ -1764,12 +1751,10 @@ function dFunc(dXpr, prefix) { //map FUNC format to export format
         return xTmp
     }
     function matL(xA) {
-        var mReturn = "";
+        var mReturn = "",prefix = "",suffix = "",iM = 0;
         var dScale = xA.length;
-        var prefix = "";
-        var suffix = "";
         if (typeof xA[0] == "string" && xA[0].substr(0,6) == "<Xrow>"){
-            for (var iM in xA) {
+            for (iM in xA) {
                 xA[iM] = xA[iM].replace(/\<Xrow\>/g,"").replace(/\<Xrwe\>/g,"").replace(/\<Xcel\>/g,"<td>").replace(/\<Xcle\>/g,"</td>");
                 dScale = dScale + dNest(xA+"")*(mgConfig.divScale/100)
                 mReturn = mReturn + "<tr>" + xA[iM] + "</tr>"
@@ -1779,7 +1764,7 @@ function dFunc(dXpr, prefix) { //map FUNC format to export format
             return prefix+" <table style='text-align:center;display:inline-table;vertical-align:middle'><tr><td style='border-left:2px solid black;border-top:2px solid black;border-bottom:2px solid black'>&nbsp;</td><td><table>" + mReturn + "</table><td style='border-right:2px solid black;border-top:2px solid black;border-bottom:2px solid black'>&nbsp;</td></tr></table> "+suffix
         }
         else {
-            for (var iM in xA) {mReturn = mReturn + "<Xcel>" + xA[iM] + "<Xcle>"}
+            for (iM in xA) {mReturn = mReturn + "<Xcel>" + xA[iM] + "<Xcle>"}
             return "<Xrow>" + mReturn + "<Xrwe>"
         }
     }
