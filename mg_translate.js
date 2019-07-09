@@ -1599,12 +1599,13 @@ function dFunc(dXpr, prefix) { //map FUNC format to export format
     }
     function fAccentU(xA) {return "<Xfnc><span style='display:inline-block;'><span style='text-align:center;vertical-align:middle;display:inline-table;'><span style='display:table-row;line-height:20%;font-size:60%'>"+xA+"</span><span style='line-height:90%;display:table-row;'>"}
     function fAccentL(xB) {return "<Xfnc></span><span style='display:table-row;line-height:20%;font-size:60%'>"+xB+"</span></span></span>"}
-
+	function xParens(xA) {return "(" + oParens(xA) + ")"}
+	
     //MG handlers
     function cAddE(xU,xL) {return xU + "+" + xL} //addition
     function cSubE(xU,xL) { //subtraction
         xTractL = oprExtract(cFunc(xL));
-        if (xTractL.func == "cAdd") {return xU + "-(" + oParens(xL) + ")"}
+        if (xTractL.func == "cAdd") {return xU + "-" + xParens(xL)}
         return xU + "-" + xL
     }
     function cTmsE(xU,xL) {return xU + "*" + xL} //multiplication using *
@@ -1612,38 +1613,38 @@ function dFunc(dXpr, prefix) { //map FUNC format to export format
         xU += "";xL += "";
         xTractU = oprExtract(cFunc(xU));
         xTractL = oprExtract(cFunc(xL));
-        if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "fac") {xU  = "(" + oParens(xU) + ")"}
-        if (xTractL.func == "cAdd" || xTractL.func == "cSub" || xTractL.func == "fac") {xL  = "(" + oParens(xL) + ")"}
-        if (xTractL.func == "cDiv" && xTractU.func == "cDiv") {xU  = "(" + oParens(xU) + ")";xL  = "(" + oParens(xL) + ")"}
-        if (xU.indexOf("Cv[45]") > -1 && xU.lastIndexOf("Cv[45]") == xU.length-6) {xU  = "(" + oParens(xU) + ")"}
-        if (xL.indexOf("Cv[45]") > -1 && xL.lastIndexOf("Cv[45]") == xL.length-6) {xL  = "(" + oParens(xL) + ")"}
-        if (xTractL.func == "cPow" && numTest(xU) &&  numTest(xTractL.upper)) {xL  = "(" + oParens(xL) + ")"}
+        if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "fac") {xU  = xParens(xU)}
+        if (xTractL.func == "cAdd" || xTractL.func == "cSub" || xTractL.func == "fac") {xL  = xParens(xL)}
+        if (xTractL.func == "cDiv" && xTractU.func == "cDiv") {xU  = xParens(xU);xL  = xParens(xL)}
+        if (xU.indexOf("Cv[45]") > -1 && xU.lastIndexOf("Cv[45]") == xU.length-6) {xU  = xParens(xU)}
+        if (xL.indexOf("Cv[45]") > -1 && xL.lastIndexOf("Cv[45]") == xL.length-6) {xL  = xParens(xL)}
+        if (xTractL.func == "cPow" && numTest(xU) &&  numTest(xTractL.upper)) {xL  = xParens(xL)}
         return xU + "" + xL
     }
     function cDivE(xU,xL) { //division
         xU += "";xL += "";
         xTractU = oprExtract(cFunc(xU));
         xTractL = oprExtract(cFunc(xL));
-        if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "cMul" || xTractU.func == "cDiv" || xTractU.func == "cNeg" || xU.indexOf("Cv[8747]") > -1) {xU  = "(" + oParens(xU) + ")"}
-        if (xTractL.func == "cAdd" || xTractL.func == "cSub" || xTractL.func == "cMul" || xTractL.func == "cDiv" || xTractL.func == "cNeg" || xL.indexOf("Cv[8747]") > -1) {xL  = "(" + oParens(xL) + ")"}
+        if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "cMul" || xTractU.func == "cDiv" || xTractU.func == "cNeg" || xU.indexOf("Cv[8747]") > -1) {xU  = xParens(xU)}
+        if (xTractL.func == "cAdd" || xTractL.func == "cSub" || xTractL.func == "cMul" || xTractL.func == "cDiv" || xTractL.func == "cNeg" || xL.indexOf("Cv[8747]") > -1) {xL  = xParens(xL)}
         return xU + "/" + xL
     }
     function cPowE(xU,xL) { //powers
         xU += "";xL += "";
         xTractU = oprExtract(cFunc(xU));
         xTractL = oprExtract(cFunc(xL));
-        if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "cMul" || xTractU.func == "cDiv" || xTractU.func == "cNeg" || xTractU.func == "fac") {xU  = "(" + oParens(xU) + ")"}
-        if (xTractL.func == "cAdd" || xTractL.func == "cSub" || xTractL.func == "cMul" || xTractL.func == "cDiv" || xTractL.func == "cNeg") {xL  = "(" + oParens(xL) + ")"}
+        if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "cMul" || xTractU.func == "cDiv" || xTractU.func == "cNeg" || xTractU.func == "fac") {xU  = xParens(xU)}
+        if (xTractL.func == "cAdd" || xTractL.func == "cSub" || xTractL.func == "cMul" || xTractL.func == "cDiv" || xTractL.func == "cNeg") {xL  = xParens(xL)}
         return xU + "^" + xL
     }
     function cNegE(xU) { //negative
         xU += "";
         xTractU = oprExtract(cFunc(xU));
-        if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "cDiv") {return "-(" + oParens(xU) + ")"}
+        if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "cDiv") {return "-" + xParens(xU)}
         return "-" + xU
     }
     function facE(xU) { //factorial
-        if (!numTest(xU) && cFunc(xU) != oParens(xU)) {return "(" + oParens(xU) +")Cv[45]"}
+        if (!numTest(xU) && cFunc(xU) != oParens(xU)) {return xParens(xU) + "Cv[45]"}
         return xU + "Cv[45]"
     }
     function tdvE(xU,dV,xN) { //total derivative from FUNC format
