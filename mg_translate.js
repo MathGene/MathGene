@@ -983,7 +983,7 @@ sdr:{  //derivative dy/dx
     latexR1:'',
     latexL2: function (parm) {return latexFuncs['sdrX'](parm[0],parm[1],parm[3])},
     latexR2:'',
-    mg: function (parm) {'sdr('+parm[0]+','+parm[1]+')'},
+    mg: function (parm) {return 'sdr('+parm[0]+','+parm[1]+')'},
     },
 psd:{ //partial derivative dy/dx
     htmlL1: function (parm) {return htmlFuncs['psdL'](parm[0],parm[1],parm[3])},
@@ -995,7 +995,7 @@ psd:{ //partial derivative dy/dx
     latexR1:'',
     latexL2: function (parm) {return latexFuncs['psdX'](parm[0],parm[1],parm[3])},
     latexR2:'',
-    mg: function (parm) {'psd('+parm[0]+','+parm[1]+')'},
+    mg: function (parm) {return 'psd('+parm[0]+','+parm[1]+')'},
     },
 sbt:{ //subscript
     htmlL1: function (parm) {return '<sub><sub>'+parm[0]+'</sub></sub>'},
