@@ -760,6 +760,7 @@ var reduce =
 "Cv[10121]cos(Cv[10120]Cv[10121])sin(Cv[10120]Cv[10121])/Cv[10121]cos(Cv[10120]Cv[10121])^2","tan(Cv[10120]Cv[10121])",
 "(2Cv[29]+1)/Cv[10120](2Cv[29]+1)","1/Cv[10120]",
 
+"Cv[10120]Cv[8226]Cv[10121]","Cv[10120]Cv[10121]",
 
 //bugs
 //"2Cv[10120]cos(Cv[10120]^2)/Cv[10121]sin(Cv[10120]^2)","2Cv[10120]cot(Cv[10120]^2)/Cv[10121]",
@@ -1018,7 +1019,7 @@ var exptotrig =
 "Cv[8]^(Cv[46]Cv[10120])/2Cv[46]-1/2Cv[46]Cv[8]^(Cv[46]Cv[10120])","sin(Cv[10120])",
 "Cv[46]/(2Cv[8]^(3Cv[46]Cv[10120]))-(Cv[46]Cv[8]^(3Cv[46]Cv[10120]))/2","sin(3Cv[10120])",
 "Cv[46]/(2Cv[8]^(2Cv[46]Cv[10120]))-(Cv[46]Cv[8]^(2Cv[46]Cv[10120]))/2","sin(2Cv[10120])",
-"Cv[46]/(2Cv[8]^(Cv[46]Cv[10120]Cv[10121]))-(Cv[46]Cv[8]^(Cv[46]Cv[10120]Cv[10121]))/2","sin(Cv[10120],Cv[10121])",
+"Cv[46]/(2Cv[8]^(Cv[46]Cv[10120]Cv[10121]))-(Cv[46]Cv[8]^(Cv[46]Cv[10120]Cv[10121]))/2","sin(Cv[10120]Cv[10121])",
 "Cv[8]^(Cv[46]Cv[10120])/2+1/(2Cv[8]^(Cv[46]Cv[10120]))","cos(Cv[10120])",
 "Cv[8]^(2Cv[46]Cv[10120])/2+1/(2Cv[8]^(2Cv[46]Cv[10120]))","cos(2Cv[10120])",
 "2/(Cv[8]^(Cv[46]Cv[10120])+1/Cv[8]^(Cv[46]Cv[10120]))","sec(Cv[10120])",
@@ -1877,9 +1878,9 @@ var xport =
 "(sum(10,Cv[10120]Cv[61]1)Cv[10120])^2"," \\left( \\sum_{x = 1}^{10} x \\right)^{2}",
 "Cv[963]=sqt((1/(Cv[10078]))sum(Cv[10078],Cv[10108]=1)(Cv[10120]sbt(Cv[10108])-Cv[956])^2)"," \\sigma = \\sqrt{ \\frac{1}{N} \\sum_{l=1}^{N}  \\left(x_{l}- \\mu \\right)^{2}}",
 "PDF=(1/Cv[963]sqt(2Cv[29]))Cv[8]^-((lne(Cv[10120])-Cv[956])^2/(2Cv[963]^2))","P D F= \\frac{1}{ \\sigma  \\sqrt{2 \\pi }} e^{- \\frac{ \\left( \\ln \\left(x \\right)- \\mu \\right)^{2}}{2 \\sigma^{2}}}",
-"sum(Cv[10098],Cv[10120]=Cv[10097])Cv[10102](Cv[10120])+sum(Cv[10098],Cv[10120]=Cv[10097])Cv[10103](Cv[10120])=sum(Cv[10098],Cv[10120]=Cv[10097])sbr(Cv[10102](Cv[10120])+Cv[10103](Cv[10120]))"," \\sum_{x=a}^{b} f \\left(x \\right)+ \\sum_{x=a}^{b} g \\left(x \\right)= \\sum_{x=a}^{b}  \\left [f \\left(x \\right)+g \\left(x \\right) \\right ]",
+"sum(Cv[10098],Cv[10120]=Cv[10097])Cv[10102](Cv[10120])+sum(Cv[10098],Cv[10120]=Cv[10097])Cv[10103](Cv[10120])=sum(Cv[10098],Cv[10120]=Cv[10097])sbr(Cv[10102](Cv[10120])+Cv[10103](Cv[10120]))","\\sum_{x=a}^{b}f\\left(x\\right)+\\sum_{x=a}^{b}g\\left(x\\right)=\\sum_{x=a}^{b}\\left\\[f\\left(x\\right)+g\\left(x\\right)\\right\\]",
 "prd(Cv[10098],Cv[10105]=Cv[10097])Cv[10110]sbt(Cv[10105])=Cv[10110]sbt(Cv[10097])*Cv[10110]sbt(Cv[10097]+1)*Cv[10110]sbt(Cv[10097]+2)*Cv[8230]*Cv[10110]sbt(Cv[10098])"," \\prod_{ \\imath =a}^{b} n_{ \\imath }=n_{a} \\times n_{a+1} \\times n_{a+2} \\times \\dotsi \\times n_{b}",
-"Cv[10120]^sbr(sum(Cv[10098],Cv[10110]=Cv[10097])Cv[10102](Cv[10110]))=prd(Cv[10098],Cv[10110]=Cv[10097])Cv[10120]^(Cv[10102](Cv[10110]))","x^{ \\left [ \\sum_{n=a}^{b} f \\left(n \\right) \\right ]}= \\prod_{n=a}^{b} x^{f \\left(n \\right)}",
+"Cv[10120]^sbr(sum(Cv[10098],Cv[10110]=Cv[10097])Cv[10102](Cv[10110]))=prd(Cv[10098],Cv[10110]=Cv[10097])Cv[10120]^(Cv[10102](Cv[10110]))","x^{\\left\\[\\sum_{n=a}^{b}f\\left(n\\right)\\right\\]}=\\prod_{n=a}^{b}x^{f\\left(n\\right)}",
 "Cv[10102](Cv[10120])=sum(Cv[8734],Cv[10110]=Cv[10097]) (Cv[10102]^cbr(Cv[10110])(Cv[10097])/Cv[10110]Cv[45])(Cv[10120]-Cv[10097])^Cv[10110]","f \\left(x \\right)= \\sum_{n=a}^{ \\infty }  \\frac{f^{ \\left \\{n \\right \\}} \\left(a \\right)}{n !} \\left(x-a \\right)^{n}",
 "tan(Cv[10120])=sum(Cv[8734],Cv[10110]=1)(Cv[10066]sbt(2Cv[10110])(-4)^Cv[10110](1-4^Cv[10110])/(2Cv[10110])Cv[45])Cv[10120]^(2Cv[10110]-1)=Cv[10120]+Cv[10120]^3/3+2Cv[10120]^5/15+Cv[8230]"," \\tan \\left(x \\right)= \\sum_{n=1}^{ \\infty }  \\frac{B_{2 n} \\left(-4 \\right)^{n} \\left(1-4^{n} \\right)}{ \\left(2 n \\right) !} x^{2 n-1}=x+ \\frac{x^{3}}{3}+ \\frac{2 x^{5}}{15}+ \\dotsi ",
 "tnh(Cv[10120])=sum(Cv[8734],Cv[10110]=1)(Cv[10066]sbt(2Cv[10110])4^Cv[10110](4^Cv[10110]-1)/(2Cv[10110])Cv[45])Cv[10120]^(2Cv[10110]-1)=Cv[10120]-(1/3)Cv[10120]^3+(2/15)Cv[10120]^5-(17/315)Cv[10120]^7+Cv[8230]"," \\tanh \\left(x \\right)= \\sum_{n=1}^{ \\infty }  \\frac{B_{2 n} 4^{n} \\left(4^{n}-1 \\right)}{ \\left(2 n \\right) !} x^{2 n-1}=x- \\frac{1}{3} x^{3}+ \\frac{2}{15} x^{5}- \\frac{17}{315} x^{7}+ \\dotsi ",
@@ -2022,7 +2023,7 @@ var mport =
 "- \\frac{b}{3 a}+ \\frac{1- \\imath \\sqrt{3}}{6 a} \\sqrt[3]{ \\frac{1}{2} \\left(2 b^{3}-9 a b c+27 a^{2} d+ \\sqrt{\\Delta} \\right)}+ \\frac{1+ \\imath \\sqrt{3}}{6 a} \\sqrt[3]{ \\frac{1}{2} \\left(2 b^{3}-9 a b c+27 a^{2} d- \\sqrt{ \\Delta } \\right)}","-(Cv[10098]/3Cv[10097])+((1-Cv[46]sqt(3))/6Cv[10097])nrt(3,(1/2)(2Cv[10098]^3-9Cv[10097]Cv[10098]Cv[10099]+27Cv[10097]^2Cv[10100]+sqt(Cv[916])))+((1+Cv[46]sqt(3))/6Cv[10097])nrt(3,(1/2)(2Cv[10098]^3-9Cv[10097]Cv[10098]Cv[10099]+27Cv[10097]^2Cv[10100]-sqt(Cv[916])))",
 "(x_0 x_1 x_2 x_3)\\leftrightarrow\\begin{pmatrix} x_0+x_3&x_1+ix_2\\\\x_1-ix_2&x_0-x_3\\end{pmatrix}","(Cv[10120]sbt(0)Cv[10120]sbt(1)Cv[10120]sbt(2)Cv[10120]sbt(3))Cv[8596]mat(mat(Cv[10120]sbt(0)+Cv[10120]sbt(3),Cv[10120]sbt(1)+Cv[46]Cv[10120]sbt(2)),mat(Cv[10120]sbt(1)-Cv[46]Cv[10120]sbt(2),Cv[10120]sbt(0)-Cv[10120]sbt(3)))",
 "\\arg {\\Gamma (x)}","arg(gam(Cv[10120]))",
-"\\exp {x}","exp(Cv[10120])",
+"\\exp {{x}}","exp(Cv[10120])",
 ];
 
 var financial =
@@ -2076,6 +2077,17 @@ var internal =
 "mgExport('cMul(sbr(Cv[10120]),cbr(Cv[10120]))')","sbr(Cv[10120])cbr(Cv[10120])",
 "mgExport('cMul(udt(Cv[10120]),tld(Cv[10120]))')","udt(Cv[10120])tld(Cv[10120])",
 "mgExport('cMul(cup(Cv[10120],Cv[10121]),cap(Cv[10120],Cv[10121]))')","cup(Cv[10120],Cv[10121])cap(Cv[10120],Cv[10121])",
+"mgExport('tdv(cPow(Cv[10120],2),Cv[10120])')","(tdr(Cv[10120])Cv[10120]^2)",
+"mgExport('drv(cPow(Cv[10120],2),Cv[10120])')","(idr(Cv[10120])Cv[10120]^2)",
+"mgExport('tdv(cPow(Cv[10120],2),Cv[10120],2)')","(tdr(Cv[10120],2)Cv[10120]^2)",
+"mgExport('drv(cPow(Cv[10120],2),Cv[10120],2)')","(idr(Cv[10120],2)Cv[10120]^2)",
+"mgExport('tdr(Cv[10120])')","tdr(Cv[10120])",
+"mgExport('idr(Cv[10120])')","idr(Cv[10120])",
+"mgExport('tdr(Cv[10120],2)')","tdr(Cv[10120],2)",
+"mgExport('idr(Cv[10120],2)')","idr(Cv[10120],2)",
+"mgExport('mat(mat(1,2,3,4,5),mat(4,5,6,7,8))')","mat(mat(1,2,3,4,5),mat(4,5,6,7,8))",
+"mgExport('cDot(Cv[10120],Cv[10121])')","Cv[10120]Cv[8226]Cv[10121]",
+"mgExport('cTms(Cv[10120],Cv[10121])')","Cv[10120]*Cv[10121]",
 ];
 
 
