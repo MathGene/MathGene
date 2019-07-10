@@ -1646,7 +1646,7 @@ function dNest(dN) {//count nested large elements
 function htmlExport(htmlXpr) { //convert MG format to HTML
     function dedupParens(xP) {//remove duplicate parens
         xP += "";
-        var nXf = 0,nXs = 0,sCount = 0,dparens = "";
+        var nXf = 0,sCount = 0,dparens = "";
         var dCount = strCount(xP,"(");
         for (nXf=0;nXf<dCount;nXf++) {
             dparens = parseParens(xP,xP.lastIndexOf("((")+1);
@@ -1655,6 +1655,7 @@ function htmlExport(htmlXpr) { //convert MG format to HTML
         return xP
     }
     //
+    var nXs=0;
     if (htmlXpr == "NaN" || htmlXpr == "undefined") {return "undefined"}
     htmlXpr = cFunc(htmlXpr); //convert to FUNC
     if (mgConfig.editMode) {htmlXpr = htmlXpr.replace(/\,\)/g,",Cv[9643])").replace(/\(\,/g,"(Cv[9643],").replace(/\,\,/g,",Cv[9643],").replace(/\(\)/g,"(Cv[9643])")} //fill empty fields
@@ -1662,7 +1663,7 @@ function htmlExport(htmlXpr) { //convert MG format to HTML
     htmlXpr = dFunc(htmlXpr, "html") //process functions
     //render symbols
     sCount = strCount(htmlXpr,"Cv[");
-    for (nXf=0;nXf<sCount;nXf++) {htmlXpr = htmlXpr.replace(/Cv\[\d+\]/,Cs[(htmlXpr.match(/Cv\[\d+\]/)+"").replace(/Cv\[(\d+)\]/,"$1")])} //resolve Cv[] symbols
+    for (nXs=0;nXs<sCount;nXs++) {htmlXpr = htmlXpr.replace(/Cv\[\d+\]/,Cs[(htmlXpr.match(/Cv\[\d+\]/)+"").replace(/Cv\[(\d+)\]/,"$1")])} //resolve Cv[] symbols
     //scale and fix parens
     htmlXpr = htmlXpr.replace(/\(/g,"{").replace(/\)/g,"}");
     sCount = strCount(htmlXpr,"{");
@@ -1854,11 +1855,11 @@ function dFunc(dXpr, prefix) { //map FUNC format to export format
     //
     dXpr = dXpr.replace(/ /g,"").replace(/([a-z][a-z][a-z])\(/ig,"$1@"); //mark left parens with @
     var sCount = strCount(dXpr,"@");
-    var bSym = 0, lSym = 0,lPar = 1,rPar = 0,iXf = 0,payload = "",paramS = "",funcKey = "",rTmp = "",fnformatL = "",fnformatR = "",fnformatLx = "";
+    var bSym = 0, lSym = 0,lPar = 0,rPar = 0,iXf = 0,payload = "",paramS = "",funcKey = "",rTmp = "",fnformatL = "",fnformatR = "",fnformatLx = "",nXf = 0;
     if (prefix == "mg") {fnformatL = prefix;fnformatR = prefix}
     else if (mgConfig.fnFmt == "fn(x)") {fnformatL = prefix+"L1";fnformatR = prefix+"R1"} //fn(x)
     else {fnformatL = prefix+"L2";fnformatR = prefix+"R2"}  //fn x
-    for (var nXf=0;nXf<sCount;nXf++) {
+    for (nXf=0;nXf<sCount;nXf++) {
         fnformatLx = fnformatL;
         lPar = 1,rPar = 0,iXf = 0,rTmp = "";
         bSym = dXpr.lastIndexOf("@")+1; //find inside parens
