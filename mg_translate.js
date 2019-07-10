@@ -518,40 +518,40 @@ azh:{
     mg: function (parm) {return 'azh('+parm[0]+')'},
     },
 sqt:{ //square root
-    htmlL1:"radL(0,strg)+mA",
-    htmlR1:"radR()",
-    htmlL2:"radL(0,strg)+mA",
-    htmlR2:"radR()",
+    htmlL1: function (parm,strg) {return radL(0,strg)+parm[0]},
+    htmlR1: function () {return radR()},
+    htmlL2: function (parm,strg) {return radL(0,strg)+parm[0]},
+    htmlR2: function () {return radR()},
     texfunc:"\\sqrt",
-    latexL1:"'\\\\sqrt{'+mA",
+    latexL1: function (parm) {return '\\sqrt{'+parm[0]},
     latexR1:"'}'",
-    latexL2:"'\\\\sqrt{'+mA",
+    latexL2: function (parm) {return '\\sqrt{'+parm[0]},
     latexR2:"'}'",
-    mg: "'sqt('+mA+')'",
+    mg: function (parm) {return 'sqt('+parm[0]+')'},
     },
 cbt:{  //cube root
-    htmlL1:"radL(1,strg)+mA", 
-    htmlR1:"radR()",
-    htmlL2:"radL(1,strg)+mA",
-    htmlR2:"radR()",
+    htmlL1: function (parm,strg) {return radL(1,strg)+parm[0]}, 
+    htmlR1: function () {return radR()},
+    htmlL2: function (parm,strg) {return radL(1,strg)+parm[0]},
+    htmlR2: function () {return radR()},
     texfunc:"\\sqrt[3]",
-    latexL1:"'\\\\sqrt[3]{'+mA",
+    latexL1: function (parm) {return '\\sqrt[3]{'+parm[0]},
     latexR1:"'}'",
-    latexL2:"'\\\\sqrt[3]{'+mA",
+    latexL2: function (parm) {return '\\sqrt[3]{'+parm[0]},
     latexR2:"'}'",
-    mg: "'cbt('+mA+')'",
+    mg: function (parm) {return 'cbt('+parm[0]+')'},
     },
 nrt:{ //nth root
-    htmlL1:"radL(2,strg,mA)+mB", 
-    htmlR1:"radR()",
-    htmlL2:"radL(2,strg,mA)+mB",
-    htmlR2:"radR()",
+    htmlL1: function (parm,strg) {return radL(2,strg,parm[0])+parm[1]}, 
+    htmlR1: function () {return radR()},
+    htmlL2: function (parm,strg) {return radL(2,strg,parm[0])+parm[1]}, 
+    htmlR2: function () {return radR()},
     texfunc:"\\sqrt[]",
-    latexL1:"'\\\\sqrt['+mA+']{'+mB",
+    latexL1: function (parm) {return '\\sqrt['+parm[0]+']{'+parm[1]},
     latexR1:"'}'",
-    latexL2:"'\\\\sqrt['+mA+']{'+mB",
+    latexL2: function (parm) {return '\\sqrt['+parm[0]+']{'+parm[1]},
     latexR2:"'}'",
-    mg: "'nrt('+mA+','+mB+')'",
+    mg: function (parm) {return 'nrt('+parm[0]+','+parm[1]+')'},
     },
 lgn:{ //nth log
     htmlL1: function (parm) {return '<Xfnc>log<sub>'+parm[0]+'</sub><Xfnx>('+parm[1]},
@@ -950,64 +950,64 @@ tdv:{ //total derivative from func
     mg: function (parm) {if (typeof parm[2] == "undefined") {return "(tdr("+parm[1]+")"+parm[0]+")"};return "(tdr("+parm[1]+","+parm[2]+")"+parm[0]+")"},
     },
 tdr:{ //derivative
-    htmlL1:"tdrL(mA,mB)", 
+    htmlL1: function (parm) {return tdrL(parm[0],parm[1])}, 
     htmlR1:"''",
-    htmlL2:"tdrL(mA,mB)",
+    htmlL2: function (parm) {return tdrL(parm[0],parm[1])},
     htmlR2:"''",
     texfunc:"\\XXX",
-    latexL1:"tdrX(mA,mB)",
+    latexL1: function (parm) {return tdrX(parm[0],parm[1])},
     latexR1:"''",
-    latexL2:"tdrX(mA,mB)",
+    latexL2: function (parm) {return tdrX(parm[0],parm[1])},
     latexR2:"''",
     mg: function (parm) {if (typeof parm[1] == "undefined") {return "tdr(" + parm[0] + ")"};return "tdr(" + parm[0] + "," + parm[1] + ")"},
     },
 idr:{ //partial derivative
-    htmlL1:"idrL(mA,mB)", 
+    htmlL1: function (parm) {return idrL(parm[0],parm[1])}, 
     htmlR1:"''",
-    htmlL2:"idrL(mA,mB)",
+    htmlL2: function (parm) {return idrL(parm[0],parm[1])}, 
     htmlR2:"''",
     texfunc:"\\XXX",
-    latexL1:"idrX(mA,mB)",
+    latexL1: function (parm) {return idrX(parm[0],parm[1])}, 
     latexR1:"''",
-    latexL2:"idrX(mA,mB)",
+    latexL2: function (parm) {return idrX(parm[0],parm[1])}, 
     latexR2:"''",
     mg: function (parm) {if (typeof parm[1] == "undefined") {return "idr(" + parm[0] + ")"};return "idr(" + parm[0] + "," + parm[1] + ")"},
     },
 sdr:{  //derivative dy/dx
-    htmlL1:"sdrL(mA,mB,mC)",
+    htmlL1: function (parm) {return sdrL(parm[0],parm[1],parm[3])},
     htmlR1:"''",
-    htmlL2:"sdrL(mA,mB,mC)",
+    htmlL2: function (parm) {return sdrL(parm[0],parm[1],parm[3])},
     htmlR2:"''",
     texfunc:"\\XXX",
-    latexL1:"sdrX(mA,mB,mC)",
+    latexL1: function (parm) {return sdrX(parm[0],parm[1],parm[3])},
     latexR1:"''",
-    latexL2:"sdrX(mA,mB,mC)",
+    latexL2: function (parm) {return sdrX(parm[0],parm[1],parm[3])},
     latexR2:"''",
-    mg: "'sdr('+mA+','+mB+')'"
+    mg: function (parm) {'sdr('+parm[0]+','+parm[1]+')'},
     },  
 psd:{ //partial derivative dy/dx
-    htmlL1:"psdL(mA,mB,mC)",
+    htmlL1: function (parm) {return psdL(parm[0],parm[1],parm[3])},
     htmlR1:"' '",
-    htmlL2:"psdL(mA,mB,mC)",
+    htmlL2: function (parm) {return psdL(parm[0],parm[1],parm[3])},
     htmlR2:"' '",
     texfunc:"\\XXX",
-    latexL1:"psdX(mA,mB,mC)",
+    latexL1: function (parm) {return psdX(parm[0],parm[1],parm[3])},
     latexR1:"''",
-    latexL2:"psdX(mA,mB,mC)",
+    latexL2: function (parm) {return psdX(parm[0],parm[1],parm[3])},
     latexR2:"''",
-    mg: "'psd('+mA+','+mB+')'",
+    mg: function (parm) {'psd('+parm[0]+','+parm[1]+')'},
     },
 sbt:{ //subscript
-    htmlL1:"'<sub><sub>'+mA+'</sub></sub>'" , 
+    htmlL1: function (parm) {return '<sub><sub>'+parm[0]+'</sub></sub>'}, 
     htmlR1:"''",
-    htmlL2:"'<sub><sub>'+mA+'</sub></sub>'",
+    htmlL2: function (parm) {return '<sub><sub>'+parm[0]+'</sub></sub>'}, 
     htmlR2:"''",
     texfunc:"\\XXX",
-    latexL1:"'_{'+mA+'}'",
+    latexL1: function (parm) {return '_{'+parm[0]+'}'},
     latexR1:"''",
-    latexL2:"'_{'+mA+'}'",
+    latexL2: function (parm) {return '_{'+parm[0]+'}'},
     latexR2:"''",
-    mg: "'sbt('+mA+')'",
+    mg:  function (parm) {return 'sbt('+parm[0]+')'},
     },
 cup:{ //cup
     htmlL1: function (parm) {return overUnder(parm[0],parm[1],'&#8746;',150)},
@@ -1106,244 +1106,244 @@ cnt:{ //container
     mg: function (parm) {return parm[0]},
     },
 dif:{ //differential
-    htmlL1:"'<i>d</i>'+mA", 
+    htmlL1: function (parm) {return '<i>d</i>'+parm[0]},
     htmlR1:"''",
-    htmlL2:"'<i>d</i>'+mA",
+    htmlL2: function (parm) {return '<i>d</i>'+parm[0]},
     htmlR2:"''",
     texfunc:"\\XXX",
-    latexL1:"'d'+mA",
+    latexL1: function (parm) {return 'd'+parm[0]},
     latexR1:"''",
-    latexL2:"'d'+mA",
+    latexL2: function (parm) {return 'd'+parm[0]},
     latexR2:"''",
-    mg: "'Cv[8748]'+mA",
+    mg: function (parm) {return 'Cv[8748]'+parm[0]},
     },
 mat:{ //matrix
-    htmlL1:"matL(parm)",
+    htmlL1: function (parm) {return matL(parm)},
     htmlR1:"''",
-    htmlL2:"matL(parm)",
+    htmlL2: function (parm) {return matL(parm)},
     htmlR2:"''",
     texfunc:"\\XXX",
-    latexL1:"matX(parm)",
+    latexL1: function (parm) {return matX(parm)},
     latexR1:"''",
-    latexL2:"matX(parm)",
+    latexL2: function (parm) {return matX(parm)},
     latexR2:"''",
     mg: function (parm) {return "mat(" + Array.prototype.slice.call(parm) + ")"},
     },
 det:{ //matrix determinant
-    htmlL1:"'det'+mA", 
+    htmlL1: function (parm) {return 'det'+parm[0]}, 
     htmlR1:"''",
-    htmlL2:"'det'+mA",
+    htmlL2: function (parm) {return 'det'+parm[0]}, 
     htmlR2:"''",
     texfunc:"\\det",
-    latexL1:"'\\\\det{'+mA",
+    latexL1: function (parm) {return '\\det{'+parm[0]}, 
     latexR1:"'}'",
-    latexL2:"'\\\\det{'+mA",
+    latexL2: function (parm) {return '\\det{'+parm[0]}, 
     latexR2:"'}'",
-    mg: "'det('+mA+')'",
+    mg: function (parm) {return 'det('+parm[0]+')'},
     },
 trc:{ //matrix trace
-    htmlL1:"'tr'+mA", 
+    htmlL1: function (parm) {return 'tr'+parm[0]},
     htmlR1:"''",
-    htmlL2:"'tr'+mA",
+    htmlL2: function (parm) {return 'tr'+parm[0]},
     htmlR2:"''",
     texfunc:"\\tr",
-    latexL1:"'\\\\tr{'+mA",
+    latexL1: function (parm) {return '\\tr{'+parm[0]}, 
     latexR1:"'}'",
-    latexL2:"'\\\\tr{'+mA",
+    latexL2: function (parm) {return '\\tr{'+parm[0]},
     latexR2:"'}'",
-    mg: "'trc('+mA+')'",
+    mg: function (parm) {return 'trc('+parm[0]+')'},
     },
 cAdd:{ //add
-    htmlL1:"mA+'+'+mB",
+    htmlL1: function (parm) {return parm[0]+'+'+parm[1]},
     htmlR1:"''",
-    htmlL2:"mA+'+'+mB",
+    htmlL2: function (parm) {return parm[0]+'+'+parm[1]},
     htmlR2:"''",
     texfunc:"\\XXX",
-    latexL1:"mA+'+'+mB",
+    latexL1: function (parm) {return parm[0]+'+'+parm[1]},
     latexR1:"''",
-    latexL2:"mA+'+'+mB",
+    latexL2: function (parm) {return parm[0]+'+'+parm[1]},
     latexR2:"''",
-    mg: "mA+'+'+mB",
+    mg: function (parm) {return parm[0]+'+'+parm[1]},
     },
 cSub:{  //subtract
-    htmlL1:"mA+'&minus;'+mB",
+    htmlL1: function (parm) {return parm[0]+'&minus;'+parm[1]},
     htmlR1:"''",
-    htmlL2:"mA+'&minus;'+mB",
+    htmlL2: function (parm) {return parm[0]+'&minus;'+parm[1]},
     htmlR2:"''",
     texfunc:"\\XXX",
-    latexL1:"mA+'-'+mB",
+    latexL1: function (parm) {return parm[0]+'-'+parm[1]},
     latexR1:"''",
-    latexL2:"mA+'-'+mB",
+    latexL2: function (parm) {return parm[0]+'-'+parm[1]},
     latexR2:"''",
     mg: "cSubE(mA,mB)",
     },
 cTms:{ //multiply by x
-    htmlL1:"mA+'&times;'+mB", 
+    htmlL1: function (parm) {return parm[0]+'&times;'+parm[1]}, 
     htmlR1:"''",
-    htmlL2:"mA+'&times;'+mB",
+    htmlL2: function (parm) {return parm[0]+'&times;'+parm[1]},
     htmlR2:"''",
     texfunc:"\\XXX",
-    latexL1:"mA+'\\\\times '+mB",
+    latexL1: function (parm) {return parm[0]+'\\times '+parm[1]},
     latexR1:"''",
-    latexL2:"mA+'\\\\times '+mB",
+    latexL2: function (parm) {return parm[0]+'\\times '+parm[1]},
     latexR2:"''",
-    mg: "mA+'*'+mB",
+    mg: function (parm) {return parm[0]+'*'+parm[1]},
     },
 cDot:{ //multiply by dot
-    htmlL1:"mA+'&#8226;'+mB", 
+    htmlL1: function (parm) {return parm[0]+'&#8226;'+parm[1]}, 
     htmlR1:"''",
-    htmlL2:"mA+'&#8226;'+mB",
+    htmlL2: function (parm) {return parm[0]+'&#8226;'+parm[1]},
     htmlR2:"''",
     texfunc:"\\XXX",
-    latexL1:"mA+'\\\\cdot '+mB",
+    latexL1: function (parm) {return parm[0]+'\\cdot '+parm[1]},
     latexR1:"''",
-    latexL2:"mA+'\\\\cdot '+mB",
+    latexL2: function (parm) {return parm[0]+'\\cdot '+parm[1]},
     latexR2:"''",
-    mg: "mA+'Cv[8226]'+mB",
+    mg: function (parm) {return parm[0]+'Cv[8226]'+parm[1]},
     },
 cMul:{ //multiply
-    htmlL1:"cMulL(mA,mB)", 
+    htmlL1: function (parm) {return cMulL(parm[0],parm[1])}, 
     htmlR1:"''",
-    htmlL2:"cMulL(mA,mB)",
+    htmlL2: function (parm) {return cMulL(parm[0],parm[1])}, 
     htmlR2:"''",
     texfunc:"\\XXX",
-    latexL1:"mA+' '+mB",
+    latexL1: function (parm) {return parm[0]+' '+parm[1]},
     latexR1:"''",
-    latexL2:"mA+' '+mB",
+    latexL2: function (parm) {return parm[0]+' '+parm[1]},
     latexR2:"''",
-    mg: "cMulE(mA,mB)",
+    mg: function (parm) {return cMulE(parm[0],parm[1])}, 
     },
 cDiv:{ //divide
-    htmlL1:"cDivL(mA,mB)",
+    htmlL1: function (parm) {return cDivL(parm[0],parm[1])}, 
     htmlR1:"''",
-    htmlL2:"cDivL(mA,mB)",
+    htmlL2: function (parm) {return cDivL(parm[0],parm[1])}, 
     htmlR2:"''",
     texfunc:"\\XXX",
-    latexL1:"'<Xdiv>\\\\frac{'+oBrackets(mA)+'}{'+oBrackets(mB)+'}<Xdve>'",
+    latexL1: function (parm) {return '<Xdiv>\\frac{'+oBrackets(parm[0])+'}{'+oBrackets(parm[1])+'}<Xdve>'},
     latexR1:"''",
-    latexL2:"'<Xdiv>\\\\frac{'+oBrackets(mA)+'}{'+oBrackets(mB)+'}<Xdve>'",
+    latexL2: function (parm) {return '<Xdiv>\\frac{'+oBrackets(parm[0])+'}{'+oBrackets(parm[1])+'}<Xdve>'},
     latexR2:"''",
-    mg: "cDivE(mA,mB)",
+    mg: function (parm) {return cDivE(parm[0],parm[1])}, 
     },
 cPow:{ //x^n
-    htmlL1:"cPowL(mA,mB)", 
+    htmlL1: function (parm) {return cPowL(parm[0],parm[1])},
     htmlR1:"''",
-    htmlL2:"cPowL(mA,mB)",
+    htmlL2: function (parm) {return cPowL(parm[0],parm[1])},
     htmlR2:"''",
     texfunc:"\\XXX",
-    latexL1:"mA+'^{'+oBrackets(mB)+'}'",
+    latexL1: function (parm) {return parm[0]+'^{'+oBrackets(parm[1])+'}'},
     latexR1:"''",
-    latexL2:"cPowX(mA,mB)",
+    latexL2: function (parm) {return cPowX(parm[0],parm[1])},
     latexR2:"''",
-    mg: "cPowE(mA,mB)",
+    mg: function (parm) {return cPowE(parm[0],parm[1])},
     },
 cNeg:{ //negative
-    htmlL1:"'&minus;'+mA",
+    htmlL1: function (parm) {return '&minus;'+parm[0]},
     htmlR1:"''",
-    htmlL2:"'&minus;'+mA",
+    htmlL2: function (parm) {return '&minus;'+parm[0]},
     htmlR2:"''",
     texfunc:"\\XXX",
-    latexL1:"'-'+mA",
+    latexL1: function (parm) {return '-'+parm[0]},
     latexR1:"''",
-    latexL2:"'-'+mA",
+    latexL2: function (parm) {return '-'+parm[0]},
     latexR2:"''",
     mg: function (parm) {xTractU = oprExtract(cFunc(parm[0]));if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "cDiv") {return "-" + xParens(parm[0])};return "-" + parm[0]},
     },
 cAng:{ //angle (polar form)
-    htmlL1:"mA+'&#8736;'+mB", 
+    htmlL1: function (parm) {return parm[0]+'&#8736;'+parm[1]}, 
     htmlR1:"''",
-    htmlL2:"mA+'&#8736;'+mB",
+    htmlL2: function (parm) {return parm[0]+'&#8736;'+parm[1]}, 
     htmlR2:"''",
     texfunc:"\\XXX",
-    latexL1:"mA+'\\\\angle '+mB",
+    latexL1: function (parm) {return parm[0]+'\\angle '+parm[1]}, 
     latexR1:"''",
-    latexL2:"mA+'\\\\angle '+mB",
+    latexL2: function (parm) {return parm[0]+'\\angle '+parm[1]}, 
     latexR2:"''",
-    mg: "mA+'~'+mB",
+    mg: function (parm) {return parm[0]+'~'+parm[1]},
     },
 cBnd:{ //bind function
-    htmlL1:"mA+''+mB", 
+    htmlL1: function (parm) {return parm[0]+''+parm[1]}, 
     htmlR1:"''",
-    htmlL2:"mA+''+mB",
+    htmlL2: function (parm) {return parm[0]+''+parm[1]},
     htmlR2:"''",
     texfunc:"\\XXX",
-    latexL1:"mA+' '+mB",
+    latexL1: function (parm) {return parm[0]+' '+parm[1]},
     latexR1:"''",
-    latexL2:"mA+' '+mB",
+    latexL2: function (parm) {return parm[0]+' '+parm[1]},
     latexR2:"''",
-    mg: "mA+''+mB",
+    mg:  function (parm) {return parm[0]+''+parm[1]},
     },
 cEql:{  //equal
-    htmlL1:"mA+' = '+mB",
+    htmlL1: function (parm) {return parm[0]+' = '+parm[1]},
     htmlR1:"''",
-    htmlL2:"mA+' = '+mB",
+    htmlL2: function (parm) {return parm[0]+' = '+parm[1]},
     htmlR2:"''",
     texfunc:"\\XXX",
-    latexL1:"mA+'='+mB",
+    latexL1: function (parm) {return parm[0]+'='+parm[1]},
     latexR1:"''",
-    latexL2:"mA+'='+mB",
+    latexL2: function (parm) {return parm[0]+'='+parm[1]},
     latexR2:"''",
-    mg: "mA+'='+mB",
+    mg: function (parm) {return parm[0]+'='+parm[1]},
     },
 cGth:{ //greater than
-    htmlL1:"mA+' &gt; '+mB", 
+    htmlL1: function (parm) {return parm[0]+' &gt; '+parm[1]}, 
     htmlR1:"''",
-    htmlL2:"mA+' &gt; '+mB",
+    htmlL2: function (parm) {return parm[0]+' &gt; '+parm[1]},
     htmlR2:"''",
     texfunc:">",
-    latexL1:"mA+'>'+mB",
+    latexL1: function (parm) {return parm[0]+'>'+parm[1]},
     latexR1:"''",
-    latexL2:"mA+'>'+mB",
+    latexL2: function (parm) {return parm[0]+'>'+parm[1]},
     latexR2:"''",
-    mg: "mA+'Cv[62]'+mB",
+    mg: function (parm) {return parm[0]+'Cv[62]'+parm[1]},
     },
 cLth:{ //less than
-    htmlL1:"mA+' &lt; '+mB", 
+    htmlL1: function (parm) {return parm[0]+' &lt; '+parm[1]},
     htmlR1:"''",
-    htmlL2:"mA+' &lt; '+mB",
+    htmlL2: function (parm) {return parm[0]+' &lt; '+parm[1]},
     htmlR2:"''",
     texfunc:"<",
-    latexL1:"mA+'<'+mB",
+    latexL1: function (parm) {return parm[0]+'<'+parm[1]},
     latexR1:"''",
-    latexL2:"mA+'<'+mB",
+    latexL2: function (parm) {return parm[0]+'<'+parm[1]},
     latexR2:"''",
-    mg: "mA+'Cv[60]'+mB",
+    mg: function (parm) {return parm[0]+'Cv[60]'+parm[1]},
     },
 cGeq:{ //greater than or equal
-    htmlL1:"mA+' &#8805; '+mB",
+    htmlL1: function (parm) {return parm[0]+' &#8805; '+parm[1]},
     htmlR1:"''",
-    htmlL2:"mA+' &#8805; '+mB",
+    htmlL2: function (parm) {return parm[0]+' &#8805; '+parm[1]},
     htmlR2:"''",
     texfunc:"\\geq",
-    latexL1:"mA+'\\\\geq'+mB",
+    latexL1: function (parm) {return parm[0]+'\\geq '+parm[1]},
     latexR1:"''",
-    latexL2:"mA+'\\\\geq'+mB",
+    latexL2: function (parm) {return parm[0]+'\\geq '+parm[1]},
     latexR2:"''",
-    mg: "mA+'Cv[8805]'+mB",
+    mg: function (parm) {return parm[0]+'Cv[8805]'+parm[1]},
     },
 cLeq:{ //less than or equal
-    htmlL1:"mA+' &#8804; '+mB",
+    htmlL1: function (parm) {return parm[0]+' &#8804; '+parm[1]},
     htmlR1:"''",
-    htmlL2:"mA+' &#8804; '+mB",
+    htmlL2: function (parm) {return parm[0]+' &#8804; '+parm[1]},
     htmlR2:"''",
     texfunc:"\\leq",
-    latexL1:"mA+'\\\\leq'+mB",
+    latexL1: function (parm) {return parm[0]+'\\leq '+parm[1]},
     latexR1:"''",
-    latexL2:"mA+'\\\\leq'+mB",
+    latexL2:function (parm) {return parm[0]+'\\leq '+parm[1]},
     latexR2:"''",
-    mg: "mA+'Cv[8804]'+mB",
+    mg: function (parm) {return parm[0]+'Cv[8804]'+parm[1]},
     },
 cNql:{ //not equal
-    htmlL1:"mA+' &#8800; '+mB",
+    htmlL1: function (parm) {return parm[0]+' &#8800; '+parm[1]},
     htmlR1:"''",
-    htmlL2:"mA+' &#8800; '+mB",
+    htmlL2: function (parm) {return parm[0]+' &#8800; '+parm[1]},
     htmlR2:"''",
     texfunc:"\\neq",
-    latexL1:"mA+'\\\\neq'+mB",
+    latexL1: function (parm) {return parm[0]+'\\neq '+parm[1]},
     latexR1:"''",
-    latexL2:"mA+'\\\\neq'+mB",
+    latexL2: function (parm) {return parm[0]+'\\neq '+parm[1]},
     latexR2:"''",
-    mg: "mA+'Cv[8800]'+mB",
+    mg: function (parm) {return parm[0]+'Cv[8800]'+parm[1]},
     },
 ntg:{  //integral from func
     htmlL1:"''",
@@ -1463,6 +1463,40 @@ function oBrackets(xP) {//remove outside brackets
     }
     return xP
 }
+
+//MG handlers
+function cSubE(xU,xL) { //subtraction
+	xTractL = oprExtract(cFunc(xL));
+	if (xTractL.func == "cAdd") {return xU + "-" + xParens(xL)}
+	return xU + "-" + xL
+}
+function cMulE(xU,xL) { //multiplication by term
+	xTractU = oprExtract(cFunc(xU));
+	xTractL = oprExtract(cFunc(xL));
+	xL = oParens(xL);xU = oParens(xU);
+	if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "fac") {xU  = xParens(xU)}
+	if (xTractL.func == "cAdd" || xTractL.func == "cSub" || xTractL.func == "fac") {xL  = xParens(xL)}
+	if (xTractL.func == "cDiv" && xTractU.func == "cDiv") {xU  = xParens(xU);xL  = xParens(xL)}
+	if (xU.indexOf("Cv[45]") > -1 && xU.lastIndexOf("Cv[45]") == xU.length-6) {xU  = xParens(xU)}
+	if (xL.indexOf("Cv[45]") > -1 && xL.lastIndexOf("Cv[45]") == xL.length-6) {xL  = xParens(xL)}
+	if (xTractL.func == "cPow" && numTest(xU) && numTest(xTractL.upper)) {xL  = xParens(xL)}
+	return xU + "" + xL
+}
+function cDivE(xU,xL) { //division
+	xTractU = oprExtract(cFunc(xU));
+	xTractL = oprExtract(cFunc(xL));
+	if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "cMul" || xTractU.func == "cDiv" || xTractU.func == "cNeg" || xU.indexOf("Cv[8747]") > -1) {xU  = xParens(xU)}
+	if (xTractL.func == "cAdd" || xTractL.func == "cSub" || xTractL.func == "cMul" || xTractL.func == "cDiv" || xTractL.func == "cNeg" || xL.indexOf("Cv[8747]") > -1) {xL  = xParens(xL)}
+	return xU + "/" + xL
+}
+function cPowE(xU,xL) { //powers
+	xTractU = oprExtract(cFunc(xU));
+	xTractL = oprExtract(cFunc(xL));
+	if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "cMul" || xTractU.func == "cDiv" || xTractU.func == "cNeg" || xTractU.func == "fac") {xU  = xParens(xU)}
+	if (xTractL.func == "cAdd" || xTractL.func == "cSub" || xTractL.func == "cMul" || xTractL.func == "cDiv" || xTractL.func == "cNeg") {xL  = xParens(xL)}
+	return xU + "^" + xL
+}
+//html handlers
 function brkt(xS,xO) {//scale brackets
     var iNest = dNest(xO);
     if (mgConfig.divScale == 50 || iNest == 0) {return xS}
@@ -1477,6 +1511,139 @@ function overUnder(xA,xB,xS,xFsize) {
 }
 function fAccentU(xA) {return "<Xfnc><span style='display:inline-block;'><span style='text-align:center;vertical-align:middle;display:inline-table;'><span style='display:table-row;line-height:20%;font-size:60%'>"+xA+"</span><span style='line-height:90%;display:table-row;'>"}
 function fAccentL(xB) {return "<Xfnc></span><span style='display:table-row;line-height:20%;font-size:60%'>"+xB+"</span></span></span>"}
+function cMulL(xU,xL) {
+	if (xL.indexOf("<Xfnc>") == 0) {return xU+" "+xL}
+	return xU+""+xL
+}
+function cDivL(xU,xL) {
+	if (mgConfig.divSymbol == "Slash") {return xU+"/"+xL}
+	else {
+		if (!mgConfig.editMode) {xU = oParens(xU);xL = oParens(xL)}
+		return "<Xdiv> <span style='text-align:center;vertical-align:middle;display:inline-block;'><span style='display:table-row;'><span style='font-size:"
+		+mgConfig.divScale+"%;display:table-cell'>"+xU+"</span></span><span style='display:table-row;vertical-align:top'><span style='font-size:"
+		+mgConfig.divScale+"%;display:table-cell;border-top-style:solid;border-top-width:2px;padding:3px;'>"+xL+"</span></span></span> <Xdve>"
+	}
+}
+function cPowL(xU,xL) {
+	if (!mgConfig.editMode) {xL = oParens(xL)}
+	if (dNest(xU) > 2) {return "<table style='text-align:center;display:inline-table;vertical-align:middle'><tr><td>"+xU+"</td><td style='vertical-align:top'><sup>"+xL+"</sup></td></tr></table>"}
+	if (xU.indexOf(" <Xfxp>") > -1 && xU.indexOf(" <Xfxp>") ==  xU.length-7) {return "("+xU+")<sup>"+xL+"</sup> "} //(ln x)^2
+	if (xU.indexOf("<Xfnc>") == 0 && xU.indexOf("<Xfxp> ") > -1 &&  xU.indexOf("<Xfxp> ") < 11) {return xU.replace("<Xfxp>","<sup>"+xL+"</sup> ")} //sin^2 x
+	if (xL.indexOf("<Xdiv>") > -1 && xL.indexOf("<Xdve>") == xL.length-7 && !mgConfig.editMode) {xL = "("+xL+")"}
+	if (xU.indexOf("<Xdiv>") == 1 && xU.indexOf("<Xdve>") == xU.length-7 && !mgConfig.editMode) {xU = "("+xU+")"}
+	if ((dNest(xU) > 0 || dNest(xL) > 0 ) && mgConfig.divScale > 50) {return xU+"<sup><span style='vertical-align:super'>"+xL+"</span></sup>"} //lift exponent for big symbols
+	return xU+"<sup>"+xL+"</sup>"
+}
+function radL(rSymb,xY,xZ) {//radicals
+	var tgtRad = ["&#8730;","<span style='vertical-align:top;display:inline-block;position:relative;'><span style='vertical-align:top;position:absolute;'>&#8730;</span><span style='vertical-align:top;position:absolute;font-size:50%;'><sup>&nbsp;3</sup></span>&nbsp;&nbsp;</span>",
+				"<span style='vertical-align:top;display:inline-block;position:relative;'><span style='vertical-align:top;position:absolute;'>&#8730;</span><span style='vertical-align:top;position:absolute;font-size:50%;'><sup>&nbsp;"+xZ+"</sup></span>&nbsp;&nbsp;</span>"];
+	if (mgConfig.divScale != 50) {
+		var xNest = Math.floor(100+(dNest(xY)*mgConfig.divScale*1.2));
+		return "<span style='vertical-align:middle;display:inline-block;padding:3px'><span style='vertical-align:top;font-size:"+xNest+"%'>"
+				+tgtRad[rSymb]+"</span><span style='vertical-align:top;border-top-style:solid;border-top-width:2px;'><span style='vertical-align:top;'><span style='vertical-align:middle;font-size:90%'>";
+	}
+	else {return "<span style='display:inline-block;'>"+tgtRad[rSymb]+"</span><span style='border-top-style:solid;border-top-width:2px;'><span style='font-size:90%'>";}
+}
+function radR() {//radicals
+	if (mgConfig.divScale == 50) {return "</span></span>"}
+	else {return "</span></span></span></span>"}
+}
+function itgL(xA,xB) {
+	return "<Xdiv><span style='display:inline-block;vertical-align:middle;'><table cellpadding='0' cellspacing='0'><tr><td rowspan='4'><span style='vertical-align:middle;display:inline-table;'><span style='display:table-row;line-height:90%'>&#8992;</span><span style='display:table-row;line-height:90%'>&#8993;</span></span></td><tr><td style='font-size:45%'>"
+			+xA+"</td></tr><tr><td>&nbsp;</td></tr><td style='font-size:45%'>"+xB+"</td></tr></table></span><Xdve>"
+}
+function tdrL(xA,xN) {
+	var xTmp = "";
+	var tmpDivSym = mgConfig.divSymbol;mgConfig.divSymbol = "Over";
+	if (typeof xN =="undefined" || xN == 1) {xTmp = cDivL("<i>d</i>","<i>d</i>"+xA)}
+	else {xTmp = cDivL("<i>d</i><sup>"+xN+"</sup>","<i>d</i>"+xA+"<sup>"+xN+"</sup>")}
+	mgConfig.divSymbol =  tmpDivSym;
+	return xTmp
+}
+function idrL(xA,xN) {
+	var xTmp = "";
+	var tmpDivSym = mgConfig.divSymbol;mgConfig.divSymbol = "Over";
+	if (typeof xN =="undefined" || xN == 1) {xTmp = cDivL("&#8706;","&#8706;"+xA)}
+	else {xTmp = cDivL("&#8706;<sup>"+xN+"</sup>","&#8706;"+xA+"<sup>"+xN+"</sup>")}
+	mgConfig.divSymbol =  tmpDivSym;
+	return xTmp
+}
+function sdrL(xA,xB,xN) {
+	var xTmp = "";
+	var tmpDivSym = mgConfig.divSymbol;mgConfig.divSymbol = "Over";
+	if (typeof xN =="undefined" || xN == 1) {xTmp = cDivL("<i>d</i>"+xA,"<i>d</i>"+xB)}
+	else {xTmp = cDivL("<i>d</i><sup>"+xN+"</sup>"+xA,"<i>d</i>"+xB+"<sup>"+xN+"</sup>")}
+	mgConfig.divSymbol =  tmpDivSym;
+	return xTmp
+}
+function psdL(xA,xB,xN) {
+	var xTmp = "";
+	var tmpDivSym = mgConfig.divSymbol;mgConfig.divSymbol = "Over";
+	if (typeof xN =="undefined" || xN == 1) {xTmp = cDivL("&#8706;"+xA,"&#8706;"+xB)}
+	else {xTmp = cDivL("&#8706;<sup>"+xN+"</sup>"+xA,"&#8706;"+xB+"<sup>"+xN+"</sup>")}
+	mgConfig.divSymbol =  tmpDivSym;
+	return xTmp
+}
+function matL(xA) {
+	var mReturn = "",prefix = "",suffix = "",iM = 0;
+	var dScale = xA.length;
+	if (typeof xA[0] == "string" && xA[0].substr(0,6) == "<Xrow>"){
+		for (iM in xA) {
+			xA[iM] = xA[iM].replace(/\<Xrow\>/g,"").replace(/\<Xrwe\>/g,"").replace(/\<Xcel\>/g,"<td>").replace(/\<Xcle\>/g,"</td>");
+			dScale = dScale + dNest(xA+"")*(mgConfig.divScale/100)
+			mReturn = mReturn + "<tr>" + xA[iM] + "</tr>"
+			prefix = prefix+"<Xdiv>";
+			suffix = suffix+"<Xdve>";
+		}
+		return prefix+" <table style='text-align:center;display:inline-table;vertical-align:middle'><tr><td style='border-left:2px solid black;border-top:2px solid black;border-bottom:2px solid black'>&nbsp;</td><td><table>" + mReturn + "</table><td style='border-right:2px solid black;border-top:2px solid black;border-bottom:2px solid black'>&nbsp;</td></tr></table> "+suffix
+	}
+	else {
+		for (iM in xA) {mReturn = mReturn + "<Xcel>" + xA[iM] + "<Xcle>"}
+		return "<Xrow>" + mReturn + "<Xrwe>"
+	}
+}
+//latex handlers
+function cPowX(xU,xL) {
+	if (xU.indexOf("<Xfxp>") > 0 && xU.indexOf("<Xfxp>") < 6 && xU.indexOf("\\") == 0) {return oBrackets(xU).replace("<Xfxp>","^{"+oBrackets(xL)+"}")} //fn^n x
+	if (xU.indexOf("\\") == 0) {return "("+oBrackets(xU)+")^{"+oBrackets(xL)+"}"}
+	return "{"+oBrackets(xU)+"}^{"+oBrackets(xL)+"}"
+}
+function idrX(xU,xN) {
+	if (typeof xN == "undefined") {return '\\frac{\\partial}{\\partial '+xU+'}'}
+	return '\\frac{\\partial^'+xN+'}{\\partial '+xU+'^2}'
+}
+function tdrX(xU,xN) {
+	if (typeof xN == "undefined") {return '\\frac{d}{d '+xU+'}'}
+	return  '\\frac{d^'+xN+'}{d '+xU+'^'+xN+'}'
+}
+function psdX(xU,xL,xN) {
+	if (typeof xN == "undefined") {return '\\frac{\\partial '+xU+'}{\\partial '+xL+'}'}
+	return  '\\frac{\\partial^'+xN+' '+xU+'}{\\partial '+xL+'^'+xN+'}'
+}
+function sdrX(xU,xL,xN) {
+	if (typeof xN == "undefined") {return '\\frac{d '+xU+'}{d '+xL+'}'}
+	return '\\frac{d^'+xN+' '+xU+'}{d '+xL+'^'+xN+'}'
+}
+function matX(xA) {
+	var mReturn = "";
+	if (xA[0].indexOf("<Xrow>") == -1) {
+		for (var iC=0;iC<xA.length;iC++) {
+			mReturn = mReturn + xA[iC];
+			if (iC < xA.length-1) {mReturn = mReturn + "<Xcel>"}
+		}
+		mReturn = "<Xrow>" + mReturn + "<Xrwe>"
+	}
+	else {
+		mReturn = mReturn + "\\begin{bmatrix}";
+		for (var iR=0;iR<xA.length;iR++) {
+			xA[iR] = xA[iR].replace(/\<Xcel\>/g,"&").replace(/\<Xrow\>/g,"").replace(/\<Xrwe\>/g,"");
+			mReturn = mReturn + xA[iR];
+			if (iR < xA.length-1) {mReturn = mReturn + "\\\\"}
+		}
+		mReturn = mReturn + "\\end{bmatrix}"
+	}
+	return mReturn
+}
 
 function dNest(dN) {//count nested large elements
     var dDepth = 0,dSpan = 0,iDp = 0;
@@ -1691,173 +1858,6 @@ function cFunc(cXpr) { //convert from MG format to FUNC format: a+bc/d -> cAdd(a
     return cXpr;
 }
 function dFunc(dXpr, prefix) { //map FUNC format to export format
-
-    //MG handlers
-    function cSubE(xU,xL) { //subtraction
-        xTractL = oprExtract(cFunc(xL));
-        if (xTractL.func == "cAdd") {return xU + "-" + xParens(xL)}
-        return xU + "-" + xL
-    }
-    function cMulE(xU,xL) { //multiplication by term
-        xTractU = oprExtract(cFunc(xU));
-        xTractL = oprExtract(cFunc(xL));
-        xL = oParens(xL);xU = oParens(xU);
-        if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "fac") {xU  = xParens(xU)}
-        if (xTractL.func == "cAdd" || xTractL.func == "cSub" || xTractL.func == "fac") {xL  = xParens(xL)}
-        if (xTractL.func == "cDiv" && xTractU.func == "cDiv") {xU  = xParens(xU);xL  = xParens(xL)}
-        if (xU.indexOf("Cv[45]") > -1 && xU.lastIndexOf("Cv[45]") == xU.length-6) {xU  = xParens(xU)}
-        if (xL.indexOf("Cv[45]") > -1 && xL.lastIndexOf("Cv[45]") == xL.length-6) {xL  = xParens(xL)}
-        if (xTractL.func == "cPow" && numTest(xU) && numTest(xTractL.upper)) {xL  = xParens(xL)}
-        return xU + "" + xL
-    }
-    function cDivE(xU,xL) { //division
-        xTractU = oprExtract(cFunc(xU));
-        xTractL = oprExtract(cFunc(xL));
-        if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "cMul" || xTractU.func == "cDiv" || xTractU.func == "cNeg" || xU.indexOf("Cv[8747]") > -1) {xU  = xParens(xU)}
-        if (xTractL.func == "cAdd" || xTractL.func == "cSub" || xTractL.func == "cMul" || xTractL.func == "cDiv" || xTractL.func == "cNeg" || xL.indexOf("Cv[8747]") > -1) {xL  = xParens(xL)}
-        return xU + "/" + xL
-    }
-    function cPowE(xU,xL) { //powers
-        xTractU = oprExtract(cFunc(xU));
-        xTractL = oprExtract(cFunc(xL));
-        if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "cMul" || xTractU.func == "cDiv" || xTractU.func == "cNeg" || xTractU.func == "fac") {xU  = xParens(xU)}
-        if (xTractL.func == "cAdd" || xTractL.func == "cSub" || xTractL.func == "cMul" || xTractL.func == "cDiv" || xTractL.func == "cNeg") {xL  = xParens(xL)}
-        return xU + "^" + xL
-    }
-    //html handlers
-    function cMulL(xU,xL) {
-        if (xL.indexOf("<Xfnc>") == 0) {return xU+" "+xL}
-        return xU+""+xL
-    }
-    function cDivL(xU,xL) {
-        if (mgConfig.divSymbol == "Slash") {return xU+"/"+xL}
-        else {
-            if (!mgConfig.editMode) {xU = oParens(xU);xL = oParens(xL)}
-            return "<Xdiv> <span style='text-align:center;vertical-align:middle;display:inline-block;'><span style='display:table-row;'><span style='font-size:"
-            +mgConfig.divScale+"%;display:table-cell'>"+xU+"</span></span><span style='display:table-row;vertical-align:top'><span style='font-size:"
-            +mgConfig.divScale+"%;display:table-cell;border-top-style:solid;border-top-width:2px;padding:3px;'>"+xL+"</span></span></span> <Xdve>"
-        }
-    }
-    function cPowL(xU,xL) {
-        if (!mgConfig.editMode) {xL = oParens(xL)}
-        if (dNest(xU) > 2) {return "<table style='text-align:center;display:inline-table;vertical-align:middle'><tr><td>"+xU+"</td><td style='vertical-align:top'><sup>"+xL+"</sup></td></tr></table>"}
-        if (xU.indexOf(" <Xfxp>") > -1 && xU.indexOf(" <Xfxp>") ==  xU.length-7) {return "("+xU+")<sup>"+xL+"</sup> "} //(ln x)^2
-        if (xU.indexOf("<Xfnc>") == 0 && xU.indexOf("<Xfxp> ") > -1 &&  xU.indexOf("<Xfxp> ") < 11) {return xU.replace("<Xfxp>","<sup>"+xL+"</sup> ")} //sin^2 x
-        if (xL.indexOf("<Xdiv>") > -1 && xL.indexOf("<Xdve>") == xL.length-7 && !mgConfig.editMode) {xL = "("+xL+")"}
-        if (xU.indexOf("<Xdiv>") == 1 && xU.indexOf("<Xdve>") == xU.length-7 && !mgConfig.editMode) {xU = "("+xU+")"}
-        if ((dNest(xU) > 0 || dNest(xL) > 0 ) && mgConfig.divScale > 50) {return xU+"<sup><span style='vertical-align:super'>"+xL+"</span></sup>"} //lift exponent for big symbols
-        return xU+"<sup>"+xL+"</sup>"
-    }
-    function radL(rSymb,xY,xZ) {//radicals
-        var tgtRad = ["&#8730;","<span style='vertical-align:top;display:inline-block;position:relative;'><span style='vertical-align:top;position:absolute;'>&#8730;</span><span style='vertical-align:top;position:absolute;font-size:50%;'><sup>&nbsp;3</sup></span>&nbsp;&nbsp;</span>",
-                    "<span style='vertical-align:top;display:inline-block;position:relative;'><span style='vertical-align:top;position:absolute;'>&#8730;</span><span style='vertical-align:top;position:absolute;font-size:50%;'><sup>&nbsp;"+xZ+"</sup></span>&nbsp;&nbsp;</span>"];
-        if (mgConfig.divScale != 50) {
-            var xNest = Math.floor(100+(dNest(xY)*mgConfig.divScale*1.2));
-            return "<span style='vertical-align:middle;display:inline-block;padding:3px'><span style='vertical-align:top;font-size:"+xNest+"%'>"
-                    +tgtRad[rSymb]+"</span><span style='vertical-align:top;border-top-style:solid;border-top-width:2px;'><span style='vertical-align:top;'><span style='vertical-align:middle;font-size:90%'>";
-        }
-        else {return "<span style='display:inline-block;'>"+tgtRad[rSymb]+"</span><span style='border-top-style:solid;border-top-width:2px;'><span style='font-size:90%'>";}
-    }
-    function radR() {//radicals
-        if (mgConfig.divScale == 50) {return "</span></span>"}
-        else {return "</span></span></span></span>"}
-    }
-    function itgL(xA,xB) {
-        return "<Xdiv><span style='display:inline-block;vertical-align:middle;'><table cellpadding='0' cellspacing='0'><tr><td rowspan='4'><span style='vertical-align:middle;display:inline-table;'><span style='display:table-row;line-height:90%'>&#8992;</span><span style='display:table-row;line-height:90%'>&#8993;</span></span></td><tr><td style='font-size:45%'>"
-                +xA+"</td></tr><tr><td>&nbsp;</td></tr><td style='font-size:45%'>"+xB+"</td></tr></table></span><Xdve>"
-    }
-    function tdrL(xA,xN) {
-        var xTmp = "";
-        var tmpDivSym = mgConfig.divSymbol;mgConfig.divSymbol = "Over";
-        if (typeof xN =="undefined" || xN == 1) {xTmp = cDivL("<i>d</i>","<i>d</i>"+xA)}
-        else {xTmp = cDivL("<i>d</i><sup>"+xN+"</sup>","<i>d</i>"+xA+"<sup>"+xN+"</sup>")}
-        mgConfig.divSymbol =  tmpDivSym;
-        return xTmp
-    }
-    function idrL(xA,xN) {
-        var xTmp = "";
-        var tmpDivSym = mgConfig.divSymbol;mgConfig.divSymbol = "Over";
-        if (typeof xN =="undefined" || xN == 1) {xTmp = cDivL("&#8706;","&#8706;"+xA)}
-        else {xTmp = cDivL("&#8706;<sup>"+xN+"</sup>","&#8706;"+xA+"<sup>"+xN+"</sup>")}
-        mgConfig.divSymbol =  tmpDivSym;
-        return xTmp
-    }
-    function sdrL(xA,xB,xN) {
-        var xTmp = "";
-        var tmpDivSym = mgConfig.divSymbol;mgConfig.divSymbol = "Over";
-        if (typeof xN =="undefined" || xN == 1) {xTmp = cDivL("<i>d</i>"+xA,"<i>d</i>"+xB)}
-        else {xTmp = cDivL("<i>d</i><sup>"+xN+"</sup>"+xA,"<i>d</i>"+xB+"<sup>"+xN+"</sup>")}
-        mgConfig.divSymbol =  tmpDivSym;
-        return xTmp
-    }
-    function psdL(xA,xB,xN) {
-        var xTmp = "";
-        var tmpDivSym = mgConfig.divSymbol;mgConfig.divSymbol = "Over";
-        if (typeof xN =="undefined" || xN == 1) {xTmp = cDivL("&#8706;"+xA,"&#8706;"+xB)}
-        else {xTmp = cDivL("&#8706;<sup>"+xN+"</sup>"+xA,"&#8706;"+xB+"<sup>"+xN+"</sup>")}
-        mgConfig.divSymbol =  tmpDivSym;
-        return xTmp
-    }
-    function matL(xA) {
-        var mReturn = "",prefix = "",suffix = "",iM = 0;
-        var dScale = xA.length;
-        if (typeof xA[0] == "string" && xA[0].substr(0,6) == "<Xrow>"){
-            for (iM in xA) {
-                xA[iM] = xA[iM].replace(/\<Xrow\>/g,"").replace(/\<Xrwe\>/g,"").replace(/\<Xcel\>/g,"<td>").replace(/\<Xcle\>/g,"</td>");
-                dScale = dScale + dNest(xA+"")*(mgConfig.divScale/100)
-                mReturn = mReturn + "<tr>" + xA[iM] + "</tr>"
-                prefix = prefix+"<Xdiv>";
-                suffix = suffix+"<Xdve>";
-            }
-            return prefix+" <table style='text-align:center;display:inline-table;vertical-align:middle'><tr><td style='border-left:2px solid black;border-top:2px solid black;border-bottom:2px solid black'>&nbsp;</td><td><table>" + mReturn + "</table><td style='border-right:2px solid black;border-top:2px solid black;border-bottom:2px solid black'>&nbsp;</td></tr></table> "+suffix
-        }
-        else {
-            for (iM in xA) {mReturn = mReturn + "<Xcel>" + xA[iM] + "<Xcle>"}
-            return "<Xrow>" + mReturn + "<Xrwe>"
-        }
-    }
-    //latex handlers
-    function cPowX(xU,xL) {
-        if (xU.indexOf("<Xfxp>") > 0 && xU.indexOf("<Xfxp>") < 6 && xU.indexOf("\\") == 0) {return oBrackets(xU).replace("<Xfxp>","^{"+oBrackets(xL)+"}")} //fn^n x
-        if (xU.indexOf("\\") == 0) {return "("+oBrackets(xU)+")^{"+oBrackets(xL)+"}"}
-        return "{"+oBrackets(xU)+"}^{"+oBrackets(xL)+"}"
-    }
-    function idrX(xU,xN) {
-        if (typeof xN == "undefined") {return '\\frac{\\partial}{\\partial '+xU+'}'}
-        return '\\frac{\\partial^'+xN+'}{\\partial '+xU+'^2}'
-    }
-    function tdrX(xU,xN) {
-        if (typeof xN == "undefined") {return '\\frac{d}{d '+xU+'}'}
-        return  '\\frac{d^'+xN+'}{d '+xU+'^'+xN+'}'
-    }
-    function psdX(xU,xL,xN) {
-        if (typeof xN == "undefined") {return '\\frac{\\partial '+xU+'}{\\partial '+xL+'}'}
-        return  '\\frac{\\partial^'+xN+' '+xU+'}{\\partial '+xL+'^'+xN+'}'
-    }
-    function sdrX(xU,xL,xN) {
-        if (typeof xN == "undefined") {return '\\frac{d '+xU+'}{d '+xL+'}'}
-        return '\\frac{d^'+xN+' '+xU+'}{d '+xL+'^'+xN+'}'
-    }
-    function matX(xA) {
-        var mReturn = "";
-        if (xA[0].indexOf("<Xrow>") == -1) {
-            for (var iC=0;iC<xA.length;iC++) {
-                mReturn = mReturn + xA[iC];
-                if (iC < xA.length-1) {mReturn = mReturn + "<Xcel>"}
-            }
-            mReturn = "<Xrow>" + mReturn + "<Xrwe>"
-        }
-        else {
-            mReturn = mReturn + "\\begin{bmatrix}";
-            for (var iR=0;iR<xA.length;iR++) {
-                xA[iR] = xA[iR].replace(/\<Xcel\>/g,"&").replace(/\<Xrow\>/g,"").replace(/\<Xrwe\>/g,"");
-                mReturn = mReturn + xA[iR];
-                if (iR < xA.length-1) {mReturn = mReturn + "\\\\"}
-            }
-            mReturn = mReturn + "\\end{bmatrix}"
-        }
-        return mReturn
-    }
     // function handlers
     function lFunc(parm,strg) { //process left side function
         var mA=parm[0],mB=parm[1],mC=parm[2],mD=parm[3];
