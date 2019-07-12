@@ -80,7 +80,7 @@ The result will be converted to form selected in the Settings menu. This allows 
   <li>ach(x) - hyperbolic arccosine</li>
   <li>ath(x) - hyperbolic arctangent</li>
   <li>lne(x) - natural log</li>
-  <li>lgn(x,n) - log to base n</li>
+  <li>lgn(n,x) - log to base n</li>
   <li>log(x) - natural log</li>
   <li>exp(x) - ℮<sup>n</sup></li>  
   <li>gam(x) - gamma function (Lanczos approximation)</li>
@@ -148,6 +148,35 @@ The result will be converted to form selected in the Settings menu. This allows 
   <li> Cv[44] - Null 0</li>
   <li> Cv[45] - imaginary constant i</li>
   <li> Cv[8734] - infinity</li>
+</ul>
+
+<p><b>MG Global Objects</b></p>
+These objects reside in the global namespace. Ensure that these names do not conflict with other object in the host application.
+<ul>
+<li>mgConfig - configuration object </li>
+<li>Cv - all variables </li>
+<li>Cs - all variable symbols </li>
+<li>mgTrans - translation code block </li>
+<li>mgCalc - calculation code block </li>
+<li>funcMap - mg function translation map </li>
+<li>mgFuncMap - mg function translation map in mgCalculate</li>
+<li>cFunc(expression) - tranlstator MG > FUNC format translator </li>
+<li>texImport(expression) - LaTeX to MG translator </li>
+<li>parseParens(expression,beginningIndex) - parens parser </li>
+<li>mgNumeric(expression) - numeric calculation </li>
+<li>mgCalculate(expression) - numeric calculation (deprecated) </li>
+<li>mgSolve(equation,variable) - solve symbolic equation for specified variable </li>
+<li>mgSubstitute(expression,tgt,src) - substitute tgt expression with src </li>
+<li>mgSimplify(expression) - simplify symbolic </li>
+<li>mgFactor(expression) - factor symbolic </li>
+<li>mgExpand(expression) - expand symbolic </li>
+<li>mgTrigToExp(expression) - trig to exponentiol form </li>
+<li>mgExpToTrig(expression) - exponential to trig form </li>
+<li>mgRange(expression) - range of expression </li>
+<li>mgDomain(expression) - domain of expression </li>
+<li>mgSeries(expression,variable,center,ordorder) - convert expression to Taylor series </li>
+<li>mgTranslate(expression,<i>scale</i>) - translate LaTeX/MG format to MG/HTML/LaTeX </li>
+<li>mgOutput(expression,<i>scale</i>) - translate MG format to MG/HTML/LaTeX </li>
 </ul>
 
 </body>

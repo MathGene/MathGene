@@ -17,6 +17,7 @@
 */
 
 // node.js import
+var cFunc,texImport,mgOutput,parseParens;
 if (typeof module ==  "object") {
     var mgTr = require("./mg_translate.js");
     var mgConfig = mgTr.mgConfig;
@@ -24,16 +25,16 @@ if (typeof module ==  "object") {
     var Cs = mgTr.Cs;
     var mgTrans = mgTr.mgTrans;
     var mgFuncMap = mgTr.funcMap;
-    var parseParens = function(xpr,bSym) {return mgTr.mgTrans.parseParens(xpr,bSym)}
-    var cFunc = function(xpr) {return mgTr.mgTrans.cFunc(xpr)}
-    var texImport = function(xpr) {return mgTr.mgTrans.texImport(xpr)}
-    var mgOutput = function(xpr,scale) {return mgTr.mgOutput(xpr,scale)}
+    parseParens = function(xpr,bSym) {return mgTr.mgTrans.parseParens(xpr,bSym)}
+    cFunc = function(xpr) {return mgTr.mgTrans.cFunc(xpr)}
+    texImport = function(xpr) {return mgTr.mgTrans.texImport(xpr)}
+    mgOutput = function(xpr,scale) {return mgTr.mgOutput(xpr,scale)}
 }
 else {
-    var mgFuncMap = funcMap;
-    var parseParens = function(xpr,bSym) {return mgTrans.parseParens(xpr,bSym)}
-    var cFunc = function(xpr) {return mgTrans.cFunc(xpr)}
-    var texImport = function(xpr) {return mgTrans.texImport(xpr)}
+    mgFuncMap = funcMap;
+    cFunc = function(xpr) {return mgTrans.cFunc(xpr)}
+    texImport = function(xpr) {return mgTrans.texImport(xpr)}
+    parseParens = function(xpr,bSym) {return mgTrans.parseParens(xpr,bSym)}
 }
 
 //external callable functions
