@@ -22,12 +22,19 @@ if (typeof module ==  "object") {
     var mgConfig = mgTr.mgConfig;
     var Cv = mgTr.Cv;
     var Cs = mgTr.Cs;
-    var funcMap = mgTr.funcMap;
-    var parseParens = function(xpr,bSym) {return mgTr.parseParens(xpr,bSym)}
-    var cFunc = function(xpr) {return mgTr.cFunc(xpr)}
-    var texImport = function(xpr) {return mgTr.texImport(xpr)}
-    var mgExport = function(xpr) {return mgTr.mgExport(xpr)}
+    var mgFuncMap = mgTr.funcMap;
+    var parseParens = function(xpr,bSym) {return mgTr.mgTrans.parseParens(xpr,bSym)}
+    var cFunc = function(xpr) {return mgTr.mgTrans.cFunc(xpr)}
+    var texImport = function(xpr) {return mgTr.mgTrans.texImport(xpr)}
+    var mgExport = function(xpr) {return mgTr.mgTrans.mgExport(xpr)}
     var mgOutput = function(xpr,scale) {return mgTr.mgOutput(xpr,scale)}
+}
+else {
+    var mgFuncMap = funcMap;
+    var parseParens = function(xpr,bSym) {return mgTrans.parseParens(xpr,bSym)}
+    var cFunc = function(xpr) {return mgTrans.cFunc(xpr)}
+    var texImport = function(xpr) {return mgTrans.texImport(xpr)}
+    var mgExport = function(xpr) {return mgTrans.mgExport(xpr)}
 }
 
 //external callable functions
@@ -80,10 +87,9 @@ function mgSeries(expression,variable,center,order) { //find Taylor Series of ex
     return mgOutput(mgExport(mgCalc.Series(texImport(expression),texImport(variable),center,order)));
 }
 //internal functions-objects
-var mgCalc = (function() {
-
+var mgCalc = function() {
     function xprSolve(xSol,cVar) {//solve equation/inequality xSol in FUNC format for variable cVar
-        const solverMap =
+        const solverMap = //map inverse functions for solver
         {
         sin:{solverU:"asnS(lExpr)",ineqU:0},
         cos:{solverU:"acsS(lExpr)",ineqU:0},
@@ -238,7 +244,7 @@ var mgCalc = (function() {
         return {func:"",upper:"",lower:""}
     }
     function opExtract(fExt) {//extract inside function in FUNC format, returns func,upper,lower
-        function fTest(tFunc) {if (typeof funcMap[tFunc] == "undefined") {return false}; return true} //test for valid function key
+        function fTest(tFunc) {if (typeof mgFuncMap[tFunc] == "undefined") {return false}; return true} //test for valid function key
         fExt = strConvert(fExt);
         var opReturn = {func:"",upper:"",lower:""}
         var funcKey = fExt.substr(0,fExt.indexOf("("))
@@ -3683,22 +3689,22 @@ var mgCalc = (function() {
         OptionVega: function(p1,p2,p3,p4,p5,p6) {return finOPTvega(p1,p2,p3,p4,p5,p6)},
         GCF:        function(p1,p2) {return cGcf(p1,p2)},
     }
-}) ();
+} ();
 // node.js export
 if (typeof module ==  "object") {
     module.exports = {
-        mgNumeric:      function(expression) {return mgNumeric(expression)},
-        mgCalculate:    function(expression) {return mgCalculate(expression)},
-        mgSolve:        function(equation,variable) {return mgSolve(equation,variable)},
-        mgSubstitute:   function(expression,substTarget,substSource) {return mgSubstitute(expression,substTarget,substSource)},
-        mgSimplify:     function(expression) {return mgSimplify(expression)},
-        mgFactor:       function(expression) {return mgFactor(expression)},
-        mgExpand:       function(expression) {return mgExpand(expression)},
-        mgTrigToExp:    function(expression) {return mgTrigToExp(expression)},
-        mgExpToTrig:    function(expression) {return mgExpToTrig(expression)},
-        mgRange:        function(expression) {return mgRange(expression)},
-        mgDomain:       function(expression) {return mgDomain(expression)},
-        mgSeries:       function(expression,variable,center,order) {return mgSeries(expression,variable,center,order)},
+        mgNumeric:      function(parm) {return mgNumeric(parm)},
+        mgCalculate:    function(parm) {return mgCalculate(parm)},
+        mgSolve:        function(parm,varbl) {return mgSolve(parm,varbl)},
+        mgSubstitute:   function(parm,tgt,src) {return mgSubstitute(parm,tgt,src)},
+        mgSimplify:     function(parm) {return mgSimplify(parm)},
+        mgFactor:       function(parm) {return mgFactor(parm)},
+        mgExpand:       function(parm) {return mgExpand(parm)},
+        mgTrigToExp:    function(parm) {return mgTrigToExp(parm)},
+        mgExpToTrig:    function(parm) {return mgExpToTrig(parm)},
+        mgRange:        function(parm) {return mgRange(parm)},
+        mgDomain:       function(parm) {return mgDomain(parm)},
+        mgSeries:       function(parm,varbl,cent,ord) {return mgSeries(parm,varbl,cent,ord)},
         mgCalc:         mgCalc,
     }
 }

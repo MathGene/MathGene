@@ -1814,12 +1814,14 @@ var htmlx =
 "ash(Cv[46])ach(Cv[46]Cv[8])ath(Cv[8]/Cv[29])","<span title='MathGene HTML' style='font-family:Times,Serif;font-size:100%'>sinh<sup>-1</sup>(<i>i</i>) cosh<sup>-1</sup>(<i>i</i><i>e</i>) tanh<sup>-1</sup><span style='vertical-align:middle;display:inline-block;font-weight:100;font-size:210%'>(</span> <span style='text-align:center;vertical-align:middle;display:inline-block;'><span style='display:table-row;'><span style='font-size:85%;display:table-cell'><i>e</i></span></span><span style='display:table-row;vertical-align:top'><span style='font-size:85%;display:table-cell;border-top-style:solid;border-top-width:2px;padding:3px;'>&#960;</span></span></span> <span style='vertical-align:middle;display:inline-block;font-weight:100;font-size:210%'>)</span></span>",
 "asc(acc(act(arg(exp(sqt(Cv[46]Cv[8]Cv[29]))))))","<span title='MathGene HTML' style='font-family:Times,Serif;font-size:100%'>sec<sup>-1</sup>(csc<sup>-1</sup>(cot<sup>-1</sup>(arg(exp(<span style='vertical-align:middle;display:inline-block;padding:3px'><span style='vertical-align:top;font-size:100%'>&#8730;</span><span style='vertical-align:top;border-top-style:solid;border-top-width:2px;'><span style='vertical-align:top;'><span style='vertical-align:middle;font-size:90%'><i>i</i><i>e</i>&#960;</span></span></span></span>)))))</span>",
 "asn(Cv[8])acs(Cv[8])atn(Cv[8])log(Cv[8])efc(Cv[8])","<span title='MathGene HTML' style='font-family:Times,Serif;font-size:100%'>sin<sup>-1</sup>(<i>e</i>) cos<sup>-1</sup>(<i>e</i>) tan<sup>-1</sup>(<i>e</i>) log(<i>e</i>) erfc(<i>e</i>)</span>",
+"axh(ayh(azh(Cv[10120])))","<span title='MathGene HTML' style='font-family:Times,Serif;font-size:100%'>sech<sup>-1</sup>(csch<sup>-1</sup>(coth<sup>-1</sup>(<i>x</i>)))</span>",
 ];
 var htmly =
 [
 "ash(Cv[46])ach(Cv[46]Cv[8])ath(Cv[8]/Cv[29])","<span title='MathGene HTML' style='font-family:Times,Serif;font-size:100%'>sinh<sup>-1</sup> <i>i</i>  cosh<sup>-1</sup> <i>i</i><i>e</i>  tanh<sup>-1</sup> <span style='vertical-align:middle;display:inline-block;font-weight:100;font-size:210%'>(</span> <span style='text-align:center;vertical-align:middle;display:inline-block;'><span style='display:table-row;'><span style='font-size:85%;display:table-cell'><i>e</i></span></span><span style='display:table-row;vertical-align:top'><span style='font-size:85%;display:table-cell;border-top-style:solid;border-top-width:2px;padding:3px;'>&#960;</span></span></span> <span style='vertical-align:middle;display:inline-block;font-weight:100;font-size:210%'>)</span> </span>",
 "asc(acc(act(arg(exp(sqt(Cv[46]Cv[8]Cv[29]))))))","<span title='MathGene HTML' style='font-family:Times,Serif;font-size:100%'>sec<sup>-1</sup> (csc<sup>-1</sup> (cot<sup>-1</sup> (arg(exp(<span style='vertical-align:middle;display:inline-block;padding:3px'><span style='vertical-align:top;font-size:100%'>&#8730;</span><span style='vertical-align:top;border-top-style:solid;border-top-width:2px;'><span style='vertical-align:top;'><span style='vertical-align:middle;font-size:90%'><i>i</i><i>e</i>&#960;</span></span></span></span>))) ) ) </span>",
 "asn(Cv[8])acs(Cv[8])atn(Cv[8])log(Cv[8])efc(Cv[8])","<span title='MathGene HTML' style='font-family:Times,Serif;font-size:100%'>sin<sup>-1</sup> <i>e</i>  cos<sup>-1</sup> <i>e</i>  tan<sup>-1</sup> <i>e</i>  log <i>e</i>  erfc(<i>e</i>)</span>",
+"axh(ayh(azh(Cv[10120])))","<span title='MathGene HTML' style='font-family:Times,Serif;font-size:100%'>sech<sup>-1</sup> (csch<sup>-1</sup> (coth<sup>-1</sup> <i>x</i> ) ) </span>",
 ];
 var htmlz =
 [
@@ -1895,6 +1897,7 @@ var xportx =
 "lne(Cv[29])^2lne(Cv[29]/2)^2","\\left(\\ln{\\pi}\\right)^{2}\\left(\\ln{\\frac{\\pi}{2}}\\right)^{2}",
 "sin(Cv[8])","\\sin {e}",
 "1/Cv[10120]^2","\\frac{1}{{x}^{2}}",
+"axh(ayh(azh(Cv[10120])))","\\arcsech{\\arccsch{\\arccoth{x}}}",
 ];
 var xporty = 
 [
@@ -1904,6 +1907,7 @@ var xporty =
 "acs(Cv[8]/Cv[29])^2","\\left( \\cos^{-1} {\\frac{e}{ \\pi }} \\right)^{2}",
 "ash(Cv[8]/Cv[29])^2","\\left( \\sinh^{-1} {\\frac{e}{ \\pi }} \\right)^{2}",
 "ath(Cv[8]/Cv[29])^2","\\left( \\tanh^{-1} {\\frac{e}{ \\pi }} \\right)^{2}",
+"axh(ayh(azh(Cv[10120])))","\\sech^{-1}{\\csch^{-1}{\\coth^{-1}{x}}}",
 ];
 var xportz = 
 [
@@ -1913,6 +1917,7 @@ var xportz =
 "acs(Cv[8]/Cv[29])^2"," \\cos^{-1} \\left( \\frac{e}{ \\pi } \\right)^{2}",
 "ash(Cv[8]/Cv[29])^2"," \\sinh^{-1} \\left( \\frac{e}{ \\pi } \\right)^{2}",
 "ath(Cv[8]/Cv[29])^2"," \\tanh^{-1} \\left( \\frac{e}{ \\pi } \\right)^{2}",
+"axh(ayh(azh(Cv[10120])))","\\sech^{-1}\\left(\\csch^{-1}\\left(\\coth^{-1}\\left(x\\right)\\right)\\right)",
 ];
 var mport = 
 [
@@ -2088,6 +2093,10 @@ var internal =
 "mgExport('mat(mat(1,2,3,4,5),mat(4,5,6,7,8))')","mat(mat(1,2,3,4,5),mat(4,5,6,7,8))",
 "mgExport('cDot(Cv[10120],Cv[10121])')","Cv[10120]Cv[8226]Cv[10121]",
 "mgExport('cTms(Cv[10120],Cv[10121])')","Cv[10120]*Cv[10121]",
+"mgExport('sum(1,10)cTms(Cv[10120],Cv[10121])')","sum(1,10)Cv[10120]*Cv[10121]",
+"mgExport('prd(1,10)cTms(Cv[10120],Cv[10121])')","prd(1,10)Cv[10120]*Cv[10121]",
+"mgExport('lim(1,10)cTms(Cv[10120],Cv[10121])')","lim(1,10)Cv[10120]*Cv[10121]",
+"mgExport('itg(1,10)cTms(Cv[10120],Cv[10121])')","itg(1,10)Cv[10120]*Cv[10121]",
 ];
 
 

@@ -20,10 +20,10 @@
 function mgTranslate(expression,scale) { //translate between MG, HTML, and LaTex
     if (typeof expression == "undefined") {return {html:"",latex:"",mg:"",} }
     if (typeof scale == "undefined") {scale = 100}
-    var mgFmt = texImport(expression);
+    var mgFmt = mgTrans.texImport(expression);
     return {
-        html:   "<span title='MathGene HTML' style='font-family:"+mgConfig.htmlFont+";font-size:"+scale+"%'>"+htmlExport(mgFmt)+"</span>",
-        latex:  texExport(mgFmt),
+        html:   "<span title='MathGene HTML' style='font-family:"+mgConfig.htmlFont+";font-size:"+scale+"%'>"+mgTrans.htmlExport(mgFmt)+"</span>",
+        latex:  mgTrans.texExport(mgFmt),
         mg:     mgFmt,
         log:    calcLog,
         }
@@ -31,8 +31,8 @@ function mgTranslate(expression,scale) { //translate between MG, HTML, and LaTex
 function mgOutput(expression,scale) { //output MG, HTML, and LaTex from MG without LaTex import
     if (typeof scale == "undefined") {scale = 100}
     return {
-        html:   "<span title='MathGene HTML' style='font-family:"+mgConfig.htmlFont+";font-size:"+scale+"%'>"+htmlExport(expression)+"</span>",
-        latex:  texExport(expression),
+        html:   "<span title='MathGene HTML' style='font-family:"+mgConfig.htmlFont+";font-size:"+scale+"%'>"+mgTrans.htmlExport(expression)+"</span>",
+        latex:  mgTrans.texExport(expression),
         mg:     expression,
         log:    calcLog,
         }
@@ -59,6 +59,7 @@ var Cv = new Array(11000); //symbol array
 var Cs = new Array(11000); //symbol rendering
 var Cd = new Array(50); //constant description
 var Cu = new Array(50); //constant units
+var Ct = new Array(11000); //latex symbols
 
 //Initialize constants
 Cv[0] = 7.2973525698e-3;    Cu[0]="";               Cs[0]="&#945;";                                         Cd[0]="fine structure const";
@@ -120,7 +121,7 @@ Cv[46] = {r:0, i:1};                    Cs[46] = "<i>i</i>";
 Cv[8230] = 0;
 Cv[8734] = "Infinity";
 
-//initialize symbols
+//initialize html symbols
 var iAl = 0;
 for (iAl=47;iAl<10000;iAl++)    {Cs[iAl]="&#"+(iAl)+";"}
 for (iAl=58;iAl<=127;iAl++)     {Cs[iAl]=String.fromCharCode(iAl)}//ascii
@@ -154,8 +155,184 @@ Cs[8592] = " &#8592; ";
 Cs[8594] = " &#8594; ";
 Cs[9998] = "<span style='color:#880000'>Error</span>";
 
+//Initialize LaTex ExportImport symbols
+Ct[0]="\\alpha ";                                       //"fine structure const";
+Ct[1]="\\alpha_{0}";                                    //"Bohr radius";
+Ct[2]="b";                                              //"Wein displacement const.";
+Ct[3]="c";                                              //"speed of light";
+Ct[4]="c^2 ";                                           //"(speed of light)<sup>2</sup>";
+
+Ct[5]="c_{1}";                                          //"1<sup>st</sup> radiation constant";
+Ct[6]="c_{2}";                                          //"2<sup>nd</sup> radiation constant";
+Ct[7]="\\epsilon_{0}";                                  //"vacuum permittivity";
+Ct[8]="e";                                              //"Euler constant";
+Ct[9]="eV";                                             //"electron volt";
+
+Ct[10]="F";                                             //"Faraday constant";
+Ct[11]="G";                                             //"Newton constant";
+Ct[12]="g";                                             //"Earth gravity accel";
+Ct[13]="G_{0}";                                         //"conductance quantum";
+Ct[14]="h";                                             //"Planck constant";
+
+Ct[15]="\\hbar ";                                       //"h-bar";
+Ct[16]="K_{j}";                                         //"Josephson constant";
+Ct[17]="k";                                             //"Boltzmann constant";
+Ct[18]="\\lambda ";                                     //"Compton wavelength";
+Ct[19]="l_{P}";                                         //"Planck length";
+
+Ct[20]="\\mu_{0}";                                      //"vacuum permeability";
+Ct[21]="\\mu_{B}";                                      //"Bohr magneton";
+Ct[22]="M_{e}";                                         //"electron mass";
+Ct[23]="M_{p}";                                         //"proton mass";
+Ct[24]="M_{n}";                                         //"neutron mass";
+
+Ct[25]="M_{P}";                                         //"Planck mass";
+Ct[26]="M_{u}";                                         //"atomic mass constant";
+Ct[27]="N_{a}";                                         //"Avogadro constant";
+Ct[28]="n_{0}";                                         //"Loschmidt constant";
+Ct[29]="\\pi ";                                         //"Archimedes constant";
+
+Ct[30]="2 \\pi ";                                       //"2&times;&#960;";
+Ct[31]="\\phi";                                         //"golden ratio";
+Ct[32]="\\phi_{0}";                                     //"magnetic flux quantum";
+Ct[33]="P_{atm}";                                       //"standard pressure";
+Ct[34]="q_{e}";                                         //"elementary charge";
+
+Ct[35]="R_{c}";                                         //"Universal gas constant";
+Ct[36]="R_{k}";                                         //"von Klitzing constant";
+Ct[37]="R_{\\infty}";                                   //"Rydberg constant";
+Ct[38]="r_{e}";                                         //"classical electron radius";
+Ct[39]="\\sigma ";                                      //"Stefan-Boltzmann";
+
+Ct[40]="T_{P}";                                         //"Planck temperature";
+Ct[41]="t_{P}";                                         //"Planck time";
+Ct[42]="V_{m}";                                         //"molar volume";
+Ct[43]="Z_{0}";                                         //"vacuum impedance";
+
+for (iAl=48;iAl<10000;iAl++) {Ct[iAl]=""}
+for (iAl=58;iAl<=127;iAl++)  {Ct[iAl]="\\textrm{"+String.fromCharCode(iAl)+"}"}//ascii
+for (iAl=48;iAl<=57;iAl++)   {Ct[iAl]=String.fromCharCode(iAl)}//0-9
+for (iAl=65;iAl<=90;iAl++) {Ct[iAl]="\\textbf{"+String.fromCharCode(iAl)+"}"}//A-Z
+for (iAl=97;iAl<=122;iAl++) {Ct[iAl]="\\textbf{"+String.fromCharCode(iAl)+"}"}//a-z
+for (iAl=10032;iAl<=10047;iAl++) {Ct[iAl]=String.fromCharCode(iAl-10000)}//punc
+for (iAl=10065;iAl<=10090;iAl++) {Ct[iAl]=String.fromCharCode(iAl-10000)}//A-Z italic
+for (iAl=10097;iAl<=10122;iAl++) {Ct[iAl]=String.fromCharCode(iAl-10000)}//a-z italic
+for (iAl=10768;iAl<=10879;iAl++) {Ct[iAl]=""}//accents
+var Greeks =   ["A","B","\\Gamma ","\\Delta ","E","Z","H","\\Theta ","I","K","\\Lambda ","M",
+                "N","\\Xi ","O","\\Pi ","","\\Rho ","\\Sigma ","T","\\Upsilon ","\\Phi ","X","\\Psi ","\\Omega ",
+                "","","","","","","",
+                "\\alpha ","\\beta ","\\gamma ","\\delta ","\\epsilon ","\\zeta ","\\eta ","\\theta ","\\iota ","\\kappa ","\\lambda ","\\mu ",
+                "\\nu ","\\xi ","o","\\pi ","","\\rho ","\\sigma ","\\tau ","\\upsilon ","\\phi ","\\chi ","\\psi ","\\omega "];
+for (iAl=0;iAl<=Greeks.length;iAl++) {Ct[iAl+913] = Greeks[iAl]}
+
+Ct[10040] ="\\left(";
+Ct[10041] ="\\right)";
+Ct[42] = "\\ast ";
+Ct[45] = "!";
+Ct[46] = "\\imath ";
+Ct[60] = "<";
+Ct[61] = "=";
+Ct[62] = ">";
+Ct[92] = "\\setminus ";
+Ct[126] = "\\sim ";
+Ct[172] = "\\neg ";
+Ct[176] = "\\circ ";
+Ct[177] = "\\pm ";
+Ct[215] = "\\times ";
+Ct[247] = "\\div ";
+Ct[420] = "\\mathfrak{P}";
+Ct[8230] = "\\dotsi ";
+Ct[8756] = "\\because ";
+Ct[8757] = "\\therefore ";
+Ct[8758] = "\\vdots ";
+Ct[8800] = "\\neq ";
+Ct[8804] = "\\leq ";
+Ct[8805] = "\\geq ";
+Ct[8773] = "\\cong ";
+Ct[8719] = "\\prod ";
+Ct[8721] = "\\sum ";
+Ct[8723] = "\\mp ";
+Ct[8747] = "\\int ";
+Ct[8748] = " d";
+Ct[8750] = "\\oint ";
+Ct[8751] = "\\oiint ";
+Ct[8752] = "\\oiiint ";
+Ct[8733] = "\\propto ";
+Ct[8789] = "";
+Ct[8734] = "\\infty ";
+Ct[8801] = "\\equiv ";
+Ct[8594] = "\\to ";
+Ct[8592] = "\\gets ";
+Ct[8226] = "\\cdot";
+Ct[8592] = "\\leftarrow ";
+Ct[8594] = "\\rightarrow ";
+Ct[8596] = "\\leftrightarrow ";
+Ct[8656] = "\\Leftarrow ";
+Ct[8658] = "\\Rightarrow ";
+Ct[8810] = "\\ll ";
+Ct[8811] = "\\gg ";
+Ct[8660] = "\\Leftrightarrow ";
+Ct[8704] = "\\forall ";
+Ct[8707] = "\\exists ";
+Ct[8708] = "\\nexists ";
+Ct[8706] = "\\partial ";
+Ct[8711] = "\\nabla ";
+Ct[8727] = "\\ast ";
+Ct[8224] = "\\dagger ";
+Ct[8225] = "\\ddagger ";
+Ct[8240] = "";
+Ct[8242] = "\\prime ";
+Ct[8243] = "\\prime\\prime ";
+Ct[8466] = "\\mathcal{L}";
+Ct[8497] = "\\mathcal{F}";
+Ct[8461] = "\\mathbb{H}";
+Ct[8469] = "\\mathbb{N}";
+Ct[8484] = "\\mathbb{Z}";
+Ct[8474] = "\\mathbb{Q}";
+Ct[8477] = "\\Re ";
+Ct[8450] = "\\mathbb{C}";
+Ct[1488] = "\\aleph ";
+Ct[8743] = "\\wedge ";
+Ct[8744] = "\\vee ";
+Ct[8745] = "\\cap ";
+Ct[8746] = "\\cup ";
+Ct[8834] = "\\subset ";
+Ct[8835] = "\\supset ";
+Ct[8712] = "\\in ";
+Ct[8715] = "\\ni ";
+Ct[8838] = "\\subseteq ";
+Ct[8839] = "\\supseteq ";
+Ct[8713] = "\\notin ";
+Ct[8716] = "";
+Ct[8728] = "\\circ ";
+Ct[8836] = "";
+Ct[8837] = "";
+Ct[8722] = "-";
+Ct[8739] = "\\amp ";
+Ct[8739] = "|";
+Ct[8853] = "\\oplus ";
+Ct[8709] = "\\oslash ";
+Ct[8854] = "\\ominus ";
+Ct[8736] = "\\angle ";
+Ct[8736] = "\\measuredangle ";
+Ct[8738] = "\\measuredangle ";
+Ct[8737] = "";
+Ct[8738] = "";
+Ct[8735] = "";
+Ct[8741] = "\\| ";
+Ct[8855] = "\\otimes ";
+Ct[8869] = "\\bot ";
+Ct[8943] = "\\cdots ";
+Ct[8944] = "\\iddots ";
+Ct[8945] = "\\ddots";
+Ct[9001] = "\\rangle ";
+Ct[9002] = "\\langle ";
+Ct[9476] = "\\ldots ";
+Ct[11100]="C";//constants of integration
+for (iAl=11101;iAl<=11110;iAl++) {Ct[iAl]="C_{"+(iAl-11100)+"}"}//constants of integration
+
 //HTML/LaTex Translation map for functions
-var funcMap =
+const funcMap =
 {
 sin:{
     htmlL1: function (parm) {return '<Xfnc>sin<Xfnx>('+parm[0]},
@@ -830,16 +1007,16 @@ cbr:{  //curly bracket
     mg: function (parm) {return 'cbr('+parm[0]+')'},
     },
 fac:{ //factorial
-    htmlL1: function (parm) {return parm[0]},
-    htmlR1:'!',
-    htmlL2: function (parm) {return parm[0]},
-    htmlR2:'!',
+    htmlL1:'',
+    htmlR1:'',
+    htmlL2:'',
+    htmlR2:'',
     texfunc:'\\XXX',
-    latexL1: function (parm) {return parm[0]},
-    latexR1:'!',
-    latexL2: function (parm) {return parm[0]},
-    latexR2:'!',
-    mg: function (parm) {if (!numTest(parm[0]) && cFunc(parm[0]) != oParens(parm[0])) {return xParens(parm[0])+"Cv[45]"};return parm[0]+"Cv[45]"},
+    latexL1:'',
+    latexR1:'',
+    latexL2:'',
+    latexR2:'',
+    mg: function (parm) {if (!mgTrans.numTest(parm[0]) && mgTrans.cFunc(parm[0]) != mgTrans.oParens(parm[0])) {return mgTrans.xParens(parm[0])+"Cv[45]"};return parm[0]+"Cv[45]"},
     },
 sum:{ //summation
     htmlL1: function (parm) {return htmlFuncs['overUnder'](parm[0],parm[1],'&#8721;',125)},
@@ -1106,14 +1283,14 @@ cnt:{ //container
     mg: function (parm) {return parm[0]},
     },
 dif:{ //differential
-    htmlL1: function (parm) {return '<i>d</i>'+parm[0]},
+    htmlL1:'',
     htmlR1:'',
-    htmlL2: function (parm) {return '<i>d</i>'+parm[0]},
+    htmlL2:'',
     htmlR2:'',
     texfunc:'\\XXX',
-    latexL1: function (parm) {return 'd'+parm[0]},
+    latexL1:'',
     latexR1:'',
-    latexL2: function (parm) {return 'd'+parm[0]},
+    latexL2:'',
     latexR2:'',
     mg: function (parm) {return 'Cv[8748]'+parm[0]},
     },
@@ -1219,9 +1396,9 @@ cDiv:{ //divide
     htmlL2: function (parm) {return htmlFuncs['cDivL'](parm[0],parm[1])},
     htmlR2:'',
     texfunc:'\\XXX',
-    latexL1: function (parm) {return '<Xdiv>\\frac{'+oBrackets(parm[0])+'}{'+oBrackets(parm[1])+'}<Xdve>'},
+    latexL1: function (parm) {return '<Xdiv>\\frac{'+mgTrans.oBrackets(parm[0])+'}{'+mgTrans.oBrackets(parm[1])+'}<Xdve>'},
     latexR1:'',
-    latexL2: function (parm) {return '<Xdiv>\\frac{'+oBrackets(parm[0])+'}{'+oBrackets(parm[1])+'}<Xdve>'},
+    latexL2: function (parm) {return '<Xdiv>\\frac{'+mgTrans.oBrackets(parm[0])+'}{'+mgTrans.oBrackets(parm[1])+'}<Xdve>'},
     latexR2:'',
     mg: function (parm) {return mgFuncs['cDivE'](parm[0],parm[1])},
     },
@@ -1231,7 +1408,7 @@ cPow:{ //x^n
     htmlL2: function (parm) {return htmlFuncs['cPowL'](parm[0],parm[1])},
     htmlR2:'',
     texfunc:'\\XXX',
-    latexL1: function (parm) {return parm[0]+'^{'+oBrackets(parm[1])+'}'},
+    latexL1: function (parm) {return parm[0]+'^{'+mgTrans.oBrackets(parm[1])+'}'},
     latexR1:'',
     latexL2: function (parm) {return latexFuncs['cPowX'](parm[0],parm[1])},
     latexR2:'',
@@ -1247,7 +1424,7 @@ cNeg:{ //negative
     latexR1:'',
     latexL2: function (parm) {return '-'+parm[0]},
     latexR2:'',
-    mg: function (parm) {xTractU = oprExtract(cFunc(parm[0]));if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "cDiv") {return "-" + xParens(parm[0])};return "-" + parm[0]},
+    mg: function (parm) {xTractU = mgTrans.oprExtract(mgTrans.cFunc(parm[0]));if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "cDiv") {return "-" + mgTrans.xParens(parm[0])};return "-" + parm[0]},
     },
 cAng:{ //angle (polar form)
     htmlL1: function (parm) {return parm[0]+'&#8736;'+parm[1]},
@@ -1371,44 +1548,44 @@ ntp:{  //integral container from func
 },
 }
 //mg handlers
-var mgFuncs = {
+const mgFuncs = {
 cSubE: function (xU,xL) { //subtraction
-    xTractL = oprExtract(cFunc(xL));
-    if (xTractL.func == "cAdd") {return xU + "-" + xParens(xL)}
+    xTractL = mgTrans.oprExtract(mgTrans.cFunc(xL));
+    if (xTractL.func == "cAdd") {return xU + "-" + mgTrans.xParens(xL)}
     return xU + "-" + xL
     },
 cMulE: function (xU,xL) { //multiplication by term
-    xTractU = oprExtract(cFunc(xU));
-    xTractL = oprExtract(cFunc(xL));
-    xL = oParens(xL);xU = oParens(xU);
-    if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "fac") {xU  = xParens(xU)}
-    if (xTractL.func == "cAdd" || xTractL.func == "cSub" || xTractL.func == "fac") {xL  = xParens(xL)}
-    if (xTractL.func == "cDiv" && xTractU.func == "cDiv") {xU  = xParens(xU);xL  = xParens(xL)}
-    if (xU.indexOf("Cv[45]") > -1 && xU.lastIndexOf("Cv[45]") == xU.length-6) {xU  = xParens(xU)}
-    if (xL.indexOf("Cv[45]") > -1 && xL.lastIndexOf("Cv[45]") == xL.length-6) {xL  = xParens(xL)}
-    if (xTractL.func == "cPow" && numTest(xU) && numTest(xTractL.upper)) {xL  = xParens(xL)}
+    xTractU = mgTrans.oprExtract(mgTrans.cFunc(xU));
+    xTractL = mgTrans.oprExtract(mgTrans.cFunc(xL));
+    xL = mgTrans.oParens(xL);xU = mgTrans.oParens(xU);
+    if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "fac") {xU  = mgTrans.xParens(xU)}
+    if (xTractL.func == "cAdd" || xTractL.func == "cSub" || xTractL.func == "fac") {xL  = mgTrans.xParens(xL)}
+    if (xTractL.func == "cDiv" && xTractU.func == "cDiv") {xU  = mgTrans.xParens(xU);xL  = mgTrans.xParens(xL)}
+    if (xU.indexOf("Cv[45]") > -1 && xU.lastIndexOf("Cv[45]") == xU.length-6) {xU  = mgTrans.xParens(xU)}
+    if (xL.indexOf("Cv[45]") > -1 && xL.lastIndexOf("Cv[45]") == xL.length-6) {xL  = mgTrans.xParens(xL)}
+    if (xTractL.func == "cPow" && mgTrans.numTest(xU) && mgTrans.numTest(xTractL.upper)) {xL  = mgTrans.xParens(xL)}
     return xU + "" + xL
     },
 cDivE: function (xU,xL) { //division
-    xTractU = oprExtract(cFunc(xU));
-    xTractL = oprExtract(cFunc(xL));
-    if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "cMul" || xTractU.func == "cDiv" || xTractU.func == "cNeg" || xU.indexOf("Cv[8747]") > -1) {xU  = xParens(xU)}
-    if (xTractL.func == "cAdd" || xTractL.func == "cSub" || xTractL.func == "cMul" || xTractL.func == "cDiv" || xTractL.func == "cNeg" || xL.indexOf("Cv[8747]") > -1) {xL  = xParens(xL)}
+    xTractU = mgTrans.oprExtract(mgTrans.cFunc(xU));
+    xTractL = mgTrans.oprExtract(mgTrans.cFunc(xL));
+    if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "cMul" || xTractU.func == "cDiv" || xTractU.func == "cNeg" || xU.indexOf("Cv[8747]") > -1) {xU  = mgTrans.xParens(xU)}
+    if (xTractL.func == "cAdd" || xTractL.func == "cSub" || xTractL.func == "cMul" || xTractL.func == "cDiv" || xTractL.func == "cNeg" || xL.indexOf("Cv[8747]") > -1) {xL  = mgTrans.xParens(xL)}
     return xU + "/" + xL
     },
 cPowE: function (xU,xL) { //powers
-    xTractU = oprExtract(cFunc(xU));
-    xTractL = oprExtract(cFunc(xL));
-    if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "cMul" || xTractU.func == "cDiv" || xTractU.func == "cNeg" || xTractU.func == "fac") {xU  = xParens(xU)}
-    if (xTractL.func == "cAdd" || xTractL.func == "cSub" || xTractL.func == "cMul" || xTractL.func == "cDiv" || xTractL.func == "cNeg") {xL  = xParens(xL)}
+    xTractU = mgTrans.oprExtract(mgTrans.cFunc(xU));
+    xTractL = mgTrans.oprExtract(mgTrans.cFunc(xL));
+    if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "cMul" || xTractU.func == "cDiv" || xTractU.func == "cNeg" || xTractU.func == "fac") {xU  = mgTrans.xParens(xU)}
+    if (xTractL.func == "cAdd" || xTractL.func == "cSub" || xTractL.func == "cMul" || xTractL.func == "cDiv" || xTractL.func == "cNeg") {xL  = mgTrans.xParens(xL)}
     return xU + "^" + xL
     },
 }
 
 //html handlers
-var htmlFuncs = {
+const htmlFuncs = {
 brkt: function (xS,xO) {//scale brackets
-    var iNest = dNest(xO);
+    var iNest = mgTrans.dNest(xO);
     if (mgConfig.divScale == 50 || iNest == 0) {return xS}
     else {return "<span style='vertical-align:middle;display:inline-block;font-weight:100;font-size:"+Math.floor(100+(iNest*mgConfig.divScale*1.3))+"%'>"+xS+"</span>"}
     },
@@ -1428,27 +1605,27 @@ cMulL: function (xU,xL) {
 cDivL: function (xU,xL) {
     if (mgConfig.divSymbol == "Slash") {return xU+"/"+xL}
     else {
-        if (!mgConfig.editMode) {xU = oParens(xU);xL = oParens(xL)}
+        if (!mgConfig.editMode) {xU = mgTrans.oParens(xU);xL = mgTrans.oParens(xL)}
         return "<Xdiv> <span style='text-align:center;vertical-align:middle;display:inline-block;'><span style='display:table-row;'><span style='font-size:"
         +mgConfig.divScale+"%;display:table-cell'>"+xU+"</span></span><span style='display:table-row;vertical-align:top'><span style='font-size:"
         +mgConfig.divScale+"%;display:table-cell;border-top-style:solid;border-top-width:2px;padding:3px;'>"+xL+"</span></span></span> <Xdve>"
     }
     },
 cPowL: function (xU,xL) {
-    if (!mgConfig.editMode) {xL = oParens(xL)}
-    if (dNest(xU) > 2) {return "<table style='text-align:center;display:inline-table;vertical-align:middle'><tr><td>"+xU+"</td><td style='vertical-align:top'><sup>"+xL+"</sup></td></tr></table>"}
+    if (!mgConfig.editMode) {xL = mgTrans.oParens(xL)}
+    if (mgTrans.dNest(xU) > 2) {return "<table style='text-align:center;display:inline-table;vertical-align:middle'><tr><td>"+xU+"</td><td style='vertical-align:top'><sup>"+xL+"</sup></td></tr></table>"}
     if (xU.indexOf(" <Xfxp>") > -1 && xU.indexOf(" <Xfxp>") ==  xU.length-7) {return "("+xU+")<sup>"+xL+"</sup> "} //(ln x)^2
     if (xU.indexOf("<Xfnc>") == 0 && xU.indexOf("<Xfxp> ") > -1 &&  xU.indexOf("<Xfxp> ") < 11) {return xU.replace("<Xfxp>","<sup>"+xL+"</sup> ")} //sin^2 x
     if (xL.indexOf("<Xdiv>") > -1 && xL.indexOf("<Xdve>") == xL.length-7 && !mgConfig.editMode) {xL = "("+xL+")"}
     if (xU.indexOf("<Xdiv>") == 1 && xU.indexOf("<Xdve>") == xU.length-7 && !mgConfig.editMode) {xU = "("+xU+")"}
-    if ((dNest(xU) > 0 || dNest(xL) > 0 ) && mgConfig.divScale > 50) {return xU+"<sup><span style='vertical-align:super'>"+xL+"</span></sup>"} //lift exponent for big symbols
+    if ((mgTrans.dNest(xU) > 0 || mgTrans.dNest(xL) > 0 ) && mgConfig.divScale > 50) {return xU+"<sup><span style='vertical-align:super'>"+xL+"</span></sup>"} //lift exponent for big symbols
     return xU+"<sup>"+xL+"</sup>"
     },
 radL: function (rSymb,xY,xZ) {//radicals
     var tgtRad = ["&#8730;","<span style='vertical-align:top;display:inline-block;position:relative;'><span style='vertical-align:top;position:absolute;'>&#8730;</span><span style='vertical-align:top;position:absolute;font-size:50%;'><sup>&nbsp;3</sup></span>&nbsp;&nbsp;</span>",
                 "<span style='vertical-align:top;display:inline-block;position:relative;'><span style='vertical-align:top;position:absolute;'>&#8730;</span><span style='vertical-align:top;position:absolute;font-size:50%;'><sup>&nbsp;"+xZ+"</sup></span>&nbsp;&nbsp;</span>"];
     if (mgConfig.divScale != 50) {
-        var xNest = Math.floor(100+(dNest(xY)*mgConfig.divScale*1.2));
+        var xNest = Math.floor(100+(mgTrans.dNest(xY)*mgConfig.divScale*1.2));
         return "<span style='vertical-align:middle;display:inline-block;padding:3px'><span style='vertical-align:top;font-size:"+xNest+"%'>"
                 +tgtRad[rSymb]+"</span><span style='vertical-align:top;border-top-style:solid;border-top-width:2px;'><span style='vertical-align:top;'><span style='vertical-align:middle;font-size:90%'>";
     }
@@ -1500,7 +1677,7 @@ matL: function (xA) {
     if (typeof xA[0] == "string" && xA[0].substr(0,6) == "<Xrow>"){
         for (iM in xA) {
             xA[iM] = xA[iM].replace(/\<Xrow\>/g,"").replace(/\<Xrwe\>/g,"").replace(/\<Xcel\>/g,"<td>").replace(/\<Xcle\>/g,"</td>");
-            dScale = dScale + dNest(xA+"")*(mgConfig.divScale/100)
+            dScale = dScale + mgTrans.dNest(xA+"")*(mgConfig.divScale/100)
             mReturn = mReturn + "<tr>" + xA[iM] + "</tr>"
             prefix = prefix+"<Xdiv>";
             suffix = suffix+"<Xdve>";
@@ -1514,11 +1691,11 @@ matL: function (xA) {
     },
 }
 //latex handlers
-latexFuncs = {
+const latexFuncs = {
 cPowX: function (xU,xL) {
-    if (xU.indexOf("<Xfxp>") > 0 && xU.indexOf("<Xfxp>") < 6 && xU.indexOf("\\") == 0) {return oBrackets(xU).replace("<Xfxp>","^{"+oBrackets(xL)+"}")} //fn^n x
-    if (xU.indexOf("\\") == 0) {return "("+oBrackets(xU)+")^{"+oBrackets(xL)+"}"}
-    return "{"+oBrackets(xU)+"}^{"+oBrackets(xL)+"}"
+    if (xU.indexOf("<Xfxp>") > 0 && xU.indexOf("<Xfxp>") < 6 && xU.indexOf("\\") == 0) {return mgTrans.oBrackets(xU).replace("<Xfxp>","^{"+mgTrans.oBrackets(xL)+"}")} //fn^n x
+    if (xU.indexOf("\\") == 0) {return "("+mgTrans.oBrackets(xU)+")^{"+mgTrans.oBrackets(xL)+"}"}
+    return "{"+mgTrans.oBrackets(xU)+"}^{"+mgTrans.oBrackets(xL)+"}"
     },
 idrX: function (xU,xN) {
     if (typeof xN == "undefined") {return '\\frac{\\partial}{\\partial '+xU+'}'}
@@ -1558,753 +1735,591 @@ matX: function (xA) {
     },
 }
 // internal functions
-function strCount(xTarget,xSearch) {xTarget +="";xSearch+="";return xTarget.split(xSearch).length-1} //count occurrences of string
-function parseParens(xB,bSym) {//parse parens and return inside string, begin index, end index, source string, upper/lower args
-    xB += "";
-    var oComma = 0,lPar = 0,rPar = 0,bDelim = " ",eDelim = " ",cFind = "",ins = "";
-    for (var iU=bSym;iU<xB.length;iU++) {
-        cFind = xB.charAt(iU);
-        if (cFind == "(") {bDelim = "(";eDelim = ")";break}
-        if (cFind == "{") {bDelim = "{";eDelim = "}";break}
-    }
-    for (var iU=bSym;iU<xB.length;iU++) {
-        cFind = xB.charAt(iU);
-        if (cFind == "," && lPar-1 == rPar) {oComma = iU-bSym}
-        if (cFind == bDelim ) {lPar++;if(lPar == 1) {bSym = iU}}
-        if (cFind == eDelim ) {rPar++}
-        if (lPar > 0 && lPar == rPar) {break}
-    }
-    ins = xB.substr(bSym+1,iU-bSym-1)
-    return {begin:bSym,end:iU,source:xB,inside:ins,upper:ins.substr(0,oComma-1),lower:ins.substr(oComma)}
-}
-function oParens(xP) {//remove outside parens
-    xP += "";
-    if (xP.charAt(0) == "(" && xP.charAt(xP.length-1) == ")") {
-        var tparens = parseParens(xP,0);
-        if (tparens.end == xP.length-1) {return tparens.inside}
-    }
-    return xP
-}
-function xParens(xA) {return "(" + oParens(xA) + ")"}
-function parseBrackets(xB,bSym) {//parse brackets and return inside string, begin index, end index, source string
-    xB += "";
-    var lPar = 0,rPar = 0,bDelim = " ",eDelim = " ",iU = 0,dTemp = "",nXi = 0;
-    var lSym = xB.length;
-    for (iU=bSym;iU<lSym;iU++) {
-        if (xB.charAt(iU) == " ") {iU++}
-        if (xB.charAt(iU).charCodeAt(0) > 47 && tDelimiter.indexOf(xB.charAt(iU)) == -1){return {begin:bSym,inside:xB.charAt(iU),end:iU,source:xB}}
-        if (xB.charAt(iU) == "\\") {
-            dTemp = xB.substr(iU,xB.length);
-            for (nXi=1;nXi<dTemp.length;nXi++) {if (tDelimiter.indexOf(dTemp.charAt(nXi)) > -1){break}}
-            dTemp = dTemp.substr(0,nXi);
-            return {begin:bSym,inside:dTemp,end:iU+dTemp.length,source:xB}
+var mgTrans = function() {
+    const tDelimiter = ["_",",","!","=","<",">","|","+","-","*","^","/","{","}","(",")","\\"," "];
+    function strCount(xTarget,xSearch) {xTarget +="";xSearch+="";return xTarget.split(xSearch).length-1} //count occurrences of string
+    function parseParens(xB,bSym) {//parse parens and return inside string, begin index, end index, source string, upper/lower args
+        xB += "";
+        var oComma = 0,lPar = 0,rPar = 0,bDelim = " ",eDelim = " ",cFind = "",ins = "";
+        for (var iU=bSym;iU<xB.length;iU++) {
+            cFind = xB.charAt(iU);
+            if (cFind == "(") {bDelim = "(";eDelim = ")";break}
+            if (cFind == "{") {bDelim = "{";eDelim = "}";break}
         }
-        if (xB.charAt(iU) == "(") {bDelim = "(";eDelim = ")";break}
-        if (xB.charAt(iU) == "{") {bDelim = "{";eDelim = "}";break}
-        if (xB.charAt(iU) == "[") {bDelim = "[";eDelim = "]";break}
+        for (var iU=bSym;iU<xB.length;iU++) {
+            cFind = xB.charAt(iU);
+            if (cFind == "," && lPar-1 == rPar) {oComma = iU-bSym}
+            if (cFind == bDelim ) {lPar++;if(lPar == 1) {bSym = iU}}
+            if (cFind == eDelim ) {rPar++}
+            if (lPar > 0 && lPar == rPar) {break}
+        }
+        ins = xB.substr(bSym+1,iU-bSym-1)
+        return {begin:bSym,end:iU,source:xB,inside:ins,upper:ins.substr(0,oComma-1),lower:ins.substr(oComma)}
     }
-    for (iU=bSym;iU<lSym;iU++) {
-        if (xB.charAt(iU) == bDelim ) {lPar++;if(lPar == 1) {bSym = iU}}
-        if (xB.charAt(iU) == eDelim ) {rPar++}
-        if (lPar > 0 && lPar == rPar) {break}
-    }
-    return {begin:bSym,inside:xB.substr(bSym+1,iU-bSym-1),end:iU,source:xB}
-}
-function oBrackets(xP) {//remove outside brackets
-    var tparens = parseBrackets(xP,0);
-    if (xP.charAt(0) == "(" && xP.charAt(xP.length-1) == ")") {
-        if (tparens.end == xP.length-1) {return tparens.inside}
-    }
-    if (xP.charAt(0) == "{" && xP.charAt(xP.length-1) == "}") {
-        if (tparens.end == xP.length-1) {return tparens.inside}
-    }
-    return xP
-}
-function oprExtract(fExt) {//extract inside function in FUNC format, returns func,upper,lower
-    function fTest(tFunc) {if (typeof funcMap[tFunc] == "undefined") {return false}; return true} //test for valid function key
-    fExt = oParens(fExt);
-    var opReturn = {func:"",upper:"",lower:""};
-    var funcKey = fExt.substr(0,fExt.indexOf("("))
-    if (funcKey != "" && fTest(funcKey)) {
-        var strg = parseParens(fExt,fExt.indexOf("("));
-        if (strg.upper != "") {opReturn = {func:funcKey,upper:strg.upper,lower:strg.lower}} //two operands
-        else {opReturn = {func:funcKey,upper:strg.inside,lower:""}} //single operand
-    }
-    return opReturn
-}
-function numTest(xT) {if (+xT == +xT*1) {return true}; return false} //test for numerical string
-function dNest(dN) {//count nested large elements
-    var dDepth = 0,dSpan = 0,iDp = 0;
-    for (iDp in dN) {
-        if (dN.substr(iDp,6) == "<Xdiv>") {dSpan++}
-        if (dN.substr(iDp,6) == "<Xdve>") {dSpan--}
-        if (dSpan > dDepth) {dDepth = dSpan}
-    }
-    return dDepth
-}
-//conversion routines
-function htmlExport(htmlXpr) { //convert MG format to HTML
-    function dedupParens(xP) {//remove duplicate parens
+    function oParens(xP) {//remove outside parens
         xP += "";
-        var nXf = 0,sCount = 0,dparens = "";
-        var dCount = strCount(xP,"(");
-        for (nXf=0;nXf<dCount;nXf++) {
-            dparens = parseParens(xP,xP.lastIndexOf("((")+1);
-            if (xP.substr(dparens.end,2) == "))" ) {xP = xP.substr(0,xP.lastIndexOf("((")+1)+dparens.inside+xP.substr(dparens.end+1,xP.length)}
+        if (xP.charAt(0) == "(" && xP.charAt(xP.length-1) == ")") {
+            var tparens = parseParens(xP,0);
+            if (tparens.end == xP.length-1) {return tparens.inside}
         }
         return xP
     }
+    function xParens(xA) {return "(" + oParens(xA) + ")"}
+    function parseBrackets(xB,bSym) {//parse brackets and return inside string, begin index, end index, source string
+        xB += "";
+        var lPar = 0,rPar = 0,bDelim = " ",eDelim = " ",iU = 0,dTemp = "",nXi = 0;
+        var lSym = xB.length;
+        for (iU=bSym;iU<lSym;iU++) {
+            if (xB.charAt(iU) == " ") {iU++}
+            if (xB.charAt(iU).charCodeAt(0) > 47 && tDelimiter.indexOf(xB.charAt(iU)) == -1){return {begin:bSym,inside:xB.charAt(iU),end:iU,source:xB}}
+            if (xB.charAt(iU) == "\\") {
+                dTemp = xB.substr(iU,xB.length);
+                for (nXi=1;nXi<dTemp.length;nXi++) {if (tDelimiter.indexOf(dTemp.charAt(nXi)) > -1){break}}
+                dTemp = dTemp.substr(0,nXi);
+                return {begin:bSym,inside:dTemp,end:iU+dTemp.length,source:xB}
+            }
+            if (xB.charAt(iU) == "(") {bDelim = "(";eDelim = ")";break}
+            if (xB.charAt(iU) == "{") {bDelim = "{";eDelim = "}";break}
+            if (xB.charAt(iU) == "[") {bDelim = "[";eDelim = "]";break}
+        }
+        for (iU=bSym;iU<lSym;iU++) {
+            if (xB.charAt(iU) == bDelim ) {lPar++;if(lPar == 1) {bSym = iU}}
+            if (xB.charAt(iU) == eDelim ) {rPar++}
+            if (lPar > 0 && lPar == rPar) {break}
+        }
+        return {begin:bSym,inside:xB.substr(bSym+1,iU-bSym-1),end:iU,source:xB}
+    }
+    function oBrackets(xP) {//remove outside brackets
+        var tparens = parseBrackets(xP,0);
+        if (xP.charAt(0) == "(" && xP.charAt(xP.length-1) == ")") {
+            if (tparens.end == xP.length-1) {return tparens.inside}
+        }
+        if (xP.charAt(0) == "{" && xP.charAt(xP.length-1) == "}") {
+            if (tparens.end == xP.length-1) {return tparens.inside}
+        }
+        return xP
+    }
+    function oprExtract(fExt) {//extract inside function in FUNC format, returns func,upper,lower
+        function fTest(tFunc) {if (typeof funcMap[tFunc] == "undefined") {return false}; return true} //test for valid function key
+        fExt = oParens(fExt);
+        var opReturn = {func:"",upper:"",lower:""};
+        var funcKey = fExt.substr(0,fExt.indexOf("("))
+        if (funcKey != "" && fTest(funcKey)) {
+            var strg = parseParens(fExt,fExt.indexOf("("));
+            if (strg.upper != "") {opReturn = {func:funcKey,upper:strg.upper,lower:strg.lower}} //two operands
+            else {opReturn = {func:funcKey,upper:strg.inside,lower:""}} //single operand
+        }
+        return opReturn
+    }
+    function numTest(xT) {if (+xT == +xT*1) {return true}; return false} //test for numerical string
+    function dNest(dN) {//count nested large elements
+        var dDepth = 0,dSpan = 0,iDp = 0;
+        for (iDp in dN) {
+            if (dN.substr(iDp,6) == "<Xdiv>") {dSpan++}
+            if (dN.substr(iDp,6) == "<Xdve>") {dSpan--}
+            if (dSpan > dDepth) {dDepth = dSpan}
+        }
+        return dDepth
+    }
+    //conversion routines
+    function htmlExport(htmlXpr) { //convert MG format to HTML
+        function dedupParens(xP) {//remove duplicate parens
+            xP += "";
+            var nXf = 0,sCount = 0,dparens = "";
+            var dCount = strCount(xP,"(");
+            for (nXf=0;nXf<dCount;nXf++) {
+                dparens = parseParens(xP,xP.lastIndexOf("((")+1);
+                if (xP.substr(dparens.end,2) == "))" ) {xP = xP.substr(0,xP.lastIndexOf("((")+1)+dparens.inside+xP.substr(dparens.end+1,xP.length)}
+            }
+            return xP
+        }
+        //
+        var nXs=0;
+        if (htmlXpr == "NaN" || htmlXpr == "undefined") {return "undefined"}
+        htmlXpr = cFunc(htmlXpr); //convert to FUNC
+        if (mgConfig.editMode) {htmlXpr = htmlXpr.replace(/\,\)/g,",Cv[9643])").replace(/\(\,/g,"(Cv[9643],").replace(/\,\,/g,",Cv[9643],").replace(/\(\)/g,"(Cv[9643])")} //fill empty fields
+        if (!mgConfig.editMode) {htmlXpr = dedupParens(htmlXpr);htmlXpr = oParens(htmlXpr)}
+        htmlXpr = dFunc(htmlXpr, "html") //process functions
+        //render symbols
+        sCount = strCount(htmlXpr,"Cv[");
+        for (nXs=0;nXs<sCount;nXs++) {htmlXpr = htmlXpr.replace(/Cv\[\d+\]/,Cs[(htmlXpr.match(/Cv\[\d+\]/)+"").replace(/Cv\[(\d+)\]/,"$1")])} //resolve Cv[] symbols
+        //scale and fix parens
+        htmlXpr = htmlXpr.replace(/\(/g,"{").replace(/\)/g,"}");
+        sCount = strCount(htmlXpr,"{");
+        for (nXs=0;nXs<sCount;nXs++) {
+            var bSym = htmlXpr.indexOf("{");
+            var lSym = htmlXpr.length;
+            var iXs = parseParens(htmlXpr,bSym);
+            var strg = iXs.inside;
+            if (!mgConfig.editMode && htmlXpr.substr(bSym,7) == "{<Xdiv>" && htmlXpr.substr(iXs.end-6,7) == "<Xdve>}"  && htmlXpr.substr(bSym-6,6) != "<Xfnx>" && strg.search(/\<Xdve\>(.*)\<Xdiv\>/) == -1) {
+                htmlXpr = htmlXpr.substr(0,bSym)+strg+htmlXpr.substr(iXs.end+1,lSym);
+            }
+            else if (dNest(strg) > 0) {//expanded parens
+                if (strCount(htmlXpr.substr(0,bSym+1),"{") > strCount(htmlXpr.substr(iXs.end,lSym),"}")) {htmlXpr = htmlXpr.substr(0,bSym)+htmlFuncs['brkt']("(",strg)+strg+htmlXpr.substr(iXs.end,lSym);}
+                else {htmlXpr = htmlXpr.substr(0,bSym)+htmlFuncs['brkt']("(",strg)+strg+htmlFuncs['brkt'](")",strg)+htmlXpr.substr(iXs.end+1,lSym)}
+            }
+            else {//normal parens
+                if (strCount(htmlXpr.substr(0,bSym+1),"{") > strCount(htmlXpr.substr(iXs.end,lSym),"}"))  {htmlXpr = htmlXpr.substr(0,bSym)+"("+strg+htmlXpr.substr(iXs.end,lSym);}
+                else {htmlXpr = htmlXpr.substr(0,bSym)+"("+strg+")"+htmlXpr.substr(iXs.end+1,lSym)}
+            }
+        }
+        // format arrays
+        htmlXpr = htmlXpr.replace(/\<Xcel\>/g,"").replace(/\<Xrow\>/g,"{").replace(/\<Xrwe\>/g,"}");
+        sCount = strCount(htmlXpr,"<Xcle>");
+        for (nXs=0;nXs<sCount;nXs++) {
+            if (nXs <sCount-1) {htmlXpr = htmlXpr.replace("<Xcle>",", ")}
+            else {htmlXpr = htmlXpr.replace("<Xcle>","")}
+        }
+        htmlXpr = htmlXpr.replace(/\<X\w\w\w\>/g,"");//cleanup tags
+        return htmlXpr
+    }
     //
-    var nXs=0;
-    if (htmlXpr == "NaN" || htmlXpr == "undefined") {return "undefined"}
-    htmlXpr = cFunc(htmlXpr); //convert to FUNC
-    if (mgConfig.editMode) {htmlXpr = htmlXpr.replace(/\,\)/g,",Cv[9643])").replace(/\(\,/g,"(Cv[9643],").replace(/\,\,/g,",Cv[9643],").replace(/\(\)/g,"(Cv[9643])")} //fill empty fields
-    if (!mgConfig.editMode) {htmlXpr = dedupParens(htmlXpr);htmlXpr = oParens(htmlXpr)}
-    htmlXpr = dFunc(htmlXpr, "html") //process functions
-    //render symbols
-    sCount = strCount(htmlXpr,"Cv[");
-    for (nXs=0;nXs<sCount;nXs++) {htmlXpr = htmlXpr.replace(/Cv\[\d+\]/,Cs[(htmlXpr.match(/Cv\[\d+\]/)+"").replace(/Cv\[(\d+)\]/,"$1")])} //resolve Cv[] symbols
-    //scale and fix parens
-    htmlXpr = htmlXpr.replace(/\(/g,"{").replace(/\)/g,"}");
-    sCount = strCount(htmlXpr,"{");
-    for (nXs=0;nXs<sCount;nXs++) {
-        var bSym = htmlXpr.indexOf("{");
-        var lSym = htmlXpr.length;
-        var iXs = parseParens(htmlXpr,bSym);
-        var strg = iXs.inside;
-        if (!mgConfig.editMode && htmlXpr.substr(bSym,7) == "{<Xdiv>" && htmlXpr.substr(iXs.end-6,7) == "<Xdve>}"  && htmlXpr.substr(bSym-6,6) != "<Xfnx>" && strg.search(/\<Xdve\>(.*)\<Xdiv\>/) == -1) {
-            htmlXpr = htmlXpr.substr(0,bSym)+strg+htmlXpr.substr(iXs.end+1,lSym);
-        }
-        else if (dNest(strg) > 0) {//expanded parens
-            if (strCount(htmlXpr.substr(0,bSym+1),"{") > strCount(htmlXpr.substr(iXs.end,lSym),"}")) {htmlXpr = htmlXpr.substr(0,bSym)+htmlFuncs['brkt']("(",strg)+strg+htmlXpr.substr(iXs.end,lSym);}
-            else {htmlXpr = htmlXpr.substr(0,bSym)+htmlFuncs['brkt']("(",strg)+strg+htmlFuncs['brkt'](")",strg)+htmlXpr.substr(iXs.end+1,lSym)}
-        }
-        else {//normal parens
-            if (strCount(htmlXpr.substr(0,bSym+1),"{") > strCount(htmlXpr.substr(iXs.end,lSym),"}"))  {htmlXpr = htmlXpr.substr(0,bSym)+"("+strg+htmlXpr.substr(iXs.end,lSym);}
-            else {htmlXpr = htmlXpr.substr(0,bSym)+"("+strg+")"+htmlXpr.substr(iXs.end+1,lSym)}
-        }
+    function mgExport(xFn) { //export from FUNC to MG format
+        function toSciNot(xU) {xU+="";return xU.replace(/(\d+)e(\d+)/g,"$1*10^$2").replace(/(\d+)e\-(\d+)/g,"$1*10^-$2").replace(/(\d+)e\+(\d+)/g,"$1*10^$2")} //convert N.NNe+-NN notation to scientific
+        if (xFn == "NaN" || xFn == "undefined") {return "undefined"}
+        xFn += "";
+        xFn = xFn.replace(/\,\)/g,",'')").replace(/\(\,/g,"('',").replace(/\,\,/g,",'',").replace(/\(\)/g,"('')");
+        xFn = dFunc(xFn, "mg");
+        xFn = xFn.replace(/\+\-/g,"-").replace(/\-\-/g,"");
+        xFn = toSciNot(xFn);
+        return xFn //process functions
     }
-    // format arrays
-    htmlXpr = htmlXpr.replace(/\<Xcel\>/g,"").replace(/\<Xrow\>/g,"{").replace(/\<Xrwe\>/g,"}");
-    sCount = strCount(htmlXpr,"<Xcle>");
-    for (nXs=0;nXs<sCount;nXs++) {
-        if (nXs <sCount-1) {htmlXpr = htmlXpr.replace("<Xcle>",", ")}
-        else {htmlXpr = htmlXpr.replace("<Xcle>","")}
-    }
-    htmlXpr = htmlXpr.replace(/\<X\w\w\w\>/g,"");//cleanup tags
-    return htmlXpr
-}
-//
-function mgExport(xFn) { //export from FUNC to MG format
-    function toSciNot(xU) {xU+="";return xU.replace(/(\d+)e(\d+)/g,"$1*10^$2").replace(/(\d+)e\-(\d+)/g,"$1*10^-$2").replace(/(\d+)e\+(\d+)/g,"$1*10^$2")} //convert N.NNe+-NN notation to scientific
-    if (xFn == "NaN" || xFn == "undefined") {return "undefined"}
-    xFn += "";
-    xFn = xFn.replace(/\,\)/g,",'')").replace(/\(\,/g,"('',").replace(/\,\,/g,",'',").replace(/\(\)/g,"('')");
-    xFn = dFunc(xFn, "mg");
-    xFn = xFn.replace(/\+\-/g,"-").replace(/\-\-/g,"");
-    xFn = toSciNot(xFn);
-    return xFn //process functions
-}
 
-//
-function cFunc(cXpr) { //convert from MG format to FUNC format: a+bc/d -> cAdd(a,cDiv(cMul(b,c),d)))
-    function cParse(xInp,xOp,xFunc) {//parse operators
-        const zDelim = ["^","-","#","*","/","+",",","~","@","=","<",">",String.fromCharCode(8800),String.fromCharCode(8804),String.fromCharCode(8805),String.fromCharCode(8226)];
-        var ztmp = "",bSym = "",lPar = 0,rPar = 0,dCp = 0,iCp = 0;
-        if (xOp == "^") {bSym = xInp.lastIndexOf(xOp)+1}
-        else  {bSym = xInp.indexOf(xOp)+1;}
-        var aSym = bSym-2;
-        var lSym = xInp.length;
-        for (iCp=bSym;iCp<=lSym;iCp++) {
-            ztmp = xInp.charAt(iCp);
-            if (ztmp == "(") {lPar++}
-            if (ztmp == ")") {rPar++}
-            if (lPar < rPar) {break;}
-            if (lPar == rPar && xInp.charAt(iCp-1)!= "e") { if (zDelim.indexOf(ztmp) > -1) {break} }
+    //
+    function cFunc(cXpr) { //convert from MG format to FUNC format: a+bc/d -> cAdd(a,cDiv(cMul(b,c),d)))
+        function cParse(xInp,xOp,xFunc) {//parse operators
+            const zDelim = ["^","-","#","*","/","+",",","~","@","=","<",">",String.fromCharCode(8800),String.fromCharCode(8804),String.fromCharCode(8805),String.fromCharCode(8226)];
+            var ztmp = "",bSym = "",lPar = 0,rPar = 0,dCp = 0,iCp = 0;
+            if (xOp == "^") {bSym = xInp.lastIndexOf(xOp)+1}
+            else  {bSym = xInp.indexOf(xOp)+1;}
+            var aSym = bSym-2;
+            var lSym = xInp.length;
+            for (iCp=bSym;iCp<=lSym;iCp++) {
+                ztmp = xInp.charAt(iCp);
+                if (ztmp == "(") {lPar++}
+                if (ztmp == ")") {rPar++}
+                if (lPar < rPar) {break;}
+                if (lPar == rPar && xInp.charAt(iCp-1)!= "e") { if (zDelim.indexOf(ztmp) > -1) {break} }
+            }
+            lPar = 0;rPar = 0;
+            for (dCp=aSym;dCp>=0;dCp--) {
+                ztmp = xInp.charAt(dCp);
+                if (ztmp == "(") {lPar++}
+                if (ztmp == ")") {rPar++}
+                if (lPar > rPar) {break;}
+                if (lPar == rPar && xInp.charAt(dCp-1)!= "e") { if (zDelim.indexOf(ztmp) > -1) {break} }
+            }
+            xInp = xInp.substr(0,dCp+1)+xFunc+"("+xInp.substr(dCp+1,aSym-dCp)+","+xInp.substr(bSym,iCp-bSym)+")"+xInp.substr(iCp);
+            return xInp;
         }
-        lPar = 0;rPar = 0;
-        for (dCp=aSym;dCp>=0;dCp--) {
-            ztmp = xInp.charAt(dCp);
-            if (ztmp == "(") {lPar++}
-            if (ztmp == ")") {rPar++}
-            if (lPar > rPar) {break;}
-            if (lPar == rPar && xInp.charAt(dCp-1)!= "e") { if (zDelim.indexOf(ztmp) > -1) {break} }
+        function nParse(xInp,xOp) {//parse negatives as cNeg()
+            const zDelim = ["(",")","^","-","#","*","/","+",",","~","@","=","<",">",String.fromCharCode(8800),String.fromCharCode(8804),String.fromCharCode(8805),String.fromCharCode(8226)];
+            var iNp = 0,lPar = 0,rPar = 0,ztmp = "";
+            var bSym = xInp.indexOf(xOp)+xOp.length;
+            var lSym = xInp.length;
+            for (iNp=bSym;iNp<=lSym;iNp++) {
+                ztmp = xInp.charAt(iNp);
+                if (ztmp == "(") {lPar++}
+                if (ztmp == ")") {rPar++}
+                if (lPar < rPar) {break;}
+                if (lPar == rPar && xInp.charAt(iNp-1)!= "e") {if (zDelim.indexOf(ztmp) > -1) {break}}
+            }
+            xInp = xInp.substr(0,bSym-1)+"cNeg("+xInp.substr(bSym,iNp-bSym)+")"+xInp.substr(iNp);
+            return xInp;
         }
-        xInp = xInp.substr(0,dCp+1)+xFunc+"("+xInp.substr(dCp+1,aSym-dCp)+","+xInp.substr(bSym,iCp-bSym)+")"+xInp.substr(iCp);
-        return xInp;
-    }
-    function nParse(xInp,xOp) {//parse negatives as cNeg()
-        const zDelim = ["(",")","^","-","#","*","/","+",",","~","@","=","<",">",String.fromCharCode(8800),String.fromCharCode(8804),String.fromCharCode(8805),String.fromCharCode(8226)];
-        var iNp = 0,lPar = 0,rPar = 0,ztmp = "";
-        var bSym = xInp.indexOf(xOp)+xOp.length;
-        var lSym = xInp.length;
-        for (iNp=bSym;iNp<=lSym;iNp++) {
-            ztmp = xInp.charAt(iNp);
-            if (ztmp == "(") {lPar++}
-            if (ztmp == ")") {rPar++}
-            if (lPar < rPar) {break;}
-            if (lPar == rPar && xInp.charAt(iNp-1)!= "e") {if (zDelim.indexOf(ztmp) > -1) {break}}
-        }
-        xInp = xInp.substr(0,bSym-1)+"cNeg("+xInp.substr(bSym,iNp-bSym)+")"+xInp.substr(iNp);
-        return xInp;
-    }
-    // non-multiplying cBnd symbols
-    const nBind = ["(Cv\\[8773\\])","(Cv\\[8750\\])","(Cv\\[8751\\])","(Cv\\[8752\\])",
-                "(Cv\\[8592\\])","(Cv\\[8747\\])","(Cv\\[8748\\])","(Cv\\[59\\])",
-                "(idr\\([^\\)]*\\))","(tdr\\([^\\)]*\\))","(lim\\([^\\)]*\\,[^\\)]*\\))",
-                "(itg\\([^\\)]*\\,[^\\)]*\\))","(sdr\\([^\\)]*\\,[^\\)]*\\))","(sum\\([^\\)]*\\,[^\\)]*\\))",
-                "(prd\\([^\\)]*\\,[^\\)]*\\))","(psd\\([^\\)]*\\,[^\\)]*\\))","(cap\\([^\\)]*\\,[^\\)]*\\))",
-                "(cup\\([^\\)]*\\,[^\\)]*\\))","(dif\\([^\\)]*\\,[^\\)]*\\))","(Cv\\[10044])"];
-    //relational operators
-    const relOps = {"cEql":"=","cLth":"<","cGth":">","cNql":String.fromCharCode(8800),"cLeq":String.fromCharCode(8804),"cGeq":String.fromCharCode(8805)};//relational operators
-    const relOperators = {"Cv[60]":"<","Cv[61]":"=","Cv[62]":">","Cv[8800]":String.fromCharCode(8800),"Cv[8804]":String.fromCharCode(8804),"Cv[8805]":String.fromCharCode(8805)};//relational operators
-    //editing
-    const pCases = ["^-","^|-"];
-    const nCases = ["~-","~|-","+-","*-","/-","(-",",-","+|-","*|-","/|-","(|-",",|-","=-","=|-","@-","@|-","e|-",">-","<-",">|-","<|-",
-                  String.fromCharCode(8804)+"-",String.fromCharCode(8804)+"|-",String.fromCharCode(8805)+"-",String.fromCharCode(8805)+"|-",
-                  String.fromCharCode(8800)+"-",String.fromCharCode(8800)+"|-",String.fromCharCode(8226)+"-",String.fromCharCode(8226)+"|-"];
-    var nCf = 0,iXX = 0,key = 0,sbtOperand = "",cIdx = 0,aIdx = 0,sCount = 0;
-    cXpr += "";
-    sCount = strCount(cXpr,"]sbt(");//var&subscripts into container cnt()
-    cXpr = cXpr.replace(/\]sbt\(/g,"]SBT(");
-    cXpr = cXpr.replace(/Infinity/g,"Cv[8734]");
-    for (nCf=0;nCf<sCount;nCf++) {
-        sbtOperand = parseParens(cXpr,cXpr.indexOf("]SBT("));
-        cXpr = cXpr.replace(/Cv\[(\d+)\]SBT\(/,"cnt(Cv[$1]SBT(").replace("]SBT("+sbtOperand.inside,"]sbt("+oParens(sbtOperand.inside)+")");
-    }
-    sCount = strCount(cXpr,"Cv[8748]");//differential
-    for (nCf=0;nCf<sCount;nCf++) {cXpr = cXpr.replace(/Cv\[8748\]Cv\[(\d+)\]\/Cv\[8748\]Cv\[(\d+)\]/,"sdr(Cv[$1],Cv[$2])")}
-    cXpr = cXpr.replace(/!/g,"Cv[45]"); //factorial
-    cXpr = cXpr.replace(/Cv\[8226\]/g,String.fromCharCode(8226)); //dot operator
-    for (key in relOperators) {
-        sCount = strCount(cXpr,key);
-        for (nCf=0;nCf<sCount;nCf++) {cXpr = cXpr.replace(key,relOperators[key])}
-    }
-    cXpr = cXpr.replace(/([\)\]])(\|?)(\d)/g,"$1$2#$3").replace(/([\)\]\d])(\|?)\(/g,"$1$2#(").replace(/([\)\]\d])(\|?)Cv\[/g,"$1$2#Cv[").replace(/([\)\]\d])(\|?)([a-z][a-z][a-z]\()/ig,"$1$2#$3");//terms to # multiply
-    for (nCf in nBind) {//add @ between bind symbols
-        var rgx = new RegExp(nBind[nCf]+"(\\|?)#");
-        var rgy = new RegExp("#(\\|?)"+nBind[nCf]);
-        while (cXpr.search(rgx) != -1 || cXpr.search(rgy) != -1) {cXpr = cXpr.replace(rgx,"$1$2@").replace(rgy,"@$1$2")}
-    }
-    if (cXpr.charAt(0) == "+") {cXpr = cXpr.substr(1)} //remove + at beginning of expression
-    sCount = strCount(cXpr,"-");//parse power negatives to cPow(x,cNeg())
-    for (nCf=0;nCf<sCount;nCf++) {
-        for (iXX in pCases) {
-            if (cXpr.indexOf(pCases[iXX]) > -1) {cXpr = nParse(cXpr,pCases[iXX])}
-        }
-    }
-    sCount = strCount(cXpr,"^");//convert powers to cPow()
-    for (nCf=0;nCf<sCount;nCf++) {cXpr = cParse(cXpr,"^","cPow")}
-    if (cXpr.charAt(0) == "-") {cXpr = nParse(cXpr,"-")}
-    sCount = strCount(cXpr,"-");//parse negatives to cNeg()
-    for (nCf=0;nCf<sCount;nCf++) {
-        for (iXX in nCases) {
-            if (cXpr.indexOf(nCases[iXX]) > -1) {cXpr = nParse(cXpr,nCases[iXX])}
-        }
-    }
-    sCount = strCount(cXpr,"~");//convert angles to cAng()
-    for (nCf=0;nCf<sCount;nCf++) {cXpr = cParse(cXpr,"~","cAng")}
-    sCount = strCount(cXpr,"#");//convert # to cMul() (multiply)
-    for (nCf=0;nCf<sCount;nCf++) {cXpr = cParse(cXpr,"#","cMul")}
-    sCount = strCount(cXpr,"/");//convert / to cDiv()
-    for (nCf=0;nCf<sCount;nCf++) {cXpr = cParse(cXpr,"/","cDiv")}
-    sCount = strCount(cXpr,"*");//convert * to cTms()
-    for (nCf=0;nCf<sCount;nCf++) {cXpr = cParse(cXpr,"*","cTms")}
-    sCount = strCount(cXpr,String.fromCharCode(8226));//convert dot to cDot()
-    for (nCf=0;nCf<sCount;nCf++) {cXpr = cParse(cXpr,String.fromCharCode(8226),"cDot")}
-    sCount = strCount(cXpr,"-") + strCount(cXpr,"+");//convert +- to cAdd() or cSub()
-    for (nCf=0;nCf<sCount;nCf++) {
-        aIdx = cXpr.indexOf("+");
-        cIdx = cXpr.indexOf("-");
-        if (aIdx == -1) {cXpr = cParse(cXpr,"-","cSub")}
-        else if (cIdx == -1) {cXpr = cParse(cXpr,"+","cAdd")}
-        else if (aIdx < cIdx) {cXpr = cParse(cXpr,"+","cAdd")}
-        else {cXpr = cParse(cXpr,"-","cSub")}
-    }
-    sCount = strCount(cXpr,"@");//convert @ symbol handler to cBnd()
-    for (nCf=0;nCf<sCount;nCf++) {cXpr = cParse(cXpr,"@","cBnd")}
-    for (key in relOps) { //relational operators
-        sCount = strCount(cXpr,relOps[key]);
+        // non-multiplying cBnd symbols
+        const nBind = ["(Cv\\[8773\\])","(Cv\\[8750\\])","(Cv\\[8751\\])","(Cv\\[8752\\])",
+                    "(Cv\\[8592\\])","(Cv\\[8747\\])","(Cv\\[8748\\])","(Cv\\[59\\])",
+                    "(idr\\([^\\)]*\\))","(tdr\\([^\\)]*\\))","(lim\\([^\\)]*\\,[^\\)]*\\))",
+                    "(itg\\([^\\)]*\\,[^\\)]*\\))","(sdr\\([^\\)]*\\,[^\\)]*\\))","(sum\\([^\\)]*\\,[^\\)]*\\))",
+                    "(prd\\([^\\)]*\\,[^\\)]*\\))","(psd\\([^\\)]*\\,[^\\)]*\\))","(cap\\([^\\)]*\\,[^\\)]*\\))",
+                    "(cup\\([^\\)]*\\,[^\\)]*\\))","(dif\\([^\\)]*\\,[^\\)]*\\))","(Cv\\[10044])"];
+        //relational operators
+        const relOps = {"cEql":"=","cLth":"<","cGth":">","cNql":String.fromCharCode(8800),"cLeq":String.fromCharCode(8804),"cGeq":String.fromCharCode(8805)};//relational operators
+        const relOperators = {"Cv[60]":"<","Cv[61]":"=","Cv[62]":">","Cv[8800]":String.fromCharCode(8800),"Cv[8804]":String.fromCharCode(8804),"Cv[8805]":String.fromCharCode(8805)};//relational operators
+        //editing
+        const pCases = ["^-","^|-"];
+        const nCases = ["~-","~|-","+-","*-","/-","(-",",-","+|-","*|-","/|-","(|-",",|-","=-","=|-","@-","@|-","e|-",">-","<-",">|-","<|-",
+                      String.fromCharCode(8804)+"-",String.fromCharCode(8804)+"|-",String.fromCharCode(8805)+"-",String.fromCharCode(8805)+"|-",
+                      String.fromCharCode(8800)+"-",String.fromCharCode(8800)+"|-",String.fromCharCode(8226)+"-",String.fromCharCode(8226)+"|-"];
+        var nCf = 0,iXX = 0,key = 0,sbtOperand = "",cIdx = 0,aIdx = 0,sCount = 0;
+        cXpr += "";
+        sCount = strCount(cXpr,"]sbt(");//var&subscripts into container cnt()
+        cXpr = cXpr.replace(/\]sbt\(/g,"]SBT(");
+        cXpr = cXpr.replace(/Infinity/g,"Cv[8734]");
         for (nCf=0;nCf<sCount;nCf++) {
-            cXpr = cParse(cXpr,relOps[key],key)
+            sbtOperand = parseParens(cXpr,cXpr.indexOf("]SBT("));
+            cXpr = cXpr.replace(/Cv\[(\d+)\]SBT\(/,"cnt(Cv[$1]SBT(").replace("]SBT("+sbtOperand.inside,"]sbt("+oParens(sbtOperand.inside)+")");
         }
-    }
-    cXpr = cXpr.replace(/\[\[/g,"'[[").replace(/\]\]/g,"]]'") //quote matrices
-    return cXpr;
-}
-function dFunc(dXpr, prefix) { //map FUNC format to export format
-    function parseArgs(xP) { //parse comma-delimited arguments into array
-        var args = [];
-        var strSplit = xP.split(",");
-        args[0] = strSplit[0];
-        for (var nXf=1;nXf<strSplit.length;nXf++) {
-            if (strCount(args[args.length-1],"(") > strCount(args[args.length-1],")")) {args[args.length-1] = args[args.length-1]+","+strSplit[nXf]} //reassemble inside parens
-            else {args.push(strSplit[nXf])}
+        sCount = strCount(cXpr,"Cv[8748]");//differential
+        for (nCf=0;nCf<sCount;nCf++) {cXpr = cXpr.replace(/Cv\[8748\]Cv\[(\d+)\]\/Cv\[8748\]Cv\[(\d+)\]/,"sdr(Cv[$1],Cv[$2])")}
+        cXpr = cXpr.replace(/!/g,"Cv[45]"); //factorial
+        cXpr = cXpr.replace(/Cv\[8226\]/g,String.fromCharCode(8226)); //dot operator
+        for (key in relOperators) {
+            sCount = strCount(cXpr,key);
+            for (nCf=0;nCf<sCount;nCf++) {cXpr = cXpr.replace(key,relOperators[key])}
         }
-        return args
-    }
-    function lFunc(parm,strg) { //process left side function
-        if (typeof funcMap[funcKey][fnformatLx] == "function") {return funcMap[funcKey][fnformatLx](parm,strg)}
-        return funcMap[funcKey][fnformatLx]
-    }
-    function rFunc(parm,strg) { //process right side function
-        if (typeof funcMap[funcKey][fnformatR] == "function") {return funcMap[funcKey][fnformatR](parm,strg)}
-        return funcMap[funcKey][fnformatR]
-    }
-    function funcTest(tFunc) {if (typeof funcMap[tFunc] == "undefined") {return false}; return true} //test for valid function key
-    //
-    dXpr = dXpr.replace(/ /g,"").replace(/([a-z][a-z][a-z])\(/ig,"$1@"); //mark left parens with @
-    var sCount = strCount(dXpr,"@");
-    var bSym = 0, lSym = 0,lPar = 0,rPar = 0,iXf = 0,payload = "",paramS = "",funcKey = "",rTmp = "",fnformatL = "",fnformatR = "",fnformatLx = "",nXf = 0;
-    if (prefix == "mg") {fnformatL = prefix;fnformatR = prefix}
-    else if (mgConfig.fnFmt == "fn(x)") {fnformatL = prefix+"L1";fnformatR = prefix+"R1"} //fn(x)
-    else {fnformatL = prefix+"L2";fnformatR = prefix+"R2"}  //fn x
-    for (nXf=0;nXf<sCount;nXf++) {
-        fnformatLx = fnformatL;
-        lPar = 1,rPar = 0,iXf = 0,rTmp = "";
-        bSym = dXpr.lastIndexOf("@")+1; //find inside parens
-        lSym = dXpr.length;
-        for (iXf=bSym;iXf<lSym;iXf++) {
-            if (dXpr.charAt(iXf) == "@" || dXpr.charAt(iXf) == "(") {lPar++}
-            if (dXpr.charAt(iXf) == ")") {rPar++}
-            if (lPar == rPar) {break;}
+        cXpr = cXpr.replace(/([\)\]])(\|?)(\d)/g,"$1$2#$3").replace(/([\)\]\d])(\|?)\(/g,"$1$2#(").replace(/([\)\]\d])(\|?)Cv\[/g,"$1$2#Cv[").replace(/([\)\]\d])(\|?)([a-z][a-z][a-z]\()/ig,"$1$2#$3");//terms to # multiply
+        for (nCf in nBind) {//add @ between bind symbols
+            var rgx = new RegExp(nBind[nCf]+"(\\|?)#");
+            var rgy = new RegExp("#(\\|?)"+nBind[nCf]);
+            while (cXpr.search(rgx) != -1 || cXpr.search(rgy) != -1) {cXpr = cXpr.replace(rgx,"$1$2@").replace(rgy,"@$1$2")}
         }
-        payload = dXpr.substr(bSym,iXf-bSym); //parameters between parens
-        if (lPar > rPar) {payload = payload.substr(0,payload.lastIndexOf(")"))+payload.substr(payload.lastIndexOf(")")+1)} //unmatched left parens
-        paramS = parseArgs(payload); //parse parms
-        funcKey = dXpr.substr(bSym-4,3); //extract functions xxx()
-        if (!funcTest(funcKey)) {funcKey = dXpr.substr(bSym-5,4)} //extract operators cXxx()
-        if (typeof funcMap[funcKey][prefix+"Inv1"] != "undefined" && mgConfig.invFmt == "sin<sup>-1</sup>" && mgConfig.fnFmt == "fn(x)") {fnformatLx = prefix+"Inv1"} //inverse fn(x)
-        if (typeof funcMap[funcKey][prefix+"Inv1"] != "undefined" && mgConfig.invFmt == "sin<sup>-1</sup>" && mgConfig.fnFmt == "fn x")  {fnformatLx = prefix+"Inv2"} //inverse fn x
-        if ((funcMap[funcKey][fnformatR] == ' ' || funcMap[funcKey][fnformatR] == ' <Xfxp>') && mgConfig.fnFmt == "fn x" && iXf < lSym && paramS[0].replace(/[\|\(\{](.*)[\|\)\}]/g,"").search(/[+(&minus;)]/) > -1 ) {paramS[0] = "("+paramS[0]+")"} //add parens to inside (fn x) functions
-        if (iXf < lSym && prefix != "mg") {rTmp = rFunc(paramS,payload)} //enable right side function if parens match
-        dXpr = dXpr.substr(0,bSym-(funcKey.length+1))+lFunc(paramS,payload)+rTmp+dXpr.substr(iXf+1,lSym); //assemble output
-    }
-    return dXpr
-}
-
-//LaTex Export/Import functions
-var Ct = new Array(11000);
-
-Ct[0]="\\alpha ";                                       //"fine structure const";
-Ct[1]="\\alpha_{0}";                                    //"Bohr radius";
-Ct[2]="b";                                              //"Wein displacement const.";
-Ct[3]="c";                                              //"speed of light";
-Ct[4]="c^2 ";                                           //"(speed of light)<sup>2</sup>";
-
-Ct[5]="c_{1}";                                          //"1<sup>st</sup> radiation constant";
-Ct[6]="c_{2}";                                          //"2<sup>nd</sup> radiation constant";
-Ct[7]="\\epsilon_{0}";                                  //"vacuum permittivity";
-Ct[8]="e";                                              //"Euler constant";
-Ct[9]="eV";                                             //"electron volt";
-
-Ct[10]="F";                                             //"Faraday constant";
-Ct[11]="G";                                             //"Newton constant";
-Ct[12]="g";                                             //"Earth gravity accel";
-Ct[13]="G_{0}";                                         //"conductance quantum";
-Ct[14]="h";                                             //"Planck constant";
-
-Ct[15]="\\hbar ";                                       //"h-bar";
-Ct[16]="K_{j}";                                         //"Josephson constant";
-Ct[17]="k";                                             //"Boltzmann constant";
-Ct[18]="\\lambda ";                                     //"Compton wavelength";
-Ct[19]="l_{P}";                                         //"Planck length";
-
-Ct[20]="\\mu_{0}";                                      //"vacuum permeability";
-Ct[21]="\\mu_{B}";                                      //"Bohr magneton";
-Ct[22]="M_{e}";                                         //"electron mass";
-Ct[23]="M_{p}";                                         //"proton mass";
-Ct[24]="M_{n}";                                         //"neutron mass";
-
-Ct[25]="M_{P}";                                         //"Planck mass";
-Ct[26]="M_{u}";                                         //"atomic mass constant";
-Ct[27]="N_{a}";                                         //"Avogadro constant";
-Ct[28]="n_{0}";                                         //"Loschmidt constant";
-Ct[29]="\\pi ";                                         //"Archimedes constant";
-
-Ct[30]="2 \\pi ";                                       //"2&times;&#960;";
-Ct[31]="\\phi";                                         //"golden ratio";
-Ct[32]="\\phi_{0}";                                     //"magnetic flux quantum";
-Ct[33]="P_{atm}";                                       //"standard pressure";
-Ct[34]="q_{e}";                                         //"elementary charge";
-
-Ct[35]="R_{c}";                                         //"Universal gas constant";
-Ct[36]="R_{k}";                                         //"von Klitzing constant";
-Ct[37]="R_{\\infty}";                                   //"Rydberg constant";
-Ct[38]="r_{e}";                                         //"classical electron radius";
-Ct[39]="\\sigma ";                                      //"Stefan-Boltzmann";
-
-Ct[40]="T_{P}";                                         //"Planck temperature";
-Ct[41]="t_{P}";                                         //"Planck time";
-Ct[42]="V_{m}";                                         //"molar volume";
-Ct[43]="Z_{0}";                                         //"vacuum impedance";
-
-for (iAl=48;iAl<10000;iAl++) {Ct[iAl]=""}
-for (iAl=58;iAl<=127;iAl++)  {Ct[iAl]="\\textrm{"+String.fromCharCode(iAl)+"}"}//ascii
-for (iAl=48;iAl<=57;iAl++)   {Ct[iAl]=String.fromCharCode(iAl)}//0-9
-for (iAl=65;iAl<=90;iAl++) {Ct[iAl]="\\textbf{"+String.fromCharCode(iAl)+"}"}//A-Z
-for (iAl=97;iAl<=122;iAl++) {Ct[iAl]="\\textbf{"+String.fromCharCode(iAl)+"}"}//a-z
-for (iAl=10032;iAl<=10047;iAl++) {Ct[iAl]=String.fromCharCode(iAl-10000)}//punc
-for (iAl=10065;iAl<=10090;iAl++) {Ct[iAl]=String.fromCharCode(iAl-10000)}//A-Z italic
-for (iAl=10097;iAl<=10122;iAl++) {Ct[iAl]=String.fromCharCode(iAl-10000)}//a-z italic
-for (iAl=10768;iAl<=10879;iAl++) {Ct[iAl]=""}//accents
-var Greeks =   ["A","B","\\Gamma ","\\Delta ","E","Z","H","\\Theta ","I","K","\\Lambda ","M",
-                "N","\\Xi ","O","\\Pi ","","\\Rho ","\\Sigma ","T","\\Upsilon ","\\Phi ","X","\\Psi ","\\Omega ",
-                "","","","","","","",
-                "\\alpha ","\\beta ","\\gamma ","\\delta ","\\epsilon ","\\zeta ","\\eta ","\\theta ","\\iota ","\\kappa ","\\lambda ","\\mu ",
-                "\\nu ","\\xi ","o","\\pi ","","\\rho ","\\sigma ","\\tau ","\\upsilon ","\\phi ","\\chi ","\\psi ","\\omega "];
-for (iAl=0;iAl<=Greeks.length;iAl++) {Ct[iAl+913] = Greeks[iAl]}
-
-Ct[10040] ="\\left(";
-Ct[10041] ="\\right)";
-Ct[42] = "\\ast ";
-Ct[45] = "!";
-Ct[46] = "\\imath ";
-Ct[60] = "<";
-Ct[61] = "=";
-Ct[62] = ">";
-Ct[92] = "\\setminus ";
-Ct[126] = "\\sim ";
-Ct[172] = "\\neg ";
-Ct[176] = "\\circ ";
-Ct[177] = "\\pm ";
-Ct[215] = "\\times ";
-Ct[247] = "\\div ";
-Ct[420] = "\\mathfrak{P}";
-Ct[8230] = "\\dotsi ";
-Ct[8756] = "\\because ";
-Ct[8757] = "\\therefore ";
-Ct[8758] = "\\vdots ";
-Ct[8800] = "\\neq ";
-Ct[8804] = "\\leq ";
-Ct[8805] = "\\geq ";
-Ct[8773] = "\\cong ";
-Ct[8719] = "\\prod ";
-Ct[8721] = "\\sum ";
-Ct[8723] = "\\mp ";
-Ct[8747] = "\\int ";
-Ct[8748] = " d";
-Ct[8750] = "\\oint ";
-Ct[8751] = "\\oiint ";
-Ct[8752] = "\\oiiint ";
-Ct[8733] = "\\propto ";
-Ct[8789] = "";
-Ct[8734] = "\\infty ";
-Ct[8801] = "\\equiv ";
-Ct[8594] = "\\to ";
-Ct[8592] = "\\gets ";
-Ct[8226] = "\\cdot";
-Ct[8592] = "\\leftarrow ";
-Ct[8594] = "\\rightarrow ";
-Ct[8596] = "\\leftrightarrow ";
-Ct[8656] = "\\Leftarrow ";
-Ct[8658] = "\\Rightarrow ";
-Ct[8810] = "\\ll ";
-Ct[8811] = "\\gg ";
-Ct[8660] = "\\Leftrightarrow ";
-Ct[8704] = "\\forall ";
-Ct[8707] = "\\exists ";
-Ct[8708] = "\\nexists ";
-Ct[8706] = "\\partial ";
-Ct[8711] = "\\nabla ";
-Ct[8727] = "\\ast ";
-Ct[8224] = "\\dagger ";
-Ct[8225] = "\\ddagger ";
-Ct[8240] = "";
-Ct[8242] = "\\prime ";
-Ct[8243] = "\\prime\\prime ";
-Ct[8466] = "\\mathcal{L}";
-Ct[8497] = "\\mathcal{F}";
-Ct[8461] = "\\mathbb{H}";
-Ct[8469] = "\\mathbb{N}";
-Ct[8484] = "\\mathbb{Z}";
-Ct[8474] = "\\mathbb{Q}";
-Ct[8477] = "\\Re ";
-Ct[8450] = "\\mathbb{C}";
-Ct[1488] = "\\aleph ";
-Ct[8743] = "\\wedge ";
-Ct[8744] = "\\vee ";
-Ct[8745] = "\\cap ";
-Ct[8746] = "\\cup ";
-Ct[8834] = "\\subset ";
-Ct[8835] = "\\supset ";
-Ct[8712] = "\\in ";
-Ct[8715] = "\\ni ";
-Ct[8838] = "\\subseteq ";
-Ct[8839] = "\\supseteq ";
-Ct[8713] = "\\notin ";
-Ct[8716] = "";
-Ct[8728] = "\\circ ";
-Ct[8836] = "";
-Ct[8837] = "";
-Ct[8722] = "-";
-Ct[8739] = "\\amp ";
-Ct[8739] = "|";
-Ct[8853] = "\\oplus ";
-Ct[8709] = "\\oslash ";
-Ct[8854] = "\\ominus ";
-Ct[8736] = "\\angle ";
-Ct[8736] = "\\measuredangle ";
-Ct[8738] = "\\measuredangle ";
-Ct[8737] = "";
-Ct[8738] = "";
-Ct[8735] = "";
-Ct[8741] = "\\| ";
-Ct[8855] = "\\otimes ";
-Ct[8869] = "\\bot ";
-Ct[8943] = "\\cdots ";
-Ct[8944] = "\\iddots ";
-Ct[8945] = "\\ddots";
-Ct[9001] = "\\rangle ";
-Ct[9002] = "\\langle ";
-Ct[9476] = "\\ldots ";
-Ct[11100]="C";//constants of integration
-for (iAl=11101;iAl<=11110;iAl++) {Ct[iAl]="C_{"+(iAl-11100)+"}"}//constants of integration
-const tDelimiter = ["_",",","!","=","<",">","|","+","-","*","^","/","{","}","(",")","\\"," "];
-//
-function texExport(latXpr) { //convert MG format to LaTeX
-    latXpr += "";
-    if (latXpr == "NaN" || latXpr == "undefined") {return "undefined"}
-    latXpr = cFunc(latXpr); //convert to func format
-    latXpr = dFunc(latXpr, "latex"); //process functions
-    //clean up extra parens
-    latXpr = latXpr.replace(/\(/g,"%");
-    var sCount = strCount(latXpr,"%");
-    for (var nXs=0;nXs<sCount;nXs++) {
-        var lPar = 1;
-        var rPar = 0;
-        var bSym = latXpr.indexOf("%")+1;
-        var lSym = latXpr.length;
-        for (var iXs=bSym;iXs<lSym;iXs++) {
-            if (latXpr.charAt(iXs) == "%" ) {lPar++}
-            if (latXpr.charAt(iXs) == ")" ) {rPar++}
-            if (lPar == rPar) {break;}
-        }
-        var strg = latXpr.substr(bSym,iXs-bSym);
-        if (latXpr.substr(bSym-1,7) == "%<Xdiv>" && latXpr.substr(iXs-6,7) == "<Xdve>)" && latXpr.substr(iXs+1,1) != "^" && strg.search(/\<Xdve\>(.*)\<Xdiv\>/) == -1) {
-            latXpr = latXpr.substr(0,bSym-1)+strg+latXpr.substr(iXs+1,lSym);
-        }
-        else {
-            latXpr = latXpr.substr(0,bSym-1)+"("+strg+")"+latXpr.substr(iXs+1,lSym);
-        }
-    }
-    latXpr = latXpr.replace(/\<Xcel\>/g,",&").replace(/\<Xrow\>/g,"\\left\\{\\begin{array}{1}").replace(/\<Xrwe\>/g,"\\end{array}\\right\\}"); //resolve arrays
-    latXpr = latXpr.replace(/\<X\w\w\w\>/g,"").replace(/\%/g,"("); //clean up tags
-    //resolve symbols
-    sCount = strCount(latXpr,"Cv[");
-    for (var nXf=0;nXf<sCount;nXf++) {latXpr = latXpr.replace(/Cv\[\d+\]/,Ct[(latXpr.match(/Cv\[\d+\]/)+"").replace(/Cv\[(\d+)\]/,"$1")])} //resolve Cv[] symbols
-    latXpr = latXpr.replace(/\(/g,"\\left(").replace(/\)/g,"\\right)").replace(/\\/g," \\").replace(/  /g," ").replace(/ _/g,"_").replace(/_ /g,"_").replace(/ \^/g,"^").replace(/\^ /g,"^").replace(/ \[/g,"[").replace(/\\ \\/g,"\\\\");//cleanup
-    return latXpr;
-}
-//
-function texImport(mgXpr) { //convert LaTeX to MG format
-    function dedupBrackets(dB) { //remove redundant brackets
-        var sCount = strCount(dB,"{");
-        var nXf = 0,dparens = "";
-        for (nXf=0;nXf<sCount;nXf++) {
-            dparens = parseBrackets(dB,dB.lastIndexOf("{{")+1);
-            if (dB.substr(dparens.end,2) == "}}" ) {
-                dB = dB.substr(0,dB.lastIndexOf("{{")+1)+dparens.inside+dB.substr(dparens.end+1,dB.length)
+        if (cXpr.charAt(0) == "+") {cXpr = cXpr.substr(1)} //remove + at beginning of expression
+        sCount = strCount(cXpr,"-");//parse power negatives to cPow(x,cNeg())
+        for (nCf=0;nCf<sCount;nCf++) {
+            for (iXX in pCases) {
+                if (cXpr.indexOf(pCases[iXX]) > -1) {cXpr = nParse(cXpr,pCases[iXX])}
             }
         }
-        sCount = strCount(dB,"(");
-        for (nXf=0;nXf<sCount;nXf++) {
-            dparens = parseBrackets(dB,dB.lastIndexOf("((")+1);
-            if (dB.substr(dparens.end,2) == "))" ) {
-                dB = dB.substr(0,dB.lastIndexOf("((")+1)+dparens.inside+dB.substr(dparens.end+1,dB.length)
+        sCount = strCount(cXpr,"^");//convert powers to cPow()
+        for (nCf=0;nCf<sCount;nCf++) {cXpr = cParse(cXpr,"^","cPow")}
+        if (cXpr.charAt(0) == "-") {cXpr = nParse(cXpr,"-")}
+        sCount = strCount(cXpr,"-");//parse negatives to cNeg()
+        for (nCf=0;nCf<sCount;nCf++) {
+            for (iXX in nCases) {
+                if (cXpr.indexOf(nCases[iXX]) > -1) {cXpr = nParse(cXpr,nCases[iXX])}
             }
         }
-        return dB
-    }
-    function asciiTest(xA) {if ((xA >= 65 && xA <= 90) || (xA >= 97 && xA <= 122)) {return true} return false} //test for ascii symbols
-    function funcselect(func,key) {return funcMap[func][key]}
-    function matI(xM) {
-        var mArray = xM.split("\\\\");
-        var mReturn = ""
-        for (var iM in mArray) {mArray[iM] = mArray[iM].split("&")}
-        for (var iR in mArray) {
-            mReturn = mReturn + "mat(" + mArray[iR] + ")"
-            if (iR < mArray.length-1) {mReturn = mReturn + ","}
+        sCount = strCount(cXpr,"~");//convert angles to cAng()
+        for (nCf=0;nCf<sCount;nCf++) {cXpr = cParse(cXpr,"~","cAng")}
+        sCount = strCount(cXpr,"#");//convert # to cMul() (multiply)
+        for (nCf=0;nCf<sCount;nCf++) {cXpr = cParse(cXpr,"#","cMul")}
+        sCount = strCount(cXpr,"/");//convert / to cDiv()
+        for (nCf=0;nCf<sCount;nCf++) {cXpr = cParse(cXpr,"/","cDiv")}
+        sCount = strCount(cXpr,"*");//convert * to cTms()
+        for (nCf=0;nCf<sCount;nCf++) {cXpr = cParse(cXpr,"*","cTms")}
+        sCount = strCount(cXpr,String.fromCharCode(8226));//convert dot to cDot()
+        for (nCf=0;nCf<sCount;nCf++) {cXpr = cParse(cXpr,String.fromCharCode(8226),"cDot")}
+        sCount = strCount(cXpr,"-") + strCount(cXpr,"+");//convert +- to cAdd() or cSub()
+        for (nCf=0;nCf<sCount;nCf++) {
+            aIdx = cXpr.indexOf("+");
+            cIdx = cXpr.indexOf("-");
+            if (aIdx == -1) {cXpr = cParse(cXpr,"-","cSub")}
+            else if (cIdx == -1) {cXpr = cParse(cXpr,"+","cAdd")}
+            else if (aIdx < cIdx) {cXpr = cParse(cXpr,"+","cAdd")}
+            else {cXpr = cParse(cXpr,"-","cSub")}
         }
-        return "mat(" + mReturn + ")"
+        sCount = strCount(cXpr,"@");//convert @ symbol handler to cBnd()
+        for (nCf=0;nCf<sCount;nCf++) {cXpr = cParse(cXpr,"@","cBnd")}
+        for (key in relOps) { //relational operators
+            sCount = strCount(cXpr,relOps[key]);
+            for (nCf=0;nCf<sCount;nCf++) {
+                cXpr = cParse(cXpr,relOps[key],key)
+            }
+        }
+        cXpr = cXpr.replace(/\[\[/g,"'[[").replace(/\]\]/g,"]]'") //quote matrices
+        return cXpr;
+    }
+    function dFunc(dXpr, prefix) { //map FUNC format to export format
+        function parseArgs(xP) { //parse comma-delimited arguments into array
+            var args = [];
+            var strSplit = xP.split(",");
+            args[0] = strSplit[0];
+            for (var nXf=1;nXf<strSplit.length;nXf++) {
+                if (strCount(args[args.length-1],"(") > strCount(args[args.length-1],")")) {args[args.length-1] = args[args.length-1]+","+strSplit[nXf]} //reassemble inside parens
+                else {args.push(strSplit[nXf])}
+            }
+            return args
+        }
+        function lFunc(parm,strg) { //process left side function
+            if (typeof funcMap[funcKey][fnformatLx] == "function") {return funcMap[funcKey][fnformatLx](parm,strg)}
+            return funcMap[funcKey][fnformatLx]
+        }
+        function rFunc(parm,strg) { //process right side function
+            if (typeof funcMap[funcKey][fnformatR] == "function") {return funcMap[funcKey][fnformatR](parm,strg)}
+            return funcMap[funcKey][fnformatR]
+        }
+        function funcTest(tFunc) {if (typeof funcMap[tFunc] == "undefined") {return false}; return true} //test for valid function key
+        //
+        dXpr = dXpr.replace(/ /g,"").replace(/([a-z][a-z][a-z])\(/ig,"$1@"); //mark left parens with @
+        var sCount = strCount(dXpr,"@");
+        var bSym = 0, lSym = 0,lPar = 0,rPar = 0,iXf = 0,payload = "",paramS = "",funcKey = "",rTmp = "",fnformatL = "",fnformatR = "",fnformatLx = "",nXf = 0;
+        if (prefix == "mg") {fnformatL = prefix;fnformatR = prefix}
+        else if (mgConfig.fnFmt == "fn(x)") {fnformatL = prefix+"L1";fnformatR = prefix+"R1"} //fn(x)
+        else {fnformatL = prefix+"L2";fnformatR = prefix+"R2"}  //fn x
+        for (nXf=0;nXf<sCount;nXf++) {
+            fnformatLx = fnformatL;
+            lPar = 1,rPar = 0,iXf = 0,rTmp = "";
+            bSym = dXpr.lastIndexOf("@")+1; //find inside parens
+            lSym = dXpr.length;
+            for (iXf=bSym;iXf<lSym;iXf++) {
+                if (dXpr.charAt(iXf) == "@" || dXpr.charAt(iXf) == "(") {lPar++}
+                if (dXpr.charAt(iXf) == ")") {rPar++}
+                if (lPar == rPar) {break;}
+            }
+            payload = dXpr.substr(bSym,iXf-bSym); //parameters between parens
+            if (lPar > rPar) {payload = payload.substr(0,payload.lastIndexOf(")"))+payload.substr(payload.lastIndexOf(")")+1)} //unmatched left parens
+            paramS = parseArgs(payload); //parse parms
+            funcKey = dXpr.substr(bSym-4,3); //extract functions xxx()
+            if (!funcTest(funcKey)) {funcKey = dXpr.substr(bSym-5,4)} //extract operators cXxx()
+            if (typeof funcMap[funcKey][prefix+"Inv1"] != "undefined" && mgConfig.invFmt == "sin<sup>-1</sup>" && mgConfig.fnFmt == "fn(x)") {fnformatLx = prefix+"Inv1"} //inverse fn(x)
+            if (typeof funcMap[funcKey][prefix+"Inv1"] != "undefined" && mgConfig.invFmt == "sin<sup>-1</sup>" && mgConfig.fnFmt == "fn x")  {fnformatLx = prefix+"Inv2"} //inverse fn x
+            if ((funcMap[funcKey][fnformatR] == ' ' || funcMap[funcKey][fnformatR] == ' <Xfxp>') && mgConfig.fnFmt == "fn x" && iXf < lSym && paramS[0].replace(/[\|\(\{](.*)[\|\)\}]/g,"").search(/[+(&minus;)]/) > -1 ) {paramS[0] = "("+paramS[0]+")"} //add parens to inside (fn x) functions
+            if (iXf < lSym && prefix != "mg") {rTmp = rFunc(paramS,payload)} //enable right side function if parens match
+            dXpr = dXpr.substr(0,bSym-(funcKey.length+1))+lFunc(paramS,payload)+rTmp+dXpr.substr(iXf+1,lSym); //assemble output
+        }
+        return dXpr
     }
     //
-    const ulSymbols = ["\\int","\\sum","\\prod","\\cap","\\cup"];
-    const ulFuncs  =  ["itg(","sum(","prd(","cap(","cup("];
-    const lBrackets = ["{","[","|"];
-    const rBrackets = ["}","]","|"];
-    var sCount = 0,symTemp = "",tTemp = "",tFunc = 0,nXs = 0,nXf = 0,nXt = 0,nXi = 0,parmU = {},parmL = {},limitL = {},limitU = {},limitX = {},operand = {};
-    if (mgXpr == "NaN" || mgXpr == "undefined") {return "undefined"}
-    mgXpr += " ";
-    mgXpr = mgXpr.replace(/\\big/g,"\\");//fix big
-    mgXpr = mgXpr.replace(/\"/g,"\\").replace(/\'/g,"\\");//remove quotes
-    mgXpr = mgXpr.replace(/\\(.)/g," \\$1").replace(/ \\\{/g,"\\{").replace(/ \\\}/g,"\\}");//fix slash whitespace
-    mgXpr = mgXpr.replace(/\s+\{/g,"{").replace(/\s+\}/g,"}").replace(/\{\s+/g,"{").replace(/\}\s+/g,"}"); //fix brace whitespaces
-    mgXpr = mgXpr.replace(/\{matrix\}/g,"{bmatrix}").replace(/\{pmatrix\}/g,"{bmatrix}").replace(/\{vmatrix\}/g,"{bmatrix}").replace(/\{Vmatrix\}/g,"{bmatrix}"); //convert all matrices to bmatrix
-    sCount = strCount(mgXpr,"\\begin{bmatrix}"); //convert matrices
-    for (nXf=0;nXf<sCount;nXf++) {
-        var rTemp = mgXpr.substr(mgXpr.lastIndexOf("\\begin{bmatrix}")+"\\begin{bmatrix}".length,mgXpr.length);
-        var mTemp = rTemp.substr(0,rTemp.indexOf("\\end{bmatrix}"));
-        mgXpr = mgXpr.replace("\\begin{bmatrix}"+mTemp+"\\end{bmatrix}",matI(mTemp));
+
+    function texExport(latXpr) { //convert MG format to LaTeX
+        latXpr += "";
+        if (latXpr == "NaN" || latXpr == "undefined") {return "undefined"}
+        latXpr = cFunc(latXpr); //convert to func format
+        latXpr = dFunc(latXpr, "latex"); //process functions
+        //clean up extra parens
+        latXpr = latXpr.replace(/\(/g,"%");
+        var sCount = strCount(latXpr,"%");
+        for (var nXs=0;nXs<sCount;nXs++) {
+            var lPar = 1;
+            var rPar = 0;
+            var bSym = latXpr.indexOf("%")+1;
+            var lSym = latXpr.length;
+            for (var iXs=bSym;iXs<lSym;iXs++) {
+                if (latXpr.charAt(iXs) == "%" ) {lPar++}
+                if (latXpr.charAt(iXs) == ")" ) {rPar++}
+                if (lPar == rPar) {break;}
+            }
+            var strg = latXpr.substr(bSym,iXs-bSym);
+            if (latXpr.substr(bSym-1,7) == "%<Xdiv>" && latXpr.substr(iXs-6,7) == "<Xdve>)" && latXpr.substr(iXs+1,1) != "^" && strg.search(/\<Xdve\>(.*)\<Xdiv\>/) == -1) {
+                latXpr = latXpr.substr(0,bSym-1)+strg+latXpr.substr(iXs+1,lSym);
+            }
+            else {
+                latXpr = latXpr.substr(0,bSym-1)+"("+strg+")"+latXpr.substr(iXs+1,lSym);
+            }
+        }
+        latXpr = latXpr.replace(/\<Xcel\>/g,",&").replace(/\<Xrow\>/g,"\\left\\{\\begin{array}{1}").replace(/\<Xrwe\>/g,"\\end{array}\\right\\}"); //resolve arrays
+        latXpr = latXpr.replace(/\<X\w\w\w\>/g,"").replace(/\%/g,"("); //clean up tags
+        //resolve symbols
+        sCount = strCount(latXpr,"Cv[");
+        for (var nXf=0;nXf<sCount;nXf++) {latXpr = latXpr.replace(/Cv\[\d+\]/,Ct[(latXpr.match(/Cv\[\d+\]/)+"").replace(/Cv\[(\d+)\]/,"$1")])} //resolve Cv[] symbols
+        latXpr = latXpr.replace(/\(/g,"\\left(").replace(/\)/g,"\\right)").replace(/\\/g," \\").replace(/  /g," ").replace(/ _/g,"_").replace(/_ /g,"_").replace(/ \^/g,"^").replace(/\^ /g,"^").replace(/ \[/g,"[").replace(/\\ \\/g,"\\\\");//cleanup
+        return latXpr;
     }
-    mgXpr = mgXpr.replace(/\s+/g," ").replace(/\\/g," \\").replace(/ _/g,"_").replace(/_ /g,"_").replace(/ \^/g,"^").replace(/\^ /g,"^").replace(/ \[/g,"[").replace(/ \(/g,"(").replace(/\\left /g,"\\left").replace(/\\right /g,"\\right");//fix whitespaces
-    sCount = strCount(mgXpr,"\\\\");//convert line breaks
-    for (nXf=0;nXf<sCount;nXf++) {mgXpr = mgXpr.replace(/\\\\/," ")}
-    mgXpr = mgXpr.replace(/\\,/g," ").replace(/\\:/g," ").replace(/\\;/g," ").replace(/\\!/g," ").replace(/\\ /g,""); //fix special
-    if (mgXpr.split("{").length != mgXpr.split("}").length) {Cs[9998] = "<span style='color:red'>Unmatched brackets</span>";return "Cv[9998]"} //check parens
-    mgXpr = mgXpr.replace(/\\left\[/g,"sbr(").replace(/\\left\{/g,"cbr(").replace(/\\right\]/g,")").replace(/\\right\}/g,")");//convert brackets
-    sCount = strCount(mgXpr,"\\");//convert left/right paren
-    for (nXf=0;nXf<sCount;nXf++) {mgXpr = mgXpr.replace(/\\left\(/,"(").replace(/\\right\)/,")").replace(/\\left\\\(/,"(").replace(/\\right\\\)/,")")}
-    for (var iBr in lBrackets){//convert left/right brackets
-        sCount = strCount(mgXpr,"\\left\\"+lBrackets[iBr]);
-        for (nXf=0;nXf<sCount;nXf++) {mgXpr = mgXpr.replace("\\left\\"+lBrackets[iBr],"cbr(").replace("\\right\\"+rBrackets[iBr],")")   }
-    }
-    sCount = strCount(mgXpr,"\\frac");//convert frac
-    for (nXf=0;nXf<sCount;nXf++) {
-        var numerator = parseBrackets(mgXpr,mgXpr.indexOf("\\frac")+5);
-        var denominator = parseBrackets(mgXpr,numerator.end+1);
-        if (numerator.inside.indexOf("+") > -1 || numerator.inside.indexOf("-") > -1){numerator.inside = "("+numerator.inside+")"}
-        if (denominator.inside.indexOf("+") > -1 || denominator.inside.indexOf("-") > -1){denominator.inside = "("+denominator.inside+")"}
-        mgXpr = mgXpr.substr(0,mgXpr.indexOf("\\frac"))+" ("+numerator.inside+"/"+denominator.inside+") "+mgXpr.substr(denominator.end+1,mgXpr.length);
-    }
-    sCount = strCount(mgXpr,"\\sqrt[");//convert sqrt_n
-    for (nXf=0;nXf<sCount;nXf++) {
-        parmU = parseBrackets(mgXpr,mgXpr.indexOf("\\sqrt[")+6);
-        parmL = parseBrackets(mgXpr,parmU.end+2);
-        mgXpr = mgXpr.substr(0,mgXpr.indexOf("\\sqrt["))+" nrt("+parmU.inside+","+parmL.inside+") "+mgXpr.substr(parmL.end+1,mgXpr.length);
-    }
-    sCount = strCount(mgXpr,"\\log_");//convert log_n
-    for (nXf=0;nXf<sCount;nXf++) {
-        parmU = parseBrackets(mgXpr,mgXpr.indexOf("\\log_")+5);
-        parmL = parseBrackets(mgXpr,parmU.end+1);
-        mgXpr = mgXpr.substr(0,mgXpr.indexOf("\\log_"))+" lgn("+parmU.inside+","+parmL.inside+") "+mgXpr.substr(parmL.end+1,mgXpr.length);
-    }
-    for (tFunc in funcMap) {//convert functions
-        sCount = strCount(mgXpr,funcselect(tFunc,"texfunc"));
+    //
+    function texImport(mgXpr) { //convert LaTeX to MG format
+        function dedupBrackets(dB) { //remove redundant brackets
+            var sCount = strCount(dB,"{");
+            var nXf = 0,dparens = "";
+            for (nXf=0;nXf<sCount;nXf++) {
+                dparens = parseBrackets(dB,dB.lastIndexOf("{{")+1);
+                if (dB.substr(dparens.end,2) == "}}" ) {
+                    dB = dB.substr(0,dB.lastIndexOf("{{")+1)+dparens.inside+dB.substr(dparens.end+1,dB.length)
+                }
+            }
+            sCount = strCount(dB,"(");
+            for (nXf=0;nXf<sCount;nXf++) {
+                dparens = parseBrackets(dB,dB.lastIndexOf("((")+1);
+                if (dB.substr(dparens.end,2) == "))" ) {
+                    dB = dB.substr(0,dB.lastIndexOf("((")+1)+dparens.inside+dB.substr(dparens.end+1,dB.length)
+                }
+            }
+            return dB
+        }
+        function asciiTest(xA) {if ((xA >= 65 && xA <= 90) || (xA >= 97 && xA <= 122)) {return true} return false} //test for ascii symbols
+        function funcselect(func,key) {return funcMap[func][key]}
+        function matI(xM) {
+            var mArray = xM.split("\\\\");
+            var mReturn = ""
+            for (var iM in mArray) {mArray[iM] = mArray[iM].split("&")}
+            for (var iR in mArray) {
+                mReturn = mReturn + "mat(" + mArray[iR] + ")"
+                if (iR < mArray.length-1) {mReturn = mReturn + ","}
+            }
+            return "mat(" + mReturn + ")"
+        }
+        //
+        const ulSymbols = ["\\int","\\sum","\\prod","\\cap","\\cup"];
+        const ulFuncs  =  ["itg(","sum(","prd(","cap(","cup("];
+        const lBrackets = ["{","[","|"];
+        const rBrackets = ["}","]","|"];
+        var sCount = 0,symTemp = "",tTemp = "",tFunc = 0,nXs = 0,nXf = 0,nXt = 0,nXi = 0,parmU = {},parmL = {},limitL = {},limitU = {},limitX = {},operand = {};
+        if (mgXpr == "NaN" || mgXpr == "undefined") {return "undefined"}
+        mgXpr += " ";
+        mgXpr = mgXpr.replace(/\\big/g,"\\");//fix big
+        mgXpr = mgXpr.replace(/\"/g,"\\").replace(/\'/g,"\\");//remove quotes
+        mgXpr = mgXpr.replace(/\\(.)/g," \\$1").replace(/ \\\{/g,"\\{").replace(/ \\\}/g,"\\}");//fix slash whitespace
+        mgXpr = mgXpr.replace(/\s+\{/g,"{").replace(/\s+\}/g,"}").replace(/\{\s+/g,"{").replace(/\}\s+/g,"}"); //fix brace whitespaces
+        mgXpr = mgXpr.replace(/\{matrix\}/g,"{bmatrix}").replace(/\{pmatrix\}/g,"{bmatrix}").replace(/\{vmatrix\}/g,"{bmatrix}").replace(/\{Vmatrix\}/g,"{bmatrix}"); //convert all matrices to bmatrix
+        sCount = strCount(mgXpr,"\\begin{bmatrix}"); //convert matrices
         for (nXf=0;nXf<sCount;nXf++) {
-            symTemp = mgXpr.substr(mgXpr.indexOf(funcselect(tFunc,"texfunc")),mgXpr.length);
-            for (nXi=1;nXi<symTemp.length;nXi++) {if (tDelimiter.indexOf(symTemp.charAt(nXi)) > -1){break}}
-            if (symTemp.charAt(nXi) == "^") {//convert inverse fn^-1
-                if (symTemp.substr(nXi,5) =="^{-1}") {
-                    symTemp = symTemp.substr(1,nXi-1);
-                    if (funcselect(tFunc,"texfunc") == "\\"+symTemp && funcselect(tFunc,"trig")) {
-                        operand = parseBrackets(mgXpr,mgXpr.indexOf(funcselect(tFunc,"texfunc"))+funcselect(tFunc,"texfunc").length+5);
-                        mgXpr = mgXpr.substr(0,mgXpr.indexOf(funcselect(tFunc,"texfunc")))+" "+funcselect(tFunc,"invfunc")+"("+operand.inside+")"+mgXpr.substr(operand.end,mgXpr.length);
+            var rTemp = mgXpr.substr(mgXpr.lastIndexOf("\\begin{bmatrix}")+"\\begin{bmatrix}".length,mgXpr.length);
+            var mTemp = rTemp.substr(0,rTemp.indexOf("\\end{bmatrix}"));
+            mgXpr = mgXpr.replace("\\begin{bmatrix}"+mTemp+"\\end{bmatrix}",matI(mTemp));
+        }
+        mgXpr = mgXpr.replace(/\s+/g," ").replace(/\\/g," \\").replace(/ _/g,"_").replace(/_ /g,"_").replace(/ \^/g,"^").replace(/\^ /g,"^").replace(/ \[/g,"[").replace(/ \(/g,"(").replace(/\\left /g,"\\left").replace(/\\right /g,"\\right");//fix whitespaces
+        sCount = strCount(mgXpr,"\\\\");//convert line breaks
+        for (nXf=0;nXf<sCount;nXf++) {mgXpr = mgXpr.replace(/\\\\/," ")}
+        mgXpr = mgXpr.replace(/\\,/g," ").replace(/\\:/g," ").replace(/\\;/g," ").replace(/\\!/g," ").replace(/\\ /g,""); //fix special
+        if (mgXpr.split("{").length != mgXpr.split("}").length) {Cs[9998] = "<span style='color:red'>Unmatched brackets</span>";return "Cv[9998]"} //check parens
+        mgXpr = mgXpr.replace(/\\left\[/g,"sbr(").replace(/\\left\{/g,"cbr(").replace(/\\right\]/g,")").replace(/\\right\}/g,")");//convert brackets
+        sCount = strCount(mgXpr,"\\");//convert left/right paren
+        for (nXf=0;nXf<sCount;nXf++) {mgXpr = mgXpr.replace(/\\left\(/,"(").replace(/\\right\)/,")").replace(/\\left\\\(/,"(").replace(/\\right\\\)/,")")}
+        for (var iBr in lBrackets){//convert left/right brackets
+            sCount = strCount(mgXpr,"\\left\\"+lBrackets[iBr]);
+            for (nXf=0;nXf<sCount;nXf++) {mgXpr = mgXpr.replace("\\left\\"+lBrackets[iBr],"cbr(").replace("\\right\\"+rBrackets[iBr],")")   }
+        }
+        sCount = strCount(mgXpr,"\\frac");//convert frac
+        for (nXf=0;nXf<sCount;nXf++) {
+            var numerator = parseBrackets(mgXpr,mgXpr.indexOf("\\frac")+5);
+            var denominator = parseBrackets(mgXpr,numerator.end+1);
+            if (numerator.inside.indexOf("+") > -1 || numerator.inside.indexOf("-") > -1){numerator.inside = "("+numerator.inside+")"}
+            if (denominator.inside.indexOf("+") > -1 || denominator.inside.indexOf("-") > -1){denominator.inside = "("+denominator.inside+")"}
+            mgXpr = mgXpr.substr(0,mgXpr.indexOf("\\frac"))+" ("+numerator.inside+"/"+denominator.inside+") "+mgXpr.substr(denominator.end+1,mgXpr.length);
+        }
+        sCount = strCount(mgXpr,"\\sqrt[");//convert sqrt_n
+        for (nXf=0;nXf<sCount;nXf++) {
+            parmU = parseBrackets(mgXpr,mgXpr.indexOf("\\sqrt[")+6);
+            parmL = parseBrackets(mgXpr,parmU.end+2);
+            mgXpr = mgXpr.substr(0,mgXpr.indexOf("\\sqrt["))+" nrt("+parmU.inside+","+parmL.inside+") "+mgXpr.substr(parmL.end+1,mgXpr.length);
+        }
+        sCount = strCount(mgXpr,"\\log_");//convert log_n
+        for (nXf=0;nXf<sCount;nXf++) {
+            parmU = parseBrackets(mgXpr,mgXpr.indexOf("\\log_")+5);
+            parmL = parseBrackets(mgXpr,parmU.end+1);
+            mgXpr = mgXpr.substr(0,mgXpr.indexOf("\\log_"))+" lgn("+parmU.inside+","+parmL.inside+") "+mgXpr.substr(parmL.end+1,mgXpr.length);
+        }
+        for (tFunc in funcMap) {//convert functions
+            sCount = strCount(mgXpr,funcselect(tFunc,"texfunc"));
+            for (nXf=0;nXf<sCount;nXf++) {
+                symTemp = mgXpr.substr(mgXpr.indexOf(funcselect(tFunc,"texfunc")),mgXpr.length);
+                for (nXi=1;nXi<symTemp.length;nXi++) {if (tDelimiter.indexOf(symTemp.charAt(nXi)) > -1){break}}
+                if (symTemp.charAt(nXi) == "^") {//convert inverse fn^-1
+                    if (symTemp.substr(nXi,5) =="^{-1}") {
+                        symTemp = symTemp.substr(1,nXi-1);
+                        if (funcselect(tFunc,"texfunc") == "\\"+symTemp && funcselect(tFunc,"trig")) {
+                            operand = parseBrackets(mgXpr,mgXpr.indexOf(funcselect(tFunc,"texfunc"))+funcselect(tFunc,"texfunc").length+5);
+                            mgXpr = mgXpr.substr(0,mgXpr.indexOf(funcselect(tFunc,"texfunc")))+" "+funcselect(tFunc,"invfunc")+"("+operand.inside+")"+mgXpr.substr(operand.end,mgXpr.length);
+                        }
+                    }
+                    else {//convert fn powers
+                        var superscript = parseBrackets(mgXpr,mgXpr.indexOf(funcselect(tFunc,"texfunc"))+funcselect(tFunc,"texfunc").length+1);
+                        operand = parseBrackets(mgXpr,superscript.end+1);
+                        mgXpr = mgXpr.substr(0,mgXpr.indexOf(funcselect(tFunc,"texfunc")))+" "+tFunc+"("+operand.inside+")^("+superscript.inside+")"+mgXpr.substr(operand.end+1,mgXpr.length);
                     }
                 }
-                else {//convert fn powers
-                    var superscript = parseBrackets(mgXpr,mgXpr.indexOf(funcselect(tFunc,"texfunc"))+funcselect(tFunc,"texfunc").length+1);
-                    operand = parseBrackets(mgXpr,superscript.end+1);
-                    mgXpr = mgXpr.substr(0,mgXpr.indexOf(funcselect(tFunc,"texfunc")))+" "+tFunc+"("+operand.inside+")^("+superscript.inside+")"+mgXpr.substr(operand.end+1,mgXpr.length);
-                }
-            }
-            else {//convert all other fn
-                symTemp = symTemp.substr(1,nXi-1);
-                if (funcselect(tFunc,"texfunc") == "\\"+symTemp) {
-                    operand = parseBrackets(mgXpr,mgXpr.indexOf(funcselect(tFunc,"texfunc"))+funcselect(tFunc,"texfunc").length);
-                    mgXpr = mgXpr.substr(0,mgXpr.indexOf(funcselect(tFunc,"texfunc")))+" "+tFunc+"("+operand.inside+")"+mgXpr.substr(operand.end+1,mgXpr.length);
+                else {//convert all other fn
+                    symTemp = symTemp.substr(1,nXi-1);
+                    if (funcselect(tFunc,"texfunc") == "\\"+symTemp) {
+                        operand = parseBrackets(mgXpr,mgXpr.indexOf(funcselect(tFunc,"texfunc"))+funcselect(tFunc,"texfunc").length);
+                        mgXpr = mgXpr.substr(0,mgXpr.indexOf(funcselect(tFunc,"texfunc")))+" "+tFunc+"("+operand.inside+")"+mgXpr.substr(operand.end+1,mgXpr.length);
+                    }
                 }
             }
         }
-    }
-    for (nXt in ulSymbols) {//convert u/l functions
-        sCount = strCount(mgXpr,ulSymbols[nXt]+"_");
+        for (nXt in ulSymbols) {//convert u/l functions
+            sCount = strCount(mgXpr,ulSymbols[nXt]+"_");
+            for (nXf=0;nXf<sCount;nXf++) {
+                limitL = parseBrackets(mgXpr,mgXpr.indexOf(ulSymbols[nXt]+"_")+ulSymbols[nXt].length+1);
+                limitU = parseBrackets(mgXpr,limitL.end+1);
+                limitL.inside = limitL.inside.replace("=","Cv[61]");
+                if (mgXpr.charAt(limitL.end+1) == "^") {mgXpr = mgXpr.substr(0,mgXpr.indexOf(ulSymbols[nXt]+"_"))+ulFuncs[nXt]+limitU.inside+","+limitL.inside+") "+mgXpr.substr(limitU.end+1,mgXpr.length)}
+                else {mgXpr = mgXpr.substr(0,mgXpr.indexOf(ulSymbols[nXt]+"_"))+ulFuncs[nXt]+","+limitL.inside+") "+mgXpr.substr(limitL.end+1,mgXpr.length)}
+            }
+            sCount = strCount(mgXpr,ulSymbols[nXt]+"^");
+            for (nXf=0;nXf<sCount;nXf++) {
+                limitU= parseBrackets(mgXpr,mgXpr.indexOf(ulSymbols[nXt]+"^")+ulSymbols[nXt].length+1);
+                limitL = parseBrackets(mgXpr,limitU.end+1);
+                limitL.inside = limitL.inside.replace("=","Cv[61]");
+                if (mgXpr.charAt(limitU.end+1) == "_") {mgXpr = mgXpr.substr(0,mgXpr.indexOf(ulSymbols[nXt]+"^"))+ulFuncs[nXt]+limitU.inside+","+limitL.inside+") "+mgXpr.substr(limitL.end+1,mgXpr.length)}
+                else {mgXpr = mgXpr.substr(0,mgXpr.indexOf(ulSymbols[nXt]+"^"))+ulFuncs[nXt]+limitU.inside+",) "+mgXpr.substr(limitU.end+1,mgXpr.length)}
+            }
+        }
+
+        sCount = strCount(mgXpr,"\\lim_");//convert /lim
         for (nXf=0;nXf<sCount;nXf++) {
-            limitL = parseBrackets(mgXpr,mgXpr.indexOf(ulSymbols[nXt]+"_")+ulSymbols[nXt].length+1);
-            limitU = parseBrackets(mgXpr,limitL.end+1);
-            limitL.inside = limitL.inside.replace("=","Cv[61]");
-            if (mgXpr.charAt(limitL.end+1) == "^") {mgXpr = mgXpr.substr(0,mgXpr.indexOf(ulSymbols[nXt]+"_"))+ulFuncs[nXt]+limitU.inside+","+limitL.inside+") "+mgXpr.substr(limitU.end+1,mgXpr.length)}
-            else {mgXpr = mgXpr.substr(0,mgXpr.indexOf(ulSymbols[nXt]+"_"))+ulFuncs[nXt]+","+limitL.inside+") "+mgXpr.substr(limitL.end+1,mgXpr.length)}
+            limitX = parseBrackets(mgXpr,mgXpr.indexOf("\\lim_")+5);
+            limitU = [limitX.inside,""];
+            if (limitX.inside.indexOf("\\to") > -1) {limitU = limitX.inside.split("\\to")}
+            if (limitX.inside.indexOf("\\rightarrow") > -1) {limitU = limitX.inside.split("\\rightarrow")}
+            mgXpr = mgXpr.substr(0,mgXpr.indexOf("\\lim_"))+" lim("+limitU[0]+","+limitU[1]+") "+mgXpr.substr(limitX.end+1,mgXpr.length)
         }
-        sCount = strCount(mgXpr,ulSymbols[nXt]+"^");
+        sCount = strCount(mgXpr,"_");//convert subscripts
         for (nXf=0;nXf<sCount;nXf++) {
-            limitU= parseBrackets(mgXpr,mgXpr.indexOf(ulSymbols[nXt]+"^")+ulSymbols[nXt].length+1);
-            limitL = parseBrackets(mgXpr,limitU.end+1);
-            limitL.inside = limitL.inside.replace("=","Cv[61]");
-            if (mgXpr.charAt(limitU.end+1) == "_") {mgXpr = mgXpr.substr(0,mgXpr.indexOf(ulSymbols[nXt]+"^"))+ulFuncs[nXt]+limitU.inside+","+limitL.inside+") "+mgXpr.substr(limitL.end+1,mgXpr.length)}
-            else {mgXpr = mgXpr.substr(0,mgXpr.indexOf(ulSymbols[nXt]+"^"))+ulFuncs[nXt]+limitU.inside+",) "+mgXpr.substr(limitU.end+1,mgXpr.length)}
+            tTemp = mgXpr.charAt(mgXpr.indexOf("_")+1)
+            if (tTemp == "{" || tTemp == "(") {
+                var subscript = parseBrackets(mgXpr,mgXpr.indexOf("_"));
+                mgXpr = mgXpr.substr(0,mgXpr.indexOf("_"))+" sbt("+subscript.inside+") "+mgXpr.substr(subscript.end+1,mgXpr.length)
+            }
+            else {
+                for (nXi=mgXpr.indexOf("_")+1;nXi<mgXpr.length;nXi++) {if (tDelimiter.indexOf(mgXpr.charAt(nXi)) > -1){break}}
+                if (mgXpr.substr(mgXpr.indexOf("_"),nXi).search(/[a-z][a-z][a-z]\(\)/i) == -1) {mgXpr = mgXpr.substr(0,mgXpr.indexOf("_"))+" sbt("+tTemp+") "+mgXpr.substr(mgXpr.indexOf("_")+2,mgXpr.length)}
+                else {mgXpr = mgXpr.replace(/_/,"")}
+            }
         }
-    }
 
-    sCount = strCount(mgXpr,"\\lim_");//convert /lim
-    for (nXf=0;nXf<sCount;nXf++) {
-        limitX = parseBrackets(mgXpr,mgXpr.indexOf("\\lim_")+5);
-        limitU = [limitX.inside,""];
-        if (limitX.inside.indexOf("\\to") > -1) {limitU = limitX.inside.split("\\to")}
-        if (limitX.inside.indexOf("\\rightarrow") > -1) {limitU = limitX.inside.split("\\rightarrow")}
-        mgXpr = mgXpr.substr(0,mgXpr.indexOf("\\lim_"))+" lim("+limitU[0]+","+limitU[1]+") "+mgXpr.substr(limitX.end+1,mgXpr.length)
-    }
-    sCount = strCount(mgXpr,"_");//convert subscripts
-    for (nXf=0;nXf<sCount;nXf++) {
-        tTemp = mgXpr.charAt(mgXpr.indexOf("_")+1)
-        if (tTemp == "{" || tTemp == "(") {
-            var subscript = parseBrackets(mgXpr,mgXpr.indexOf("_"));
-            mgXpr = mgXpr.substr(0,mgXpr.indexOf("_"))+" sbt("+subscript.inside+") "+mgXpr.substr(subscript.end+1,mgXpr.length)
+        sCount = strCount(mgXpr,"^");//convert superscripts
+        for (nXf=0;nXf<sCount;nXf++) {
+            tTemp = mgXpr.charAt(mgXpr.indexOf("^")+1)
+            if (tTemp == "{" || tTemp == "(") {
+                var superscr = parseBrackets(mgXpr,mgXpr.indexOf("^")+1);
+                if (superscr.inside.length > 1) {mgXpr = mgXpr.substr(0,mgXpr.indexOf("^"))+" ^("+superscr.inside+") "+mgXpr.substr(superscr.end+1,mgXpr.length)}
+            }
         }
-        else {
-            for (nXi=mgXpr.indexOf("_")+1;nXi<mgXpr.length;nXi++) {if (tDelimiter.indexOf(mgXpr.charAt(nXi)) > -1){break}}
-            if (mgXpr.substr(mgXpr.indexOf("_"),nXi).search(/[a-z][a-z][a-z]\(\)/i) == -1) {mgXpr = mgXpr.substr(0,mgXpr.indexOf("_"))+" sbt("+tTemp+") "+mgXpr.substr(mgXpr.indexOf("_")+2,mgXpr.length)}
-            else {mgXpr = mgXpr.replace(/_/,"")}
+        sCount = strCount(mgXpr,"\\");//convert symbols
+        for (nXf=0;nXf<sCount;nXf++) {
+            symTemp = mgXpr.substr(mgXpr.indexOf("\\"),mgXpr.length);
+            for (nXi=1;nXi<symTemp.length;nXi++) {if (tDelimiter.indexOf(symTemp.charAt(nXi)) > -1){break}}
+            symTemp = symTemp.substr(1,nXi-1);
+            for (nXs=1;nXs<=9500;nXs++) {if (typeof Ct[nXs] != "undefined" && (Ct[nXs] == "\\"+symTemp || Ct[nXs] == "\\"+symTemp+" ")) {mgXpr = mgXpr.replace("\\"+symTemp," Cv["+nXs+"]");break} }
         }
-    }
-
-    sCount = strCount(mgXpr,"^");//convert superscripts
-    for (nXf=0;nXf<sCount;nXf++) {
-        tTemp = mgXpr.charAt(mgXpr.indexOf("^")+1)
-        if (tTemp == "{" || tTemp == "(") {
-            var superscr = parseBrackets(mgXpr,mgXpr.indexOf("^")+1);
-            if (superscr.inside.length > 1) {mgXpr = mgXpr.substr(0,mgXpr.indexOf("^"))+" ^("+superscr.inside+") "+mgXpr.substr(superscr.end+1,mgXpr.length)}
+        sCount = strCount(mgXpr,"\\");//remove unknown tags
+        for (nXf=0;nXf<sCount;nXf++) {
+            symTemp = mgXpr.substr(mgXpr.indexOf("\\"),mgXpr.length);
+            for (nXi=1;nXi<symTemp.length;nXi++) {if (",!=<>|+-*^/{}()\\ ".indexOf(symTemp.charAt(nXi)) > -1){break}}
+            symTemp = symTemp.substr(1,nXi-1);
+            mgXpr = mgXpr.replace("\\"+symTemp,"");
         }
+        for (nXf=0;nXf<mgXpr.length;nXf++) {//convert variables
+            for (tFunc in funcMap) {if (mgXpr.substr(nXf,4) == tFunc+"(") {nXf = nXf+3;break}}
+            if (mgXpr.substr(nXf,3) == "Cv[") {nXf = nXf+3}
+            var asciiChar = mgXpr.charAt(nXf).charCodeAt(0);
+            if (asciiTest(asciiChar)) {mgXpr = mgXpr.substr(0,nXf)+"Cv["+(asciiChar+10000)+"]"+mgXpr.substr(nXf+1,mgXpr.length);nXf = nXf+6}
+        }
+        mgXpr = mgXpr.replace(/ /g,""); //cleanup spaces
+        mgXpr = mgXpr.replace(/\(Cv\[10100\]\)/g,"Cv[10100]");
+        sCount = strCount(mgXpr,"Cv[10100]");//convert derivatives
+        for (nXf=0;nXf<sCount;nXf++) {
+            mgXpr = mgXpr.replace(/\(Cv\[10100\]\/Cv\[10100\]Cv\[(\d+)\]\)/,"tdr(Cv[$1])");
+            mgXpr = mgXpr.replace(/\(Cv\[10100\]Cv\[(\d+)\]\/Cv\[10100\]Cv\[(\d+)\]\)/,"sdr(Cv[$1],Cv[$2])");
+            //nth derivative
+            mgXpr = mgXpr.replace(/\(Cv\[10100\]\^\d+\/Cv\[10100\]Cv\[(\d+)\]\^(\d+)\)/,"tdr(Cv[$1],$2)");
+            mgXpr = mgXpr.replace(/\(Cv\[10100\]\^\d+Cv\[(\d+)\]\/Cv\[10100\]Cv\[(\d+)\]\^(\d+)\)/,"sdr(Cv[$1],Cv[$2],$3)");
+        }
+        mgXpr = mgXpr.replace(/\(Cv\[8706\]\)/g,"Cv[8706]");
+        sCount = strCount(mgXpr,"Cv[8706]");//convert partial derivatives
+        for (nXf=0;nXf<sCount;nXf++) {
+            mgXpr = mgXpr.replace(/\(Cv\[8706\]\/Cv\[8706\]Cv\[(\d+)\]\)/,"idr(Cv[$1])");
+            mgXpr = mgXpr.replace(/\(Cv\[8706\]Cv\[(\d+)\]\/Cv\[8706\]Cv\[(\d+)\]\)/,"psd(Cv[$1],Cv[$2])");
+            //nth derivative
+            mgXpr = mgXpr.replace(/\(Cv\[8706\]\^\d+\/Cv\[8706\]Cv\[(\d+)\]\^(\d+)\)/,"idr(Cv[$1],$2)");
+            mgXpr = mgXpr.replace(/\(Cv\[8706\]\^\d+Cv\[(\d+)\]\/Cv\[8706\]Cv\[(\d+)\]\^(\d+)\)/,"psd(Cv[$1],Cv[$2],$3)");
+        }
+        sCount = strCount(mgXpr,"Cv[10100]");//convert differentials
+        for (nXf=0;nXf<sCount;nXf++) {
+            mgXpr = mgXpr.replace(/\{Cv\[10100\]\}/,"Cv[10100]").replace(/Cv\[10100\]Cv\[(\d+)\]/,"Cv[8748]Cv[$1]");
+        }
+        mgXpr = mgXpr.replace(/Cv\[10101\]/g,"Cv[8]").replace(/Cv\[10105\]/g,"Cv[46]").replace(/Cv\[215\]/g,"*"); //special variables
+        mgXpr = mgXpr.replace(/ /g,"").replace(/\{/g,"").replace(/\}/g,"").replace(/_/g,"").replace(/\'/g,"Cv[8242]").replace(/\`/g,"Cv[8242]");//cleanup
+        mgXpr = dedupBrackets(mgXpr);
+        return mgXpr
     }
-    sCount = strCount(mgXpr,"\\");//convert symbols
-    for (nXf=0;nXf<sCount;nXf++) {
-        symTemp = mgXpr.substr(mgXpr.indexOf("\\"),mgXpr.length);
-        for (nXi=1;nXi<symTemp.length;nXi++) {if (tDelimiter.indexOf(symTemp.charAt(nXi)) > -1){break}}
-        symTemp = symTemp.substr(1,nXi-1);
-        for (nXs=1;nXs<=9500;nXs++) {if (typeof Ct[nXs] != "undefined" && (Ct[nXs] == "\\"+symTemp || Ct[nXs] == "\\"+symTemp+" ")) {mgXpr = mgXpr.replace("\\"+symTemp," Cv["+nXs+"]");break} }
+    return {
+        parseParens:function(xB,bSym) {return parseParens(xB,bSym)},
+        cFunc:      function(parm) {return cFunc(parm)},
+        mgExport:   function(parm) {return mgExport(parm)},
+        htmlExport: function(parm) {return htmlExport(parm)},
+        texExport:  function(parm) {return texExport(parm)},
+        texImport:  function(parm) {return texImport(parm)},
+        oParens:    function(parm) {return oParens(parm)},
+        xParens:    function(parm) {return xParens(parm)},
+        oBrackets:  function(parm) {return oBrackets(parm)},
+        dNest:      function(parm) {return dNest(parm)},
+        oprExtract: function(parm) {return oprExtract(parm)},
+        numTest:    function(parm) {return numTest(parm)},
     }
-    sCount = strCount(mgXpr,"\\");//remove unknown tags
-    for (nXf=0;nXf<sCount;nXf++) {
-        symTemp = mgXpr.substr(mgXpr.indexOf("\\"),mgXpr.length);
-        for (nXi=1;nXi<symTemp.length;nXi++) {if (",!=<>|+-*^/{}()\\ ".indexOf(symTemp.charAt(nXi)) > -1){break}}
-        symTemp = symTemp.substr(1,nXi-1);
-        mgXpr = mgXpr.replace("\\"+symTemp,"");
-    }
-    for (nXf=0;nXf<mgXpr.length;nXf++) {//convert variables
-        for (tFunc in funcMap) {if (mgXpr.substr(nXf,4) == tFunc+"(") {nXf = nXf+3;break}}
-        if (mgXpr.substr(nXf,3) == "Cv[") {nXf = nXf+3}
-        var asciiChar = mgXpr.charAt(nXf).charCodeAt(0);
-        if (asciiTest(asciiChar)) {mgXpr = mgXpr.substr(0,nXf)+"Cv["+(asciiChar+10000)+"]"+mgXpr.substr(nXf+1,mgXpr.length);nXf = nXf+6}
-    }
-    mgXpr = mgXpr.replace(/ /g,""); //cleanup spaces
-    mgXpr = mgXpr.replace(/\(Cv\[10100\]\)/g,"Cv[10100]");
-    sCount = strCount(mgXpr,"Cv[10100]");//convert derivatives
-    for (nXf=0;nXf<sCount;nXf++) {
-        mgXpr = mgXpr.replace(/\(Cv\[10100\]\/Cv\[10100\]Cv\[(\d+)\]\)/,"tdr(Cv[$1])");
-        mgXpr = mgXpr.replace(/\(Cv\[10100\]Cv\[(\d+)\]\/Cv\[10100\]Cv\[(\d+)\]\)/,"sdr(Cv[$1],Cv[$2])");
-        //nth derivative
-        mgXpr = mgXpr.replace(/\(Cv\[10100\]\^\d+\/Cv\[10100\]Cv\[(\d+)\]\^(\d+)\)/,"tdr(Cv[$1],$2)");
-        mgXpr = mgXpr.replace(/\(Cv\[10100\]\^\d+Cv\[(\d+)\]\/Cv\[10100\]Cv\[(\d+)\]\^(\d+)\)/,"sdr(Cv[$1],Cv[$2],$3)");
-    }
-    mgXpr = mgXpr.replace(/\(Cv\[8706\]\)/g,"Cv[8706]");
-    sCount = strCount(mgXpr,"Cv[8706]");//convert partial derivatives
-    for (nXf=0;nXf<sCount;nXf++) {
-        mgXpr = mgXpr.replace(/\(Cv\[8706\]\/Cv\[8706\]Cv\[(\d+)\]\)/,"idr(Cv[$1])");
-        mgXpr = mgXpr.replace(/\(Cv\[8706\]Cv\[(\d+)\]\/Cv\[8706\]Cv\[(\d+)\]\)/,"psd(Cv[$1],Cv[$2])");
-        //nth derivative
-        mgXpr = mgXpr.replace(/\(Cv\[8706\]\^\d+\/Cv\[8706\]Cv\[(\d+)\]\^(\d+)\)/,"idr(Cv[$1],$2)");
-        mgXpr = mgXpr.replace(/\(Cv\[8706\]\^\d+Cv\[(\d+)\]\/Cv\[8706\]Cv\[(\d+)\]\^(\d+)\)/,"psd(Cv[$1],Cv[$2],$3)");
-    }
-    sCount = strCount(mgXpr,"Cv[10100]");//convert differentials
-    for (nXf=0;nXf<sCount;nXf++) {
-        mgXpr = mgXpr.replace(/\{Cv\[10100\]\}/,"Cv[10100]").replace(/Cv\[10100\]Cv\[(\d+)\]/,"Cv[8748]Cv[$1]");
-    }
-    mgXpr = mgXpr.replace(/Cv\[10101\]/g,"Cv[8]").replace(/Cv\[10105\]/g,"Cv[46]").replace(/Cv\[215\]/g,"*"); //special variables
-    mgXpr = mgXpr.replace(/ /g,"").replace(/\{/g,"").replace(/\}/g,"").replace(/_/g,"").replace(/\'/g,"Cv[8242]").replace(/\`/g,"Cv[8242]");//cleanup
-    mgXpr = dedupBrackets(mgXpr);
-    return mgXpr
-}
-
+} ();
 // node.js export
 if (typeof module ==  "object") {
     module.exports = {
@@ -2312,14 +2327,15 @@ if (typeof module ==  "object") {
         Cv:         Cv,
         Cs:         Cs,
         funcMap:    funcMap,
-        parseParens:function(xB,bSym) {return parseParens(xB,bSym)},
-        cFunc:      function(expression) {return cFunc(expression)},
-        mgExport:   function(expression) {return mgExport(expression)},
-        htmlExport: function(expression) {return htmlExport(expression)},
-        texExport:  function(expression) {return texExport(expression)},
-        texImport:  function(expression) {return texImport(expression)},
-        mgTranslate:function(expression,scale) {return mgTranslate(expression,scale)},
-        mgOutput:   function(expression,scale) {return mgOutput(expression,scale)},
+        mgTrans:    mgTrans,
+        parseParens:function(xB,bSym) {return mgTrans.parseParens(xB,bSym)},
+        cFunc:      function(parm) {return mgTrans.cFunc(parm)},
+        mgExport:   function(parm) {return mgTrans.mgExport(parm)},
+        htmlExport: function(parm) {return mgTrans.htmlExport(parm)},
+        texExport:  function(parm) {return mgTrans.texExport(parm)},
+        texImport:  function(parm) {return mgTrans.texImport(parm)},
+        mgTranslate:function(parm,scale) {return mgTranslate(parm,scale)},
+        mgOutput:   function(parm,scale) {return mgOutput(parm,scale)},
     }
 }
 //
