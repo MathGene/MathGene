@@ -2328,12 +2328,6 @@ if (typeof module ==  "object") {
         Cs:         Cs,
         funcMap:    funcMap,
         mgTrans:    mgTrans,
-        parseParens:function(xB,bSym) {return mgTrans.parseParens(xB,bSym)},
-        cFunc:      function(parm) {return mgTrans.cFunc(parm)},
-        mgExport:   function(parm) {return mgTrans.mgExport(parm)},
-        htmlExport: function(parm) {return mgTrans.htmlExport(parm)},
-        texExport:  function(parm) {return mgTrans.texExport(parm)},
-        texImport:  function(parm) {return mgTrans.texImport(parm)},
         mgTranslate:function(parm,scale) {return mgTranslate(parm,scale)},
         mgOutput:   function(parm,scale) {return mgOutput(parm,scale)},
     }

@@ -22,11 +22,11 @@ if (typeof module ==  "object") {
     var mgConfig = mgTr.mgConfig;
     var Cv = mgTr.Cv;
     var Cs = mgTr.Cs;
+    var mgTrans = mgTr.mgTrans;
     var mgFuncMap = mgTr.funcMap;
     var parseParens = function(xpr,bSym) {return mgTr.mgTrans.parseParens(xpr,bSym)}
     var cFunc = function(xpr) {return mgTr.mgTrans.cFunc(xpr)}
     var texImport = function(xpr) {return mgTr.mgTrans.texImport(xpr)}
-    var mgExport = function(xpr) {return mgTr.mgTrans.mgExport(xpr)}
     var mgOutput = function(xpr,scale) {return mgTr.mgOutput(xpr,scale)}
 }
 else {
@@ -34,7 +34,6 @@ else {
     var parseParens = function(xpr,bSym) {return mgTrans.parseParens(xpr,bSym)}
     var cFunc = function(xpr) {return mgTrans.cFunc(xpr)}
     var texImport = function(xpr) {return mgTrans.texImport(xpr)}
-    var mgExport = function(xpr) {return mgTrans.mgExport(xpr)}
 }
 
 //external callable functions
@@ -48,11 +47,11 @@ function mgCalculate(expression) { //calculate numerical (deprecated)
 }
 function mgSolve(equation,variable) { //solve equation for variable
     calcLog = [];
-    return mgOutput(mgExport(mgCalc.Solve(texImport(equation),texImport(variable))));
+    return mgOutput(mgTrans.mgExport(mgCalc.Solve(texImport(equation),texImport(variable))));
 }
 function mgSimplify(expression) { //simplify or reduce expression and evaluate all calculus
     calcLog = [];
-    return mgOutput(mgExport(mgCalc.Simplify(texImport(expression))))
+    return mgOutput(mgTrans.mgExport(mgCalc.Simplify(texImport(expression))))
 }
 function mgSubstitute(expression,substTarget,substSource) { //substitute target with source within expression
     calcLog = [];
@@ -60,19 +59,19 @@ function mgSubstitute(expression,substTarget,substSource) { //substitute target 
 }
 function mgFactor(expression) { //factor expression
     calcLog = [];
-    return mgOutput(mgExport(mgCalc.Factor(texImport(expression))));
+    return mgOutput(mgTrans.mgExport(mgCalc.Factor(texImport(expression))));
 }
 function mgExpand(expression) { //expand expression
     calcLog = [];
-    return mgOutput(mgExport(mgCalc.Expand(texImport(expression))));
+    return mgOutput(mgTrans.mgExport(mgCalc.Expand(texImport(expression))));
 }
 function mgTrigToExp(expression) { //convert trig functions to exponential form
     calcLog = [];
-    return mgOutput(mgExport(mgCalc.TrigToExp(texImport(expression))));
+    return mgOutput(mgTrans.mgExport(mgCalc.TrigToExp(texImport(expression))));
 }
 function mgExpToTrig(expression) { //convert exponential form to trig
     calcLog = [];
-    return mgOutput(mgExport(mgCalc.ExpToTrig(texImport(expression))));
+    return mgOutput(mgTrans.mgExport(mgCalc.ExpToTrig(texImport(expression))));
 }
 function mgRange(expression) { //find range of expression
     calcLog = [];
@@ -84,7 +83,7 @@ function mgDomain(expression) { //find domain of expression
 }
 function mgSeries(expression,variable,center,order) { //find Taylor Series of expression
     calcLog = [];
-    return mgOutput(mgExport(mgCalc.Series(texImport(expression),texImport(variable),center,order)));
+    return mgOutput(mgTrans.mgExport(mgCalc.Series(texImport(expression),texImport(variable),center,order)));
 }
 //internal functions-objects
 var mgCalc = function() {
@@ -2521,7 +2520,7 @@ var mgCalc = function() {
             var zArray = [],zString = "",iZ = 0;
             var zVars = cInventory(nZ+"+"+nC);
             if (zVars.length == 0) {return ""}
-            for (iZ in zVars) {zArray[iZ] = mgExport(xprSolve(cFunc(nZ+"Cv[8800]"+nC),"Cv["+zVars[iZ]+"]"))}
+            for (iZ in zVars) {zArray[iZ] = mgTrans.mgExport(xprSolve(cFunc(nZ+"Cv[8800]"+nC),"Cv["+zVars[iZ]+"]"))}
             for (iZ in zVars) {
                 if (!strTest(zArray[iZ],"Cv[8734]")) {
                     zString = zString+zArray[iZ];
@@ -2554,22 +2553,22 @@ var mgCalc = function() {
         function cbtR(xU) {return "cbt("+xU+")"}
         function sinR(xU) {return "sin("+xU+")"}
         function cosR(xU) {return "cos("+xU+")"}
-        function tanR(xU) {dArray.push(nEqual(xU,mgExport(cDivS(invMult,2))));return "tan("+xU+")"}
+        function tanR(xU) {dArray.push(nEqual(xU,mgTrans.mgExport(cDivS(invMult,2))));return "tan("+xU+")"}
         function cotR(xU) {dArray.push(nEqual(xU,"0"));return "cot("+xU+")"}
         function cscR(xU) {dArray.push(nEqual(xU,"0"));return "csc("+xU+")"}
-        function secR(xU) {dArray.push(nEqual(xU,mgExport(cDivS(invMult,2))));return "sec("+xU+")"}
+        function secR(xU) {dArray.push(nEqual(xU,mgTrans.mgExport(cDivS(invMult,2))));return "sec("+xU+")"}
         function snhR(xU) {return "snh("+xU+")"}
         function cshR(xU) {return "csh("+xU+")"}
         function tnhR(xU) {return "tnh("+xU+")"}
         function schR(xU) {return "sch("+xU+")"}
         function cchR(xU) {return "cch("+xU+")"}
         function cthR(xU) {return "cth("+xU+")"}
-        function asnR(xU) {dArray.push(mgExport(cNegS(cDivS(invMult,2)))+"Cv[8804]"+xU+"Cv[8804]"+mgExport(cDivS(invMult,2)));return "asn("+xU+")"}
+        function asnR(xU) {dArray.push(mgTrans.mgExport(cNegS(cDivS(invMult,2)))+"Cv[8804]"+xU+"Cv[8804]"+mgTrans.mgExport(cDivS(invMult,2)));return "asn("+xU+")"}
         function acsR(xU) {dArray.push("0"+"Cv[8804]"+xU+"Cv[8804]"+invMult);return "acs("+xU+")"}
-        function atnR(xU) {dArray.push(mgExport(cNegS(cDivS(invMult,2)))+"Cv[8804]"+xU+"Cv[8804]"+mgExport(cDivS(invMult,2)));return "atn("+xU+")"}
+        function atnR(xU) {dArray.push(mgTrans.mgExport(cNegS(cDivS(invMult,2)))+"Cv[8804]"+xU+"Cv[8804]"+mgTrans.mgExport(cDivS(invMult,2)));return "atn("+xU+")"}
         function actR(xU) {dArray.push("0"+"Cv[8804]"+xU+"Cv[8804]"+invMult);return "act("+xU+")"}
         function ascR(xU) {dArray.push("0"+"Cv[8804]"+xU+"Cv[8804]"+invMult);return "asc("+xU+")"}
-        function accR(xU) {dArray.push(mgExport(cNegS(cDivS(invMult,2)))+"Cv[8804]"+xU+"Cv[8804]"+mgExport(cDivS(invMult,2)));return "acc("+xU+")"}
+        function accR(xU) {dArray.push(mgTrans.mgExport(cNegS(cDivS(invMult,2)))+"Cv[8804]"+xU+"Cv[8804]"+mgTrans.mgExport(cDivS(invMult,2)));return "acc("+xU+")"}
         function ashR(xU) {return "ash("+xU+")"}
         function achR(xU) {dArray.push(xU+"Cv[8805]1");return "ach("+xU+")"}
         function athR(xU) {dArray.push(xU+"Cv[8805]1");return "ath("+xU+")"}
@@ -3659,7 +3658,7 @@ var mgCalc = function() {
     if (mgConfig.trigBase == Cv[29]/200) {invMult = "200"}
 
     return {
-        Numeric:    function(xprA) {return mgExport(fmtResult(eval(cFunc(xprA))))},
+        Numeric:    function(xprA) {return mgTrans.mgExport(fmtResult(eval(cFunc(xprA))))},
         Simplify:   function(xprA) {return cReduce(cFunc(parseCalculus(xprA))) },
         Solve:      function(xprA,xprB) {return xprSolve(cFunc(parseCalculus(xprA)),xprB)},
         Substitute: function(xprA,xprB,xprC) {return cSubst(xprA,xprB,xprC)},

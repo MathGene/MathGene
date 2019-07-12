@@ -2567,7 +2567,7 @@ if (typeof module == "object") {
     var mgTr = module.require('./mg_translate.js')
     var mgCl = module.require('./mg_calculate.js')
     var mgTranslate = function(xpr,scale) {return mgTr.mgTranslate(xpr,scale)};
-	var mgExport = function(xpr) {return mgTr.mgExport(xpr)};
+	var mgExport = function(xpr) {return mgTr.mgTrans.mgExport(xpr)};
     var mgNumeric = function(xpr) {return mgCl.mgNumeric(xpr)};
 	var mgCalculate = function(xpr) {return mgCl.mgCalculate(xpr)};
     var mgSimplify = function(xpr) {return mgCl.mgSimplify(xpr)};
@@ -2582,6 +2582,7 @@ if (typeof module == "object") {
     var mgSeries = function(xpr,svar,center,order) {return mgCl.mgSeries(xpr,svar,center,order)};
     var mgConfig = mgTr.mgConfig;
     var mgCalc = mgCl.mgCalc;
+	var mgTrans = mgTr.mgTrans;
     var nodejs = true;
     for (var testcase in testList) {execTest(testcase)}
 }
