@@ -22,57 +22,46 @@ if (typeof module ==  "object") {
     var mgTr = require("./mg_translate.js");
     var mgConfig = mgTr.mgConfig;
     var Cv = mgTr.Cv;
-    var Cs = mgTr.Cs;
     var mgTrans = mgTr.mgTrans;
+    var mgTranslate = mgTr.mgTranslate;
+    var mgOutput = mgTr.mgOutput;
 }
 
 //external callable functions
 function mgNumeric(expression) { //calculate numerical
-    calcLog = [];
     return mgOutput(mgCalc.Numeric(mgTrans.texImport(expression)));
 }
 function mgCalculate(expression) { //calculate numerical (deprecated)
-    calcLog = [];
     return mgOutput(mgCalc.Numeric(mgTrans.texImport(expression)));
 }
 function mgSolve(equation,variable) { //solve equation for variable
-    calcLog = [];
     return mgOutput(mgTrans.mgExport(mgCalc.Solve(mgTrans.texImport(equation),mgTrans.texImport(variable))));
 }
 function mgSimplify(expression) { //simplify or reduce expression and evaluate all calculus
-    calcLog = [];
     return mgOutput(mgTrans.mgExport(mgCalc.Simplify(mgTrans.texImport(expression))))
 }
 function mgSubstitute(expression,substTarget,substSource) { //substitute target with source within expression
-    calcLog = [];
     return mgOutput(mgCalc.Substitute(mgTrans.texImport(expression),mgTrans.texImport(substTarget),mgTrans.texImport(substSource)));
 }
 function mgFactor(expression) { //factor expression
-    calcLog = [];
     return mgOutput(mgTrans.mgExport(mgCalc.Factor(mgTrans.texImport(expression))));
 }
 function mgExpand(expression) { //expand expression
-    calcLog = [];
     return mgOutput(mgTrans.mgExport(mgCalc.Expand(mgTrans.texImport(expression))));
 }
 function mgTrigToExp(expression) { //convert trig functions to exponential form
-    calcLog = [];
     return mgOutput(mgTrans.mgExport(mgCalc.TrigToExp(mgTrans.texImport(expression))));
 }
 function mgExpToTrig(expression) { //convert exponential form to trig
-    calcLog = [];
     return mgOutput(mgTrans.mgExport(mgCalc.ExpToTrig(mgTrans.texImport(expression))));
 }
 function mgRange(expression) { //find range of expression
-    calcLog = [];
     return mgOutput(mgCalc.Range(mgTrans.texImport(expression)));
 }
 function mgDomain(expression) { //find domain of expression
-    calcLog = [];
     return mgOutput(mgCalc.Domain(mgTrans.texImport(expression)));
 }
 function mgSeries(expression,variable,center,order) { //find Taylor Series of expression
-    calcLog = [];
     return mgOutput(mgTrans.mgExport(mgCalc.Series(mgTrans.texImport(expression),mgTrans.texImport(variable),center,order)));
 }
 //internal functions-objects
@@ -218,7 +207,6 @@ var mgCalc = function() {
         else if (sXtract.func == "cLeq" && cRet.ineqSwap < 0) {sReturn = cGeqS(cRet.rExpr,xReduce(cRet.lExpr))}
         else {sReturn = "undefined"}
         if (strTest(sReturn,"Cv[9998]")) {sReturn = "Cv[9998]"}
-        if (mgConfig.calcLogLevel > 0) {calcLog.push({xprSolve:{input:xSol,output:sReturn,variable:cSol}})}
         return sReturn
     }
     function relExtract(fExt) { //extract relational operators in FUNC format, returns func,upper,lower
@@ -307,7 +295,7 @@ var mgCalc = function() {
         if (sTest) {return sTest}
         return ""
     }
-    function cError(cE) {Cs[9998] = cE;return "Cv[9998]"} //error message return symbol
+    function cError(cE) {mgTrans.Cs[9998] = cE;return "Cv[9998]"} //error message return symbol
     function cSubst(sXpr,xI,xO) {sXpr+="";var sCount = sXpr.split(xI).length-1;for (var nXs=0;nXs<sCount;nXs++) {sXpr = sXpr.replace(xI,xO)};return sXpr} //substitution in MG format
     function nbrTest(xT) {if (+xT == +xT*1) {return true}; return false} //test for numerical string
     function nbrEven(xE) {if (cDiv(xE,2) == int(cDiv(xE,2))) {return true};return false} //test for even number
@@ -341,7 +329,6 @@ var mgCalc = function() {
     }
     function cReduce(cRdce) {
         var sReturn = iReduce(xReduce(cRdce));
-        if (mgConfig.calcLogLevel > 2) {calcLog.push({cReduce:{input:cRdce,output:sReturn}})}
         return sReturn
     } //complete expression reduction
     function pxpExecute(xIn) {Pv = [];return xprIterate(xprIterate(xIn.replace(/cMul\(/g,"vMul(").replace(/cDiv\(/g,"vDiv(").replace(/cNeg\(/g,"vNeg(")).replace(/Pv\[(\d+)\]/g,"pxp($1)"))}
@@ -1644,7 +1631,6 @@ var mgCalc = function() {
         else if (dXpr == deeVar) {sReturn = 1} //identity
         else if (!strTest(dXpr,deeVar)) {sReturn = 0} //no derivative variable
         else {sReturn = drvS(cReduce(drvExecute(dXpr)),deeVar,nTh-1)} //recurse derivatives greater than 1st
-        if (mgConfig.calcLogLevel > 1) {calcLog.push({drvS:{input:dXpr,output:sReturn,variable:deeVar}})}
         return sReturn
     }
 
@@ -2148,7 +2134,6 @@ var mgCalc = function() {
                 if (ntgCheck(dXpr)) {sReturn = cReduce(dXpr)}
             }
         }
-        if (mgConfig.calcLogLevel > 0) {calcLog.push({ntgS:{input:nXpr,output:sReturn,variable:deeVar,recursion:iIterations}})}
         return sReturn
     }
 
@@ -2367,7 +2352,6 @@ var mgCalc = function() {
         var args = opExtract(sReturn);
         if (!strTest(sReturn,lVar) || args.func == "") {return sReturn}
         sReturn = xReduce(cSubst(lmtFunc[args.func+"L"](args.upper,args.lower),lVar,xLim));
-        if (mgConfig.calcLogLevel > 0) {calcLog.push({lmtS:{input:lXpr,variable:lVar,output:sReturn}})}
         return sReturn
     }
 
@@ -2383,7 +2367,6 @@ var mgCalc = function() {
         else {facTemp = facTerms(facTerms(cFac))}
         if (factorFlag == true && facTemp != cFac && !strTest(facTemp, "undefined")) {factorFlag = false;sReturn = facTemp}
         factorFlag = false;
-        if (mgConfig.calcLogLevel > 0) {calcLog.push({xprFactor:{input:cFac,output:sReturn}})}
         return sReturn
     }
     function pFactor(xFac) { //factor polynomials
@@ -2787,7 +2770,6 @@ var mgCalc = function() {
                 if (!strTest(sumReturn,"undefined") && !strTest(sumReturn,"NaN")) {sReturn = xReduce(sumReturn)}
             }
         }
-        if (mgConfig.calcLogLevel > 0) {calcLog.push({smmS:{input:sXpr,output:sReturn}})}
         return sReturn
     }
     //Pi Products
@@ -2889,7 +2871,6 @@ var mgCalc = function() {
                 if (!strTest(prdReturn,"undefined") && !strTest(prdReturn,"NaN")) {sReturn = xReduce(prdReturn)}
             }
         }
-        if (mgConfig.calcLogLevel > 0) {calcLog.push({pmmS:{input:pXpr,output:sReturn}})}
         return sReturn
     }
 
