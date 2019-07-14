@@ -24,67 +24,56 @@ if (typeof module ==  "object") {
     var Cv = mgTr.Cv;
     var Cs = mgTr.Cs;
     var mgTrans = mgTr.mgTrans;
-    var mgFuncMap = mgTr.funcMap;
-    parseParens = function(xpr,bSym) {return mgTr.mgTrans.parseParens(xpr,bSym)}
-    cFunc = function(xpr) {return mgTr.mgTrans.cFunc(xpr)}
-    texImport = function(xpr) {return mgTr.mgTrans.texImport(xpr)}
-    mgOutput = function(xpr,scale) {return mgTr.mgOutput(xpr,scale)}
-}
-else {
-    mgFuncMap = funcMap;
-    cFunc = function(xpr) {return mgTrans.cFunc(xpr)}
-    texImport = function(xpr) {return mgTrans.texImport(xpr)}
-    parseParens = function(xpr,bSym) {return mgTrans.parseParens(xpr,bSym)}
 }
 
 //external callable functions
 function mgNumeric(expression) { //calculate numerical
     calcLog = [];
-    return mgOutput(mgCalc.Numeric(texImport(expression)));
+    return mgOutput(mgCalc.Numeric(mgTrans.texImport(expression)));
 }
 function mgCalculate(expression) { //calculate numerical (deprecated)
     calcLog = [];
-    return mgOutput(mgCalc.Numeric(texImport(expression)));
+    return mgOutput(mgCalc.Numeric(mgTrans.texImport(expression)));
 }
 function mgSolve(equation,variable) { //solve equation for variable
     calcLog = [];
-    return mgOutput(mgTrans.mgExport(mgCalc.Solve(texImport(equation),texImport(variable))));
+    return mgOutput(mgTrans.mgExport(mgCalc.Solve(mgTrans.texImport(equation),mgTrans.texImport(variable))));
 }
 function mgSimplify(expression) { //simplify or reduce expression and evaluate all calculus
     calcLog = [];
-    return mgOutput(mgTrans.mgExport(mgCalc.Simplify(texImport(expression))))
+    return mgOutput(mgTrans.mgExport(mgCalc.Simplify(mgTrans.texImport(expression))))
 }
 function mgSubstitute(expression,substTarget,substSource) { //substitute target with source within expression
     calcLog = [];
-    return mgOutput(mgCalc.Substitute(texImport(expression),texImport(substTarget),texImport(substSource)));
+    return mgOutput(mgCalc.Substitute(mgTrans.texImport(expression),mgTrans.texImport(substTarget),mgTrans.texImport(substSource)));
 }
 function mgFactor(expression) { //factor expression
     calcLog = [];
-    return mgOutput(mgTrans.mgExport(mgCalc.Factor(texImport(expression))));
+    return mgOutput(mgTrans.mgExport(mgCalc.Factor(mgTrans.texImport(expression))));
 }
 function mgExpand(expression) { //expand expression
     calcLog = [];
-    return mgOutput(mgTrans.mgExport(mgCalc.Expand(texImport(expression))));
+    return mgOutput(mgTrans.mgExport(mgCalc.Expand(mgTrans.texImport(expression))));
 }
 function mgTrigToExp(expression) { //convert trig functions to exponential form
     calcLog = [];
-    return mgOutput(mgTrans.mgExport(mgCalc.TrigToExp(texImport(expression))));
+    return mgOutput(mgTrans.mgExport(mgCalc.TrigToExp(mgTrans.texImport(expression))));
 }
 function mgExpToTrig(expression) { //convert exponential form to trig
     calcLog = [];
-    return mgOutput(mgTrans.mgExport(mgCalc.ExpToTrig(texImport(expression))));
+    return mgOutput(mgTrans.mgExport(mgCalc.ExpToTrig(mgTrans.texImport(expression))));
 }
 function mgRange(expression) { //find range of expression
     calcLog = [];
-    return mgOutput(mgCalc.Range(texImport(expression)));
+    return mgOutput(mgCalc.Range(mgTrans.texImport(expression)));
 }
 function mgDomain(expression) { //find domain of expression
     calcLog = [];
-    return mgOutput(mgCalc.Domain(texImport(expression)));
+    return mgOutput(mgCalc.Domain(mgTrans.texImport(expression)));
 }
 function mgSeries(expression,variable,center,order) { //find Taylor Series of expression
     calcLog = [];
-    return mgOutput(mgTrans.mgExport(mgCalc.Series(texImport(expression),texImport(variable),center,order)));
+    return mgOutput(mgTrans.mgExport(mgCalc.Series(mgTrans.texImport(expression),mgTrans.texImport(variable),center,order)));
 }
 //internal functions-objects
 var mgCalc = function() {
@@ -237,19 +226,19 @@ var mgCalc = function() {
         fExt = strConvert(fExt);
         for (var cI in rOps) {
             if (fExt.indexOf(rOps[cI]) == 0 ) {
-                var strg = parseParens(fExt,fExt.indexOf("("));
+                var strg = mgTrans.parseParens(fExt,fExt.indexOf("("));
                 return {func:rOps[cI],upper:strg.upper,lower:strg.lower}
             }
         }
         return {func:"",upper:"",lower:""}
     }
     function opExtract(fExt) {//extract inside function in FUNC format, returns func,upper,lower
-        function fTest(tFunc) {if (typeof mgFuncMap[tFunc] == "undefined") {return false}; return true} //test for valid function key
+        function fTest(tFunc) {if (typeof mgTrans.funcMap[tFunc] == "undefined") {return false}; return true} //test for valid function key
         fExt = strConvert(fExt);
         var opReturn = {func:"",upper:"",lower:""}
         var funcKey = fExt.substr(0,fExt.indexOf("("))
         if (funcKey && fTest(funcKey)) {
-            var strg = parseParens(fExt,fExt.indexOf("("));
+            var strg = mgTrans.parseParens(fExt,fExt.indexOf("("));
             if (strg.upper) {opReturn = {func:funcKey,upper:xprIterate(strg.upper),lower:xprIterate(strg.lower)}} //two operands
             else {opReturn = {func:funcKey,upper:xprIterate(strg.inside),lower:""}} //single operand
         }
@@ -1522,7 +1511,7 @@ var mgCalc = function() {
                 if (invTemp.length == 1) {dExp = dExp + "dif(Cv[" + invTemp[0] +"])"}
                 else {return cError("Missing dx")}
             }
-            dV = parseParens(dExp,dExp.indexOf("itg(")+3)
+            dV = mgTrans.parseParens(dExp,dExp.indexOf("itg(")+3)
             if (strTest(dExp,"(,") || strTest(dExp,",)")) {return cError("Missing integral limit(s)")}
             dExp = dExp.substr(0,dExp.indexOf("itg("))+"ntg("+dExp.substr(dV.end+1,dExp.length);
             dExp = dExp.replace(/dif\(Cv\[(\d+)\]\)/,",Cv[$1],"+dV.inside+")");
@@ -1534,9 +1523,9 @@ var mgCalc = function() {
             if (rFunc == -1) {break}
             dExp = dExp.substr(0,rIndex)+"tmp("+dExp.substr(rIndex+4);
             var lIndex = dExp.substr(dExp.lastIndexOf("tmp("),dExp.length);
-            dV = parseParens(lIndex,lIndex.indexOf("tmp(")+3).inside;
+            dV = mgTrans.parseParens(lIndex,lIndex.indexOf("tmp(")+3).inside;
             dExp = dExp.replace(lIndex,"tmp("+lIndex.replace("tmp("+dV+")",""));
-            var strg = parseParens(dExp,dExp.lastIndexOf("tmp(")+3);
+            var strg = mgTrans.parseParens(dExp,dExp.lastIndexOf("tmp(")+3);
             if (strg.inside.charAt(strg.inside.length-1) == "," || !strg.inside) {return cError("Missing operand(s)")}
             dExp = dExp.substr(0,dExp.lastIndexOf("tmp("))+calcOpsOut[rFunc]+strg.inside+","+dV+")"+dExp.substr(strg.end,dExp.length);
             if (strTest(dExp,"smm(") || strTest(dExp,"pmm(")) {dExp = dExp.replace("Cv[61]",",")}
@@ -2521,7 +2510,7 @@ var mgCalc = function() {
             var zArray = [],zString = "",iZ = 0;
             var zVars = cInventory(nZ+"+"+nC);
             if (zVars.length == 0) {return ""}
-            for (iZ in zVars) {zArray[iZ] = mgTrans.mgExport(xprSolve(cFunc(nZ+"Cv[8800]"+nC),"Cv["+zVars[iZ]+"]"))}
+            for (iZ in zVars) {zArray[iZ] = mgTrans.mgExport(xprSolve(mgTrans.cFunc(nZ+"Cv[8800]"+nC),"Cv["+zVars[iZ]+"]"))}
             for (iZ in zVars) {
                 if (!strTest(zArray[iZ],"Cv[8734]")) {
                     zString = zString+zArray[iZ];
@@ -2602,8 +2591,8 @@ var mgCalc = function() {
         //
         xR = strConvert(xR);
         var xRang = "",dArray = [],xArray = [];
-        if (strTest(xR,"=")) {xRang = cFunc(xR.split("=")[1])}
-        else {xRang = cFunc(xR)}
+        if (strTest(xR,"=")) {xRang = mgTrans.cFunc(xR.split("=")[1])}
+        else {xRang = mgTrans.cFunc(xR)}
         eval(xRang.replace(/([a-z])\(/g,"$1R(").replace(/(Cv\[\d+\])/g,"'$1'"));
         for (var xC in dArray) {// fix dups/blanks
             if (!strTest(xArray,dArray[xC]) && dArray[xC] && !strTest(dArray[xC],"undefined") && !strTest(dArray[xC],"Cv[8734]")) {xArray.push(dArray[xC])}
@@ -2657,8 +2646,8 @@ var mgCalc = function() {
         //z
         xD = strConvert(xD);
         var iV = 0,realVars = [],integerVars = [],dString = "",rString = "",iString = "";
-        if (strTest(xD,"=")) {xDom = cFunc(xD.split("=")[1])}
-        else {xDom = cFunc(parseCalculus(xD))}
+        if (strTest(xD,"=")) {xDom = mgTrans.cFunc(xD.split("=")[1])}
+        else {xDom = mgTrans.cFunc(parseCalculus(xD))}
         var allVars = cInventory(xD);
         for (iV in allVars) {allVars[iV] = "Cv["+allVars[iV]+"]"}
         eval(xDom.replace(/([a-z])\(/g,"$1S(").replace(/(Cv\[\d+\])/g,"'$1'").replace(/ntgS/g,"ntgO").replace(/smmS/g,"smmO").replace(/pmmS/g,"pmmO").replace(/lmtS/g,"lmtO"));
@@ -2912,7 +2901,7 @@ var mgCalc = function() {
             if (mgConfig.dPrecision <= 6) {cT = mgConfig.dPrecision}
             if (mgConfig.cplxFmt == "Polar") {
                 if (cIn.i == 0) {return roundDecTo(cIn.r)}
-                else {return cFunc(roundDecTo(abs(cIn),cT)+"~"+roundDecTo(cDiv(arg(cMul(cIn,mgConfig.trigBase)),mgConfig.trigBase),cT))}
+                else {return mgTrans.cFunc(roundDecTo(abs(cIn),cT)+"~"+roundDecTo(cDiv(arg(cMul(cIn,mgConfig.trigBase)),mgConfig.trigBase),cT))}
             }
             else {
                 if (cIn.r == "NaN" || cIn.i == "NaN") {return "undefined"}
@@ -2924,7 +2913,7 @@ var mgCalc = function() {
                 if (+cIn.i == 1 && +cIn.r == 0) {return "Cv[46]"}
                 if (+cIn.r == 0) {tCmpx = roundDecTo(cIn.i,cT)+"Cv[46]"}
                 else {tCmpx = roundDecTo(cIn.r,cT)+"+"+roundDecTo(cIn.i,cT)+"Cv[46]"}
-                return cFunc(tCmpx.replace(/\+\-/g,"-").replace(/\-1Cv\[46\]/g,"-Cv[46]").replace(/\+1Cv\[46\]/g,"+Cv[46]"))
+                return mgTrans.cFunc(tCmpx.replace(/\+\-/g,"-").replace(/\-1Cv\[46\]/g,"-Cv[46]").replace(/\+1Cv\[46\]/g,"+Cv[46]"))
             }
         }
         if (getType(xIn) == "matrix") {
@@ -3659,17 +3648,17 @@ var mgCalc = function() {
     if (mgConfig.trigBase == Cv[29]/200) {invMult = "200"}
 
     return {
-        Numeric:    function(xprA) {return mgTrans.mgExport(fmtResult(eval(cFunc(xprA))))},
-        Simplify:   function(xprA) {return cReduce(cFunc(parseCalculus(xprA))) },
-        Solve:      function(xprA,xprB) {return xprSolve(cFunc(parseCalculus(xprA)),xprB)},
+        Numeric:    function(xprA) {return mgTrans.mgExport(fmtResult(eval(mgTrans.cFunc(xprA))))},
+        Simplify:   function(xprA) {return cReduce(mgTrans.cFunc(parseCalculus(xprA))) },
+        Solve:      function(xprA,xprB) {return xprSolve(mgTrans.cFunc(parseCalculus(xprA)),xprB)},
         Substitute: function(xprA,xprB,xprC) {return cSubst(xprA,xprB,xprC)},
-        Factor:     function(xprA) {return xprFactor(cFunc(parseCalculus(xprA)))},
-        Expand:     function(xprA) {return xprExpand(cFunc(parseCalculus(xprA)))},
-        TrigToExp:  function(xprA) {return xprTrigToExp(cFunc(parseCalculus(xprA)))},
-        ExpToTrig:  function(xprA) {return xprExpToTrig(cFunc(parseCalculus(xprA)))},
+        Factor:     function(xprA) {return xprFactor(mgTrans.cFunc(parseCalculus(xprA)))},
+        Expand:     function(xprA) {return xprExpand(mgTrans.cFunc(parseCalculus(xprA)))},
+        TrigToExp:  function(xprA) {return xprTrigToExp(mgTrans.cFunc(parseCalculus(xprA)))},
+        ExpToTrig:  function(xprA) {return xprExpToTrig(mgTrans.cFunc(parseCalculus(xprA)))},
         Range:      function(xprA) {return xprRange(xprA)},
         Domain:     function(xprA) {return xprDomain(xprA)},
-        Series:     function(xprA,xprB,xprC,xprD) {return xprSeries(cFunc(parseCalculus(xprA)),xprB,xprC,xprD)},
+        Series:     function(xprA,xprB,xprC,xprD) {return xprSeries(mgTrans.cFunc(parseCalculus(xprA)),xprB,xprC,xprD)},
         RoundDec:   function(p1,p2) {return roundDecTo(p1,p2)},
         Inventory:  function(xprA) {return cInventory(xprA)},
         Payment:    function(p1,p2,p3,p4,p5,p6) {return finPMT(p1,p2,p3,p4,p5,p6)},
