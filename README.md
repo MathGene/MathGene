@@ -166,7 +166,7 @@ Advantages:
 - Released under GPL. No fees or licensing!
 
 The following function is used to render HTML output from the input expression string in either LaTeX or native MG format:
-- mgTranslate(expression).html
+- mgTrans.Translate(expression).html
 
 Example of embedding MathGene HTML in a web page:
 
@@ -176,16 +176,16 @@ Example of embedding MathGene HTML in a web page:
 	</head>
 	<body>
 	<p>Here is a matrix:</p>
-	<script>document.write(mgTranslate("\\begin{ bmatrix}a&b&c \\\\ \\frac{\\pi}{2}&d&e  \\end{bmatrix}").html)</script>
+	<script>document.write(mgTrans.Translate("\\begin{ bmatrix}a&b&c \\\\ \\frac{\\pi}{2}&d&e  \\end{bmatrix}").html)</script>
 	<p>Here is an integral:</p>
-	<script>document.write(mgTranslate("\\int_{1}^{2} \\sin\\left(x\\right) dx").html)</script>
+	<script>document.write(mgTrans.Translate("\\int_{1}^{2} \\sin\\left(x\\right) dx").html)</script>
 	</body>
 	</html>
 
 
 ## MathGene Numeric Math
 
-MathGene 'mgNumeric(expression)' function will compute the numeric decimal value of an input expression.
+MathGene 'mgCalc.Numeric(expression)' function will compute the numeric decimal value of an input expression.
 
 Numeric computations are performed via IEEE754-2008 64bit floating point math as implemented in JavaScript engine. 
 This provides 16 decimal places of precision with exponents from -322 to +302 in standard scientific notation.
@@ -197,30 +197,30 @@ The input expression can contain constants, real numbers, fractions, complex num
 Examples can be seen in the test suite under 'Numeric' and 'Matrix'.
 
 - All uninitialized variables will be evaluated with a '0' value unless the variable value is set prior to the operation.
-- The returned value of mgNumeric() is an object containing the three output formats LaTeX, HTML, and MG.
-- To output a computation in LaTeX use: mgNumeric(expression).latex
-- To output a computation in HTML use: mgNumeric(expression).html.
+- The returned value of mgCalc.Numeric() is an object containing the three output formats LaTeX, HTML, and MG.
+- To output a computation in LaTeX use: mgCalc.Numeric(expression).latex
+- To output a computation in HTML use: mgCalc.Numeric(expression).html.
 
 Examples:
 
-	mgNumeric("\\frac{8-8 \\imath }{2+ \\imath }").latex    =>     "1.6-4.8 \\imath"
-	mgNumeric("\\begin{bmatrix}3&4&2 \\end{bmatrix} \\times \\begin{bmatrix}13&9&7&15 \\\\8&7&4&6 \\\\6&4&0&3 \\end{bmatrix}").latex  =>  "\\begin{bmatrix}3&4&2 \\end{bmatrix} \\times \\begin{bmatrix}13&9&7&15 \\\\8&7&4&6 \\\\6&4&0&3\\end{bmatrix}"
+	mgCalc.Numeric("\\frac{8-8 \\imath }{2+ \\imath }").latex    =>     "1.6-4.8 \\imath"
+	mgCalc.Numeric("\\begin{bmatrix}3&4&2 \\end{bmatrix} \\times \\begin{bmatrix}13&9&7&15 \\\\8&7&4&6 \\\\6&4&0&3 \\end{bmatrix}").latex  =>  "\\begin{bmatrix}3&4&2 \\end{bmatrix} \\times \\begin{bmatrix}13&9&7&15 \\\\8&7&4&6 \\\\6&4&0&3\\end{bmatrix}"
 
 
 ## MathGene Symbolic Math
 
 The following MathGene functions compute symbolic math:
 
-- mgSimplfy(expression) - reduces the expression to simplest form, evaluates all calculus, limits, summations, reduces fractions, etc.
-- mgSolve(equation,variable) - solve the equation for the specified variable
-- mgSubstitute(expression,substTarget,substSource) - substitute the expression in substTarget (which is a term in expression) with substSource
-- mgFactor(expression) - factor symbolically 
-- mgExpand(expression) - inverse of mgFactor
-- mgTrigToExp(expression) - converts trig and hyperbolic functions to exponential equivalents
-- mgExpToTrig(expression) - converts exponential equivalents to trig and hyperbolic functions
-- mgRange(expression) - returns range of expression
-- mgDomain(expression) - returns domain of expression
-- mgSeries(expression,variable,center,order) - returns Taylor series of expression, center default=0, order default=6
+- mgCalc.Simplfy(expression) - reduces the expression to simplest form, evaluates all calculus, limits, summations, reduces fractions, etc.
+- mgCalc.Solve(equation,variable) - solve the equation for the specified variable
+- mgCalc.Substitute(expression,substTarget,substSource) - substitute the expression in substTarget (which is a term in expression) with substSource
+- mgCalc.Factor(expression) - factor symbolically 
+- mgCalc.Expand(expression) - inverse of mgFactor
+- mgCalc.TrigToExp(expression) - converts trig and hyperbolic functions to exponential equivalents
+- mgCalc.ExpToTrig(expression) - converts exponential equivalents to trig and hyperbolic functions
+- mgCalc.Range(expression) - returns range of expression
+- mgCalc.Domain(expression) - returns domain of expression
+- mgCalc.Series(expression,variable,center,order) - returns Taylor series of expression, center default=0, order default=6
 
 The returned value of all the above functions is an object containing the three output formats LaTeX, HTML, and MG.
 

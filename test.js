@@ -1,6 +1,6 @@
 /*
-    MathGene Test Suite - Version 1.30
-    Copyright (C) 2018  George J. Paulos
+    MathGene Test Suite - Version 2.0
+    Copyright (C) 2019  George J. Paulos
 
     MathGene is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -2062,7 +2062,6 @@ var internal =
 "mgCalc.GCF(120,76)","4",
 "mgCalc.GCF(2049,333)","3",
 "mgCalc.GCF(450,225)","225",
-"mgCalculate('2+3').mg","5",
 "mgSubstitute('2/Cv[10110]+1','Cv[10110]','Cv[10120]^2').mg","2/Cv[10120]^2+1",
 "mgTrans.mgExport('lmt(cDiv(1,Cv[10120]),Cv[10120],1)')","lim(Cv[10120],1)1/Cv[10120]",
 "mgTrans.mgExport('pmm(cDiv(1,Cv[10120]),Cv[10120],1,10)')","prd(Cv[10120],1Cv[61]10)1/Cv[10120]",
@@ -2140,7 +2139,7 @@ function setTitle(label) {
     htmlResults =htmlResults+"<br><div align='center'><b>"+label+"</b></div><br>";
 }
 function runNumerical() {
-    setTitle("Numerical Tests 'mgNumeric()'")
+    setTitle("Numerical Tests 'mgCalc.Numeric()'")
     mgConfig.dPrecision = 8; //reduce precision to allow for different JS engines
     increment = 2;
     for (index=0;index<numerical.length;index+=increment) {
@@ -2157,7 +2156,7 @@ function runNumerical() {
     toOutput()
 }
 function runRange() {
-    setTitle("Range Tests 'mgRange()'")
+    setTitle("Range Tests 'mgCalc.Range()'")
     increment = 2;
     degree = 1;
     for (index=0;index<range.length;index+=increment) {
@@ -2173,7 +2172,7 @@ function runRange() {
     toOutput()
 }
 function runDomain() {
-    setTitle("Domain Tests 'mgDomain()'")
+    setTitle("Domain Tests 'mgCalc.Domain()'")
     increment = 2;
     degree = 1;
     for (index=0;index<domain.length;index+=increment) {
@@ -2189,7 +2188,7 @@ function runDomain() {
     toOutput()
 }
 function runMatrix() {
-    setTitle("Matrix Tests 'mgSimplify()'")
+    setTitle("Matrix Tests 'mgCalc.Simplify()'")
     increment = 2;
     degree = 1;
     for (index=0;index<matrix.length;index+=increment) {
@@ -2205,7 +2204,7 @@ function runMatrix() {
     toOutput()
 }
 function runReduce() {
-    setTitle("Reduce Tests 'mgSimplify()'")
+    setTitle("Reduce Tests 'mgCalc.Simplify()'")
     degree = 1;
     increment = 2;
     for (index=0;index<reduce.length;index+=increment) {
@@ -2221,7 +2220,7 @@ function runReduce() {
     toOutput()
 }
 function runFactor() {
-    setTitle("Factor Tests 'mgFactor()'")
+    setTitle("Factor Tests 'mgCalc.Factor()'")
     degree = 1;
     increment = 2;
     for (index=0;index<factor.length;index+=increment) {
@@ -2237,7 +2236,7 @@ function runFactor() {
     toOutput()
 }
 function runExpand() {
-    setTitle("Expand Tests 'mgExpand()'")
+    setTitle("Expand Tests 'mgCalc.Expand()'")
     increment = 2;
     for (index=0;index<expand.length;index+=increment) {
 		if (nodejs) {
@@ -2252,7 +2251,7 @@ function runExpand() {
     toOutput()
 }
 function runSolve() {
-    setTitle("Solve Tests 'mgSolve()'")
+    setTitle("Solve Tests 'mgCalc.Solve()'")
     increment = 3;
     for (index=0;index<solve.length;index+=increment) {
 		if (nodejs) {
@@ -2267,7 +2266,7 @@ function runSolve() {
     toOutput()
 }
 function runSeries() {
-    setTitle("Taylor Series Tests 'mgSeries()'")
+    setTitle("Taylor Series Tests 'mgCalc.Series()'")
     increment = 5;
     for (index=0;index<series.length;index+=increment) {
         runTest(mgTranslate(series[index]).html,mgSeries(series[index],series[index+1],series[index+2],series[index+3]).html,mgTranslate(series[index+4]).html)
@@ -2275,7 +2274,7 @@ function runSeries() {
     toOutput()
 }
 function runTrigtoexp() {
-    setTitle("Trig to Exponential Tests 'mgTrigToExp()'")
+    setTitle("Trig to Exponential Tests 'mgCalc.TrigToExp()'")
     increment = 2;
     for (index=0;index<trigtoexp.length;index+=increment) {
 		if (nodejs) {
@@ -2290,7 +2289,7 @@ function runTrigtoexp() {
     toOutput()
 }
 function runExptotrig() {
-    setTitle("Exponential to Trig Tests 'mgExpToTrig()'")
+    setTitle("Exponential to Trig Tests 'mgCalc.ExpToTrig()'")
     increment = 2;
     for (index=0;index<exptotrig.length;index+=increment) {
 		if (nodejs) {
@@ -2305,7 +2304,7 @@ function runExptotrig() {
     toOutput()
 }
 function runLimits() {
-    setTitle("Limits Tests 'mgSimplify()'")
+    setTitle("Limits Tests 'mgCalc.Simplify()'")
     increment = 2;
     for (index=0;index<limits.length;index+=increment) {
 		if (nodejs) {
@@ -2320,7 +2319,7 @@ function runLimits() {
     toOutput()
 }
 function runDerivatives() {
-    setTitle("Complex Domain Derivatives Tests 'mgSimplify()'")
+    setTitle("Complex Domain Derivatives Tests 'mgCalc.Simplify()'")
     increment = 2;
     for (index=0;index<derivatives.length;index+=increment) {
 		if (nodejs) {
@@ -2335,7 +2334,7 @@ function runDerivatives() {
     toOutput()
 }
 function runIntegrals() {
-    setTitle("Complex Domain Integrals Tests 'mgSimplify()'")
+    setTitle("Complex Domain Integrals Tests 'mgCalc.Simplify()'")
     increment = 2;
     for (index=0;index<integrals.length;index+=increment) {
 		if (nodejs) {
@@ -2350,7 +2349,7 @@ function runIntegrals() {
     toOutput()
 }
 function runRealCalculus() {
-    setTitle("Real Domain Calculus Tests 'mgSimplify()'")
+    setTitle("Real Domain Calculus Tests 'mgCalc.Simplify()'")
     increment = 2;
     mgConfig.Domain = "Real";
     for (index=0;index<real_calculus.length;index+=increment) {
@@ -2367,7 +2366,7 @@ function runRealCalculus() {
     mgConfig.Domain = "Complex";
 }
 function runSummation() {
-    setTitle("Summation Tests 'mgSimplify()'")
+    setTitle("Summation Tests 'mgCalc.Simplify()'")
     increment = 2;
     for (index=0;index<summation.length;index+=increment) {
 		if (nodejs) {
@@ -2382,7 +2381,7 @@ function runSummation() {
     toOutput()
 }
 function runHTML() {
-    setTitle("HTML Tests 'mgTranslate().html'")
+    setTitle("HTML Tests 'mgCalc.Translate().html'")
     increment = 2;
     mgConfig.invFmt = "asin"
     mgConfig.fnFmt = "fn(x)";
@@ -2397,7 +2396,7 @@ function runHTML() {
 		}
     }
     mgConfig.invFmt = "sin<sup>-1</sup>"
-    setTitle("HTML Tests 'mgTranslate().html sin<sup>-1</sup>'")
+    setTitle("HTML Tests 'mgCalc.Translate().html sin<sup>-1</sup>'")
     for (index=0;index<htmlx.length;index+=increment) {
 		if (nodejs) {
 			const rceivd = mgTranslate(htmlx[index]).html;
@@ -2410,7 +2409,7 @@ function runHTML() {
     }
     mgConfig.invFmt = "sin<sup>-1</sup>";
     mgConfig.fnFmt = "fn x";
-    setTitle("HTML Tests 'mgTranslate().html fn x sin<sup>-1</sup>'")
+    setTitle("HTML Tests 'mgCalc.Translate().html fn x sin<sup>-1</sup>'")
     for (index=0;index<htmly.length;index+=increment) {
 		if (nodejs) {
 			const rceivd = mgTranslate(htmly[index]).html;
@@ -2423,7 +2422,7 @@ function runHTML() {
     }
     mgConfig.invFmt = "asin";
     mgConfig.fnFmt = "fn x";
-    setTitle("HTML Tests 'mgTranslate().html fn x asin'")
+    setTitle("HTML Tests 'mgCalc.Translate().html fn x asin'")
     for (index=0;index<htmlz.length;index+=increment) {
 		if (nodejs) {
 			const rceivd = mgTranslate(htmlz[index]).html;
@@ -2438,7 +2437,7 @@ function runHTML() {
     toOutput()
 }
 function runExport() {
-    setTitle("Latex Export Tests 'mgTranslate().latex'")
+    setTitle("Latex Export Tests 'mgCalc.Translate().latex'")
     increment = 2;
 	mgConfig.fnFmt = "fn(x)";
     for (index=0;index<xport.length;index+=increment) {
@@ -2452,7 +2451,7 @@ function runExport() {
 		}
     }
     mgConfig.fnFmt = "fn x";
-    setTitle("Latex Export Tests 'mgTranslate().latex fn x'")
+    setTitle("Latex Export Tests 'mgCalc.Translate().latex fn x'")
     for (index=0;index<xportx.length;index+=increment) {
 		if (nodejs) {
 			const rceivd = mgTranslate(xportx[index]).latex.replace(/ /g,"");
@@ -2465,7 +2464,7 @@ function runExport() {
     }
     mgConfig.fnFmt = "fn x";
     mgConfig.invFmt = "sin<sup>-1</sup>";
-    setTitle("Latex Export Tests 'mgTranslate().latex' 'fn x sin<sup>-1</sup>'")
+    setTitle("Latex Export Tests 'mgCalc.Translate().latex' 'fn x sin<sup>-1</sup>'")
     for (index=0;index<xporty.length;index+=increment) {
 		if (nodejs) {
 			const rceivd = mgTranslate(xporty[index]).latex.replace(/ /g,"");
@@ -2478,7 +2477,7 @@ function runExport() {
     }
     mgConfig.fnFmt = "fn(x)";
     mgConfig.invFmt = "sin<sup>-1</sup>";
-    setTitle("Latex Export Tests 'mgTranslate().latex' 'fn(x) sin<sup>-1</sup>'")
+    setTitle("Latex Export Tests 'mgCalc.Translate().latex' 'fn(x) sin<sup>-1</sup>'")
     for (index=0;index<xportz.length;index+=increment) {
 		if (nodejs) {
 			const rceivd = mgTranslate(xportz[index]).latex.replace(/ /g,"");
@@ -2494,7 +2493,7 @@ function runExport() {
     toOutput()
 }
 function runImport() {
-    setTitle("Latex Import Tests 'mgTranslate().mg'")
+    setTitle("Latex Import Tests 'mgCalc.Translate().mg'")
     increment = 2;
     mgConfig.fnFmt = "fn(x)";
     for (index=0;index<mport.length;index+=increment) {
@@ -2562,27 +2561,42 @@ function toOutput() {
     if (!nodejs && document.getElementById('testDisplay')) {document.getElementById('testDisplay').innerHTML = htmlResults}
 }
 
-//Node.js branch
-if (typeof module == "object") {
+
+if (typeof module == "object") {//Node.js branch
     var mgTr = module.require('./mg_translate.js')
     var mgCl = module.require('./mg_calculate.js')
-    var mgTranslate = function(xpr,scale) {return mgTr.mgTranslate(xpr,scale)};
-    var mgNumeric = function(xpr) {return mgCl.mgNumeric(xpr)};
-	var mgCalculate = function(xpr) {return mgCl.mgCalculate(xpr)};
-    var mgSimplify = function(xpr) {return mgCl.mgSimplify(xpr)};
-	var mgSubstitute = function(x1,x2,x3) {return mgCl.mgSubstitute(x1,x2,x3)};
-    var mgRange = function(xpr) {return mgCl.mgRange(xpr)};
-    var mgDomain = function(xpr) {return mgCl.mgDomain(xpr)};
-    var mgFactor = function(xpr) {return mgCl.mgFactor(xpr)};
-    var mgExpand = function(xpr) {return mgCl.mgExpand(xpr)};
-    var mgTrigToExp = function(xpr) {return mgCl.mgTrigToExp(xpr)};
-    var mgExpToTrig = function(xpr) {return mgCl.mgExpToTrig(xpr)};
-    var mgSolve = function(xpr,slvar) {return mgCl.mgSolve(xpr,slvar)};
-    var mgSeries = function(xpr,svar,center,order) {return mgCl.mgSeries(xpr,svar,center,order)};
     var mgConfig = mgTr.mgConfig;
     var mgCalc = mgCl.mgCalc;
 	var mgTrans = mgTr.mgTrans;
+    var mgNumeric = function(xpr) {return mgCl.mgCalc.Numeric(xpr)};
+    var mgSimplify = function(xpr) {return mgCl.mgCalc.Simplify(xpr)};
+	var mgSubstitute = function(x1,x2,x3) {return mgCl.mgCalc.Substitute(x1,x2,x3)};
+    var mgRange = function(xpr) {return mgCl.mgCalc.Range(xpr)};
+    var mgDomain = function(xpr) {return mgCl.mgCalc.Domain(xpr)};
+    var mgFactor = function(xpr) {return mgCl.mgCalc.Factor(xpr)};
+    var mgExpand = function(xpr) {return mgCl.mgCalc.Expand(xpr)};
+    var mgTrigToExp = function(xpr) {return mgCl.mgCalc.TrigToExp(xpr)};
+    var mgExpToTrig = function(xpr) {return mgCl.mgCalc.ExpToTrig(xpr)};
+    var mgSolve = function(xpr,slvar) {return mgCl.mgCalc.Solve(xpr,slvar)};
+    var mgSeries = function(xpr,svar,center,order) {return mgCl.mgCalc.Series(xpr,svar,center,order)};
+	var mgTranslate = function(xpr,scale) {return mgTr.mgTrans.Translate(xpr,scale)};
+	var mgOutput = function(xpr,scale) {return mgTr.mgTrans.Output(xpr,scale)};
     var nodejs = true;
     for (var testcase in testList) {execTest(testcase)}
+}
+else {
+    var mgNumeric = function(xpr) {return mgCalc.Numeric(xpr)};
+    var mgSimplify = function(xpr) {return mgCalc.Simplify(xpr)};
+	var mgSubstitute = function(x1,x2,x3) {return mgCalc.Substitute(x1,x2,x3)};
+    var mgRange = function(xpr) {return mgCalc.Range(xpr)};
+    var mgDomain = function(xpr) {return mgCalc.Domain(xpr)};
+    var mgFactor = function(xpr) {return mgCalc.Factor(xpr)};
+    var mgExpand = function(xpr) {return mgCalc.Expand(xpr)};
+    var mgTrigToExp = function(xpr) {return mgCalc.TrigToExp(xpr)};
+    var mgExpToTrig = function(xpr) {return mgCalc.ExpToTrig(xpr)};
+    var mgSolve = function(xpr,slvar) {return mgCalc.Solve(xpr,slvar)};
+    var mgSeries = function(xpr,svar,center,order) {return mgCalc.Series(xpr,svar,center,order)};
+	var mgTranslate = function(xpr,scale) {return mgTrans.Translate(xpr,scale)};
+	var mgOutput = function(xpr,scale) {return mgTrans.Output(xpr,scale)};
 }
 //

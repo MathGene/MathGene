@@ -1,6 +1,6 @@
 /*
-    MathGene Math Library - Version 1.30
-    Copyright (C) 2018  George J. Paulos
+    MathGene Math Library - Version 2.0
+    Copyright (C) 2019  George J. Paulos
 
     MathGene is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,53 +17,13 @@
 */
 
 // node.js import
-var cFunc,texImport,mgOutput,parseParens;
 if (typeof module ==  "object") {
     var mgTr = require("./mg_translate.js");
     var mgConfig = mgTr.mgConfig;
     var Cv = mgTr.Cv;
     var mgTrans = mgTr.mgTrans;
-    var mgTranslate = mgTr.mgTranslate;
-    var mgOutput = mgTr.mgOutput;
 }
 
-//external callable functions
-function mgNumeric(expression) { //calculate numerical
-    return mgOutput(mgCalc.Numeric(mgTrans.texImport(expression)));
-}
-function mgCalculate(expression) { //calculate numerical (deprecated)
-    return mgOutput(mgCalc.Numeric(mgTrans.texImport(expression)));
-}
-function mgSolve(equation,variable) { //solve equation for variable
-    return mgOutput(mgTrans.mgExport(mgCalc.Solve(mgTrans.texImport(equation),mgTrans.texImport(variable))));
-}
-function mgSimplify(expression) { //simplify or reduce expression and evaluate all calculus
-    return mgOutput(mgTrans.mgExport(mgCalc.Simplify(mgTrans.texImport(expression))))
-}
-function mgSubstitute(expression,substTarget,substSource) { //substitute target with source within expression
-    return mgOutput(mgCalc.Substitute(mgTrans.texImport(expression),mgTrans.texImport(substTarget),mgTrans.texImport(substSource)));
-}
-function mgFactor(expression) { //factor expression
-    return mgOutput(mgTrans.mgExport(mgCalc.Factor(mgTrans.texImport(expression))));
-}
-function mgExpand(expression) { //expand expression
-    return mgOutput(mgTrans.mgExport(mgCalc.Expand(mgTrans.texImport(expression))));
-}
-function mgTrigToExp(expression) { //convert trig functions to exponential form
-    return mgOutput(mgTrans.mgExport(mgCalc.TrigToExp(mgTrans.texImport(expression))));
-}
-function mgExpToTrig(expression) { //convert exponential form to trig
-    return mgOutput(mgTrans.mgExport(mgCalc.ExpToTrig(mgTrans.texImport(expression))));
-}
-function mgRange(expression) { //find range of expression
-    return mgOutput(mgCalc.Range(mgTrans.texImport(expression)));
-}
-function mgDomain(expression) { //find domain of expression
-    return mgOutput(mgCalc.Domain(mgTrans.texImport(expression)));
-}
-function mgSeries(expression,variable,center,order) { //find Taylor Series of expression
-    return mgOutput(mgTrans.mgExport(mgCalc.Series(mgTrans.texImport(expression),mgTrans.texImport(variable),center,order)));
-}
 //internal functions-objects
 var mgCalc = function() {
     function xprSolve(xSol,cVar) {//solve equation/inequality xSol in FUNC format for variable cVar
@@ -3629,17 +3589,17 @@ var mgCalc = function() {
     if (mgConfig.trigBase == Cv[29]/200) {invMult = "200"}
 
     return {
-        Numeric:    function(xprA) {return mgTrans.mgExport(fmtResult(eval(mgTrans.cFunc(xprA))))},
-        Simplify:   function(xprA) {return cReduce(mgTrans.cFunc(parseCalculus(xprA))) },
-        Solve:      function(xprA,xprB) {return xprSolve(mgTrans.cFunc(parseCalculus(xprA)),xprB)},
-        Substitute: function(xprA,xprB,xprC) {return cSubst(xprA,xprB,xprC)},
-        Factor:     function(xprA) {return xprFactor(mgTrans.cFunc(parseCalculus(xprA)))},
-        Expand:     function(xprA) {return xprExpand(mgTrans.cFunc(parseCalculus(xprA)))},
-        TrigToExp:  function(xprA) {return xprTrigToExp(mgTrans.cFunc(parseCalculus(xprA)))},
-        ExpToTrig:  function(xprA) {return xprExpToTrig(mgTrans.cFunc(parseCalculus(xprA)))},
-        Range:      function(xprA) {return xprRange(xprA)},
-        Domain:     function(xprA) {return xprDomain(xprA)},
-        Series:     function(xprA,xprB,xprC,xprD) {return xprSeries(mgTrans.cFunc(parseCalculus(xprA)),xprB,xprC,xprD)},
+        Numeric:    function(xprA) {return mgTrans.Output(mgTrans.mgExport(fmtResult(eval(mgTrans.cFunc(mgTrans.texImport(xprA))))))},
+        Simplify:   function(xprA) {return mgTrans.Output(mgTrans.mgExport(cReduce(mgTrans.cFunc(parseCalculus(mgTrans.texImport(xprA))))))},
+        Solve:      function(xprA,xprB) {return mgTrans.Output(mgTrans.mgExport(xprSolve(mgTrans.cFunc(parseCalculus(mgTrans.texImport(xprA))),mgTrans.texImport(xprB))))},
+        Substitute: function(xprA,xprB,xprC) {return mgTrans.Output(cSubst(mgTrans.texImport(xprA),mgTrans.texImport(xprB),mgTrans.texImport(xprC)))},
+        Factor:     function(xprA) {return mgTrans.Output(mgTrans.mgExport(xprFactor(mgTrans.cFunc(parseCalculus(mgTrans.texImport(xprA))))))},
+        Expand:     function(xprA) {return mgTrans.Output(mgTrans.mgExport(xprExpand(mgTrans.cFunc(parseCalculus(mgTrans.texImport(xprA))))))},
+        TrigToExp:  function(xprA) {return mgTrans.Output(mgTrans.mgExport(xprTrigToExp(mgTrans.cFunc(parseCalculus(mgTrans.texImport(xprA))))))},
+        ExpToTrig:  function(xprA) {return mgTrans.Output(mgTrans.mgExport(xprExpToTrig(mgTrans.cFunc(parseCalculus(mgTrans.texImport(xprA))))))},
+        Range:      function(xprA) {return mgTrans.Output(xprRange(mgTrans.texImport(xprA)))},
+        Domain:     function(xprA) {return mgTrans.Output(xprDomain(mgTrans.texImport(xprA)))},
+        Series:     function(xprA,xprB,xprC,xprD) {return mgTrans.Output(mgTrans.mgExport(xprSeries(mgTrans.cFunc(parseCalculus(mgTrans.texImport(xprA))),mgTrans.texImport(xprB),xprC,xprD)))},
         RoundDec:   function(p1,p2) {return roundDecTo(p1,p2)},
         Inventory:  function(xprA) {return cInventory(xprA)},
         Payment:    function(p1,p2,p3,p4,p5,p6) {return finPMT(p1,p2,p3,p4,p5,p6)},
@@ -3663,18 +3623,6 @@ var mgCalc = function() {
 // node.js export
 if (typeof module ==  "object") {
     module.exports = {
-        mgNumeric:      function(parm) {return mgNumeric(parm)},
-        mgCalculate:    function(parm) {return mgCalculate(parm)},
-        mgSolve:        function(parm,varbl) {return mgSolve(parm,varbl)},
-        mgSubstitute:   function(parm,tgt,src) {return mgSubstitute(parm,tgt,src)},
-        mgSimplify:     function(parm) {return mgSimplify(parm)},
-        mgFactor:       function(parm) {return mgFactor(parm)},
-        mgExpand:       function(parm) {return mgExpand(parm)},
-        mgTrigToExp:    function(parm) {return mgTrigToExp(parm)},
-        mgExpToTrig:    function(parm) {return mgExpToTrig(parm)},
-        mgRange:        function(parm) {return mgRange(parm)},
-        mgDomain:       function(parm) {return mgDomain(parm)},
-        mgSeries:       function(parm,varbl,cent,ord) {return mgSeries(parm,varbl,cent,ord)},
         mgCalc:         mgCalc,
     }
 }

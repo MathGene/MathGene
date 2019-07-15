@@ -1,5 +1,5 @@
 /*
-    MathGene Translation/Rendering Library - Version 1.30
+    MathGene Translation/Rendering Library - Version 2.0
     Copyright (C) 2019  George J. Paulos
 
     MathGene is free software: you can redistribute it and/or modify
@@ -15,26 +15,6 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
-//external callable functions
-function mgTranslate(expression,scale) { //translate between MG, HTML, and LaTex
-    if (typeof expression == "undefined") {return {html:"",latex:"",mg:"",} }
-    if (typeof scale == "undefined") {scale = 100}
-    var mgFmt = mgTrans.texImport(expression);
-    return {
-        html:   "<span title='MathGene HTML' style='font-family:"+mgConfig.htmlFont+";font-size:"+scale+"%'>"+mgTrans.htmlExport(mgFmt)+"</span>",
-        latex:  mgTrans.texExport(mgFmt),
-        mg:     mgFmt,
-        }
-}
-function mgOutput(expression,scale) { //output MG, HTML, and LaTex from MG without LaTex import
-    if (typeof scale == "undefined") {scale = 100}
-    return {
-        html:   "<span title='MathGene HTML' style='font-family:"+mgConfig.htmlFont+";font-size:"+scale+"%'>"+mgTrans.htmlExport(expression)+"</span>",
-        latex:  mgTrans.texExport(expression),
-        mg:     expression,
-        }
-}
 
 // external objects
 var mgConfig =
@@ -2304,6 +2284,7 @@ var mgTrans = function() {
     return {
         funcMap:    funcMap,
         Cs:         Cs,
+        Cu:         Cu,
         parseParens:function(xB,bSym) {return parseParens(xB,bSym)},
         cFunc:      function(parm) {return cFunc(parm)},
         mgExport:   function(parm) {return mgExport(parm)},
@@ -2316,7 +2297,24 @@ var mgTrans = function() {
         dNest:      function(parm) {return dNest(parm)},
         oprExtract: function(parm) {return oprExtract(parm)},
         numTest:    function(parm) {return numTest(parm)},
-    }
+        Translate:  function(expression,scale)    {
+            if (typeof scale == "undefined") {scale = 100}
+            var mgFmt = mgTrans.texImport(expression);
+            return {
+                html:   "<span title='MathGene HTML' style='font-family:"+mgConfig.htmlFont+";font-size:"+scale+"%'>"+mgTrans.htmlExport(mgFmt)+"</span>",
+                latex:  mgTrans.texExport(mgFmt),
+                mg:     mgFmt,
+                }
+        },
+        Output:     function(expression,scale)    {
+            if (typeof scale == "undefined") {scale = 100}
+            return {
+                html:   "<span title='MathGene HTML' style='font-family:"+mgConfig.htmlFont+";font-size:"+scale+"%'>"+mgTrans.htmlExport(expression)+"</span>",
+                latex:  mgTrans.texExport(expression),
+                mg:     expression,
+                }
+        },      
+        }
 } ();
 // node.js export
 if (typeof module ==  "object") {
@@ -2324,8 +2322,6 @@ if (typeof module ==  "object") {
         mgConfig:   mgConfig,
         Cv:         Cv,
         mgTrans:    mgTrans,
-        mgTranslate:function(parm,scale) {return mgTranslate(parm,scale)},
-        mgOutput:   function(parm,scale) {return mgOutput(parm,scale)},
     }
 }
 //
