@@ -991,7 +991,7 @@ var mgTrans = function() {
         latexR1:'',
         latexL2:'',
         latexR2:'',
-        mg: function (parm) {if (!mgTrans.numTest(parm[0]) && mgTrans.cFunc(parm[0]) != mgTrans.oParens(parm[0])) {return mgTrans.xParens(parm[0])+"Cv[45]"};return parm[0]+"Cv[45]"},
+        mg: function (parm) {if (!numTest(parm[0]) && mgTrans.cFunc(parm[0]) != oParens(parm[0])) {return xParens(parm[0])+"Cv[45]"};return parm[0]+"Cv[45]"},
         },
     sum:{ //summation
         htmlL1: function (parm) {return htmlFuncs['overUnder'](parm[0],parm[1],'&#8721;',125)},
@@ -1371,9 +1371,9 @@ var mgTrans = function() {
         htmlL2: function (parm) {return htmlFuncs['cDivL'](parm[0],parm[1])},
         htmlR2:'',
         texfunc:'\\XXX',
-        latexL1: function (parm) {return '<Xdiv>\\frac{'+mgTrans.oBrackets(parm[0])+'}{'+mgTrans.oBrackets(parm[1])+'}<Xdve>'},
+        latexL1: function (parm) {return '<Xdiv>\\frac{'+oBrackets(parm[0])+'}{'+oBrackets(parm[1])+'}<Xdve>'},
         latexR1:'',
-        latexL2: function (parm) {return '<Xdiv>\\frac{'+mgTrans.oBrackets(parm[0])+'}{'+mgTrans.oBrackets(parm[1])+'}<Xdve>'},
+        latexL2: function (parm) {return '<Xdiv>\\frac{'+oBrackets(parm[0])+'}{'+oBrackets(parm[1])+'}<Xdve>'},
         latexR2:'',
         mg: function (parm) {return mgFuncs['cDivE'](parm[0],parm[1])},
         },
@@ -1383,7 +1383,7 @@ var mgTrans = function() {
         htmlL2: function (parm) {return htmlFuncs['cPowL'](parm[0],parm[1])},
         htmlR2:'',
         texfunc:'\\XXX',
-        latexL1: function (parm) {return parm[0]+'^{'+mgTrans.oBrackets(parm[1])+'}'},
+        latexL1: function (parm) {return parm[0]+'^{'+oBrackets(parm[1])+'}'},
         latexR1:'',
         latexL2: function (parm) {return latexFuncs['cPowX'](parm[0],parm[1])},
         latexR2:'',
@@ -1399,7 +1399,7 @@ var mgTrans = function() {
         latexR1:'',
         latexL2: function (parm) {return '-'+parm[0]},
         latexR2:'',
-        mg: function (parm) {xTractU = mgTrans.oprExtract(mgTrans.cFunc(parm[0]));if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "cDiv") {return "-" + mgTrans.xParens(parm[0])};return "-" + parm[0]},
+        mg: function (parm) {xTractU = oprExtract(mgTrans.cFunc(parm[0]));if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "cDiv") {return "-" + xParens(parm[0])};return "-" + parm[0]},
         },
     cAng:{ //angle (polar form)
         htmlL1: function (parm) {return parm[0]+'&#8736;'+parm[1]},
@@ -1525,34 +1525,34 @@ var mgTrans = function() {
     //mg handlers
     const mgFuncs = {
     cSubE: function (xU,xL) { //subtraction
-        xTractL = mgTrans.oprExtract(mgTrans.cFunc(xL));
-        if (xTractL.func == "cAdd") {return xU + "-" + mgTrans.xParens(xL)}
+        xTractL = oprExtract(mgTrans.cFunc(xL));
+        if (xTractL.func == "cAdd") {return xU + "-" + xParens(xL)}
         return xU + "-" + xL
         },
     cMulE: function (xU,xL) { //multiplication by term
-        xTractU = mgTrans.oprExtract(mgTrans.cFunc(xU));
-        xTractL = mgTrans.oprExtract(mgTrans.cFunc(xL));
-        xL = mgTrans.oParens(xL);xU = mgTrans.oParens(xU);
-        if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "fac") {xU  = mgTrans.xParens(xU)}
-        if (xTractL.func == "cAdd" || xTractL.func == "cSub" || xTractL.func == "fac") {xL  = mgTrans.xParens(xL)}
-        if (xTractL.func == "cDiv" && xTractU.func == "cDiv") {xU  = mgTrans.xParens(xU);xL  = mgTrans.xParens(xL)}
-        if (xU.indexOf("Cv[45]") > -1 && xU.lastIndexOf("Cv[45]") == xU.length-6) {xU  = mgTrans.xParens(xU)}
-        if (xL.indexOf("Cv[45]") > -1 && xL.lastIndexOf("Cv[45]") == xL.length-6) {xL  = mgTrans.xParens(xL)}
-        if (xTractL.func == "cPow" && mgTrans.numTest(xU) && mgTrans.numTest(xTractL.upper)) {xL  = mgTrans.xParens(xL)}
+        xTractU = oprExtract(mgTrans.cFunc(xU));
+        xTractL = oprExtract(mgTrans.cFunc(xL));
+        xL = oParens(xL);xU = oParens(xU);
+        if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "fac") {xU  = xParens(xU)}
+        if (xTractL.func == "cAdd" || xTractL.func == "cSub" || xTractL.func == "fac") {xL  = xParens(xL)}
+        if (xTractL.func == "cDiv" && xTractU.func == "cDiv") {xU  = xParens(xU);xL  = xParens(xL)}
+        if (xU.indexOf("Cv[45]") > -1 && xU.lastIndexOf("Cv[45]") == xU.length-6) {xU  = xParens(xU)}
+        if (xL.indexOf("Cv[45]") > -1 && xL.lastIndexOf("Cv[45]") == xL.length-6) {xL  = xParens(xL)}
+        if (xTractL.func == "cPow" && numTest(xU) && numTest(xTractL.upper)) {xL  = xParens(xL)}
         return xU + "" + xL
         },
     cDivE: function (xU,xL) { //division
-        xTractU = mgTrans.oprExtract(mgTrans.cFunc(xU));
-        xTractL = mgTrans.oprExtract(mgTrans.cFunc(xL));
-        if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "cMul" || xTractU.func == "cDiv" || xTractU.func == "cNeg" || xU.indexOf("Cv[8747]") > -1) {xU  = mgTrans.xParens(xU)}
-        if (xTractL.func == "cAdd" || xTractL.func == "cSub" || xTractL.func == "cMul" || xTractL.func == "cDiv" || xTractL.func == "cNeg" || xL.indexOf("Cv[8747]") > -1) {xL  = mgTrans.xParens(xL)}
+        xTractU = oprExtract(mgTrans.cFunc(xU));
+        xTractL = oprExtract(mgTrans.cFunc(xL));
+        if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "cMul" || xTractU.func == "cDiv" || xTractU.func == "cNeg" || xU.indexOf("Cv[8747]") > -1) {xU  = xParens(xU)}
+        if (xTractL.func == "cAdd" || xTractL.func == "cSub" || xTractL.func == "cMul" || xTractL.func == "cDiv" || xTractL.func == "cNeg" || xL.indexOf("Cv[8747]") > -1) {xL  = xParens(xL)}
         return xU + "/" + xL
         },
     cPowE: function (xU,xL) { //powers
-        xTractU = mgTrans.oprExtract(mgTrans.cFunc(xU));
-        xTractL = mgTrans.oprExtract(mgTrans.cFunc(xL));
-        if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "cMul" || xTractU.func == "cDiv" || xTractU.func == "cNeg" || xTractU.func == "fac") {xU  = mgTrans.xParens(xU)}
-        if (xTractL.func == "cAdd" || xTractL.func == "cSub" || xTractL.func == "cMul" || xTractL.func == "cDiv" || xTractL.func == "cNeg") {xL  = mgTrans.xParens(xL)}
+        xTractU = oprExtract(mgTrans.cFunc(xU));
+        xTractL = oprExtract(mgTrans.cFunc(xL));
+        if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "cMul" || xTractU.func == "cDiv" || xTractU.func == "cNeg" || xTractU.func == "fac") {xU  = xParens(xU)}
+        if (xTractL.func == "cAdd" || xTractL.func == "cSub" || xTractL.func == "cMul" || xTractL.func == "cDiv" || xTractL.func == "cNeg") {xL  = xParens(xL)}
         return xU + "^" + xL
         },
     }
@@ -1560,7 +1560,7 @@ var mgTrans = function() {
     //html handlers
     const htmlFuncs = {
     brkt: function (xS,xO) {//scale brackets
-        var iNest = mgTrans.dNest(xO);
+        var iNest = dNest(xO);
         if (mgConfig.divScale == 50 || iNest == 0) {return xS}
         else {return "<span style='vertical-align:middle;display:inline-block;font-weight:100;font-size:"+Math.floor(100+(iNest*mgConfig.divScale*1.3))+"%'>"+xS+"</span>"}
         },
@@ -1580,27 +1580,27 @@ var mgTrans = function() {
     cDivL: function (xU,xL) {
         if (mgConfig.divSymbol == "Slash") {return xU+"/"+xL}
         else {
-            if (!mgConfig.editMode) {xU = mgTrans.oParens(xU);xL = mgTrans.oParens(xL)}
+            if (!mgConfig.editMode) {xU = oParens(xU);xL = oParens(xL)}
             return "<Xdiv> <span style='text-align:center;vertical-align:middle;display:inline-block;'><span style='display:table-row;'><span style='font-size:"
             +mgConfig.divScale+"%;display:table-cell'>"+xU+"</span></span><span style='display:table-row;vertical-align:top'><span style='font-size:"
             +mgConfig.divScale+"%;display:table-cell;border-top-style:solid;border-top-width:2px;padding:3px;'>"+xL+"</span></span></span> <Xdve>"
         }
         },
     cPowL: function (xU,xL) {
-        if (!mgConfig.editMode) {xL = mgTrans.oParens(xL)}
-        if (mgTrans.dNest(xU) > 2) {return "<table style='text-align:center;display:inline-table;vertical-align:middle'><tr><td>"+xU+"</td><td style='vertical-align:top'><sup>"+xL+"</sup></td></tr></table>"}
+        if (!mgConfig.editMode) {xL = oParens(xL)}
+        if (dNest(xU) > 2) {return "<table style='text-align:center;display:inline-table;vertical-align:middle'><tr><td>"+xU+"</td><td style='vertical-align:top'><sup>"+xL+"</sup></td></tr></table>"}
         if (xU.indexOf(" <Xfxp>") > -1 && xU.indexOf(" <Xfxp>") ==  xU.length-7) {return "("+xU+")<sup>"+xL+"</sup> "} //(ln x)^2
         if (xU.indexOf("<Xfnc>") == 0 && xU.indexOf("<Xfxp> ") > -1 &&  xU.indexOf("<Xfxp> ") < 11) {return xU.replace("<Xfxp>","<sup>"+xL+"</sup> ")} //sin^2 x
         if (xL.indexOf("<Xdiv>") > -1 && xL.indexOf("<Xdve>") == xL.length-7 && !mgConfig.editMode) {xL = "("+xL+")"}
         if (xU.indexOf("<Xdiv>") == 1 && xU.indexOf("<Xdve>") == xU.length-7 && !mgConfig.editMode) {xU = "("+xU+")"}
-        if ((mgTrans.dNest(xU) > 0 || mgTrans.dNest(xL) > 0 ) && mgConfig.divScale > 50) {return xU+"<sup><span style='vertical-align:super'>"+xL+"</span></sup>"} //lift exponent for big symbols
+        if ((dNest(xU) > 0 || dNest(xL) > 0 ) && mgConfig.divScale > 50) {return xU+"<sup><span style='vertical-align:super'>"+xL+"</span></sup>"} //lift exponent for big symbols
         return xU+"<sup>"+xL+"</sup>"
         },
     radL: function (rSymb,xY,xZ) {//radicals
         var tgtRad = ["&#8730;","<span style='vertical-align:top;display:inline-block;position:relative;'><span style='vertical-align:top;position:absolute;'>&#8730;</span><span style='vertical-align:top;position:absolute;font-size:50%;'><sup>&nbsp;3</sup></span>&nbsp;&nbsp;</span>",
                     "<span style='vertical-align:top;display:inline-block;position:relative;'><span style='vertical-align:top;position:absolute;'>&#8730;</span><span style='vertical-align:top;position:absolute;font-size:50%;'><sup>&nbsp;"+xZ+"</sup></span>&nbsp;&nbsp;</span>"];
         if (mgConfig.divScale != 50) {
-            var xNest = Math.floor(100+(mgTrans.dNest(xY)*mgConfig.divScale*1.2));
+            var xNest = Math.floor(100+(dNest(xY)*mgConfig.divScale*1.2));
             return "<span style='vertical-align:middle;display:inline-block;padding:3px'><span style='vertical-align:top;font-size:"+xNest+"%'>"
                     +tgtRad[rSymb]+"</span><span style='vertical-align:top;border-top-style:solid;border-top-width:2px;'><span style='vertical-align:top;'><span style='vertical-align:middle;font-size:90%'>";
         }
@@ -1652,7 +1652,7 @@ var mgTrans = function() {
         if (typeof xA[0] == "string" && xA[0].substr(0,6) == "<Xrow>"){
             for (iM in xA) {
                 xA[iM] = xA[iM].replace(/\<Xrow\>/g,"").replace(/\<Xrwe\>/g,"").replace(/\<Xcel\>/g,"<td>").replace(/\<Xcle\>/g,"</td>");
-                dScale = dScale + mgTrans.dNest(xA+"")*(mgConfig.divScale/100)
+                dScale = dScale + dNest(xA+"")*(mgConfig.divScale/100)
                 mReturn = mReturn + "<tr>" + xA[iM] + "</tr>"
                 prefix = prefix+"<Xdiv>";
                 suffix = suffix+"<Xdve>";
@@ -1668,9 +1668,9 @@ var mgTrans = function() {
     //latex handlers
     const latexFuncs = {
     cPowX: function (xU,xL) {
-        if (xU.indexOf("<Xfxp>") > 0 && xU.indexOf("<Xfxp>") < 6 && xU.indexOf("\\") == 0) {return mgTrans.oBrackets(xU).replace("<Xfxp>","^{"+mgTrans.oBrackets(xL)+"}")} //fn^n x
-        if (xU.indexOf("\\") == 0) {return "("+mgTrans.oBrackets(xU)+")^{"+mgTrans.oBrackets(xL)+"}"}
-        return "{"+mgTrans.oBrackets(xU)+"}^{"+mgTrans.oBrackets(xL)+"}"
+        if (xU.indexOf("<Xfxp>") > 0 && xU.indexOf("<Xfxp>") < 6 && xU.indexOf("\\") == 0) {return oBrackets(xU).replace("<Xfxp>","^{"+oBrackets(xL)+"}")} //fn^n x
+        if (xU.indexOf("\\") == 0) {return "("+oBrackets(xU)+")^{"+oBrackets(xL)+"}"}
+        return "{"+oBrackets(xU)+"}^{"+oBrackets(xL)+"}"
         },
     idrX: function (xU,xN) {
         if (typeof xN == "undefined") {return '\\frac{\\partial}{\\partial '+xU+'}'}
@@ -1709,8 +1709,37 @@ var mgTrans = function() {
         return mReturn
         },
     }
+    //parsing delimiters
     const tDelimiter = ["_",",","!","=","<",">","|","+","-","*","^","/","{","}","(",")","\\"," "];
+    //cFunc arrays
+    //non-multiplying cBnd symbols
+    const nBind = ["(Cv\\[8773\\])","(Cv\\[8750\\])","(Cv\\[8751\\])","(Cv\\[8752\\])",
+                "(Cv\\[8592\\])","(Cv\\[8747\\])","(Cv\\[8748\\])","(Cv\\[59\\])",
+                "(idr\\([^\\)]*\\))","(tdr\\([^\\)]*\\))","(lim\\([^\\)]*\\,[^\\)]*\\))",
+                "(itg\\([^\\)]*\\,[^\\)]*\\))","(sdr\\([^\\)]*\\,[^\\)]*\\))","(sum\\([^\\)]*\\,[^\\)]*\\))",
+                "(prd\\([^\\)]*\\,[^\\)]*\\))","(psd\\([^\\)]*\\,[^\\)]*\\))","(cap\\([^\\)]*\\,[^\\)]*\\))",
+                "(cup\\([^\\)]*\\,[^\\)]*\\))","(dif\\([^\\)]*\\,[^\\)]*\\))","(Cv\\[10044])"];
+    //relational operators
+    const relOps = {"cEql":"=","cLth":"<","cGth":">","cNql":String.fromCharCode(8800),"cLeq":String.fromCharCode(8804),"cGeq":String.fromCharCode(8805)};//relational operators
+    const relOperators = {"Cv[60]":"<","Cv[61]":"=","Cv[62]":">","Cv[8800]":String.fromCharCode(8800),"Cv[8804]":String.fromCharCode(8804),"Cv[8805]":String.fromCharCode(8805)};//relational operators
+    //editing
+    const pCases = ["^-","^|-"];
+    const nCases = ["~-","~|-","+-","*-","/-","(-",",-","+|-","*|-","/|-","(|-",",|-","=-","=|-","@-","@|-","e|-",">-","<-",">|-","<|-",
+                  String.fromCharCode(8804)+"-",String.fromCharCode(8804)+"|-",String.fromCharCode(8805)+"-",String.fromCharCode(8805)+"|-",
+                  String.fromCharCode(8800)+"-",String.fromCharCode(8800)+"|-",String.fromCharCode(8226)+"-",String.fromCharCode(8226)+"|-"];
+    //misc functions
     function strCount(xTarget,xSearch) {xTarget +="";xSearch+="";return xTarget.split(xSearch).length-1} //count occurrences of string
+    function numTest(xT) {if (+xT == +xT*1) {return true}; return false} //test for numerical string
+    function parseArgs(xP) { //parse comma-delimited arguments into array
+        var args = [];
+        var strSplit = xP.split(",");
+        args[0] = strSplit[0];
+        for (var nXf=1;nXf<strSplit.length;nXf++) {
+            if (strCount(args[args.length-1],"(") > strCount(args[args.length-1],")")) {args[args.length-1] = args[args.length-1]+","+strSplit[nXf]} //reassemble inside parens
+            else {args.push(strSplit[nXf])}
+        }
+        return args
+    }   
     function parseParens(xB,bSym) {//parse parens and return inside string, begin index, end index, source string, upper/lower args
         xB += "";
         var oComma = 0,lPar = 0,rPar = 0,bDelim = " ",eDelim = " ",cFind = "",ins = "";
@@ -1784,7 +1813,6 @@ var mgTrans = function() {
         }
         return opReturn
     }
-    function numTest(xT) {if (+xT == +xT*1) {return true}; return false} //test for numerical string
     function dNest(dN) {//count nested large elements
         var dDepth = 0,dSpan = 0,iDp = 0;
         for (iDp in dN) {
@@ -1794,19 +1822,18 @@ var mgTrans = function() {
         }
         return dDepth
     }
+    function dedupParens(xP) {//remove duplicate parens
+        xP += "";
+        var nXf = 0,sCount = 0,dparens = "";
+        var dCount = strCount(xP,"(");
+        for (nXf=0;nXf<dCount;nXf++) {
+            dparens = parseParens(xP,xP.lastIndexOf("((")+1);
+            if (xP.substr(dparens.end,2) == "))" ) {xP = xP.substr(0,xP.lastIndexOf("((")+1)+dparens.inside+xP.substr(dparens.end+1,xP.length)}
+        }
+        return xP
+    }
     //conversion routines
     function htmlExport(htmlXpr) { //convert MG format to HTML
-        function dedupParens(xP) {//remove duplicate parens
-            xP += "";
-            var nXf = 0,sCount = 0,dparens = "";
-            var dCount = strCount(xP,"(");
-            for (nXf=0;nXf<dCount;nXf++) {
-                dparens = parseParens(xP,xP.lastIndexOf("((")+1);
-                if (xP.substr(dparens.end,2) == "))" ) {xP = xP.substr(0,xP.lastIndexOf("((")+1)+dparens.inside+xP.substr(dparens.end+1,xP.length)}
-            }
-            return xP
-        }
-        //
         var nXs=0;
         if (htmlXpr == "NaN" || htmlXpr == "undefined") {return "undefined"}
         htmlXpr = cFunc(htmlXpr); //convert to FUNC
@@ -1900,21 +1927,6 @@ var mgTrans = function() {
             xInp = xInp.substr(0,bSym-1)+"cNeg("+xInp.substr(bSym,iNp-bSym)+")"+xInp.substr(iNp);
             return xInp;
         }
-        // non-multiplying cBnd symbols
-        const nBind = ["(Cv\\[8773\\])","(Cv\\[8750\\])","(Cv\\[8751\\])","(Cv\\[8752\\])",
-                    "(Cv\\[8592\\])","(Cv\\[8747\\])","(Cv\\[8748\\])","(Cv\\[59\\])",
-                    "(idr\\([^\\)]*\\))","(tdr\\([^\\)]*\\))","(lim\\([^\\)]*\\,[^\\)]*\\))",
-                    "(itg\\([^\\)]*\\,[^\\)]*\\))","(sdr\\([^\\)]*\\,[^\\)]*\\))","(sum\\([^\\)]*\\,[^\\)]*\\))",
-                    "(prd\\([^\\)]*\\,[^\\)]*\\))","(psd\\([^\\)]*\\,[^\\)]*\\))","(cap\\([^\\)]*\\,[^\\)]*\\))",
-                    "(cup\\([^\\)]*\\,[^\\)]*\\))","(dif\\([^\\)]*\\,[^\\)]*\\))","(Cv\\[10044])"];
-        //relational operators
-        const relOps = {"cEql":"=","cLth":"<","cGth":">","cNql":String.fromCharCode(8800),"cLeq":String.fromCharCode(8804),"cGeq":String.fromCharCode(8805)};//relational operators
-        const relOperators = {"Cv[60]":"<","Cv[61]":"=","Cv[62]":">","Cv[8800]":String.fromCharCode(8800),"Cv[8804]":String.fromCharCode(8804),"Cv[8805]":String.fromCharCode(8805)};//relational operators
-        //editing
-        const pCases = ["^-","^|-"];
-        const nCases = ["~-","~|-","+-","*-","/-","(-",",-","+|-","*|-","/|-","(|-",",|-","=-","=|-","@-","@|-","e|-",">-","<-",">|-","<|-",
-                      String.fromCharCode(8804)+"-",String.fromCharCode(8804)+"|-",String.fromCharCode(8805)+"-",String.fromCharCode(8805)+"|-",
-                      String.fromCharCode(8800)+"-",String.fromCharCode(8800)+"|-",String.fromCharCode(8226)+"-",String.fromCharCode(8226)+"|-"];
         var nCf = 0,iXX = 0,key = 0,sbtOperand = "",cIdx = 0,aIdx = 0,sCount = 0;
         cXpr += "";
         sCount = strCount(cXpr,"]sbt(");//var&subscripts into container cnt()
@@ -1985,25 +1997,10 @@ var mgTrans = function() {
         return cXpr;
     }
     function dFunc(dXpr, prefix) { //map FUNC format to export format
-        function parseArgs(xP) { //parse comma-delimited arguments into array
-            var args = [];
-            var strSplit = xP.split(",");
-            args[0] = strSplit[0];
-            for (var nXf=1;nXf<strSplit.length;nXf++) {
-                if (strCount(args[args.length-1],"(") > strCount(args[args.length-1],")")) {args[args.length-1] = args[args.length-1]+","+strSplit[nXf]} //reassemble inside parens
-                else {args.push(strSplit[nXf])}
-            }
-            return args
+        function xFunc(parm,strg,fnformat) { //process funcMap function
+            if (typeof funcMap[funcKey][fnformat] == "function") {return funcMap[funcKey][fnformat](parm,strg)}
+            return funcMap[funcKey][fnformat]
         }
-        function lFunc(parm,strg) { //process left side function
-            if (typeof funcMap[funcKey][fnformatLx] == "function") {return funcMap[funcKey][fnformatLx](parm,strg)}
-            return funcMap[funcKey][fnformatLx]
-        }
-        function rFunc(parm,strg) { //process right side function
-            if (typeof funcMap[funcKey][fnformatR] == "function") {return funcMap[funcKey][fnformatR](parm,strg)}
-            return funcMap[funcKey][fnformatR]
-        }
-        function funcTest(tFunc) {if (typeof funcMap[tFunc] == "undefined") {return false}; return true} //test for valid function key
         //
         dXpr = dXpr.replace(/ /g,"").replace(/([a-z][a-z][a-z])\(/ig,"$1@"); //mark left parens with @
         var sCount = strCount(dXpr,"@");
@@ -2025,17 +2022,16 @@ var mgTrans = function() {
             if (lPar > rPar) {payload = payload.substr(0,payload.lastIndexOf(")"))+payload.substr(payload.lastIndexOf(")")+1)} //unmatched left parens
             paramS = parseArgs(payload); //parse parms
             funcKey = dXpr.substr(bSym-4,3); //extract functions xxx()
-            if (!funcTest(funcKey)) {funcKey = dXpr.substr(bSym-5,4)} //extract operators cXxx()
+            if (typeof funcMap[funcKey] == "undefined") {funcKey = dXpr.substr(bSym-5,4)} //extract operators cXxx()
             if (typeof funcMap[funcKey][prefix+"Inv1"] != "undefined" && mgConfig.invFmt == "sin<sup>-1</sup>" && mgConfig.fnFmt == "fn(x)") {fnformatLx = prefix+"Inv1"} //inverse fn(x)
             if (typeof funcMap[funcKey][prefix+"Inv1"] != "undefined" && mgConfig.invFmt == "sin<sup>-1</sup>" && mgConfig.fnFmt == "fn x")  {fnformatLx = prefix+"Inv2"} //inverse fn x
             if ((funcMap[funcKey][fnformatR] == ' ' || funcMap[funcKey][fnformatR] == ' <Xfxp>') && mgConfig.fnFmt == "fn x" && iXf < lSym && paramS[0].replace(/[\|\(\{](.*)[\|\)\}]/g,"").search(/[+(&minus;)]/) > -1 ) {paramS[0] = "("+paramS[0]+")"} //add parens to inside (fn x) functions
-            if (iXf < lSym && prefix != "mg") {rTmp = rFunc(paramS,payload)} //enable right side function if parens match
-            dXpr = dXpr.substr(0,bSym-(funcKey.length+1))+lFunc(paramS,payload)+rTmp+dXpr.substr(iXf+1,lSym); //assemble output
+            if (iXf < lSym && prefix != "mg") {rTmp = xFunc(paramS,payload,fnformatR)} //enable right side function if parens match
+            dXpr = dXpr.substr(0,bSym-(funcKey.length+1))+xFunc(paramS,payload,fnformatLx)+rTmp+dXpr.substr(iXf+1,lSym); //assemble output
         }
         return dXpr
     }
-    //
-
+    // latex conversions
     function texExport(latXpr) { //convert MG format to LaTeX
         latXpr += "";
         if (latXpr == "NaN" || latXpr == "undefined") {return "undefined"}
@@ -2072,24 +2068,6 @@ var mgTrans = function() {
     }
     //
     function texImport(mgXpr) { //convert LaTeX to MG format
-        function dedupBrackets(dB) { //remove redundant brackets
-            var sCount = strCount(dB,"{");
-            var nXf = 0,dparens = "";
-            for (nXf=0;nXf<sCount;nXf++) {
-                dparens = parseBrackets(dB,dB.lastIndexOf("{{")+1);
-                if (dB.substr(dparens.end,2) == "}}" ) {
-                    dB = dB.substr(0,dB.lastIndexOf("{{")+1)+dparens.inside+dB.substr(dparens.end+1,dB.length)
-                }
-            }
-            sCount = strCount(dB,"(");
-            for (nXf=0;nXf<sCount;nXf++) {
-                dparens = parseBrackets(dB,dB.lastIndexOf("((")+1);
-                if (dB.substr(dparens.end,2) == "))" ) {
-                    dB = dB.substr(0,dB.lastIndexOf("((")+1)+dparens.inside+dB.substr(dparens.end+1,dB.length)
-                }
-            }
-            return dB
-        }
         function asciiTest(xA) {if ((xA >= 65 && xA <= 90) || (xA >= 97 && xA <= 122)) {return true} return false} //test for ascii symbols
         function funcselect(func,key) {return funcMap[func][key]}
         function matI(xM) {
@@ -2275,26 +2253,20 @@ var mgTrans = function() {
         }
         mgXpr = mgXpr.replace(/Cv\[10101\]/g,"Cv[8]").replace(/Cv\[10105\]/g,"Cv[46]").replace(/Cv\[215\]/g,"*"); //special variables
         mgXpr = mgXpr.replace(/ /g,"").replace(/\{/g,"").replace(/\}/g,"").replace(/_/g,"").replace(/\'/g,"Cv[8242]").replace(/\`/g,"Cv[8242]");//cleanup
-        mgXpr = dedupBrackets(mgXpr);
+        mgXpr = dedupParens(mgXpr);
         return mgXpr
     }
     return {
         funcMap:    funcMap,
         Cs:         Cs,
         Cu:         Cu,
-		Cd:         Cd,
+        Cd:         Cd,
         parseParens:function(xB,bSym) {return parseParens(xB,bSym)},
         cFunc:      function(parm) {return cFunc(parm)},
         mgExport:   function(parm) {return mgExport(parm)},
         htmlExport: function(parm) {return htmlExport(parm)},
         texExport:  function(parm) {return texExport(parm)},
         texImport:  function(parm) {return texImport(parm)},
-        oParens:    function(parm) {return oParens(parm)},
-        xParens:    function(parm) {return xParens(parm)},
-        oBrackets:  function(parm) {return oBrackets(parm)},
-        dNest:      function(parm) {return dNest(parm)},
-        oprExtract: function(parm) {return oprExtract(parm)},
-        numTest:    function(parm) {return numTest(parm)},
         Translate:  function(expression,scale)    {
             if (typeof scale == "undefined") {scale = 100}
             var mgFmt = mgTrans.texImport(expression);
