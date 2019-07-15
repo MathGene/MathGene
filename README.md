@@ -23,7 +23,7 @@ Both modules are required to perform calculations.
 MathGene supports the following browsers, mobile devices, and Javascript engines:
 - FireFox version 8 or higher (Windows, Mac, Linux)
 - Google Chrome version 10 or higher (Windows, Mac, Linux, Android)
-- Internet Explorer version 10 or higher (Windows)
+- Internet Explorer version 11 or higher (Windows)
 - Microsoft Edge
 - Safari version 5 or higher (Mac)
 - Node.js versions 4 or higher
