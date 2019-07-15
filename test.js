@@ -2062,7 +2062,7 @@ var internal =
 "mgCalc.GCF(120,76)","4",
 "mgCalc.GCF(2049,333)","3",
 "mgCalc.GCF(450,225)","225",
-"mgSubstitute('2/Cv[10110]+1','Cv[10110]','Cv[10120]^2').mg","2/Cv[10120]^2+1",
+"mgCalc.Substitute('2/Cv[10110]+1','Cv[10110]','Cv[10120]^2').mg","2/Cv[10120]^2+1",
 "mgTrans.mgExport('lmt(cDiv(1,Cv[10120]),Cv[10120],1)')","lim(Cv[10120],1)1/Cv[10120]",
 "mgTrans.mgExport('pmm(cDiv(1,Cv[10120]),Cv[10120],1,10)')","prd(Cv[10120],1Cv[61]10)1/Cv[10120]",
 "mgTrans.mgExport('drv(cDiv(1,Cv[10120]),Cv[10120])')","(idr(Cv[10120])1/Cv[10120])",
@@ -2144,12 +2144,12 @@ function runNumerical() {
     increment = 2;
     for (index=0;index<numerical.length;index+=increment) {
 		if (nodejs) {
-			const rceivd = mgNumeric(numerical[index]).mg;
+			const rceivd = mgCalc.Numeric(numerical[index]).mg;
 			const xpectd = numerical[index+1];
 			test("Numerical:"+numerical[index], function () {return expect(xpectd).toBe(rceivd)})	
 		}
 		else {
-			runTest(mgTranslate(numerical[index]).html,mgNumeric(numerical[index]).html,mgTranslate(numerical[index+1]).html)
+			runTest(mgTrans.Translate(numerical[index]).html,mgCalc.Numeric(numerical[index]).html,mgTrans.Translate(numerical[index+1]).html)
 		}
     }
     mgConfig.dPrecision = 16;
@@ -2161,12 +2161,12 @@ function runRange() {
     degree = 1;
     for (index=0;index<range.length;index+=increment) {
 		if (nodejs) {
-			const rceivd = mgRange(range[index]).html;
-			const xpectd = mgTranslate(range[index+1]).html;
+			const rceivd = mgCalc.Range(range[index]).html;
+			const xpectd = mgTrans.Translate(range[index+1]).html;
 			test("Range:"+range[index], function () {return expect(xpectd).toBe(rceivd)})	
 		}
 		else {
-			runTest(mgTranslate(range[index]).html,mgRange(range[index]).html,mgTranslate(range[index+1]).html)
+			runTest(mgTrans.Translate(range[index]).html,mgCalc.Range(range[index]).html,mgTrans.Translate(range[index+1]).html)
 		}
     }
     toOutput()
@@ -2177,12 +2177,12 @@ function runDomain() {
     degree = 1;
     for (index=0;index<domain.length;index+=increment) {
 		if (nodejs) {
-			const rceivd = mgDomain(domain[index]).html;
-			const xpectd = mgTranslate(domain[index+1]).html;
+			const rceivd = mgCalc.Domain(domain[index]).html;
+			const xpectd = mgTrans.Translate(domain[index+1]).html;
 			test("Domain:"+domain[index], function () {return expect(xpectd).toBe(rceivd)})	
 		}
 		else {
-			runTest(mgTranslate(domain[index]).html,mgDomain(domain[index]).html,mgTranslate(domain[index+1]).html)
+			runTest(mgTrans.Translate(domain[index]).html,mgCalc.Domain(domain[index]).html,mgTrans.Translate(domain[index+1]).html)
 		}
     }
     toOutput()
@@ -2193,12 +2193,12 @@ function runMatrix() {
     degree = 1;
     for (index=0;index<matrix.length;index+=increment) {
 		if (nodejs) {
-			const rceivd = mgSimplify(matrix[index]).html;
-			const xpectd = mgTranslate(matrix[index+1]).html;
+			const rceivd = mgCalc.Simplify(matrix[index]).html;
+			const xpectd = mgTrans.Translate(matrix[index+1]).html;
 			test("Matrix:"+matrix[index], function () {return expect(xpectd).toBe(rceivd)})	
 		}
 		else {
-			runTest(mgTranslate(matrix[index]).html,mgSimplify(matrix[index]).html,mgTranslate(matrix[index+1]).html)
+			runTest(mgTrans.Translate(matrix[index]).html,mgCalc.Simplify(matrix[index]).html,mgTrans.Translate(matrix[index+1]).html)
 		}
     }
     toOutput()
@@ -2209,12 +2209,12 @@ function runReduce() {
     increment = 2;
     for (index=0;index<reduce.length;index+=increment) {
 		if (nodejs) {
-			const rceivd = mgSimplify(reduce[index]).html;
-			const xpectd = mgTranslate(reduce[index+1]).html;
+			const rceivd = mgCalc.Simplify(reduce[index]).html;
+			const xpectd = mgTrans.Translate(reduce[index+1]).html;
 			test("Reduce:"+reduce[index], function () {return expect(xpectd).toBe(rceivd)})	
 		}
 		else {
-        runTest(mgTranslate(reduce[index]).html,mgSimplify(reduce[index]).html,mgTranslate(reduce[index+1]).html)
+        runTest(mgTrans.Translate(reduce[index]).html,mgCalc.Simplify(reduce[index]).html,mgTrans.Translate(reduce[index+1]).html)
 		}
     }
     toOutput()
@@ -2225,12 +2225,12 @@ function runFactor() {
     increment = 2;
     for (index=0;index<factor.length;index+=increment) {
 		if (nodejs) {
-			const rceivd = mgFactor(factor[index]).html;
-			const xpectd = mgTranslate(factor[index+1]).html;
+			const rceivd = mgCalc.Factor(factor[index]).html;
+			const xpectd = mgTrans.Translate(factor[index+1]).html;
 			test("Factor:"+factor[index], function () {return expect(xpectd).toBe(rceivd)})	
 		}
 		else {
-			runTest(mgTranslate(factor[index]).html,mgFactor(factor[index]).html,mgTranslate(factor[index+1]).html)
+			runTest(mgTrans.Translate(factor[index]).html,mgCalc.Factor(factor[index]).html,mgTrans.Translate(factor[index+1]).html)
 		}
     }
     toOutput()
@@ -2240,12 +2240,12 @@ function runExpand() {
     increment = 2;
     for (index=0;index<expand.length;index+=increment) {
 		if (nodejs) {
-			const rceivd = mgExpand(expand[index]).html;
-			const xpectd = mgTranslate(expand[index+1]).html;
+			const rceivd = mgCalc.Expand(expand[index]).html;
+			const xpectd = mgTrans.Translate(expand[index+1]).html;
 			test("Expand:"+expand[index], function () {return expect(xpectd).toBe(rceivd)})	
 		}
 		else {
-			runTest(mgTranslate(expand[index]).html,mgExpand(expand[index]).html,mgTranslate(expand[index+1]).html)
+			runTest(mgTrans.Translate(expand[index]).html,mgCalc.Expand(expand[index]).html,mgTrans.Translate(expand[index+1]).html)
 		}
     }
     toOutput()
@@ -2255,12 +2255,12 @@ function runSolve() {
     increment = 3;
     for (index=0;index<solve.length;index+=increment) {
 		if (nodejs) {
-			const rceivd = mgSolve(solve[index],solve[index+1]).html;
-			const xpectd = mgTranslate(solve[index+2]).html;
+			const rceivd = mgCalc.Solve(solve[index],solve[index+1]).html;
+			const xpectd = mgTrans.Translate(solve[index+2]).html;
 			test("Solve:"+solve[index]+" for "+solve[index+2], function() {return expect(xpectd).toBe(rceivd)})	
 		}
 		else {
-			runTest(mgTranslate(solve[index]).html,mgSolve(solve[index],solve[index+1]).html,mgTranslate(solve[index+2]).html)
+			runTest(mgTrans.Translate(solve[index]).html,mgCalc.Solve(solve[index],solve[index+1]).html,mgTrans.Translate(solve[index+2]).html)
 		}
     }
     toOutput()
@@ -2269,7 +2269,7 @@ function runSeries() {
     setTitle("Taylor Series Tests 'mgCalc.Series()'")
     increment = 5;
     for (index=0;index<series.length;index+=increment) {
-        runTest(mgTranslate(series[index]).html,mgSeries(series[index],series[index+1],series[index+2],series[index+3]).html,mgTranslate(series[index+4]).html)
+        runTest(mgTrans.Translate(series[index]).html,mgCalc.Series(series[index],series[index+1],series[index+2],series[index+3]).html,mgTrans.Translate(series[index+4]).html)
     }
     toOutput()
 }
@@ -2278,12 +2278,12 @@ function runTrigtoexp() {
     increment = 2;
     for (index=0;index<trigtoexp.length;index+=increment) {
 		if (nodejs) {
-			const rceivd = mgTrigToExp(trigtoexp[index]).html;
-			const xpectd = mgTranslate(trigtoexp[index+1]).html;
+			const rceivd = mgCalc.TrigToExp(trigtoexp[index]).html;
+			const xpectd = mgTrans.Translate(trigtoexp[index+1]).html;
 			test("Trig2exp:"+trigtoexp[index], function() {return expect(xpectd).toBe(rceivd)})	
 		}
 		else {
-			runTest(mgTranslate(trigtoexp[index]).html,mgTrigToExp(trigtoexp[index]).html,mgTranslate(trigtoexp[index+1]).html)
+			runTest(mgTrans.Translate(trigtoexp[index]).html,mgCalc.TrigToExp(trigtoexp[index]).html,mgTrans.Translate(trigtoexp[index+1]).html)
 		}
     }
     toOutput()
@@ -2293,12 +2293,12 @@ function runExptotrig() {
     increment = 2;
     for (index=0;index<exptotrig.length;index+=increment) {
 		if (nodejs) {
-			const rceivd = mgExpToTrig(exptotrig[index]).html;
-			const xpectd = mgTranslate(exptotrig[index+1]).html;
+			const rceivd = mgCalc.ExpToTrig(exptotrig[index]).html;
+			const xpectd = mgTrans.Translate(exptotrig[index+1]).html;
 			test("Exp2trig:"+exptotrig[index], function() {return expect(xpectd).toBe(rceivd)})	
 		}
 		else {
-			runTest(mgTranslate(exptotrig[index]).html,mgExpToTrig(exptotrig[index]).html,mgTranslate(exptotrig[index+1]).html)
+			runTest(mgTrans.Translate(exptotrig[index]).html,mgCalc.ExpToTrig(exptotrig[index]).html,mgTrans.Translate(exptotrig[index+1]).html)
 		}
     }
     toOutput()
@@ -2308,12 +2308,12 @@ function runLimits() {
     increment = 2;
     for (index=0;index<limits.length;index+=increment) {
 		if (nodejs) {
-			const rceivd = mgSimplify(limits[index]).html;
-			const xpectd = mgTranslate(limits[index+1]).html;
+			const rceivd = mgCalc.Simplify(limits[index]).html;
+			const xpectd = mgTrans.Translate(limits[index+1]).html;
 			test("Limits:"+limits[index], function() {return expect(xpectd).toBe(rceivd)})	
 		}
 		else {
-			runTest(mgTranslate(limits[index]).html,mgSimplify(limits[index]).html,mgTranslate(limits[index+1]).html)
+			runTest(mgTrans.Translate(limits[index]).html,mgCalc.Simplify(limits[index]).html,mgTrans.Translate(limits[index+1]).html)
 		}
     }
     toOutput()
@@ -2323,12 +2323,12 @@ function runDerivatives() {
     increment = 2;
     for (index=0;index<derivatives.length;index+=increment) {
 		if (nodejs) {
-			const rceivd = mgSimplify(derivatives[index]).html;
-			const xpectd = mgTranslate(derivatives[index+1]).html;
+			const rceivd = mgCalc.Simplify(derivatives[index]).html;
+			const xpectd = mgTrans.Translate(derivatives[index+1]).html;
 			test("Derivatives:"+derivatives[index], function() {return expect(xpectd).toBe(rceivd)})	
 		}
 		else {
-			runTest(mgTranslate(derivatives[index]).html,mgSimplify(derivatives[index]).html,mgTranslate(derivatives[index+1]).html)
+			runTest(mgTrans.Translate(derivatives[index]).html,mgCalc.Simplify(derivatives[index]).html,mgTrans.Translate(derivatives[index+1]).html)
 		}
     }
     toOutput()
@@ -2338,12 +2338,12 @@ function runIntegrals() {
     increment = 2;
     for (index=0;index<integrals.length;index+=increment) {
 		if (nodejs) {
-			const rceivd = mgSimplify(integrals[index]).html;
-			const xpectd = mgTranslate(integrals[index+1]).html;
+			const rceivd = mgCalc.Simplify(integrals[index]).html;
+			const xpectd = mgTrans.Translate(integrals[index+1]).html;
 			test("Integrals:"+integrals[index], function() {return expect(xpectd).toBe(rceivd)})	
 		}
 		else {
-			runTest(mgTranslate(integrals[index]).html,mgSimplify(integrals[index]).html,mgTranslate(integrals[index+1]).html)
+			runTest(mgTrans.Translate(integrals[index]).html,mgCalc.Simplify(integrals[index]).html,mgTrans.Translate(integrals[index+1]).html)
 		}
     }
     toOutput()
@@ -2354,12 +2354,12 @@ function runRealCalculus() {
     mgConfig.Domain = "Real";
     for (index=0;index<real_calculus.length;index+=increment) {
 		if (nodejs) {
-			const rceivd = mgSimplify(real_calculus[index]).html;
-			const xpectd = mgTranslate(real_calculus[index+1]).html;
+			const rceivd = mgCalc.Simplify(real_calculus[index]).html;
+			const xpectd = mgTrans.Translate(real_calculus[index+1]).html;
 			test("RealCalculus:"+real_calculus[index], function() {return expect(xpectd).toBe(rceivd)})	
 		}
 		else {
-			runTest(mgTranslate(real_calculus[index]).html,mgSimplify(real_calculus[index]).html,mgTranslate(real_calculus[index+1]).html)
+			runTest(mgTrans.Translate(real_calculus[index]).html,mgCalc.Simplify(real_calculus[index]).html,mgTrans.Translate(real_calculus[index+1]).html)
 		}
     }
     toOutput()
@@ -2370,12 +2370,12 @@ function runSummation() {
     increment = 2;
     for (index=0;index<summation.length;index+=increment) {
 		if (nodejs) {
-			const rceivd = mgSimplify(summation[index]).html;
-			const xpectd = mgTranslate(summation[index+1]).html;
+			const rceivd = mgCalc.Simplify(summation[index]).html;
+			const xpectd = mgTrans.Translate(summation[index+1]).html;
 			test("Summation:"+summation[index], function() {return expect(xpectd).toBe(rceivd)})	
 		}
 		else {
-			runTest(mgTranslate(summation[index]).html,mgSimplify(summation[index]).html,mgTranslate(summation[index+1]).html)
+			runTest(mgTrans.Translate(summation[index]).html,mgCalc.Simplify(summation[index]).html,mgTrans.Translate(summation[index+1]).html)
 		}
     }
     toOutput()
@@ -2387,24 +2387,24 @@ function runHTML() {
     mgConfig.fnFmt = "fn(x)";
     for (index=0;index<html.length;index+=increment) {
 		if (nodejs) {
-			const xpectd = mgTranslate(html[index]).html;
+			const xpectd = mgTrans.Translate(html[index]).html;
 			const rceivd = html[index+1];
 			test("html:"+html[index], function() {return expect(xpectd).toBe(rceivd)})	
 		}
 		else {
-			runTest(html[index],mgTranslate(html[index]).html,html[index+1])
+			runTest(html[index],mgTrans.Translate(html[index]).html,html[index+1])
 		}
     }
     mgConfig.invFmt = "sin<sup>-1</sup>"
     setTitle("HTML Tests 'mgCalc.Translate().html sin<sup>-1</sup>'")
     for (index=0;index<htmlx.length;index+=increment) {
 		if (nodejs) {
-			const rceivd = mgTranslate(htmlx[index]).html;
+			const rceivd = mgTrans.Translate(htmlx[index]).html;
 			const xpectd = htmlx[index+1];
 			test("html:"+htmlx[index], function() {return expect(xpectd).toBe(rceivd)})	
 		}
 		else {
-			runTest(htmlx[index],mgTranslate(htmlx[index]).html,htmlx[index+1])
+			runTest(htmlx[index],mgTrans.Translate(htmlx[index]).html,htmlx[index+1])
 		}
     }
     mgConfig.invFmt = "sin<sup>-1</sup>";
@@ -2412,12 +2412,12 @@ function runHTML() {
     setTitle("HTML Tests 'mgCalc.Translate().html fn x sin<sup>-1</sup>'")
     for (index=0;index<htmly.length;index+=increment) {
 		if (nodejs) {
-			const rceivd = mgTranslate(htmly[index]).html;
+			const rceivd = mgTrans.Translate(htmly[index]).html;
 			const xpectd = htmly[index+1];
 			test("html:"+htmly[index], function() {return expect(xpectd).toBe(rceivd)})	
 		}
 		else {
-			runTest(htmly[index],mgTranslate(htmly[index]).html,htmly[index+1])
+			runTest(htmly[index],mgTrans.Translate(htmly[index]).html,htmly[index+1])
 		}
     }
     mgConfig.invFmt = "asin";
@@ -2425,12 +2425,12 @@ function runHTML() {
     setTitle("HTML Tests 'mgCalc.Translate().html fn x asin'")
     for (index=0;index<htmlz.length;index+=increment) {
 		if (nodejs) {
-			const rceivd = mgTranslate(htmlz[index]).html;
+			const rceivd = mgTrans.Translate(htmlz[index]).html;
 			const xpectd = htmlz[index+1];
 			test("html:"+htmlz[index], function() {return expect(xpectd).toBe(rceivd)})	
 		}
 		else {
-			runTest(htmlz[index],mgTranslate(htmlz[index]).html,htmlz[index+1])
+			runTest(htmlz[index],mgTrans.Translate(htmlz[index]).html,htmlz[index+1])
 		}
     }
     mgConfig.fnFmt = "fn(x)";
@@ -2442,24 +2442,24 @@ function runExport() {
 	mgConfig.fnFmt = "fn(x)";
     for (index=0;index<xport.length;index+=increment) {
 		if (nodejs) {
-			const rceivd = mgTranslate(xport[index]).latex.replace(/ /g,"");
+			const rceivd = mgTrans.Translate(xport[index]).latex.replace(/ /g,"");
 			const xpectd = xport[index+1].replace(/ /g,"");
 			test("Latex-xport:"+xport[index], function() {return expect(xpectd).toBe(rceivd)})	
 		}
 		else {
-			runTest(mgTranslate(xport[index]).html,mgTranslate(xport[index]).latex.replace(/ /g,""),xport[index+1].replace(/ /g,""))
+			runTest(mgTrans.Translate(xport[index]).html,mgTrans.Translate(xport[index]).latex.replace(/ /g,""),xport[index+1].replace(/ /g,""))
 		}
     }
     mgConfig.fnFmt = "fn x";
     setTitle("Latex Export Tests 'mgCalc.Translate().latex fn x'")
     for (index=0;index<xportx.length;index+=increment) {
 		if (nodejs) {
-			const rceivd = mgTranslate(xportx[index]).latex.replace(/ /g,"");
+			const rceivd = mgTrans.Translate(xportx[index]).latex.replace(/ /g,"");
 			const xpectd = xportx[index+1].replace(/ /g,"");
 			test("Latex-xport:"+xportx[index], function() {return expect(xpectd).toBe(rceivd)})	
 		}
 		else {
-			runTest(mgTranslate(xportx[index]).html,mgTranslate(xportx[index]).latex.replace(/ /g,""),xportx[index+1].replace(/ /g,""))
+			runTest(mgTrans.Translate(xportx[index]).html,mgTrans.Translate(xportx[index]).latex.replace(/ /g,""),xportx[index+1].replace(/ /g,""))
 		}
     }
     mgConfig.fnFmt = "fn x";
@@ -2467,12 +2467,12 @@ function runExport() {
     setTitle("Latex Export Tests 'mgCalc.Translate().latex' 'fn x sin<sup>-1</sup>'")
     for (index=0;index<xporty.length;index+=increment) {
 		if (nodejs) {
-			const rceivd = mgTranslate(xporty[index]).latex.replace(/ /g,"");
+			const rceivd = mgTrans.Translate(xporty[index]).latex.replace(/ /g,"");
 			const xpectd = xporty[index+1].replace(/ /g,"");
 			test("Latex-xport:"+xporty[index], function() {return expect(xpectd).toBe(rceivd)})	
 		}
 		else {
-			runTest(mgTranslate(xporty[index]).html,mgTranslate(xporty[index]).latex.replace(/ /g,""),xporty[index+1].replace(/ /g,""))
+			runTest(mgTrans.Translate(xporty[index]).html,mgTrans.Translate(xporty[index]).latex.replace(/ /g,""),xporty[index+1].replace(/ /g,""))
 		}
     }
     mgConfig.fnFmt = "fn(x)";
@@ -2480,12 +2480,12 @@ function runExport() {
     setTitle("Latex Export Tests 'mgCalc.Translate().latex' 'fn(x) sin<sup>-1</sup>'")
     for (index=0;index<xportz.length;index+=increment) {
 		if (nodejs) {
-			const rceivd = mgTranslate(xportz[index]).latex.replace(/ /g,"");
+			const rceivd = mgTrans.Translate(xportz[index]).latex.replace(/ /g,"");
 			const xpectd = xportz[index+1].replace(/ /g,"");
 			test("Latex-xport:"+xportz[index], function() {return expect(xpectd).toBe(rceivd)})	
 		}
 		else {
-			runTest(mgTranslate(xportz[index]).html,mgTranslate(xportz[index]).latex.replace(/ /g,""),xportz[index+1].replace(/ /g,""))
+			runTest(mgTrans.Translate(xportz[index]).html,mgTrans.Translate(xportz[index]).latex.replace(/ /g,""),xportz[index+1].replace(/ /g,""))
 		}
     }
     mgConfig.invFmt = "asin";
@@ -2498,12 +2498,12 @@ function runImport() {
     mgConfig.fnFmt = "fn(x)";
     for (index=0;index<mport.length;index+=increment) {
 		if (nodejs) {
-			const rceivd = mgTranslate(mport[index]).html;		    
-			const xpectd = mgTranslate(mport[index+1]).html;
+			const rceivd = mgTrans.Translate(mport[index]).html;		    
+			const xpectd = mgTrans.Translate(mport[index+1]).html;
 			test("Latex-import:"+mport[index], function() {return expect(xpectd).toBe(rceivd)})	
 		}
 		else {
-			runTest(mport[index],mgTranslate(mport[index]).html,mgTranslate(mport[index+1]).html)
+			runTest(mport[index],mgTrans.Translate(mport[index]).html,mgTrans.Translate(mport[index+1]).html)
 		}
     }
     toOutput()
@@ -2568,35 +2568,8 @@ if (typeof module == "object") {//Node.js branch
     var mgConfig = mgTr.mgConfig;
     var mgCalc = mgCl.mgCalc;
 	var mgTrans = mgTr.mgTrans;
-    var mgNumeric = function(xpr) {return mgCl.mgCalc.Numeric(xpr)};
-    var mgSimplify = function(xpr) {return mgCl.mgCalc.Simplify(xpr)};
-	var mgSubstitute = function(x1,x2,x3) {return mgCl.mgCalc.Substitute(x1,x2,x3)};
-    var mgRange = function(xpr) {return mgCl.mgCalc.Range(xpr)};
-    var mgDomain = function(xpr) {return mgCl.mgCalc.Domain(xpr)};
-    var mgFactor = function(xpr) {return mgCl.mgCalc.Factor(xpr)};
-    var mgExpand = function(xpr) {return mgCl.mgCalc.Expand(xpr)};
-    var mgTrigToExp = function(xpr) {return mgCl.mgCalc.TrigToExp(xpr)};
-    var mgExpToTrig = function(xpr) {return mgCl.mgCalc.ExpToTrig(xpr)};
-    var mgSolve = function(xpr,slvar) {return mgCl.mgCalc.Solve(xpr,slvar)};
-    var mgSeries = function(xpr,svar,center,order) {return mgCl.mgCalc.Series(xpr,svar,center,order)};
-	var mgTranslate = function(xpr,scale) {return mgTr.mgTrans.Translate(xpr,scale)};
-	var mgOutput = function(xpr,scale) {return mgTr.mgTrans.Output(xpr,scale)};
     var nodejs = true;
     for (var testcase in testList) {execTest(testcase)}
 }
-else {
-    var mgNumeric = function(xpr) {return mgCalc.Numeric(xpr)};
-    var mgSimplify = function(xpr) {return mgCalc.Simplify(xpr)};
-	var mgSubstitute = function(x1,x2,x3) {return mgCalc.Substitute(x1,x2,x3)};
-    var mgRange = function(xpr) {return mgCalc.Range(xpr)};
-    var mgDomain = function(xpr) {return mgCalc.Domain(xpr)};
-    var mgFactor = function(xpr) {return mgCalc.Factor(xpr)};
-    var mgExpand = function(xpr) {return mgCalc.Expand(xpr)};
-    var mgTrigToExp = function(xpr) {return mgCalc.TrigToExp(xpr)};
-    var mgExpToTrig = function(xpr) {return mgCalc.ExpToTrig(xpr)};
-    var mgSolve = function(xpr,slvar) {return mgCalc.Solve(xpr,slvar)};
-    var mgSeries = function(xpr,svar,center,order) {return mgCalc.Series(xpr,svar,center,order)};
-	var mgTranslate = function(xpr,scale) {return mgTrans.Translate(xpr,scale)};
-	var mgOutput = function(xpr,scale) {return mgTrans.Output(xpr,scale)};
-}
+
 //
