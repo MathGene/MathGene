@@ -35,7 +35,7 @@ var Cv = new Array(11000); //symbol array
 
 // internal functions
 var mgTrans = function() {
-    var Cs = new Array(11000); //symbol rendering
+    var Cs = new Array(11000); //html symbols
     var Cd = new Array(50); //constant description
     var Cu = new Array(50); //constant units
     var Ct = new Array(11000); //latex symbols
@@ -44,7 +44,7 @@ var mgTrans = function() {
     Cv[1] = 5.2917721092e-11;   Cu[1]="m";              Cs[1]="&#945;<span style='font-size:50%'>0</span>";     Cd[1]="Bohr radius";
     Cv[2] = 2.8977721e-3;       Cu[2]="m&#8226;K";      Cs[2]="<i>b</i>";                                       Cd[2]="Wein displacement const.";
     Cv[3] = 299792458;          Cu[3]="m/s";            Cs[3]="<i>c</i>";                                       Cd[3]="speed of light";
-    Cv[4] = 0.577215664901532;  Cu[4]="";               Cs[4]="&#947;";                                         Cd[4]="Euler–Mascheroni constant";
+    Cv[4] = 0.577215664901532;  Cu[4]="";               Cs[4]="&#947;";                                         Cd[4]="Euler-Mascheroni constant";
 
     Cv[5] = 3.74177153e-16;     Cu[5]="W/m&#178;";      Cs[5]="c<span style='font-size:50%'>1</span>";          Cd[5]="1<sup>st</sup> radiation constant";
     Cv[6] = 1.4387770e-2;       Cu[6]="m&#8226;K";      Cs[6]="c<span style='font-size:50%'>2</span>";          Cd[6]="2<sup>nd</sup> radiation constant";
@@ -94,10 +94,9 @@ var mgTrans = function() {
     Cv[43] = 376.730313461;     Cu[43]="&#937;";        Cs[43]="<i>Z<span style='font-size:50%'>0</span></i>";  Cd[43]="vacuum impedance";
     Cv[44] = 0;                 Cu[44]="";              Cs[44]="0";                                             Cd[44]="Null";
 
-    Cv[45] = {r:1, i:0, s:"!"};             Cs[45]="!";
-    Cv[46] = {r:0, i:1};                    Cs[46] = "<i>i</i>";
+    Cv[45] = {r:1, i:0};        Cs[45]="!";
+    Cv[46] = {r:0, i:1};        Cs[46] = "<i>i</i>"; //imaginary constant
     Cv[8230] = 0;
-    Cv[8734] = "Infinity";
 
     //initialize html symbols
     var iAl = 0;
@@ -112,8 +111,6 @@ var mgTrans = function() {
     for (iAl=10768;iAl<=10879;iAl++){Cs[iAl]="<i>&#"+(iAl-10000)+";</i>"}//italic accents
     Cs[11100]="<i>C</i>";//constants of integration
     for (iAl=11101;iAl<=11110;iAl++) {Cs[iAl]="<i>C<sub>"+(iAl-11100)+"</sub></i>"}//constants of integration
-    Cv[10047] = {s:"/"}; //slash
-    Cv[247] = {s:"&divide;"}; //quotient
     Cs[59] = "; ";
     Cs[10013] = "<br>"; //line break
     Cs[10044] = ", ";
@@ -2285,6 +2282,7 @@ var mgTrans = function() {
         funcMap:    funcMap,
         Cs:         Cs,
         Cu:         Cu,
+		Cd:         Cd,
         parseParens:function(xB,bSym) {return parseParens(xB,bSym)},
         cFunc:      function(parm) {return cFunc(parm)},
         mgExport:   function(parm) {return mgExport(parm)},
