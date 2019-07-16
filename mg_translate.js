@@ -1731,6 +1731,7 @@ var mgTrans = function() {
     //misc functions
     function strCount(xTarget,xSearch) {xTarget +="";xSearch+="";return xTarget.split(xSearch).length-1} //count occurrences of string
     function numTest(xT) {if (+xT == +xT*1) {return true}; return false} //test for numerical string
+    function toSciNot(xU) {xU+="";return xU.replace(/(\d+)e(\d+)/g,"$1*10^$2").replace(/(\d+)e\-(\d+)/g,"$1*10^-$2").replace(/(\d+)e\+(\d+)/g,"$1*10^$2")} //convert N.NNe+-NN notation to scientific
     function parseArgs(xP) { //parse comma-delimited arguments into array
         var args = [];
         var strSplit = xP.split(",");
@@ -1803,11 +1804,10 @@ var mgTrans = function() {
         return xP
     }
     function oprExtract(fExt) {//extract inside function in FUNC format, returns func,upper,lower
-        function fTest(tFunc) {if (typeof funcMap[tFunc] == "undefined") {return false}; return true} //test for valid function key
         fExt = oParens(fExt);
         var opReturn = {func:"",upper:"",lower:""};
         var funcKey = fExt.substr(0,fExt.indexOf("("))
-        if (funcKey != "" && fTest(funcKey)) {
+        if (funcKey != "" && typeof mgTrans.funcMap[funcKey] != "undefined") {
             var strg = parseParens(fExt,fExt.indexOf("("));
             if (strg.upper != "") {opReturn = {func:funcKey,upper:strg.upper,lower:strg.lower}} //two operands
             else {opReturn = {func:funcKey,upper:strg.inside,lower:""}} //single operand
@@ -1876,7 +1876,6 @@ var mgTrans = function() {
     }
     //
     function mgExport(xFn) { //export from FUNC to MG format
-        function toSciNot(xU) {xU+="";return xU.replace(/(\d+)e(\d+)/g,"$1*10^$2").replace(/(\d+)e\-(\d+)/g,"$1*10^-$2").replace(/(\d+)e\+(\d+)/g,"$1*10^$2")} //convert N.NNe+-NN notation to scientific
         if (xFn == "NaN" || xFn == "undefined") {return "undefined"}
         xFn += "";
         xFn = xFn.replace(/\,\)/g,",'')").replace(/\(\,/g,"('',").replace(/\,\,/g,",'',").replace(/\(\)/g,"('')");

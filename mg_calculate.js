@@ -181,11 +181,10 @@ var mgCalc = function() {
         return {func:"",upper:"",lower:""}
     }
     function opExtract(fExt) {//extract inside function in FUNC format, returns func,upper,lower
-        function fTest(tFunc) {if (typeof mgTrans.funcMap[tFunc] == "undefined") {return false}; return true} //test for valid function key
         fExt = strConvert(fExt);
-        var opReturn = {func:"",upper:"",lower:""}
+        var opReturn = {func:"",upper:"",lower:"",third:"",fourth:""}
         var funcKey = fExt.substr(0,fExt.indexOf("("))
-        if (funcKey && fTest(funcKey)) {
+        if (funcKey != "" && typeof mgTrans.funcMap[funcKey] != "undefined") {
             var strg = mgTrans.parseParens(fExt,fExt.indexOf("("));
             if (strg.upper) {opReturn = {func:funcKey,upper:xprIterate(strg.upper),lower:xprIterate(strg.lower)}} //two operands
             else {opReturn = {func:funcKey,upper:xprIterate(strg.inside),lower:""}} //single operand
