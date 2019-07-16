@@ -1496,7 +1496,7 @@ var mgCalc = function() {
         return drvS(dXpr,deeVar,nTh)
     }
     function drvS(dXpr,deeVar,nTh) { //nTh partial derivative
-        var drvFunc = {
+        const drvFunc = {
         cPowD: function(xU,xL) {
             if (strTest(xU,deeVar) && strTest(xL,deeVar)) {return cMulS(cAddS(cMulS(lneS(deeVar),drvS(xL,deeVar)),cDivS(xL,deeVar)),cPowS(xU,xL))}
             if (strTest(xU,deeVar)) {return cMulS(cMulS(xL,(cPowS(xU,cSubS(xL,1)))),drvS(xU,deeVar))}
@@ -1602,7 +1602,7 @@ var mgCalc = function() {
     function ntgS(nXpr,deeVar,iU,iL) { //integrate (integrand, variable, upper_limit, lower_limit)
         function ntgCheck(rCheck) {if (typeof rCheck == "undefined" || strTest(rCheck,"Cv[9998]") || strTest(rCheck,"undefined")) {return false}; return true}
         function ntgTest(rTest)   {if (ntgCheck(rTest) &&  !strTest(rTest,"ntp(") && rTest != 0) {return true}; return false} //test for ntg success
-        var ntgFunc = {
+        const ntgFunc = {
         cPowI: function(xU,xL) {
             var xTractU = opExtract(xU);
             //special cases
@@ -2219,7 +2219,7 @@ var mgCalc = function() {
 
     //Limits
     function lmtS(lXpr,lVar,xLim) {
-        var lmtFunc = {
+        const lmtFunc = {
         cAddL: function(xU,xL) {return cAddS(lmtS(xU,lVar,xLim),lmtS(xL,lVar,xLim))},
         cSubL: function(xU,xL) {
             if (lmtS(xU,lVar,xLim) == "Cv[8734]" && lmtS(xL,lVar,xLim) == "Cv[8734]") {return lneS(cDivS(cPowS("Cv[8]",lmtS(xU,lVar,xLim)),cPowS("Cv[8]",lmtS(xL,lVar,xLim))))} //inf-inf
@@ -2624,7 +2624,7 @@ var mgCalc = function() {
             for (var sI=int(sLower);sI<=int(sUpper);sI++) {sReturn = xReduce(cAddS(sReturn,cSubst(sXpr,dV,sI))) }
             return sReturn
         }
-        var smmFunc = {
+        const smmFunc = {
         cAddM: function(xU,xL) {return xReduce(cAddS(smmS(xU,sUpper,dV,sLower),smmS(xL,sUpper,dV,sLower)))},
         cSubM: function(xU,xL) {return xReduce(cSubS(smmS(xU,sUpper,dV,sLower),smmS(xL,sUpper,dV,sLower)))},
         cMulM: function(xU,xL) {
@@ -2741,7 +2741,7 @@ var mgCalc = function() {
             for (var sI=int(pLower);sI<=int(pUpper);sI++) {pReturn = xReduce(cMulS(pReturn,cSubst(pXpr,dV,sI))) }
             return pReturn
         }
-        var pmmFunc = {
+        const pmmFunc = {
         cAddP: function(xU,xL) {
             if (!strTest(xU,dV) && xL == dV)  {return cDivS(facS(cAddS(xU,pUpper)),facS(cSubS(cAddS(xU,pLower),1)))}
             if (xU == dV && !strTest(xL,dV))  {return cDivS(facS(cAddS(xL,pUpper)),facS(cSubS(cAddS(xL,pLower),1)))}

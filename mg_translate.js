@@ -22,7 +22,7 @@ var mgConfig =
     trigBase:   1,          //trig base 1=radians. Math.pi/180 for degrees, Math.pi/200 gradians
     divScale:   85,         //default scale factor for x/y division in percent
     divSymbol:  "Over",     //default HTML divide symbol "Slash" or "Over"
-    fnFmt: "    fn x",      //function format "fn(x)" or "fn x"
+    fnFmt:      "fn x",     //function format "fn(x)" or "fn x"
     invFmt:     "asin",     //inverse trig function format "asin" or "sin<sup>-1</sup>"
     cplxFmt:    "Rect",     //complex numbers "Rect" or "Polar"
     pctFactor:  100,        //percent factor 100 for percent, 1 for n.nn decimal
@@ -31,6 +31,7 @@ var mgConfig =
     editMode:   false,      //edit mode formatting
     htmlFont:   "Times,Serif", //default HTML font-family
 }
+
 var Cv = new Array(11000); //symbol array
 
 // internal functions
@@ -1884,49 +1885,48 @@ var mgTrans = function() {
         xFn = toSciNot(xFn);
         return xFn //process functions
     }
-
+    function cParse(xInp,xOp,xFunc) {//parse operators
+        const zDelim = ["^","-","#","*","/","+",",","~","@","=","<",">",String.fromCharCode(8800),String.fromCharCode(8804),String.fromCharCode(8805),String.fromCharCode(8226)];
+        var ztmp = "",bSym = "",lPar = 0,rPar = 0,dCp = 0,iCp = 0;
+        if (xOp == "^") {bSym = xInp.lastIndexOf(xOp)+1}
+        else  {bSym = xInp.indexOf(xOp)+1;}
+        var aSym = bSym-2;
+        var lSym = xInp.length;
+        for (iCp=bSym;iCp<=lSym;iCp++) {
+            ztmp = xInp.charAt(iCp);
+            if (ztmp == "(") {lPar++}
+            if (ztmp == ")") {rPar++}
+            if (lPar < rPar) {break;}
+            if (lPar == rPar && xInp.charAt(iCp-1)!= "e") { if (zDelim.indexOf(ztmp) > -1) {break} }
+        }
+        lPar = 0;rPar = 0;
+        for (dCp=aSym;dCp>=0;dCp--) {
+            ztmp = xInp.charAt(dCp);
+            if (ztmp == "(") {lPar++}
+            if (ztmp == ")") {rPar++}
+            if (lPar > rPar) {break;}
+            if (lPar == rPar && xInp.charAt(dCp-1)!= "e") { if (zDelim.indexOf(ztmp) > -1) {break} }
+        }
+        xInp = xInp.substr(0,dCp+1)+xFunc+"("+xInp.substr(dCp+1,aSym-dCp)+","+xInp.substr(bSym,iCp-bSym)+")"+xInp.substr(iCp);
+        return xInp;
+    }
+    function nParse(xInp,xOp) {//parse negatives as cNeg()
+        const zDelim = ["(",")","^","-","#","*","/","+",",","~","@","=","<",">",String.fromCharCode(8800),String.fromCharCode(8804),String.fromCharCode(8805),String.fromCharCode(8226)];
+        var iNp = 0,lPar = 0,rPar = 0,ztmp = "";
+        var bSym = xInp.indexOf(xOp)+xOp.length;
+        var lSym = xInp.length;
+        for (iNp=bSym;iNp<=lSym;iNp++) {
+            ztmp = xInp.charAt(iNp);
+            if (ztmp == "(") {lPar++}
+            if (ztmp == ")") {rPar++}
+            if (lPar < rPar) {break;}
+            if (lPar == rPar && xInp.charAt(iNp-1)!= "e") {if (zDelim.indexOf(ztmp) > -1) {break}}
+        }
+        xInp = xInp.substr(0,bSym-1)+"cNeg("+xInp.substr(bSym,iNp-bSym)+")"+xInp.substr(iNp);
+        return xInp;
+    }
     //
     function cFunc(cXpr) { //convert from MG format to FUNC format: a+bc/d -> cAdd(a,cDiv(cMul(b,c),d)))
-        function cParse(xInp,xOp,xFunc) {//parse operators
-            const zDelim = ["^","-","#","*","/","+",",","~","@","=","<",">",String.fromCharCode(8800),String.fromCharCode(8804),String.fromCharCode(8805),String.fromCharCode(8226)];
-            var ztmp = "",bSym = "",lPar = 0,rPar = 0,dCp = 0,iCp = 0;
-            if (xOp == "^") {bSym = xInp.lastIndexOf(xOp)+1}
-            else  {bSym = xInp.indexOf(xOp)+1;}
-            var aSym = bSym-2;
-            var lSym = xInp.length;
-            for (iCp=bSym;iCp<=lSym;iCp++) {
-                ztmp = xInp.charAt(iCp);
-                if (ztmp == "(") {lPar++}
-                if (ztmp == ")") {rPar++}
-                if (lPar < rPar) {break;}
-                if (lPar == rPar && xInp.charAt(iCp-1)!= "e") { if (zDelim.indexOf(ztmp) > -1) {break} }
-            }
-            lPar = 0;rPar = 0;
-            for (dCp=aSym;dCp>=0;dCp--) {
-                ztmp = xInp.charAt(dCp);
-                if (ztmp == "(") {lPar++}
-                if (ztmp == ")") {rPar++}
-                if (lPar > rPar) {break;}
-                if (lPar == rPar && xInp.charAt(dCp-1)!= "e") { if (zDelim.indexOf(ztmp) > -1) {break} }
-            }
-            xInp = xInp.substr(0,dCp+1)+xFunc+"("+xInp.substr(dCp+1,aSym-dCp)+","+xInp.substr(bSym,iCp-bSym)+")"+xInp.substr(iCp);
-            return xInp;
-        }
-        function nParse(xInp,xOp) {//parse negatives as cNeg()
-            const zDelim = ["(",")","^","-","#","*","/","+",",","~","@","=","<",">",String.fromCharCode(8800),String.fromCharCode(8804),String.fromCharCode(8805),String.fromCharCode(8226)];
-            var iNp = 0,lPar = 0,rPar = 0,ztmp = "";
-            var bSym = xInp.indexOf(xOp)+xOp.length;
-            var lSym = xInp.length;
-            for (iNp=bSym;iNp<=lSym;iNp++) {
-                ztmp = xInp.charAt(iNp);
-                if (ztmp == "(") {lPar++}
-                if (ztmp == ")") {rPar++}
-                if (lPar < rPar) {break;}
-                if (lPar == rPar && xInp.charAt(iNp-1)!= "e") {if (zDelim.indexOf(ztmp) > -1) {break}}
-            }
-            xInp = xInp.substr(0,bSym-1)+"cNeg("+xInp.substr(bSym,iNp-bSym)+")"+xInp.substr(iNp);
-            return xInp;
-        }
         var nCf = 0,iXX = 0,key = 0,sbtOperand = "",cIdx = 0,aIdx = 0,sCount = 0;
         cXpr += "";
         sCount = strCount(cXpr,"]sbt(");//var&subscripts into container cnt()
