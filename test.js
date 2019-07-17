@@ -2033,25 +2033,25 @@ var mport =
 
 var financial =
 [
-"mgCalc.PresentValue(1000,0,83.79,1,1,12)","1000.05",
-"mgCalc.FutureValue(0,1000,-83.79,1,1,12)","1010.1",
-"mgCalc.Payment(1000,0,83.79,1,1,12)","83.79",
-"mgCalc.Rate(1000,0,83.79,1,1,12)","1.01",
-"mgCalc.Term(1000,0,83.79,1,1,12)","1",
-"mgCalc.Term(100,1000,0,1,1,12)","230.35",
-"mgCalc.Term(1000,100,1,0,1,12)","75",
-"mgCalc.Term(100,1000,-72.88,5,1,12)","1",
+"mgCalc.PresentValue({PV:1000,FV:0,PMT:83.79,RATE:1,TERM:1,IPY:12})","1000.05",
+"mgCalc.FutureValue({PV:0,FV:1000,PMT:-83.79,RATE:1,TERM:1,IPY:12})","1010.1",
+"mgCalc.Payment({PV:1000,FV:0,PMT:83.79,RATE:1,TERM:1,IPY:12})","83.79",
+"mgCalc.Rate({PV:1000,FV:0,PMT:83.79,RATE:1,TERM:1,IPY:12})","1.01",
+"mgCalc.Term({PV:1000,FV:0,PMT:83.79,RATE:1,TERM:1,IPY:12})","1",
+"mgCalc.Term({PV:100,FV:1000,PMT:0,RATE:1,TERM:1,IPY:12})","230.35",
+"mgCalc.Term({PV:1000,FV:100,PMT:1,RATE:0,TERM:1,IPY:12})","75",
+"mgCalc.Term({PV:100,FV:1000,PMT:-72.88,RATE:5,TERM:1,IPY:12})","1",
 
-"mgCalc.Call(90/365,5,100,110,5,.5)","15.93",
-"mgCalc.CallDelta(90/365,5,100,110,5,.5)","0.202",
-"mgCalc.CallTheta(90/365,5,100,110,5,.5)","-0.0504",
-"mgCalc.CallRho(90/365,5,100,110,5,.5)","0.169",
-"mgCalc.Put(90/365,5,110,100,5,.5)","15.93",
-"mgCalc.PutDelta(90/365,5,110,100,5,.5)","-0.176",
-"mgCalc.PutTheta(90/365,5,110,100,5,.5)","-0.0504",
-"mgCalc.PutRho(90/365,5,110,100,5,.5)","-0.161",
-"mgCalc.OptionGamma(90/365,5,100,110,5,.5)","0.00374",
-"mgCalc.OptionVega(90/365,5,100,100,5,.5)","0.194",
+"mgCalc.Call({TERM:90/365,RATE:5,STRIKE:100,SPOT:110,DIV:5,STDV:.5})","15.93",
+"mgCalc.CallDelta({TERM:90/365,RATE:5,STRIKE:100,SPOT:110,DIV:5,STDV:.5})","0.202",
+"mgCalc.CallTheta({TERM:90/365,RATE:5,STRIKE:100,SPOT:110,DIV:5,STDV:.5})","-0.0504",
+"mgCalc.CallRho({TERM:90/365,RATE:5,STRIKE:100,SPOT:110,DIV:5,STDV:.5})","0.169",
+"mgCalc.Put({TERM:90/365,RATE:5,STRIKE:110,SPOT:100,DIV:5,STDV:.5})","15.93",
+"mgCalc.PutDelta({TERM:90/365,RATE:5,STRIKE:110,SPOT:100,DIV:5,STDV:.5})","-0.176",
+"mgCalc.PutTheta({TERM:90/365,RATE:5,STRIKE:110,SPOT:100,DIV:5,STDV:.5})","-0.0504",
+"mgCalc.PutRho({TERM:90/365,RATE:5,STRIKE:110,SPOT:100,DIV:5,STDV:.5})","-0.161",
+"mgCalc.OptionGamma({TERM:90/365,RATE:5,STRIKE:100,SPOT:110,DIV:5,STDV:.5})","0.00374",
+"mgCalc.OptionVega({TERM:90/365,RATE:5,STRIKE:100,SPOT:100,DIV:5,STDV:.5})","0.194",
 ];
 
 var internal =
