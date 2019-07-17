@@ -36,6 +36,7 @@ var Cv = new Array(11000); //symbol array
 
 // internal functions
 var mgTrans = function() {
+    //Initialize symbol arrays
     var Cs = new Array(11000); //html symbols
     var Cd = new Array(50); //constant description
     var Cu = new Array(50); //constant units
@@ -99,7 +100,7 @@ var mgTrans = function() {
     Cv[46] = {r:0, i:1};        Cs[46] = "<i>i</i>"; //imaginary constant
     Cv[8230] = 0;
 
-    //initialize html symbols
+    //Initialize html symbols
     var iAl = 0;
     for (iAl=47;iAl<10000;iAl++)    {Cs[iAl]="&#"+(iAl)+";"}
     for (iAl=58;iAl<=127;iAl++)     {Cs[iAl]=String.fromCharCode(iAl)}//ascii
@@ -2255,6 +2256,19 @@ var mgTrans = function() {
         mgXpr = dedupParens(mgXpr);
         return mgXpr
     }
+    // check config
+    function configCheck() {
+        if (mgConfig.trigBase != 1 && mgConfig.trigBase != Math.pi/180 && mgConfig.trigBase != Math.pi/200) {mgConfig.trigBase = 1; console.log("* Invalid value for mgConfig.trigBase, setting to default *")}
+        if (mgConfig.divScale < 0 || mgConfig.divScale  > 100) {mgConfig.divScale = 85; console.log("* Invalid value for mgConfig.divScale, setting to default *")}
+        if (mgConfig.divSymbol != "Over" && mgConfig.divSymbol != "Slash") {mgConfig.divSymbol = "Over"; console.log("* Invalid value for mgConfig.divSymbol, setting to default *")}
+        if (mgConfig.fnFmt != "fn x" && mgConfig.fnFmt != "fn(x)") {mgConfig.fnFmt = "fn x"; console.log("* Invalid value for mgConfig.fnFmt, setting to default *")}
+        if (mgConfig.invFmt != "asin" && mgConfig.invFmt != "sin<sup>-1</sup>") {mgConfig.invFmt = "asin"; console.log("* Invalid value for mgConfig.invFmt, setting to default *")}
+        if (mgConfig.cplxFmt != "Rect" && mgConfig.cplxFmt != "Polar") {mgConfig.cplxFmt = "Rect"; console.log("* Invalid value for mgConfig.cplxFmt, setting to default *")}
+        if (mgConfig.pctFactor != 100 && mgConfig.pctFactor != 1) {mgConfig.pctFactor = 100; console.log("* Invalid value for mgConfig.pctFactor, setting to default *")}
+        if (mgConfig.dPrecision < 0 || mgConfig.dPrecision > 16) {mgConfig.dPrecision = 16; console.log("* Invalid value for mgConfig.dPrecision, setting to default *")}
+        if (mgConfig.Domain != "Complex" && mgConfig.Domain != "Real") {mgConfig.Domain = "Complex"; console.log("* Invalid value for mgConfig.Domain, setting to default *")}
+        if (mgConfig.editMode != true && mgConfig.editMode != false) {mgConfig.editMode = false; console.log("* Invalid value for mgConfig.editMode, setting to default *")}
+    }
     return {
         funcMap:    funcMap,
         Cs:         Cs,
@@ -2267,6 +2281,7 @@ var mgTrans = function() {
         texExport:  function(parm) {return texExport(parm)},
         texImport:  function(parm) {return texImport(parm)},
         Translate:  function(expression,scale)    {
+            configCheck()
             if (typeof scale == "undefined") {scale = 100}
             var mgFmt = mgTrans.texImport(expression);
             return {
@@ -2276,6 +2291,7 @@ var mgTrans = function() {
                 }
         },
         Output:     function(expression,scale)    {
+            configCheck()
             if (typeof scale == "undefined") {scale = 100}
             return {
                 html:   "<span title='MathGene HTML' style='font-family:"+mgConfig.htmlFont+";font-size:"+scale+"%'>"+mgTrans.htmlExport(expression)+"</span>",

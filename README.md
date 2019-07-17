@@ -26,7 +26,7 @@ MathGene supports the following browsers, mobile devices, and Javascript engines
 - Internet Explorer version 11 or higher (Windows)
 - Microsoft Edge
 - Safari version 5 or higher (Mac)
-- Node.js versions 4 or higher
+- Node.js versions 8 or higher (version 4+ is compatible with code but not tests)
 - Apple iPhone 3+
 - Apple iPad 2+
 - Android 4.3+
@@ -45,7 +45,7 @@ for translation and computation. For example, the entire derivative engine is a 
 
 MathGene does not incorporate any 3rd party code or algorithms outside of conventional math techniques.
 
-Use the followng HTML statements to load MathGene into a web page (view file 'web_demo.html' for usage):
+Insert the followng HTML statements to install MathGene into a web page (view file 'web_demo.html' for usage):
 
 	<script type="text/javascript" src="mg_translate.js"></script>
 	<script type="text/javascript" src="mg_calculate.js"></script>
@@ -122,6 +122,7 @@ Expressions are evaluated from left to right. Math operators have a precedence v
 
 Operator precedence from first to last:
 - () → Operations inside parentheses and functions
+- ! → factorial
 - x^n → Exponents
 - -x → Negative numbers: -4^2 = -(4^2)
 - xN → Terms such as 2π: 2π/4<i>i</i> = (2π)/(4<i>i</i>)
@@ -215,14 +216,14 @@ The following MathGene functions compute symbolic math:
 - mgCalc.Solve(equation,variable) - solve the equation for the specified variable
 - mgCalc.Substitute(expression,substTarget,substSource) - substitute the expression in substTarget (which is a term in expression) with substSource
 - mgCalc.Factor(expression) - factor symbolically 
-- mgCalc.Expand(expression) - inverse of mgFactor
+- mgCalc.Expand(expression) - inverse of mgCalc.Factor
 - mgCalc.TrigToExp(expression) - converts trig and hyperbolic functions to exponential equivalents
 - mgCalc.ExpToTrig(expression) - converts exponential equivalents to trig and hyperbolic functions
 - mgCalc.Range(expression) - returns range of expression
 - mgCalc.Domain(expression) - returns domain of expression
 - mgCalc.Series(expression,variable,center,order) - returns Taylor series of expression, center default=0, order default=6
 
-The returned value of all the above functions is an object containing the three output formats LaTeX, HTML, and MG.
+The returned value of all the above functions is an object containing the three output formats LaTeX, HTML, and MG just as in the Numeric function.
 
 Conventions:
 - negative exponents 'x^(-n)' are simplified to '1/x^n'
@@ -271,7 +272,7 @@ To run the test suite via command-line run the following commands (Node.js 8 or 
 To run the web test interface, load the file 'test_suite.html' into a supported web browser.
 
 Each merge or pull request to master branch will also run node tests via Azure Pipelines. 
-Pipeline tests run against multiple versions of NodeJS and include coverage reporting.
+Pipeline tests run against multiple versions of NodeJS (base version 8.0 and current) and include coverage reporting.
 
 ## Basic Theory of Operation
 

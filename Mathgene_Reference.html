@@ -1,11 +1,158 @@
 <html>
 <head>
 <title>MathGene Reference v2.0</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<script type="text/javascript" src="mg_translate.js" ></script>
+<script type="text/javascript" src="mg_calculate.js" ></script>
+<script type="text/javascript">
+function evtInit() {
+	var btns = document.getElementsByTagName("button");
+	for (var iEvt=0;iEvt<btns.length;iEvt++) {
+		if  (btns[iEvt].attachEvent) {btns[iEvt].attachEvent('onmouseup', function() {eval(window.event.srcElement.value)});} 
+		else {btns[iEvt].addEventListener("mousedown", function() {eval(this.value)},false);}	
+	}
+}
+function demo(id) {
+	document.getElementById(id+'output').innerHTML = mgTrans.Translate(document.getElementById(id+'input').value).html
+}</script>
+</head>
 <body>
+<center>
+<p><h1>MathGene Reference v2.0</h1></p>
+<tr><td><script>document.write(mgTrans.Translate("sin(Cv[10120])=sum(Cv[8734],Cv[10110]=0)((-1)^Cv[10110]/(2Cv[10110]+1)Cv[45])Cv[10120]^(2Cv[10110]+1)=Cv[10120]-Cv[10120]^3/3Cv[45]+Cv[10120]^5/5Cv[45]-Cv[8230]",150).html)</script></td></tr>
+<p><i><b>The JavaScript Open Source symbolic math calculation and rendering engine!</b></i></p>
+</center>
 
-<p><b>MathGene Reference</b></p>
+<p>MathGene is a comprehensive JavaScript mathematics engine that delivers the power to perform advanced numerical 
+and symbolic mathematics processing of LaTeX expressions and send the output to pure HTML for rendering publishing quality 
+mathematics on a conventional web browser. </p>
 
-<p><b>MG Format Arithmetic Operators</b></p>
+<p>MathGene has two modules:</p>
+<ul>
+<li>mg_translate.js, which translates between LaTeX, HTML, and native MG format.</li>
+<li>mg_calculate.js, which performs the calculations.</li>
+</ul>
+
+<p>mg_translate.js can be used without mg_calculate.js to perform HTML mathematics rendering only.
+Both modules are required to perform calculations.</p>
+
+<h2>MathGene Features</h2>
+<p>MathGene can be used to render standard math notation into HTML from expressions in industry-standard LaTeX notation or MathGene MG notation (mgTranslate.js).</p>
+<p>MathGene also can compute numerical or symbolic mathematics from LaTex or MG notation and render results to HTML, LaTeX, or MG output (mgCalculate.js).</p>
+
+<p>Numeric Calculations:</p>
+<ul>
+<li>Real or complex numbers</li>
+<li>Output in scientific notation</li>
+<li>Trig and Hyperbolic functions</li>
+<li>Probability functions</li>
+<li>Radians, degrees, or gradians</li>
+<li>Scientific constants</li>
+<li>Financial calculations</li>
+<li>Matrices</li>
+</ul>
+
+<p>Symbolic calculations:</p>
+<ul>
+<li>Solve equation or inequality for variable</li>
+<li>Simplify expression or equation</li>
+<li>Evaluate derivatives, integrals, summations via simplify function</li>
+<li>Factor symbolic expressions</li>
+<li>Expand (de-factor) symbolic expression</li>
+<li>Convert trig functions to exponential</li>
+<li>Convert exponential functions to trig</li>
+<li>Expand expression to Taylor series</li>
+<li>Find domian of expression</li>
+<li>Find range of expression</li>
+<li>Matrices</li>
+</ul>
+
+<h2>Using MathGene in Browsers</h2>
+
+<p>MathGene has the unique ability to render pure HTML math output from a LaTeX or MG formatted input expression. 
+This has many advantages over the conventional image-based approach or MathML for web mathematics publishing.</p>
+
+<p>Advantages:</p>
+<ul>
+<li>no image or font download, instant rendering using built-in HTML extended ASCII characters</li>
+<li>fast rendering on mobile devices</li>
+<li>fully scalable math rendering without pixelation, math stays razor sharp after zooming</li>
+<li>easy insertion into HTML documents</li>
+<li>simple and compact markup language compared to MathML</li>
+<li>compatible with all modern browsers and mobile devices</li>
+<li>Released under GPL. No fees or licensing!</li>
+</ul>
+
+<h3>Browser support:</h3>
+<p>MathGene is implemented entirely in JavaScript conforming to ECMAscript ECMA-262, edition 5.1. This ensures compatibility with a wide range of current and legacy devices.</p>
+
+<p>MathGene supports the following browsers, mobile devices, and Javascript engines:</p>
+<ul>
+<li>FireFox version 8 or higher (Windows, Mac, Linux)</li>
+<li>Google Chrome version 10 or higher (Windows, Mac, Linux, Android)</li>
+<li>Internet Explorer version 11 or higher (Windows)</li>
+<li>Microsoft Edge</li>
+<li>Safari version 5 or higher (Mac)</li>
+<li>Apple iPhone 3+</li>
+<li>Apple iPad 2+</li>
+<li>Android 4.3+</li>
+</ul>
+
+<h3>Rendering Math in Browsers</h2>
+<p>Insert the followng HTML statements in the head section to install MathGene into a web page (view file 'web_demo.html' for usage):</p>
+<b>
+<div>&ltmeta http-equiv="Content-Type" content="text/html; charset=utf-8"&gt;</div>
+<div>&lt;script type="text/javascript" src="mg_translate.js"&gt;&lt;/script&gt;</div>
+<div>&lt;script type="text/javascript" src="mg_calculate.js"&gt;&lt;/script&gt;</div>
+</b>
+<p>(If only rendering is required, then omit mg_calculate.js line.)</p>
+
+<p>Examples of inserting inline math in a web page:</p>
+<p>LaTeX:</p>
+<div><b> &lt;script&gt;document.write(mgTrans.Translate('\\sqrt{5+\\frac{\\sqrt{x}}{y}}').html)&lt;/script&gt;</b> (note double back-slashes needed to for direct JavaScript insertion)</div>
+<p><script>document.write(mgTrans.Translate('\\sqrt{5+\\frac{\\sqrt{x}}{y}}',150).html)</script></p>
+<p>MG</p>
+<div><b> &lt;script&gt;document.write(mgTrans.Translate('sqt(5+ sqt(x)/y)').html)&lt;/script&gt;</b>
+<p><script>document.write(mgTrans.Translate('sqt(5+ sqt(x)/y)',150).html)</script></p>
+
+<h2>MathGene Configuration</h2>
+
+<p>The configuration object 'mgConfig' contains the following parameters which can be set at run time:</p>
+
+<table>
+<tr><td> mgConfig.trigBase</td>     <td>default = 1         </td><td>trig base 1=radians. Math.pi/180 for degrees, Math.pi/200 gradians</td></tr>
+<tr><td> mgConfig.divScale</td>     <td>default = 85        </td><td>default scale factor for x/y division in percent</td></tr>
+<tr><td> mgConfig.divSymbol</td>    <td>default = "Over"    </td><td>default HTML divide symbol "Slash" or "Over"</td></tr>
+<tr><td> mgConfig.fnFmt</td>        <td>default = "fn x"    </td><td>function format "fn(x)" or "fn x"</td></tr>
+<tr><td> mgConfig.invFmt </td>      <td>default = "asin"    </td><td>inverse trig function format "asin" or "sin<sup>-1"</td></sup>
+<tr><td> mgConfig.cplxFmt </td>     <td>default = "Rect"    </td><td>complex number format "Rect" or "Polar"    </td></tr>
+<tr><td> mgConfig.pctFactor </td>   <td>default = 100       </td><td>percent factor 100 for percent, 1 for n.nn decimal</td></tr>
+<tr><td> mgConfig.dPrecision </td>  <td>default = 16        </td><td>decimal precision 1-16</td></tr>
+<tr><td> mgConfig.Domain </td>      <td>default = "Complex" </td><td>number domain "Complex" or "Real"</td></tr>
+<tr><td> mgConfig.editMode </td>    <td>default = false     </td><td>edit mode formatting</td></tr>
+<tr><td> mgConfig.htmlFont </td>    <td>default = "Times,Serif"</td><td>default HTML font-family</td></tr>
+</table>
+
+<p>Function style format in mgConfig.fnFmt can be in two styles "fn(x)" which is computer-style such as 'sin(xy)' or default "fn x" which is the conventional 'sin xy'.</p>
+
+<p>Inverse trig function style format in mgConfig.fnFmt can be either "asin" for 'asin x' or "sin<sup>-1</sup>" for 'sin^-1 x'.</p>
+
+<h2>MG Format Reference</h2>
+<p>MG Format is the native math format for MathGene. It is similar to standard computer-style math and is therefore intuitive and easy to use. 
+It is also better for use with WSYWYG math editors than LaTeX.</p>
+
+<p>Live demo of MG to HTML rendering:</p>
+
+<table>
+<tr>
+<td width="5%"><button value="demo('mg')">Show</button></td>
+<td><textarea id='mginput' rows="2" cols="50">Cv[8747]Cv[10120]^Cv[10110]Cv[10100]Cv[10120]=(1/(Cv[10110]+1))Cv[10120]^(Cv[10110]+1)</textarea></td>
+<td width="10%"><center> &#x2192; </center></td>
+<td width="60%"><span id="mgoutput"></span></td>
+</tr>
+</table>
+
+<h3>MG Format Arithmetic Operators</h3>
 <ul>
   <li>+  add</li>
   <li>-  subtract/negative</li>
@@ -14,23 +161,24 @@
   <li>^  exponent</li>
   <li>!  factorial (Lanczos approximation)</li>
   <li>~  angle operator (polar complex form)</li>
- </ul>
+</ul>
 
-<p><b>MG Format Relational Operators</b></p>
+<h3>MG Format Relational Operators</h3>
 <ul>
   <li>=  equal</li>
-  <li>Cs[8800]  not equal </li>
+  <li>Cs[8800] not equal </li>
   <li>Cv[62] greater than</li>
   <li>Cs[8805] greater than or equal</li>
   <li>Cv[60] less than  </li>
   <li>Cs[8804] less than or equal  </li>
  </ul>
 
-<p><b>Operator Precedence</b></p>
+<h3>Operator Precedence</h3>
 <p>Expressions are evaluated from left to right. Math operators have a precedence value that determines which operations are performed first.</p>
 <p>Operator precedence from first to last:</p>
 <ol>
 <li>() → Operations inside parentheses</li>
+<li>! → factorial</li>
 <li>x<sup>n</sup> → Exponents</li>
 <li>&minus;x → Negative numbers: &minus;4<sup>2</sup> = &minus;(4<sup>2</sup>)</li>
 <li>xN → Terms such as 2π: 2π/4<i>i</i> = (2π)/(4<i>i</i>)</li>
@@ -40,21 +188,7 @@
 <li>+&minus; → Add/Subtract</li>
 </ol>
 
-<p><b>Complex Numbers</b></p>
-<p>MathGene has full support for complex and imaginary numbers and their operations when in the Complex domain mode is set in mgConfig. 
-By default, complex numbers are represented in rectangular form a+b<i>i</i>, where <i>i</i> is the imaginary constant.
-Polar forms are also supported using the notation A&#8736;B where A is the magnitude and B is the angle. 
-The mgConfig object selects which form is displayed by default as a calculation result.
-Angles can be represented in Radians (default), Degrees, or Gradians which are also selected in mgConfig.
-Expressions can be entered using either rectangular or polar form and they can be mixed together.
-The result will be converted to form selected in the Settings menu. This allows easy conversions between rectangular and polar forms.
-</p>
-<ul>
-  <li>Rectangular form example: 2+3Cv[45] </li>
-  <li>Polar form example: 2~3 </li>
-</ul>
-
-<p><b>MG Format Math Functions</b></p>
+<h3>MG Format Math Functions</h3>
 
 <p>MG functions:</p>
 <ul>
@@ -93,13 +227,38 @@ The result will be converted to form selected in the Settings menu. This allows 
   <li>nrt(n,x) - nth root</li>
   <li>erf(x) - error function (real numbers only)</li>
   <li>efc(x) - complementary error function (real numbers only)</li>
+  <li>cdf(x) - normalized cumulative density function (real numbers only)</li> 
+  <li>pdf(x) - normalized probability density function (real numbers only)</li>
+  <li>lcf(x) - normalized log cumulative density function (real numbers only)</li>
+  <li>lpf(x) - normalized log probability density function (real numbers only)</li>
   <li>rnd(x) - randomized function</li>
   <li>rou(x) - round to nearest integer</li>
   <li>int(x) - floor, nearest lesser integer</li>
   <li>cei(x) - ceiling, nearest greater integer</li>
 </ul>
 
-<p><b>MG Format Constants</b></p>
+<h3>MG Variables</h3>
+
+<p>Variables in the MG format expressions are represented as 'Cv[nnnn]'. The numeric index nnnn identifies the symbol that is associated with the variable. 
+Cv indexes are derived from the HTML Extended ASCII value using the following scheme:</p>
+
+<ul>
+  <li>Cv[97] to Cv[122] &gt; lowercase plain a-z  </li>
+  <li>Cv[65] to Cv[90] > uppercase plain a-z  </li>
+  <li>Cv[10097] to Cv[10122] &gt; lowercase italic a-z  </li>
+  <li>Cv[10065] to Cv[10090] &gt; uppercase italic a-z  </li>
+  <li>Cv[20097] to Cv[20122] &gt; lowercase bold a-z  </li>
+  <li>Cv[20065] to Cv[20090] &gt; uppercase bold a-z  </li>
+  <li>Cv[945] to Cv[969] &gt; greek lowercase characters </li>
+  <li>Cv[913] to Cv[937] &gt; greek uppercase characters </li>
+</ul>
+
+<p>If plain text is used for a variable in MG formatted expressions, then it will be converted into an italics variable (Cv[10065]-Cv[10022])</p>
+
+<h3>MG Constants</h3>
+
+<p>MathGene has built-in values and associated symbols for the following constants:</p>
+
 <ul>
   <li> Cv[0] - fine structure constant</li>
   <li> Cv[1] - Bohr Radius</li>
@@ -150,15 +309,84 @@ The result will be converted to form selected in the Settings menu. This allows 
   <li> Cv[8734] - infinity</li>
 </ul>
 
+<h3>Special MG Characters and Functions</h3>
+
+<ul>
+<li>Cv[8747] - integral sign</li>
+<li>Cv[8750] - contour integral sign</li>
+</ul>
+
+<h2>MathGene LaTeX</h2>
+
+<p>Live demo of MathGene LaTeX to HTML conversion:</p>
+
+<table>
+<tr>
+<td width="5%"><button value="demo('latex')">Show</button></td>
+<td><textarea id='latexinput' rows="2" cols="50">\frac{1 + \sqrt{5}}{2} \ = \ 1 + \frac{1}{1+\frac{1}{1+\frac{1}{1+\ldots{}}}} \ = \ \sqrt{1+\sqrt{1+\sqrt{1+\sqrt{1+\sqrt{1+\ldots{}}}}}}</textarea></td>
+<td width="10%"><center> &#x2192; </center></td>
+<td width="60%"><span id="latexoutput"></span></td>
+</tr>
+</table>
+
+<h2>MathGene Numeric Calculations</h2>
+<h3>Complex Numbers</h3>
+<p>MathGene has full support for complex and imaginary numbers and their operations when in the Complex domain mode is set in mgConfig. 
+By default, complex numbers are represented in rectangular form a+b<i>i</i>, where <i>i</i> is the imaginary constant.
+Polar forms are also supported using the notation A&#8736;B where A is the magnitude and B is the angle. 
+The mgConfig object selects which form is displayed by default as a calculation result.
+Angles can be represented in Radians (default), Degrees, or Gradians which are also selected in mgConfig.
+Expressions can be entered using either rectangular or polar form and they can be mixed together.
+The result will be converted to form selected in the Settings menu. This allows easy conversions between rectangular and polar forms.
+</p>
+<ul>
+  <li>Rectangular form example: 2+3Cv[45] </li>
+  <li>Polar form example: 2~3 </li>
+</ul>
+
+<h2>MathGene Symbolic Calculations</h2>
+
+<h2>MathGeneFinancial Functions</h2>
+
+<p>Financial functions are available to calculate bond/loan values and Black-Scholes options. These are only accessible via the direct calls listed below. 
+Parameters to financial functions are passed via JSON objects. All financial functions return a single numeric value truncated to the decimal precision set in mgConfig.</p>
+
+<p>The following bond/payment functions require passing a JSON object in the following format (all parameters are decimal numeric):</p>
+<div>(PV:&lt;present value&gt;,FV:&lt;future value&lt;,PMT:&lt;payment&gt;,RATE:&lt;rate&gt;,TERM:&lt;term&gt;,IPY:&lt;interest payments per year&gt;)</div>
+
+<ul>
+<li>mgCalc.PresentValue() - calculate present value of a loan or bond, uses all parameters except PV</li>
+<li>mgCalc.FutureValue() - calculate future value of a loan or bond, uses all parameters except FV</li>
+<li>mgCalc.Rate() - calculate rate of bond/loan, uses all parameters except RATE</li>
+<li>mgCalc.Term() - calculate term of bond/loan in units of IPY, uses all parameters except TERM</li>
+<li>mgCalc.Payment() - calculate payment of bond/loan, uses all parameters except PMT</li>
+</ul>
+
+<p>The following Black-Scholes options functions require passing a single JSON object with the following format (all parameters are decimal numeric):</p>
+<div>{TERM:&lt;term&gt;,RATE:&lt;rate&gt;,STRIKE:&lt;strike price&gt;,SPOT:&lt;spot price&gt;,DIV:&lt;dividend&gt;,STDV:&lt;stdev&gt;}</div>
+<ul>
+<li>mgCalc.Call() - calculate the value of a call option based upon input parameters</li>
+<li>mgCalc.Put() - calculate the value of a call option based upon input parameters</li>
+<li>mgCalc.CallDelta() - calculate the value of a call delta based upon input parameters</li>
+<li>mgCalc.CallRho() - calculate the value of a call rho based upon input parameters</li>
+<li>mgCalc.CallTheta() - calculate the value of a call theta based upon input parameters</li>
+<li>mgCalc.PutDelta() - calculate the value of a put delta based upon input parameters</li>
+<li>mgCalc.PutRho() - calculate the value of a put rho based upon input parameters</li>
+<li>mgCalc.PutTheta() - calculate the value of a put theta based upon input parameters</li>
+<li>mgCalc.OptionGamma() - calculate the value of option gamma based upon input parameters</li>
+<li>mgCalc.OptionVega() - calculate the value of option vega based upon input parameters</li>
+</ul>
 <p><b>MG Global Objects</b></p>
 These objects reside in the global namespace. Ensure that these names do not conflict with other objects in the host application.
 <ul>
 <li>mgConfig - configuration object </li>
 <li>Cv - all MG variables </li>
-<li>Cs - all HTML symbols </li>
 <li>mgTrans - translation code block </li>
 <li>mgCalc - calculation code block </li>
 </ul>
 
 </body>
+<script type="text/javascript">
+evtInit();
+</script>
 </html>
