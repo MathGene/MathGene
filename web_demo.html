@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 <head>
 <title>MathGene Web Demo</title>
@@ -11,49 +12,49 @@ function evtInit() {
 	}
 }
 function htmldemo(num) {
-	document.getElementById('output'+num).innerHTML = mgTranslate(document.getElementById('input'+num).value,document.getElementById('scale'+num).value).html
+	document.getElementById('output'+num).innerHTML = mgTrans.Translate(document.getElementById('input'+num).value,document.getElementById('scale'+num).value).html
 }
 function numericdemo(num) {
-	document.getElementById('output'+num).innerHTML = mgTranslate(document.getElementById('input'+num).value).html
-	document.getElementById('result'+num).innerHTML = mgNumeric(document.getElementById('input'+num).value).html
+	document.getElementById('output'+num).innerHTML = mgTrans.Translate(document.getElementById('input'+num).value).html
+	document.getElementById('result'+num).innerHTML = mgCalc.Numeric(document.getElementById('input'+num).value).html
 }
 function simplifydemo(num) {
 	document.getElementById('result'+num).innerHTML = "working..."
 	function runsimplify() {
-		document.getElementById('output'+num).innerHTML = mgTranslate(document.getElementById('input'+num).value).html
-		document.getElementById('result'+num).innerHTML = mgSimplify(document.getElementById('input'+num).value).html
+		document.getElementById('output'+num).innerHTML = mgTrans.Translate(document.getElementById('input'+num).value).html
+		document.getElementById('result'+num).innerHTML = mgCalc.Simplify(document.getElementById('input'+num).value).html
 	}
 	window.setTimeout(runsimplify,50)
 }
 function factordemo(num) {
 	document.getElementById('result'+num).innerHTML = "working..."
 	function runfactor() {
-		document.getElementById('output'+num).innerHTML = mgTranslate(document.getElementById('input'+num).value).html
-		document.getElementById('result'+num).innerHTML = mgFactor(document.getElementById('input'+num).value).html
+		document.getElementById('output'+num).innerHTML = mgTrans.Translate(document.getElementById('input'+num).value).html
+		document.getElementById('result'+num).innerHTML = mgCalc.Factor(document.getElementById('input'+num).value).html
 	}
 	window.setTimeout(runfactor,50)
 }
 function solvedemo(num) {
 	document.getElementById('result'+num).innerHTML = "working..."
 	function runsolve() {
-		document.getElementById('output'+num).innerHTML = mgTranslate(document.getElementById('input'+num).value).html
-		document.getElementById('result'+num).innerHTML = mgSolve(document.getElementById('input'+num).value,document.getElementById('variable'+num).value).html
+		document.getElementById('output'+num).innerHTML = mgTrans.Translate(document.getElementById('input'+num).value).html
+		document.getElementById('result'+num).innerHTML = mgCalc.Solve(document.getElementById('input'+num).value,document.getElementById('variable'+num).value).html
 	}
 	window.setTimeout(runsolve,50)
 }
 function trigdemo(num) {
 	document.getElementById('result'+num).innerHTML = "working..."
 	function runtrig() {
-		document.getElementById('output'+num).innerHTML = mgTranslate(document.getElementById('input'+num).value).html
-		document.getElementById('result'+num).innerHTML = mgTrigToExp(document.getElementById('input'+num).value).html
+		document.getElementById('output'+num).innerHTML = mgTrans.Translate(document.getElementById('input'+num).value).html
+		document.getElementById('result'+num).innerHTML = mgCalc.TrigToExp(document.getElementById('input'+num).value).html
 	}
 	window.setTimeout(runtrig,50)
 }
 function seriesdemo(num) {
 	document.getElementById('result'+num).innerHTML = "working..."
 	function runseries() {
-		document.getElementById('output'+num).innerHTML = mgTranslate(document.getElementById('input'+num).value).html
-		document.getElementById('result'+num).innerHTML = mgSeries(document.getElementById('input'+num).value,'x',1,8).html
+		document.getElementById('output'+num).innerHTML = mgTrans.Translate(document.getElementById('input'+num).value).html
+		document.getElementById('result'+num).innerHTML = mgCalc.Series(document.getElementById('input'+num).value,'x',1,8).html
 	}
 	window.setTimeout(runseries,50)
 }

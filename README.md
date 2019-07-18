@@ -23,10 +23,10 @@ Both modules are required to perform calculations.
 MathGene supports the following browsers, mobile devices, and Javascript engines:
 - FireFox version 8 or higher (Windows, Mac, Linux)
 - Google Chrome version 10 or higher (Windows, Mac, Linux, Android)
-- Internet Explorer version 10 or higher (Windows)
+- Internet Explorer version 11 or higher (Windows)
 - Microsoft Edge
 - Safari version 5 or higher (Mac)
-- Node.js versions 4 or higher
+- Node.js versions 8 or higher (version 4+ is compatible with code but not tests)
 - Apple iPhone 3+
 - Apple iPad 2+
 - Android 4.3+
@@ -45,7 +45,7 @@ for translation and computation. For example, the entire derivative engine is a 
 
 MathGene does not incorporate any 3rd party code or algorithms outside of conventional math techniques.
 
-Use the followng HTML statements to load MathGene into a web page (view file 'web_demo.html' for usage):
+Insert the followng HTML statements to install MathGene into a web page (view file 'web_demo.html' for usage):
 
 	<script type="text/javascript" src="mg_translate.js"></script>
 	<script type="text/javascript" src="mg_calculate.js"></script>
@@ -122,6 +122,7 @@ Expressions are evaluated from left to right. Math operators have a precedence v
 
 Operator precedence from first to last:
 - () → Operations inside parentheses and functions
+- ! → factorial
 - x^n → Exponents
 - -x → Negative numbers: -4^2 = -(4^2)
 - xN → Terms such as 2π: 2π/4<i>i</i> = (2π)/(4<i>i</i>)
@@ -166,7 +167,7 @@ Advantages:
 - Released under GPL. No fees or licensing!
 
 The following function is used to render HTML output from the input expression string in either LaTeX or native MG format:
-- mgTranslate(expression).html
+- mgTrans.Translate(expression).html
 
 Example of embedding MathGene HTML in a web page:
 
@@ -176,16 +177,16 @@ Example of embedding MathGene HTML in a web page:
 	</head>
 	<body>
 	<p>Here is a matrix:</p>
-	<script>document.write(mgTranslate("\\begin{ bmatrix}a&b&c \\\\ \\frac{\\pi}{2}&d&e  \\end{bmatrix}").html)</script>
+	<script>document.write(mgTrans.Translate("\\begin{ bmatrix}a&b&c \\\\ \\frac{\\pi}{2}&d&e  \\end{bmatrix}").html)</script>
 	<p>Here is an integral:</p>
-	<script>document.write(mgTranslate("\\int_{1}^{2} \\sin\\left(x\\right) dx").html)</script>
+	<script>document.write(mgTrans.Translate("\\int_{1}^{2} \\sin\\left(x\\right) dx").html)</script>
 	</body>
 	</html>
 
 
 ## MathGene Numeric Math
 
-MathGene 'mgNumeric(expression)' function will compute the numeric decimal value of an input expression.
+MathGene 'mgCalc.Numeric(expression)' function will compute the numeric decimal value of an input expression.
 
 Numeric computations are performed via IEEE754-2008 64bit floating point math as implemented in JavaScript engine. 
 This provides 16 decimal places of precision with exponents from -322 to +302 in standard scientific notation.
@@ -197,32 +198,32 @@ The input expression can contain constants, real numbers, fractions, complex num
 Examples can be seen in the test suite under 'Numeric' and 'Matrix'.
 
 - All uninitialized variables will be evaluated with a '0' value unless the variable value is set prior to the operation.
-- The returned value of mgNumeric() is an object containing the three output formats LaTeX, HTML, and MG.
-- To output a computation in LaTeX use: mgNumeric(expression).latex
-- To output a computation in HTML use: mgNumeric(expression).html.
+- The returned value of mgCalc.Numeric() is an object containing the three output formats LaTeX, HTML, and MG.
+- To output a computation in LaTeX use: mgCalc.Numeric(expression).latex
+- To output a computation in HTML use: mgCalc.Numeric(expression).html.
 
 Examples:
 
-	mgNumeric("\\frac{8-8 \\imath }{2+ \\imath }").latex    =>     "1.6-4.8 \\imath"
-	mgNumeric("\\begin{bmatrix}3&4&2 \\end{bmatrix} \\times \\begin{bmatrix}13&9&7&15 \\\\8&7&4&6 \\\\6&4&0&3 \\end{bmatrix}").latex  =>  "\\begin{bmatrix}3&4&2 \\end{bmatrix} \\times \\begin{bmatrix}13&9&7&15 \\\\8&7&4&6 \\\\6&4&0&3\\end{bmatrix}"
+	mgCalc.Numeric("\\frac{8-8 \\imath }{2+ \\imath }").latex    =>     "1.6-4.8 \\imath"
+	mgCalc.Numeric("\\begin{bmatrix}3&4&2 \\end{bmatrix} \\times \\begin{bmatrix}13&9&7&15 \\\\8&7&4&6 \\\\6&4&0&3 \\end{bmatrix}").latex  =>  "\\begin{bmatrix}3&4&2 \\end{bmatrix} \\times \\begin{bmatrix}13&9&7&15 \\\\8&7&4&6 \\\\6&4&0&3\\end{bmatrix}"
 
 
 ## MathGene Symbolic Math
 
 The following MathGene functions compute symbolic math:
 
-- mgSimplfy(expression) - reduces the expression to simplest form, evaluates all calculus, limits, summations, reduces fractions, etc.
-- mgSolve(equation,variable) - solve the equation for the specified variable
-- mgSubstitute(expression,substTarget,substSource) - substitute the expression in substTarget (which is a term in expression) with substSource
-- mgFactor(expression) - factor symbolically 
-- mgExpand(expression) - inverse of mgFactor
-- mgTrigToExp(expression) - converts trig and hyperbolic functions to exponential equivalents
-- mgExpToTrig(expression) - converts exponential equivalents to trig and hyperbolic functions
-- mgRange(expression) - returns range of expression
-- mgDomain(expression) - returns domain of expression
-- mgSeries(expression,variable,center,order) - returns Taylor series of expression, center default=0, order default=6
+- mgCalc.Simplfy(expression) - reduces the expression to simplest form, evaluates all calculus, limits, summations, reduces fractions, etc.
+- mgCalc.Solve(equation,variable) - solve the equation for the specified variable
+- mgCalc.Substitute(expression,substTarget,substSource) - substitute the expression in substTarget (which is a term in expression) with substSource
+- mgCalc.Factor(expression) - factor symbolically 
+- mgCalc.Expand(expression) - inverse of mgCalc.Factor
+- mgCalc.TrigToExp(expression) - converts trig and hyperbolic functions to exponential equivalents
+- mgCalc.ExpToTrig(expression) - converts exponential equivalents to trig and hyperbolic functions
+- mgCalc.Range(expression) - returns range of expression
+- mgCalc.Domain(expression) - returns domain of expression
+- mgCalc.Series(expression,variable,center,order) - returns Taylor series of expression, center default=0, order default=6
 
-The returned value of all the above functions is an object containing the three output formats LaTeX, HTML, and MG.
+The returned value of all the above functions is an object containing the three output formats LaTeX, HTML, and MG just as in the Numeric function.
 
 Conventions:
 - negative exponents 'x^(-n)' are simplified to '1/x^n'
@@ -239,7 +240,7 @@ Examples:
 
 The configuration object 'mgConfig' contains the following parameters which can be set at run time:
 
-- mgConfig.trigBase		default = 1, 			trig base 1=radians. Math.pi/180 for degrees, Math.pi/200 gradians
+- mgConfig.trigBase		default = 1, 			trig base 1=radians, Math.pi/180 = degrees, Math.pi/200 = gradians
 - mgConfig.divScale		default = 85, 			default scale factor for x/y division in percent
 - mgConfig.divSymbol	default = "Over", 		default HTML divide symbol "Slash" or "Over"
 - mgConfig.fnFmt		default = "fn x", 		function format "fn(x)" or "fn x"
@@ -271,7 +272,7 @@ To run the test suite via command-line run the following commands (Node.js 8 or 
 To run the web test interface, load the file 'test_suite.html' into a supported web browser.
 
 Each merge or pull request to master branch will also run node tests via Azure Pipelines. 
-Pipeline tests run against multiple versions of NodeJS and include coverage reporting.
+Pipeline tests run against multiple versions of NodeJS (base version 8.0 and current) and include coverage reporting.
 
 ## Basic Theory of Operation
 
@@ -326,10 +327,6 @@ Each mathematics operation is represented by a recursive JavaScript function. Th
 
 The expression '2+3/4-10' has been translated into a functional expression that encodes the standard execution priority conventions. 
 In this case the '3/4' operation is the 'inside' function which will be executed first according to standard JavaScript function execution. 
-
-When this expression is sent for numeric calculation, then the expression is executed as a string with the following Javascript statement:
-
-	exec("cSub(cAdd(2,cDiv(3,4)),10)");
 
 The result of the above calculation will be a decimal number that is represented as a string.
 
