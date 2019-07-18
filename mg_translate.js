@@ -2274,6 +2274,7 @@ var mgTrans = function() {
         Cs:         Cs,
         Cu:         Cu,
         Cd:         Cd,
+        configCheck:function() {configCheck()},
         parseParens:function(xB,bSym) {return parseParens(xB,bSym)},
         cFunc:      function(parm) {return cFunc(parm)},
         mgExport:   function(parm) {return mgExport(parm)},
@@ -2281,7 +2282,7 @@ var mgTrans = function() {
         texExport:  function(parm) {return texExport(parm)},
         texImport:  function(parm) {return texImport(parm)},
         Translate:  function(expression,scale)    {
-            configCheck()
+            configCheck();
             if (typeof scale == "undefined") {scale = 100}
             var mgFmt = mgTrans.texImport(expression);
             return {
@@ -2291,7 +2292,7 @@ var mgTrans = function() {
                 }
         },
         Output:     function(expression,scale)    {
-            configCheck()
+            configCheck();
             if (typeof scale == "undefined") {scale = 100}
             return {
                 html:   "<span title='MathGene HTML' style='font-family:"+mgConfig.htmlFont+";font-size:"+scale+"%'>"+mgTrans.htmlExport(expression)+"</span>",

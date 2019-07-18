@@ -240,7 +240,7 @@ Examples:
 
 The configuration object 'mgConfig' contains the following parameters which can be set at run time:
 
-- mgConfig.trigBase		default = 1, 			trig base 1=radians. Math.pi/180 for degrees, Math.pi/200 gradians
+- mgConfig.trigBase		default = 1, 			trig base 1=radians, Math.pi/180 = degrees, Math.pi/200 = gradians
 - mgConfig.divScale		default = 85, 			default scale factor for x/y division in percent
 - mgConfig.divSymbol	default = "Over", 		default HTML divide symbol "Slash" or "Over"
 - mgConfig.fnFmt		default = "fn x", 		function format "fn(x)" or "fn x"

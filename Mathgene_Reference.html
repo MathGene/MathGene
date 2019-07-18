@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 <head>
 <title>MathGene Reference v2.0</title>
@@ -130,7 +131,7 @@ This has many advantages over the conventional image-based approach or MathML fo
 <p>The configuration object 'mgConfig' contains the following parameters which can be set dynamcally at run time:</p>
 
 <table>
-<tr><td> mgConfig.trigBase</td>     <td>default = 1         </td><td>trig base 1=radians. Math.pi/180 for degrees, Math.pi/200 gradians</td></tr>
+<tr><td> mgConfig.trigBase</td>     <td>default = 1         </td><td>trig base 1=radians, Math.pi/180 = degrees, Math.pi/200 = gradians</td></tr>
 <tr><td> mgConfig.divScale</td>     <td>default = 85        </td><td>default scale factor for x/y division in percent</td></tr>
 <tr><td> mgConfig.divSymbol</td>    <td>default = "Over"    </td><td>default HTML divide symbol "Slash" or "Over"</td></tr>
 <tr><td> mgConfig.fnFmt</td>        <td>default = "fn x"    </td><td>function format "fn(x)" or "fn x"</td></tr>
@@ -164,23 +165,23 @@ It is also better for use with WSYWYG math editors than LaTeX.</p>
 
 <h3>MG Format Arithmetic Operators</h3>
 <ul>
-  <li>+  add</li>
-  <li>-  subtract/negative</li>
-  <li>*  multiply</li>
-  <li>/  divide</li>
-  <li>^  exponent</li>
-  <li>!  factorial (Lanczos approximation)</li>
-  <li>~  angle operator (polar complex form)</li>
+  <li>+  →  add</li>
+  <li>-  →  subtract/negative</li>
+  <li>*  →  multiply</li>
+  <li>/  →  divide</li>
+  <li>^  →  exponent</li>
+  <li>!  →  factorial (Lanczos approximation)</li>
+  <li>~  →  angle operator (polar complex form)</li>
 </ul>
 
 <h3>MG Format Relational Operators</h3>
 <ul>
-  <li>=  equal</li>
-  <li>Cs[8800] not equal </li>
-  <li>Cv[62] greater than</li>
-  <li>Cs[8805] greater than or equal</li>
-  <li>Cv[60] less than  </li>
-  <li>Cs[8804] less than or equal  </li>
+  <li>= → equal</li>
+  <li>Cs[8800] →  not equal </li>
+  <li>Cv[62] → greater than</li>
+  <li>Cs[8805] →  greater than or equal</li>
+  <li>Cv[60] →  less than  </li>
+  <li>Cs[8804] →  less than or equal  </li>
  </ul>
 
 <h3>Operator Precedence</h3>
@@ -202,49 +203,49 @@ It is also better for use with WSYWYG math editors than LaTeX.</p>
 
 <p>MG functions:</p>
 <ul>
-  <li>sin(x) - sine</li>
-  <li>cos(x) - cosine</li>
-  <li>tan(x) - tangent</li>
-  <li>sec(x) - secant</li>
-  <li>csc(x) - cosecant</li>
-  <li>cot(x) - cotangent</li>
-  <li>asn(x) - arcsine or inverse sine</li>
-  <li>acs(x) - arccosine or inverse cosine</li>
-  <li>atn(x) - arctangent or inverse tangent</li>
-  <li>asc(x) - arcsecant or inverse secant</li>
-  <li>acs(x) - arccosecant or inverse cosecant</li>
-  <li>act(x) - arccotangent or inverse cotangent</li>  
-  <li>snh(x) - hyperbolic sine</li>
-  <li>csh(x) - hyperbolic cosine</li>
-  <li>tnh(x) - hyperbolic tangent</li>
-  <li>sch(x) - hyperbolic secant</li>
-  <li>cch(x) - hyperbolic cosecant</li>
-  <li>cth(x) - hyperbolic cotangent</li>
-  <li>ash(x) - hyperbolic arcsine</li>
-  <li>ach(x) - hyperbolic arccosine</li>
-  <li>ath(x) - hyperbolic arctangent</li>
-  <li>lne(x) - natural log</li>
-  <li>lgn(n,x) - log to base n</li>
-  <li>log(x) - natural log</li>
-  <li>exp(x) - ℮<sup>n</sup></li>  
-  <li>gam(x) - gamma function (Lanczos approximation)</li>
-  <li>abs(x) - absolute value</li>
-  <li>rex(x) - real component of complex number</li>
-  <li>imx(x) - imaginary component of complex number</li>
-  <li>arg(x) - complex argument or phase</li>
-  <li>sqt(x) - square root</li>
-  <li>cbt(x) - cube root</li>
-  <li>nrt(n,x) - nth root</li>
-  <li>erf(x) - error function (real numbers only)</li>
-  <li>efc(x) - complementary error function (real numbers only)</li>
-  <li>cdf(x) - normalized cumulative density function (real numbers only)</li> 
-  <li>pdf(x) - normalized probability density function (real numbers only)</li>
-  <li>lcf(x) - normalized log cumulative density function (real numbers only)</li>
-  <li>lpf(x) - normalized log probability density function (real numbers only)</li>
-  <li>rnd(x) - randomized function</li>
-  <li>rou(x) - round to nearest integer</li>
-  <li>int(x) - floor, nearest lesser integer</li>
-  <li>cei(x) - ceiling, nearest greater integer</li>
+  <li>sin(x) → sine</li>
+  <li>cos(x) → cosine</li>
+  <li>tan(x) → tangent</li>
+  <li>sec(x) → secant</li>
+  <li>csc(x) → cosecant</li>
+  <li>cot(x) → cotangent</li>
+  <li>asn(x) → arcsine or inverse sine</li>
+  <li>acs(x) → arccosine or inverse cosine</li>
+  <li>atn(x) → arctangent or inverse tangent</li>
+  <li>asc(x) → arcsecant or inverse secant</li>
+  <li>acs(x) → arccosecant or inverse cosecant</li>
+  <li>act(x) → arccotangent or inverse cotangent</li>  
+  <li>snh(x) → hyperbolic sine</li>
+  <li>csh(x) → hyperbolic cosine</li>
+  <li>tnh(x) → hyperbolic tangent</li>
+  <li>sch(x) → hyperbolic secant</li>
+  <li>cch(x) → hyperbolic cosecant</li>
+  <li>cth(x) → hyperbolic cotangent</li>
+  <li>ash(x) → hyperbolic arcsine</li>
+  <li>ach(x) → hyperbolic arccosine</li>
+  <li>ath(x) → hyperbolic arctangent</li>
+  <li>lne(x) → natural log</li>
+  <li>lgn(n,x) → log to base n</li>
+  <li>log(x) → natural log</li>
+  <li>exp(x) → ℮<sup>n</sup></li>  
+  <li>gam(x) → gamma function (Lanczos approximation)</li>
+  <li>abs(x) → absolute value</li>
+  <li>rex(x) → real component of complex number</li>
+  <li>imx(x) → imaginary component of complex number</li>
+  <li>arg(x) → complex argument or phase</li>
+  <li>sqt(x) → square root</li>
+  <li>cbt(x) → cube root</li>
+  <li>nrt(n,x) → nth root</li>
+  <li>erf(x) → error function (real numbers only)</li>
+  <li>efc(x) → complementary error function (real numbers only)</li>
+  <li>cdf(x) → normalized cumulative density function (real numbers only)</li> 
+  <li>pdf(x) → normalized probability density function (real numbers only)</li>
+  <li>lcf(x) → normalized log cumulative density function (real numbers only)</li>
+  <li>lpf(x) → normalized log probability density function (real numbers only)</li>
+  <li>rnd(x) → randomized function</li>
+  <li>rou(x) → round to nearest integer</li>
+  <li>int(x) → floor, nearest lesser integer</li>
+  <li>cei(x) → ceiling, nearest greater integer</li>
 </ul>
 
 <h3>MG Variables</h3>
@@ -253,14 +254,14 @@ It is also better for use with WSYWYG math editors than LaTeX.</p>
 Cv indexes are derived from the HTML Extended ASCII value using the following scheme:</p>
 
 <ul>
-  <li>Cv[97] to Cv[122] &gt; lowercase plain a-z  </li>
+  <li>Cv[97] to Cv[122]  →  lowercase plain a-z  </li>
   <li>Cv[65] to Cv[90] > uppercase plain a-z  </li>
-  <li>Cv[10097] to Cv[10122] &gt; lowercase italic a-z  </li>
-  <li>Cv[10065] to Cv[10090] &gt; uppercase italic a-z  </li>
-  <li>Cv[20097] to Cv[20122] &gt; lowercase bold a-z  </li>
-  <li>Cv[20065] to Cv[20090] &gt; uppercase bold a-z  </li>
-  <li>Cv[945] to Cv[969] &gt; greek lowercase characters </li>
-  <li>Cv[913] to Cv[937] &gt; greek uppercase characters </li>
+  <li>Cv[10097] to Cv[10122]  →  lowercase italic a-z  </li>
+  <li>Cv[10065] to Cv[10090]  →  uppercase italic a-z  </li>
+  <li>Cv[20097] to Cv[20122]  →  lowercase bold a-z  </li>
+  <li>Cv[20065] to Cv[20090]  →  uppercase bold a-z  </li>
+  <li>Cv[945] to Cv[969]  →  greek lowercase characters </li>
+  <li>Cv[913] to Cv[937]  →  greek uppercase characters </li>
 </ul>
 
 <p>If plain text is used for a variable in MG formatted expressions, then it will be converted into an italics variable (Cv[10065]-Cv[10022])</p>
@@ -270,63 +271,68 @@ Cv indexes are derived from the HTML Extended ASCII value using the following sc
 <p>MathGene has built-in values and associated symbols for the following constants:</p>
 
 <ul>
-  <li> Cv[0] - fine structure constant</li>
-  <li> Cv[1] - Bohr Radius</li>
-  <li> Cv[2] - Wein Displacement constant</li>
-  <li> Cv[3] - Speed of Light m/s</li>
-  <li> Cv[4] - Euler-Mascheroni constant</li>
-  <li> Cv[5] - 1st radiation constant W/m^2</li>
-  <li> Cv[6] - 2nd radiation constant M/K</li>
-  <li> Cv[7] - vacuum permittivity F/m</li>
-  <li> Cv[8] - e Euler's constant</li>
-  <li> Cv[9] - Electron Volt Joules</li>
-  <li> Cv[10] - Faraday constant C/mol</li>
-  <li> Cv[11] - Newton's gravitational constant M^3/kg^*s^2</li>
-  <li> Cv[12] - Earth gravitational accel. m/s^2</li>
-  <li> Cv[13] - conductance quantum s</li>
-  <li> Cv[14] - Plank's constant J*s</li>
-  <li> Cv[15] - h/bar J*s</li>
-  <li> Cv[16] - Josephson constant Hz/V</li>
-  <li> Cv[17] - Boltzmann constant J/K</li>
-  <li> Cv[18] - Compton wavelength meters</li>
-  <li> Cv[19] - Planck length meters</li>
-  <li> Cv[20] - vacuum permeability N/A</li>
-  <li> Cv[21] - Bohr magneton J/T</li>
-  <li> Cv[22] - electron mass kg</li>
-  <li> Cv[23] - proton mass kg</li>
-  <li> Cv[24] - neutron mass kg</li>
-  <li> Cv[25] - Plank mass kg</li>
-  <li> Cv[26] - atomic mass constant kg</li>
-  <li> Cv[27] - Avogadro constant /mol</li>
-  <li> Cv[28] - Loschmidt constant</li>
-  <li> Cv[29] - Archimedes constant pi</li>
-  <li> Cv[30] - 2pi</li>
-  <li> Cv[31] - golden ratio</li>
-  <li> Cv[32] - magnetic flux quantum Wb</li>
-  <li> Cv[33] - standard pressure Pa</li>
-  <li> Cv[34] - elementary charge C</li>
-  <li> Cv[35] - Universal gas constant J/mol*K</li>
-  <li> Cv[36] - von Klitzing constant</li>
-  <li> Cv[37] - Rydberg constant /m</li>
-  <li> Cv[38] - classical electron radius m</li>
-  <li> Cv[39] - Stefan-Boltzmann </li>
-  <li> Cv[40] - Planck temperature K</li>
-  <li> Cv[41] - Planck time s</li>
-  <li> Cv[42] - molar volume </li>
-  <li> Cv[43] - vacuum imepdance ohms</li>
-  <li> Cv[44] - Null 0</li>
-  <li> Cv[45] - imaginary constant i</li>
+  <li> Cv[0] → fine structure constant</li>
+  <li> Cv[1] → Bohr Radius</li>
+  <li> Cv[2] → Wein Displacement constant</li>
+  <li> Cv[3] → Speed of Light m/s</li>
+  <li> Cv[4] → Euler-Mascheroni constant</li>
+  <li> Cv[5] → 1st radiation constant W/m^2</li>
+  <li> Cv[6] → 2nd radiation constant M/K</li>
+  <li> Cv[7] → vacuum permittivity F/m</li>
+  <li> Cv[8] → e Euler's constant</li>
+  <li> Cv[9] → Electron Volt Joules</li>
+  <li> Cv[10] → Faraday constant C/mol</li>
+  <li> Cv[11] → Newton's gravitational constant M^3/kg^*s^2</li>
+  <li> Cv[12] → Earth gravitational accel. m/s^2</li>
+  <li> Cv[13] → conductance quantum s</li>
+  <li> Cv[14] → Plank's constant J*s</li>
+  <li> Cv[15] → h/bar J*s</li>
+  <li> Cv[16] → Josephson constant Hz/V</li>
+  <li> Cv[17] → Boltzmann constant J/K</li>
+  <li> Cv[18] → Compton wavelength meters</li>
+  <li> Cv[19] → Planck length meters</li>
+  <li> Cv[20] → vacuum permeability N/A</li>
+  <li> Cv[21] → Bohr magneton J/T</li>
+  <li> Cv[22] → electron mass kg</li>
+  <li> Cv[23] → proton mass kg</li>
+  <li> Cv[24] → neutron mass kg</li>
+  <li> Cv[25] → Plank mass kg</li>
+  <li> Cv[26] → atomic mass constant kg</li>
+  <li> Cv[27] → Avogadro constant /mol</li>
+  <li> Cv[28] → Loschmidt constant</li>
+  <li> Cv[29] → Archimedes constant pi</li>
+  <li> Cv[30] → 2pi</li>
+  <li> Cv[31] → golden ratio</li>
+  <li> Cv[32] → magnetic flux quantum Wb</li>
+  <li> Cv[33] → standard pressure Pa</li>
+  <li> Cv[34] → elementary charge C</li>
+  <li> Cv[35] → Universal gas constant J/mol*K</li>
+  <li> Cv[36] → von Klitzing constant</li>
+  <li> Cv[37] → Rydberg constant /m</li>
+  <li> Cv[38] → classical electron radius m</li>
+  <li> Cv[39] → Stefan-Boltzmann </li>
+  <li> Cv[40] → Planck temperature K</li>
+  <li> Cv[41] → Planck time s</li>
+  <li> Cv[42] → molar volume </li>
+  <li> Cv[43] → vacuum imepdance ohms</li>
+  <li> Cv[44] → Null 0</li>
+  <li> Cv[45] → imaginary constant i</li>
 </ul>
 
 <h3>Special MG Characters and Functions</h3>
 
 <ul>
-<li>Cv[8747] - integral sign</li>
-<li>Cv[8750] - contour integral sign</li>
-<li> Cv[8734] - infinity</li>
+<li>Cv[8747] → integral sign</li>
+<li>Cv[8750] → contour integral sign</li>
+<li>Cv[8734] → infinity</li>
+<li>itg(x,y) → definite integral from x to y</li>
+<li>lim(x,y) → limit of variable x at it approaches y</li>
+<li>sum(x,y) → sigma sum example: sum(10,xCv[61]1)</li>
+<li>prd(x,y) → pi product example: prd(10,xCv[61]1)</li>
+<li>(d/dx) → derivative of x</li>
+<li>idr(x) → derivative of x</li>
+<li>idr(x,2) → 2nd derivative of x</li>
 </ul>
-
-<h3>MG Matrices</h3>
 
 <h2>MathGene LaTeX</h2>
 
@@ -356,7 +362,7 @@ Javascript strings must escape the LaTeX backslash with another backslash such a
 <li>'/' slash divide symbol is always interpreted as equivalent to '\frac'</li>
 </ul>
 
-<p>MathGene follows these conventions:</p>
+<p>MathGene LaTeX follows these conventions:</p>
 <ul>
 <li>'e' is interpreted as Euler's number (2.718...)</li>
 <li>'\pi' is interpreted as Archimedes constant (3.14...)</li>
@@ -397,9 +403,37 @@ The result will be converted to form selected in the Settings menu. This allows 
 
 <h3>Matrices</h3>
 
+<p>MathGene can process matrix objects using either MG or LaTeX format. Matrices can be nested and there are no size constraints. 
+The examples below show MG and LaTeX renderings for typical matrices.</p>
+<p>MG: <b>mat(mat(1,2,3),mat(4,5,6))</b></p>
+<p>LaTeX: <b><script>document.write(mgTrans.Translate('mat(mat(1,2,3),mat(4,5,6))',150).latex)</script></b></p>
+<p>HTML: <script>document.write(mgTrans.Translate('mat(mat(1,2,3),mat(4,5,6))',150).html)</script></p>
+
+<p>MG: <b>mat(mat(-2,1),mat(-(1/2),3/2))</b></p>
+<p>LaTeX: <b><script>document.write(mgTrans.Translate('mat(mat(-2,1),mat(-(1/2),3/2))',150).latex)</script></b></p>
+<p>HTML: <script>document.write(mgTrans.Translate('mat(mat(-2,1),mat(-(1/2),3/2))',150).html)</script></p>
+
+<p>MG: <b>mat(mat(mat(mat(x,2x),mat(11x,12x)),mat(mat(3x,4x),mat(11x,12x))),mat(mat(mat(x,2x),mat(11x,12x)),mat(mat(3x,4x),mat(11x,12x))))</b></p>
+<p>LaTeX: <b><script>document.write(mgTrans.Translate('mat(mat(mat(mat(x,2x),mat(11x,12x)),mat(mat(3x,4x),mat(11x,12x))),mat(mat(mat(x,2x),mat(11x,12x)),mat(mat(3x,4x),mat(11x,12x))))',150).latex)</script></b></p>
+<p>HTML: <script>document.write(mgTrans.Translate('mat(mat(mat(mat(x,2x),mat(11x,12x)),mat(mat(3x,4x),mat(11x,12x))),mat(mat(mat(x,2x),mat(11x,12x)),mat(mat(3x,4x),mat(11x,12x))))',150).html)</script></p>
+
 <p>MathGene can process matrices in either numeric or symbolic form.</p>
 
-<p>See file 'web_demo.html' to experiment with live numeric processing.</p>
+<p>The following matrix functions are supported:
+
+<ul>
+<li>+ → addition</li>
+<li>- → subtraction</li>
+<li>* → multiplication</li>
+<li>* → multiply by scalar</li>
+<li>^ → exponent</li>
+<li>tr() → trace</li>
+<li>det() → determinant</li>
+<li>^T → transpose</li>
+<li>^-1 → inverse</li>
+</ul>
+
+<p>Load file 'web_demo.html' to experiment with live numeric processing.</p>
 
 <h2>MathGene Symbolic Calculations</h2>
 
@@ -419,15 +453,15 @@ The result will be converted to form selected in the Settings menu. This allows 
 <li> mgCalc.Series(expression,variable,center,order) - returns Taylor series of expression, center default=0, order default=6</li>
 </ul>
 
-<p>See file 'web_demo.html' to experiment with live symbolic processing.</p>
+<p>Load file 'web_demo.html' to experiment with live symbolic processing.</p>
 
 <h2>MathGene Financial Functions</h2>
 
 <p>Financial functions are available to calculate bond/loan values and Black-Scholes options. These are only accessible via the direct calls listed below. 
-Parameters to financial functions are passed via JSON objects. All financial functions return a single numeric value truncated to the decimal precision set in mgConfig.</p>
+All financial functions return a single numeric value truncated to the decimal precision set in mgConfig.dPrecision (typically set to 2).</p>
 
 <p>The following bond/payment functions require passing a JSON object in the following format (all parameters are decimal numeric):</p>
-<div>(PV:&lt;present value&gt;,FV:&lt;future value&lt;,PMT:&lt;payment&gt;,RATE:&lt;rate&gt;,TERM:&lt;term&gt;,IPY:&lt;interest payments per year&gt;)</div>
+<div><b>(PV:&lt;present value&gt;,FV:&lt;future value&lt;,PMT:&lt;payment&gt;,RATE:&lt;rate&gt;,TERM:&lt;term&gt;,IPY:&lt;interest payments per year&gt;)</b></div>
 
 <ul>
 <li>mgCalc.PresentValue() - calculate present value of a loan or bond, uses all parameters except PV</li>
@@ -438,7 +472,7 @@ Parameters to financial functions are passed via JSON objects. All financial fun
 </ul>
 
 <p>The following Black-Scholes options functions require passing a single JSON object with the following format (all parameters are decimal numeric):</p>
-<div>{TERM:&lt;term&gt;,RATE:&lt;rate&gt;,STRIKE:&lt;strike price&gt;,SPOT:&lt;spot price&gt;,DIV:&lt;dividend&gt;,STDV:&lt;stdev&gt;}</div>
+<div><b>{TERM:&lt;term&gt;,RATE:&lt;rate&gt;,STRIKE:&lt;strike price&gt;,SPOT:&lt;spot price&gt;,DIV:&lt;dividend&gt;,STDV:&lt;stdev&gt;}</b></div>
 <ul>
 <li>mgCalc.Call() - calculate the value of a call option based upon input parameters</li>
 <li>mgCalc.Put() - calculate the value of a call option based upon input parameters</li>
