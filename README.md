@@ -328,10 +328,6 @@ Each mathematics operation is represented by a recursive JavaScript function. Th
 The expression '2+3/4-10' has been translated into a functional expression that encodes the standard execution priority conventions. 
 In this case the '3/4' operation is the 'inside' function which will be executed first according to standard JavaScript function execution. 
 
-When this expression is sent for numeric calculation, then the expression is executed as a string with the following Javascript statement:
-
-	exec("cSub(cAdd(2,cDiv(3,4)),10)");
-
 The result of the above calculation will be a decimal number that is represented as a string.
 
 - HTML Format
