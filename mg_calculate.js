@@ -3440,43 +3440,43 @@ var mgCalc = function() {
     // financial functions
     // Black-Scholes JSON parameter:{TERM:<term>,RATE:<rate>,STRIKE:<strike price>,SPOT:<spot price>,DIV:<dividend>,STDV:<stdev>}
     function finCALL(parm) {
-        fT = toReal(parm.TERM);fR = toReal(parm.RATE);fK = toReal(parm.STRIKE);fS = toReal(parm.SPOT);fQ = toReal(parm.DIV);sDv = toReal(parm.STDV);
+        var fT = toReal(parm.TERM),fR = toReal(parm.RATE),fK = toReal(parm.STRIKE),fS = toReal(parm.SPOT),fQ = toReal(parm.DIV),sDv = toReal(parm.STDV);
         return roundDecTo(normCDF(1,finD1(fT,fR,fK,fS,fQ,sDv),0)*fS*exp(-(fQ/mgConfig.pctFactor)*fT)-normCDF(1,finD2(fT,fR,fK,fS,fQ,sDv),0)*fK*exp(-(fR/mgConfig.pctFactor)*fT),mgConfig.dPrecision)
     }
     function finPUT(parm) {
-        fT = toReal(parm.TERM);fR = toReal(parm.RATE);fK = toReal(parm.STRIKE);fS = toReal(parm.SPOT);fQ = toReal(parm.DIV);sDv = toReal(parm.STDV);
+        var fT = toReal(parm.TERM),fR = toReal(parm.RATE),fK = toReal(parm.STRIKE),fS = toReal(parm.SPOT),fQ = toReal(parm.DIV),sDv = toReal(parm.STDV);
         return roundDecTo(normCDF(1,-finD2(fT,fR,fK,fS,fQ,sDv),0)*fK*exp(-(fR/mgConfig.pctFactor)*fT)-normCDF(1,-finD1(fT,fR,fK,fS,fQ,sDv),0)*fS*exp(-(fQ/mgConfig.pctFactor)*fT),mgConfig.dPrecision)
     }
     function finCALLdelta(parm) {
-        fT = toReal(parm.TERM);fR = toReal(parm.RATE);fK = toReal(parm.STRIKE);fS = toReal(parm.SPOT);fQ = toReal(parm.DIV);sDv = toReal(parm.STDV);
+        var fT = toReal(parm.TERM),fR = toReal(parm.RATE),fK = toReal(parm.STRIKE),fS = toReal(parm.SPOT),fQ = toReal(parm.DIV),sDv = toReal(parm.STDV);
         return roundDecTo(normCDF(1,finD1(fT,fR,fK,fS,fQ,sDv),0)*exp(-fQ*fT),mgConfig.dPrecision);
     }
     function finPUTdelta(parm) {
-        fT = toReal(parm.TERM);fR = toReal(parm.RATE);fK = toReal(parm.STRIKE);fS = toReal(parm.SPOT);fQ = toReal(parm.DIV);sDv = toReal(parm.STDV);
+        var fT = toReal(parm.TERM),fR = toReal(parm.RATE),fK = toReal(parm.STRIKE),fS = toReal(parm.SPOT),fQ = toReal(parm.DIV),sDv = toReal(parm.STDV);
         return roundDecTo(-normCDF(1,-finD1(fT,fR,fK,fS,fQ,sDv),0)*exp(-fQ*fT),mgConfig.dPrecision);
     }
     function finOPTgamma(parm) {
-        fT = toReal(parm.TERM);fR = toReal(parm.RATE);fK = toReal(parm.STRIKE);fS = toReal(parm.SPOT);fQ = toReal(parm.DIV);sDv = toReal(parm.STDV);
+        var fT = toReal(parm.TERM),fR = toReal(parm.RATE),fK = toReal(parm.STRIKE),fS = toReal(parm.SPOT),fQ = toReal(parm.DIV),sDv = toReal(parm.STDV);
         return roundDecTo((normPDF(1,finD1(fT,fR,fK,fS,fQ,sDv),0)*exp(-fQ*fT))/(fS*sDv*sqt(fT)),mgConfig.dPrecision);
     }
     function finCALLtheta(parm) {
-        fT = toReal(parm.TERM);fR = toReal(parm.RATE);fK = toReal(parm.STRIKE);fS = toReal(parm.SPOT);fQ = toReal(parm.DIV);sDv = toReal(parm.STDV);
+        var fT = toReal(parm.TERM),fR = toReal(parm.RATE),fK = toReal(parm.STRIKE),fS = toReal(parm.SPOT),fQ = toReal(parm.DIV),sDv = toReal(parm.STDV);
         return roundDecTo((-exp(-(fQ/mgConfig.pctFactor)*fT)*(normPDF(1,finD1(fT,fR,fK,fS,fQ,sDv),0)*fS*sDv)/(2*sqt(fT))-(fR/mgConfig.pctFactor)*fK*exp(-(fR/mgConfig.pctFactor)*fT)*normCDF(1,finD2(fT,fR,fK,fS,fQ,sDv),0)+(fQ/mgConfig.pctFactor)*fS*exp(-(fQ/mgConfig.pctFactor)*fT)*normCDF(1,finD1(fT,fR,fK,fS,fQ,sDv),0))/365,mgConfig.dPrecision);
     }
     function finPUTtheta(parm) {
-        fT = toReal(parm.TERM);fR = toReal(parm.RATE);fK = toReal(parm.STRIKE);fS = toReal(parm.SPOT);fQ = toReal(parm.DIV);sDv = toReal(parm.STDV);
+        var fT = toReal(parm.TERM),fR = toReal(parm.RATE),fK = toReal(parm.STRIKE),fS = toReal(parm.SPOT),fQ = toReal(parm.DIV),sDv = toReal(parm.STDV);
         return roundDecTo((-exp(-(fQ/mgConfig.pctFactor)*fT)*(normPDF(1,finD1(fT,fR,fK,fS,fQ,sDv),0)*fS*sDv)/(2*sqt(fT))+(fR/mgConfig.pctFactor)*fK*exp(-(fR/mgConfig.pctFactor)*fT)*normCDF(1,-finD2(fT,fR,fK,fS,fQ,sDv),0)-(fQ/mgConfig.pctFactor)*fS*exp(-(fQ/mgConfig.pctFactor)*fT)*normCDF(1,-finD1(fT,fR,fK,fS,fQ,sDv),0))/365,mgConfig.dPrecision);
     }
     function finOPTvega(parm) {
-        fT = toReal(parm.TERM);fR = toReal(parm.RATE);fK = toReal(parm.STRIKE);fS = toReal(parm.SPOT);fQ = toReal(parm.DIV);sDv = toReal(parm.STDV);
+        var fT = toReal(parm.TERM),fR = toReal(parm.RATE),fK = toReal(parm.STRIKE),fS = toReal(parm.SPOT),fQ = toReal(parm.DIV),sDv = toReal(parm.STDV);
         return roundDecTo(normPDF(1,finD1(fT,fR,fK,fS,fQ,sDv),0)*fS*exp(-(fQ/mgConfig.pctFactor)*fT)*sqt(fT)/100,mgConfig.dPrecision);
     }
     function finCALLrho(parm) {
-        fT = toReal(parm.TERM);fR = toReal(parm.RATE);fK = toReal(parm.STRIKE);fS = toReal(parm.SPOT);fQ = toReal(parm.DIV);sDv = toReal(parm.STDV);
+        var fT = toReal(parm.TERM),fR = toReal(parm.RATE),fK = toReal(parm.STRIKE),fS = toReal(parm.SPOT),fQ = toReal(parm.DIV),sDv = toReal(parm.STDV);
         return roundDecTo(normCDF(1,finD1(fT,fR,fK,fS,fQ,sDv),0)*fK*fT*exp(-(fR/mgConfig.pctFactor)*fT)/100,mgConfig.dPrecision);
     }
     function finPUTrho(parm) {
-        fT = toReal(parm.TERM);fR = toReal(parm.RATE);fK = toReal(parm.STRIKE);fS = toReal(parm.SPOT);fQ = toReal(parm.DIV);sDv = toReal(parm.STDV);
+        var fT = toReal(parm.TERM),fR = toReal(parm.RATE),fK = toReal(parm.STRIKE),fS = toReal(parm.SPOT),fQ = toReal(parm.DIV),sDv = toReal(parm.STDV);
         return roundDecTo(-normCDF(1,-finD1(fT,fR,fK,fS,fQ,sDv),0)*fK*fT*exp(-(fR/mgConfig.pctFactor)*fT)/100,mgConfig.dPrecision);
     }
     function finD1(fT,fR,fK,fS,fQ,sDv){return (lne(fS/fK)+((fR/mgConfig.pctFactor)-(fQ/mgConfig.pctFactor)+.5*cPow(sDv,2))*fT)/(sDv*sqt(fT))}
@@ -3484,25 +3484,25 @@ var mgCalc = function() {
     // Loan/Bond functions
     //JSON parameter: (PV:<present value>,FV:<future value<,PMT:<payment>,RATE:<rate>,TERM:<term>,IPY:<interest payments per year>)
     function finPV(parm){
-        PVx = toReal(parm.PV);FVx = toReal(parm.FV);PMTx = toReal(parm.PMT);RATEx = toReal(parm.RATE);TERMx = toReal(parm.TERM);IPYx = toReal(parm.IPY);
+        var FVx = toReal(parm.FV),PMTx = toReal(parm.PMT),RATEx = toReal(parm.RATE),TERMx = toReal(parm.TERM),IPYx = toReal(parm.IPY);
         if (RATEx == 0) {return FVx+(IPYx*TERMx*PMTx)}
         var Ux = (PMTx*(1-1/cPow(1+(RATEx/mgConfig.pctFactor)/IPYx,IPYx*TERMx))/((RATEx/mgConfig.pctFactor)/IPYx))+FVx*(1/cPow(1+((RATEx/mgConfig.pctFactor)/IPYx),IPYx*TERMx));
         return rou(Ux*100)/100
     }
     function finFV(parm){
-        PVx = toReal(parm.PV);FVx = toReal(parm.FV);PMTx = toReal(parm.PMT);RATEx = toReal(parm.RATE);TERMx = toReal(parm.TERM);IPYx = toReal(parm.IPY);
+        var PVx = toReal(parm.PV),PMTx = toReal(parm.PMT),RATEx = toReal(parm.RATE),TERMx = toReal(parm.TERM),IPYx = toReal(parm.IPY);
         if (RATEx == 0) {return PVx-(IPYx*TERMx*PMTx)}
         var Ux = (PVx-(PMTx*(1-1/cPow(1+(RATEx/mgConfig.pctFactor)/IPYx,IPYx*TERMx))/((RATEx/mgConfig.pctFactor)/IPYx)))/(1/cPow(1+((RATEx/mgConfig.pctFactor)/IPYx),IPYx*TERMx));
         return rou(Ux*100)/100
     }
     function finPMT(parm) {
-        PVx = toReal(parm.PV);FVx = toReal(parm.FV);PMTx = toReal(parm.PMT);RATEx = toReal(parm.RATE);TERMx = toReal(parm.TERM);IPYx = toReal(parm.IPY);
+        var PVx = toReal(parm.PV),FVx = toReal(parm.FV),RATEx = toReal(parm.RATE),TERMx = toReal(parm.TERM),IPYx = toReal(parm.IPY);
         if (RATEx == 0) {return (PVx-FVx)/(IPYx*TERMx)}
         var Ux = (PVx-FVx*(1/cPow(1+((RATEx/mgConfig.pctFactor)/IPYx),IPYx*TERMx)))/((1-1/cPow(1+(RATEx/mgConfig.pctFactor)/IPYx,IPYx*TERMx))/((RATEx/mgConfig.pctFactor)/IPYx));
         return rou(Ux*100)/100
     }
     function finRATE(parm) {
-        PVx = toReal(parm.PV);FVx = toReal(parm.FV);PMTx = toReal(parm.PMT);RATEx = toReal(parm.RATE);TERMx = toReal(parm.TERM);IPYx = toReal(parm.IPY);
+        var PVx = toReal(parm.PV),FVx = toReal(parm.FV),PMTx = toReal(parm.PMT),TERMx = toReal(parm.TERM),IPYx = toReal(parm.IPY);
         var Ux = 0,nH = 100,nL = 0,t1 = 0;
         for (var kI=1; kI<=100;kI++) {
         Ux = (nH+nL)/2;
@@ -3512,7 +3512,7 @@ var mgCalc = function() {
         return Ux.toPrecision(4)*mgConfig.pctFactor
     }
     function finTERM(parm) {
-        PVx = toReal(parm.PV);FVx = toReal(parm.FV);PMTx = toReal(parm.PMT);RATEx = toReal(parm.RATE);TERMx = toReal(parm.TERM);IPYx = toReal(parm.IPY);
+        var PVx = toReal(parm.PV),FVx = toReal(parm.FV),PMTx = toReal(parm.PMT),RATEx = toReal(parm.RATE),IPYx = toReal(parm.IPY);
         if (RATEx == 0) {return (PVx-FVx)/(IPYx*PMTx)}
         var Ux = 0,nH = 500,nL = 1,t1 = 0, kI = 0;
         if (PMTx == 0) {
