@@ -1876,14 +1876,15 @@ var mgTrans = function() {
         return htmlXpr
     }
     //
-    function mgExport(xFn) { //export from FUNC to MG format
-        if (xFn == "NaN" || xFn == "undefined") {return "undefined"}
-        xFn += "";
-        xFn = xFn.replace(/\,\)/g,",'')").replace(/\(\,/g,"('',").replace(/\,\,/g,",'',").replace(/\(\)/g,"('')");
-        xFn = dFunc(xFn, "mg");
-        xFn = xFn.replace(/\+\-/g,"-").replace(/\-\-/g,"");
-        xFn = toSciNot(xFn);
-        return xFn //process functions
+    function mgExport(funcIn) { //export from FUNC to MG format
+		var mgReturn = funcIn+"";
+        if (mgReturn == "NaN" || mgReturn == "undefined") {return "undefined"}
+        mgReturn += "";
+        mgReturn = mgReturn.replace(/\,\)/g,",'')").replace(/\(\,/g,"('',").replace(/\,\,/g,",'',").replace(/\(\)/g,"('')");
+        mgReturn = dFunc(mgReturn, "mg");
+        mgReturn = mgReturn.replace(/\+\-/g,"-").replace(/\-\-/g,"");
+        mgReturn = toSciNot(mgReturn);
+        return mgReturn //process functions
     }
     function cParse(xInp,xOp,xFunc) {//parse operators
         const zDelim = ["^","-","#","*","/","+",",","~","@","=","<",">",String.fromCharCode(8800),String.fromCharCode(8804),String.fromCharCode(8805),String.fromCharCode(8226)];
@@ -1926,84 +1927,84 @@ var mgTrans = function() {
         return xInp;
     }
     //
-    function cFunc(cXpr) { //convert from MG format to FUNC format: a+bc/d -> cAdd(a,cDiv(cMul(b,c),d)))
+    function cFunc(mgIn) { //convert from MG format to FUNC format: a+bc/d -> cAdd(a,cDiv(cMul(b,c),d)))
         var nCf = 0,iXX = 0,key = 0,sbtOperand = "",cIdx = 0,aIdx = 0,sCount = 0;
-        cXpr += "";
-        sCount = strCount(cXpr,"]sbt(");//var&subscripts into container cnt()
-        cXpr = cXpr.replace(/\]sbt\(/g,"]SBT(");
-        cXpr = cXpr.replace(/Infinity/g,"Cv[8734]");
+        funcReturn = mgIn+"";
+        sCount = strCount(funcReturn,"]sbt(");//var&subscripts into container cnt()
+        funcReturn = funcReturn.replace(/\]sbt\(/g,"]SBT(");
+        funcReturn = funcReturn.replace(/Infinity/g,"Cv[8734]");
         for (nCf=0;nCf<sCount;nCf++) {
-            sbtOperand = parseParens(cXpr,cXpr.indexOf("]SBT("));
-            cXpr = cXpr.replace(/Cv\[(\d+)\]SBT\(/,"cnt(Cv[$1]SBT(").replace("]SBT("+sbtOperand.inside,"]sbt("+oParens(sbtOperand.inside)+")");
+            sbtOperand = parseParens(funcReturn,funcReturn.indexOf("]SBT("));
+            funcReturn = funcReturn.replace(/Cv\[(\d+)\]SBT\(/,"cnt(Cv[$1]SBT(").replace("]SBT("+sbtOperand.inside,"]sbt("+oParens(sbtOperand.inside)+")");
         }
-        sCount = strCount(cXpr,"Cv[8748]");//differential
-        for (nCf=0;nCf<sCount;nCf++) {cXpr = cXpr.replace(/Cv\[8748\]Cv\[(\d+)\]\/Cv\[8748\]Cv\[(\d+)\]/,"sdr(Cv[$1],Cv[$2])")}
-        cXpr = cXpr.replace(/!/g,"Cv[45]"); //factorial
-        cXpr = cXpr.replace(/Cv\[8226\]/g,String.fromCharCode(8226)); //dot operator
+        sCount = strCount(funcReturn,"Cv[8748]");//differential
+        for (nCf=0;nCf<sCount;nCf++) {funcReturn = funcReturn.replace(/Cv\[8748\]Cv\[(\d+)\]\/Cv\[8748\]Cv\[(\d+)\]/,"sdr(Cv[$1],Cv[$2])")}
+        funcReturn = funcReturn.replace(/!/g,"Cv[45]"); //factorial
+        funcReturn = funcReturn.replace(/Cv\[8226\]/g,String.fromCharCode(8226)); //dot operator
         for (key in relOperators) {
-            sCount = strCount(cXpr,key);
-            for (nCf=0;nCf<sCount;nCf++) {cXpr = cXpr.replace(key,relOperators[key])}
+            sCount = strCount(funcReturn,key);
+            for (nCf=0;nCf<sCount;nCf++) {funcReturn = funcReturn.replace(key,relOperators[key])}
         }
-        cXpr = cXpr.replace(/([\)\]])(\|?)(\d)/g,"$1$2#$3").replace(/([\)\]\d])(\|?)\(/g,"$1$2#(").replace(/([\)\]\d])(\|?)Cv\[/g,"$1$2#Cv[").replace(/([\)\]\d])(\|?)([a-z][a-z][a-z]\()/ig,"$1$2#$3");//terms to # multiply
+        funcReturn = funcReturn.replace(/([\)\]])(\|?)(\d)/g,"$1$2#$3").replace(/([\)\]\d])(\|?)\(/g,"$1$2#(").replace(/([\)\]\d])(\|?)Cv\[/g,"$1$2#Cv[").replace(/([\)\]\d])(\|?)([a-z][a-z][a-z]\()/ig,"$1$2#$3");//terms to # multiply
         for (nCf in nBind) {//add @ between bind symbols
             var rgx = new RegExp(nBind[nCf]+"(\\|?)#");
             var rgy = new RegExp("#(\\|?)"+nBind[nCf]);
-            while (cXpr.search(rgx) != -1 || cXpr.search(rgy) != -1) {cXpr = cXpr.replace(rgx,"$1$2@").replace(rgy,"@$1$2")}
+            while (funcReturn.search(rgx) != -1 || funcReturn.search(rgy) != -1) {funcReturn = funcReturn.replace(rgx,"$1$2@").replace(rgy,"@$1$2")}
         }
-        if (cXpr.charAt(0) == "+") {cXpr = cXpr.substr(1)} //remove + at beginning of expression
-        sCount = strCount(cXpr,"-");//parse power negatives to cPow(x,cNeg())
+        if (funcReturn.charAt(0) == "+") {funcReturn = funcReturn.substr(1)} //remove + at beginning of expression
+        sCount = strCount(funcReturn,"-");//parse power negatives to cPow(x,cNeg())
         for (nCf=0;nCf<sCount;nCf++) {
             for (iXX in pCases) {
-                if (cXpr.indexOf(pCases[iXX]) > -1) {cXpr = nParse(cXpr,pCases[iXX])}
+                if (funcReturn.indexOf(pCases[iXX]) > -1) {funcReturn = nParse(funcReturn,pCases[iXX])}
             }
         }
-        sCount = strCount(cXpr,"^");//convert powers to cPow()
-        for (nCf=0;nCf<sCount;nCf++) {cXpr = cParse(cXpr,"^","cPow")}
-        if (cXpr.charAt(0) == "-") {cXpr = nParse(cXpr,"-")}
-        sCount = strCount(cXpr,"-");//parse negatives to cNeg()
+        sCount = strCount(funcReturn,"^");//convert powers to cPow()
+        for (nCf=0;nCf<sCount;nCf++) {funcReturn = cParse(funcReturn,"^","cPow")}
+        if (funcReturn.charAt(0) == "-") {funcReturn = nParse(funcReturn,"-")}
+        sCount = strCount(funcReturn,"-");//parse negatives to cNeg()
         for (nCf=0;nCf<sCount;nCf++) {
             for (iXX in nCases) {
-                if (cXpr.indexOf(nCases[iXX]) > -1) {cXpr = nParse(cXpr,nCases[iXX])}
+                if (funcReturn.indexOf(nCases[iXX]) > -1) {funcReturn = nParse(funcReturn,nCases[iXX])}
             }
         }
-        sCount = strCount(cXpr,"~");//convert angles to cAng()
-        for (nCf=0;nCf<sCount;nCf++) {cXpr = cParse(cXpr,"~","cAng")}
-        sCount = strCount(cXpr,"#");//convert # to cMul() (multiply)
-        for (nCf=0;nCf<sCount;nCf++) {cXpr = cParse(cXpr,"#","cMul")}
-        sCount = strCount(cXpr,"/");//convert / to cDiv()
-        for (nCf=0;nCf<sCount;nCf++) {cXpr = cParse(cXpr,"/","cDiv")}
-        sCount = strCount(cXpr,"*");//convert * to cTms()
-        for (nCf=0;nCf<sCount;nCf++) {cXpr = cParse(cXpr,"*","cTms")}
-        sCount = strCount(cXpr,String.fromCharCode(8226));//convert dot to cDot()
-        for (nCf=0;nCf<sCount;nCf++) {cXpr = cParse(cXpr,String.fromCharCode(8226),"cDot")}
-        sCount = strCount(cXpr,"-") + strCount(cXpr,"+");//convert +- to cAdd() or cSub()
+        sCount = strCount(funcReturn,"~");//convert angles to cAng()
+        for (nCf=0;nCf<sCount;nCf++) {funcReturn = cParse(funcReturn,"~","cAng")}
+        sCount = strCount(funcReturn,"#");//convert # to cMul() (multiply)
+        for (nCf=0;nCf<sCount;nCf++) {funcReturn = cParse(funcReturn,"#","cMul")}
+        sCount = strCount(funcReturn,"/");//convert / to cDiv()
+        for (nCf=0;nCf<sCount;nCf++) {funcReturn = cParse(funcReturn,"/","cDiv")}
+        sCount = strCount(funcReturn,"*");//convert * to cTms()
+        for (nCf=0;nCf<sCount;nCf++) {funcReturn = cParse(funcReturn,"*","cTms")}
+        sCount = strCount(funcReturn,String.fromCharCode(8226));//convert dot to cDot()
+        for (nCf=0;nCf<sCount;nCf++) {funcReturn = cParse(funcReturn,String.fromCharCode(8226),"cDot")}
+        sCount = strCount(funcReturn,"-") + strCount(funcReturn,"+");//convert +- to cAdd() or cSub()
         for (nCf=0;nCf<sCount;nCf++) {
-            aIdx = cXpr.indexOf("+");
-            cIdx = cXpr.indexOf("-");
-            if (aIdx == -1) {cXpr = cParse(cXpr,"-","cSub")}
-            else if (cIdx == -1) {cXpr = cParse(cXpr,"+","cAdd")}
-            else if (aIdx < cIdx) {cXpr = cParse(cXpr,"+","cAdd")}
-            else {cXpr = cParse(cXpr,"-","cSub")}
+            aIdx = funcReturn.indexOf("+");
+            cIdx = funcReturn.indexOf("-");
+            if (aIdx == -1) {funcReturn = cParse(funcReturn,"-","cSub")}
+            else if (cIdx == -1) {funcReturn = cParse(funcReturn,"+","cAdd")}
+            else if (aIdx < cIdx) {funcReturn = cParse(funcReturn,"+","cAdd")}
+            else {funcReturn = cParse(funcReturn,"-","cSub")}
         }
-        sCount = strCount(cXpr,"@");//convert @ symbol handler to cBnd()
-        for (nCf=0;nCf<sCount;nCf++) {cXpr = cParse(cXpr,"@","cBnd")}
+        sCount = strCount(funcReturn,"@");//convert @ symbol handler to cBnd()
+        for (nCf=0;nCf<sCount;nCf++) {funcReturn = cParse(funcReturn,"@","cBnd")}
         for (key in relOps) { //relational operators
-            sCount = strCount(cXpr,relOps[key]);
+            sCount = strCount(funcReturn,relOps[key]);
             for (nCf=0;nCf<sCount;nCf++) {
-                cXpr = cParse(cXpr,relOps[key],key)
+                funcReturn = cParse(funcReturn,relOps[key],key)
             }
         }
-        cXpr = cXpr.replace(/\[\[/g,"'[[").replace(/\]\]/g,"]]'") //quote matrices
-        return cXpr;
+        funcReturn = funcReturn.replace(/\[\[/g,"'[[").replace(/\]\]/g,"]]'") //quote matrices
+        return funcReturn;
     }
-    function dFunc(dXpr, prefix) { //map FUNC format to export format
+    function dFunc(funcIn, prefix) { //map FUNC format to export format
         function xFunc(parm,strg,fnformat) { //process funcMap function
             if (typeof funcMap[funcKey][fnformat] == "function") {return funcMap[funcKey][fnformat](parm,strg)}
             return funcMap[funcKey][fnformat]
         }
         //
-        dXpr = dXpr.replace(/ /g,"").replace(/([a-z][a-z][a-z])\(/ig,"$1@"); //mark left parens with @
-        var sCount = strCount(dXpr,"@");
+        expReturn = funcIn.replace(/ /g,"").replace(/([a-z][a-z][a-z])\(/ig,"$1@"); //mark left parens with @
+        var sCount = strCount(expReturn,"@");
         var bSym = 0, lSym = 0,lPar = 0,rPar = 0,iXf = 0,payload = "",paramS = "",funcKey = "",rTmp = "",fnformatL = "",fnformatR = "",fnformatLx = "",nXf = 0;
         if (prefix == "mg") {fnformatL = prefix;fnformatR = prefix}
         else if (mgConfig.fnFmt == "fn(x)") {fnformatL = prefix+"L1";fnformatR = prefix+"R1"} //fn(x)
@@ -2011,63 +2012,63 @@ var mgTrans = function() {
         for (nXf=0;nXf<sCount;nXf++) {
             fnformatLx = fnformatL;
             lPar = 1,rPar = 0,iXf = 0,rTmp = "";
-            bSym = dXpr.lastIndexOf("@")+1; //find inside parens
-            lSym = dXpr.length;
+            bSym = expReturn.lastIndexOf("@")+1; //find inside parens
+            lSym = expReturn.length;
             for (iXf=bSym;iXf<lSym;iXf++) {
-                if (dXpr.charAt(iXf) == "@" || dXpr.charAt(iXf) == "(") {lPar++}
-                if (dXpr.charAt(iXf) == ")") {rPar++}
+                if (expReturn.charAt(iXf) == "@" || expReturn.charAt(iXf) == "(") {lPar++}
+                if (expReturn.charAt(iXf) == ")") {rPar++}
                 if (lPar == rPar) {break;}
             }
-            payload = dXpr.substr(bSym,iXf-bSym); //parameters between parens
+            payload = expReturn.substr(bSym,iXf-bSym); //parameters between parens
             if (lPar > rPar) {payload = payload.substr(0,payload.lastIndexOf(")"))+payload.substr(payload.lastIndexOf(")")+1)} //unmatched left parens
             paramS = parseArgs(payload); //parse parms
-            funcKey = dXpr.substr(bSym-4,3); //extract functions xxx()
-            if (typeof funcMap[funcKey] == "undefined") {funcKey = dXpr.substr(bSym-5,4)} //extract operators cXxx()
+            funcKey = expReturn.substr(bSym-4,3); //extract functions xxx()
+            if (typeof funcMap[funcKey] == "undefined") {funcKey = expReturn.substr(bSym-5,4)} //extract operators cXxx()
             if (typeof funcMap[funcKey][prefix+"Inv1"] != "undefined" && mgConfig.invFmt == "sin<sup>-1</sup>" && mgConfig.fnFmt == "fn(x)") {fnformatLx = prefix+"Inv1"} //inverse fn(x)
             if (typeof funcMap[funcKey][prefix+"Inv1"] != "undefined" && mgConfig.invFmt == "sin<sup>-1</sup>" && mgConfig.fnFmt == "fn x")  {fnformatLx = prefix+"Inv2"} //inverse fn x
             if ((funcMap[funcKey][fnformatR] == ' ' || funcMap[funcKey][fnformatR] == ' <Xfxp>') && mgConfig.fnFmt == "fn x" && iXf < lSym && paramS[0].replace(/[\|\(\{](.*)[\|\)\}]/g,"").search(/[+(&minus;)]/) > -1 ) {paramS[0] = "("+paramS[0]+")"} //add parens to inside (fn x) functions
             if (iXf < lSym && prefix != "mg") {rTmp = xFunc(paramS,payload,fnformatR)} //enable right side function if parens match
-            dXpr = dXpr.substr(0,bSym-(funcKey.length+1))+xFunc(paramS,payload,fnformatLx)+rTmp+dXpr.substr(iXf+1,lSym); //assemble output
+            expReturn = expReturn.substr(0,bSym-(funcKey.length+1))+xFunc(paramS,payload,fnformatLx)+rTmp+expReturn.substr(iXf+1,lSym); //assemble output
         }
-        return dXpr
+        return expReturn
     }
     // latex conversions
-    function texExport(latXpr) { //convert MG format to LaTeX
-        latXpr += "";
-        if (latXpr == "NaN" || latXpr == "undefined") {return "undefined"}
-        latXpr = cFunc(latXpr); //convert to func format
-        latXpr = dFunc(latXpr, "latex"); //process functions
+    function texExport(mgIn) { //convert MG format to LaTeX
+        var lxReturn = mgIn+"";
+        if (lxReturn == "NaN" || lxReturn == "undefined") {return "undefined"}
+        lxReturn = cFunc(lxReturn); //convert to func format
+        lxReturn = dFunc(lxReturn, "latex"); //process functions
         //clean up extra parens
-        latXpr = latXpr.replace(/\(/g,"%");
-        var sCount = strCount(latXpr,"%");
+        lxReturn = lxReturn.replace(/\(/g,"%"); //mark left parens with %
+        var sCount = strCount(lxReturn,"%");
         for (var nXs=0;nXs<sCount;nXs++) {
             var lPar = 1;
             var rPar = 0;
-            var bSym = latXpr.indexOf("%")+1;
-            var lSym = latXpr.length;
+            var bSym = lxReturn.indexOf("%")+1;
+            var lSym = lxReturn.length;
             for (var iXs=bSym;iXs<lSym;iXs++) {
-                if (latXpr.charAt(iXs) == "%" ) {lPar++}
-                if (latXpr.charAt(iXs) == ")" ) {rPar++}
+                if (lxReturn.charAt(iXs) == "%" ) {lPar++}
+                if (lxReturn.charAt(iXs) == ")" ) {rPar++}
                 if (lPar == rPar) {break;}
             }
-            var strg = latXpr.substr(bSym,iXs-bSym);
-            if (latXpr.substr(bSym-1,7) == "%<Xdiv>" && latXpr.substr(iXs-6,7) == "<Xdve>)" && latXpr.substr(iXs+1,1) != "^" && strg.search(/\<Xdve\>(.*)\<Xdiv\>/) == -1) {
-                latXpr = latXpr.substr(0,bSym-1)+strg+latXpr.substr(iXs+1,lSym);
+            var strg = lxReturn.substr(bSym,iXs-bSym);
+            if (lxReturn.substr(bSym-1,7) == "%<Xdiv>" && lxReturn.substr(iXs-6,7) == "<Xdve>)" && lxReturn.substr(iXs+1,1) != "^" && strg.search(/\<Xdve\>(.*)\<Xdiv\>/) == -1) {
+                lxReturn = lxReturn.substr(0,bSym-1)+strg+lxReturn.substr(iXs+1,lSym);
             }
             else {
-                latXpr = latXpr.substr(0,bSym-1)+"("+strg+")"+latXpr.substr(iXs+1,lSym);
+                lxReturn = lxReturn.substr(0,bSym-1)+"("+strg+")"+lxReturn.substr(iXs+1,lSym);
             }
         }
-        latXpr = latXpr.replace(/\<Xcel\>/g,",&").replace(/\<Xrow\>/g,"\\left\\{\\begin{array}{1}").replace(/\<Xrwe\>/g,"\\end{array}\\right\\}"); //resolve arrays
-        latXpr = latXpr.replace(/\<X\w\w\w\>/g,"").replace(/\%/g,"("); //clean up tags
+        lxReturn = lxReturn.replace(/\<Xcel\>/g,",&").replace(/\<Xrow\>/g,"\\left\\{\\begin{array}{1}").replace(/\<Xrwe\>/g,"\\end{array}\\right\\}"); //resolve arrays
+        lxReturn = lxReturn.replace(/\<X\w\w\w\>/g,"").replace(/\%/g,"("); //clean up tags
         //resolve symbols
-        sCount = strCount(latXpr,"Cv[");
-        for (var nXf=0;nXf<sCount;nXf++) {latXpr = latXpr.replace(/Cv\[\d+\]/,Ct[(latXpr.match(/Cv\[\d+\]/)+"").replace(/Cv\[(\d+)\]/,"$1")])} //resolve Cv[] symbols
-        latXpr = latXpr.replace(/\(/g,"\\left(").replace(/\)/g,"\\right)").replace(/\\/g," \\").replace(/  /g," ").replace(/ _/g,"_").replace(/_ /g,"_").replace(/ \^/g,"^").replace(/\^ /g,"^").replace(/ \[/g,"[").replace(/\\ \\/g,"\\\\");//cleanup
-        return latXpr;
+        sCount = strCount(lxReturn,"Cv[");
+        for (var nXf=0;nXf<sCount;nXf++) {lxReturn = lxReturn.replace(/Cv\[\d+\]/,Ct[(lxReturn.match(/Cv\[\d+\]/)+"").replace(/Cv\[(\d+)\]/,"$1")])} //resolve Cv[] symbols
+        lxReturn = lxReturn.replace(/\(/g,"\\left(").replace(/\)/g,"\\right)").replace(/\\/g," \\").replace(/  /g," ").replace(/ _/g,"_").replace(/_ /g,"_").replace(/ \^/g,"^").replace(/\^ /g,"^").replace(/ \[/g,"[").replace(/\\ \\/g,"\\\\");//cleanup
+        return lxReturn;
     }
     //
-    function texImport(mgXpr) { //convert LaTeX to MG format
+    function texImport(latIn) { //convert LaTeX to MG format
         function asciiTest(xA) {if ((xA >= 65 && xA <= 90) || (xA >= 97 && xA <= 122)) {return true} return false} //test for ascii symbols
         function funcselect(func,key) {return funcMap[func][key]}
         function matI(xM) {
@@ -2081,180 +2082,181 @@ var mgTrans = function() {
             return "mat(" + mReturn + ")"
         }
         //
+		var liReturn = latIn+"";
         const ulSymbols = ["\\int","\\sum","\\prod","\\cap","\\cup"];
         const ulFuncs  =  ["itg(","sum(","prd(","cap(","cup("];
         const lBrackets = ["{","[","|"];
         const rBrackets = ["}","]","|"];
         var sCount = 0,symTemp = "",tTemp = "",tFunc = 0,nXs = 0,nXf = 0,nXt = 0,nXi = 0,parmU = {},parmL = {},limitL = {},limitU = {},limitX = {},operand = {};
-        if (mgXpr == "NaN" || mgXpr == "undefined") {return "undefined"}
-        mgXpr += " ";
-        mgXpr = mgXpr.replace(/\\big/g,"\\");//fix big
-        mgXpr = mgXpr.replace(/\"/g,"\\").replace(/\'/g,"\\");//remove quotes
-        mgXpr = mgXpr.replace(/\\(.)/g," \\$1").replace(/ \\\{/g,"\\{").replace(/ \\\}/g,"\\}");//fix slash whitespace
-        mgXpr = mgXpr.replace(/\s+\{/g,"{").replace(/\s+\}/g,"}").replace(/\{\s+/g,"{").replace(/\}\s+/g,"}"); //fix brace whitespaces
-        mgXpr = mgXpr.replace(/\{matrix\}/g,"{bmatrix}").replace(/\{pmatrix\}/g,"{bmatrix}").replace(/\{vmatrix\}/g,"{bmatrix}").replace(/\{Vmatrix\}/g,"{bmatrix}"); //convert all matrices to bmatrix
-        sCount = strCount(mgXpr,"\\begin{bmatrix}"); //convert matrices
+        if (liReturn == "NaN" || liReturn == "undefined") {return "undefined"}
+        liReturn += " ";
+        liReturn = liReturn.replace(/\\big/g,"\\");//fix big
+        liReturn = liReturn.replace(/\"/g,"\\").replace(/\'/g,"\\");//remove quotes
+        liReturn = liReturn.replace(/\\(.)/g," \\$1").replace(/ \\\{/g,"\\{").replace(/ \\\}/g,"\\}");//fix slash whitespace
+        liReturn = liReturn.replace(/\s+\{/g,"{").replace(/\s+\}/g,"}").replace(/\{\s+/g,"{").replace(/\}\s+/g,"}"); //fix brace whitespaces
+        liReturn = liReturn.replace(/\{matrix\}/g,"{bmatrix}").replace(/\{pmatrix\}/g,"{bmatrix}").replace(/\{vmatrix\}/g,"{bmatrix}").replace(/\{Vmatrix\}/g,"{bmatrix}"); //convert all matrices to bmatrix
+        sCount = strCount(liReturn,"\\begin{bmatrix}"); //convert matrices
         for (nXf=0;nXf<sCount;nXf++) {
-            var rTemp = mgXpr.substr(mgXpr.lastIndexOf("\\begin{bmatrix}")+"\\begin{bmatrix}".length,mgXpr.length);
+            var rTemp = liReturn.substr(liReturn.lastIndexOf("\\begin{bmatrix}")+"\\begin{bmatrix}".length,liReturn.length);
             var mTemp = rTemp.substr(0,rTemp.indexOf("\\end{bmatrix}"));
-            mgXpr = mgXpr.replace("\\begin{bmatrix}"+mTemp+"\\end{bmatrix}",matI(mTemp));
+            liReturn = liReturn.replace("\\begin{bmatrix}"+mTemp+"\\end{bmatrix}",matI(mTemp));
         }
-        mgXpr = mgXpr.replace(/\s+/g," ").replace(/\\/g," \\").replace(/ _/g,"_").replace(/_ /g,"_").replace(/ \^/g,"^").replace(/\^ /g,"^").replace(/ \[/g,"[").replace(/ \(/g,"(").replace(/\\left /g,"\\left").replace(/\\right /g,"\\right");//fix whitespaces
-        sCount = strCount(mgXpr,"\\\\");//convert line breaks
-        for (nXf=0;nXf<sCount;nXf++) {mgXpr = mgXpr.replace(/\\\\/," ")}
-        mgXpr = mgXpr.replace(/\\,/g," ").replace(/\\:/g," ").replace(/\\;/g," ").replace(/\\!/g," ").replace(/\\ /g,""); //fix special
-        if (mgXpr.split("{").length != mgXpr.split("}").length) {Cs[9998] = "<span style='color:red'>Unmatched brackets</span>";return "Cv[9998]"} //check parens
-        mgXpr = mgXpr.replace(/\\left\[/g,"sbr(").replace(/\\left\{/g,"cbr(").replace(/\\right\]/g,")").replace(/\\right\}/g,")");//convert brackets
-        sCount = strCount(mgXpr,"\\");//convert left/right paren
-        for (nXf=0;nXf<sCount;nXf++) {mgXpr = mgXpr.replace(/\\left\(/,"(").replace(/\\right\)/,")").replace(/\\left\\\(/,"(").replace(/\\right\\\)/,")")}
+        liReturn = liReturn.replace(/\s+/g," ").replace(/\\/g," \\").replace(/ _/g,"_").replace(/_ /g,"_").replace(/ \^/g,"^").replace(/\^ /g,"^").replace(/ \[/g,"[").replace(/ \(/g,"(").replace(/\\left /g,"\\left").replace(/\\right /g,"\\right");//fix whitespaces
+        sCount = strCount(liReturn,"\\\\");//convert line breaks
+        for (nXf=0;nXf<sCount;nXf++) {liReturn = liReturn.replace(/\\\\/," ")}
+        liReturn = liReturn.replace(/\\,/g," ").replace(/\\:/g," ").replace(/\\;/g," ").replace(/\\!/g," ").replace(/\\ /g,""); //fix special
+        if (liReturn.split("{").length != liReturn.split("}").length) {Cs[9998] = "<span style='color:red'>Unmatched brackets</span>";return "Cv[9998]"} //check parens
+        liReturn = liReturn.replace(/\\left\[/g,"sbr(").replace(/\\left\{/g,"cbr(").replace(/\\right\]/g,")").replace(/\\right\}/g,")");//convert brackets
+        sCount = strCount(liReturn,"\\");//convert left/right paren
+        for (nXf=0;nXf<sCount;nXf++) {liReturn = liReturn.replace(/\\left\(/,"(").replace(/\\right\)/,")").replace(/\\left\\\(/,"(").replace(/\\right\\\)/,")")}
         for (var iBr in lBrackets){//convert left/right brackets
-            sCount = strCount(mgXpr,"\\left\\"+lBrackets[iBr]);
-            for (nXf=0;nXf<sCount;nXf++) {mgXpr = mgXpr.replace("\\left\\"+lBrackets[iBr],"cbr(").replace("\\right\\"+rBrackets[iBr],")")   }
+            sCount = strCount(liReturn,"\\left\\"+lBrackets[iBr]);
+            for (nXf=0;nXf<sCount;nXf++) {liReturn = liReturn.replace("\\left\\"+lBrackets[iBr],"cbr(").replace("\\right\\"+rBrackets[iBr],")")   }
         }
-        sCount = strCount(mgXpr,"\\frac");//convert frac
+        sCount = strCount(liReturn,"\\frac");//convert frac
         for (nXf=0;nXf<sCount;nXf++) {
-            var numerator = parseBrackets(mgXpr,mgXpr.indexOf("\\frac")+5);
-            var denominator = parseBrackets(mgXpr,numerator.end+1);
+            var numerator = parseBrackets(liReturn,liReturn.indexOf("\\frac")+5);
+            var denominator = parseBrackets(liReturn,numerator.end+1);
             if (numerator.inside.indexOf("+") > -1 || numerator.inside.indexOf("-") > -1){numerator.inside = "("+numerator.inside+")"}
             if (denominator.inside.indexOf("+") > -1 || denominator.inside.indexOf("-") > -1){denominator.inside = "("+denominator.inside+")"}
-            mgXpr = mgXpr.substr(0,mgXpr.indexOf("\\frac"))+" ("+numerator.inside+"/"+denominator.inside+") "+mgXpr.substr(denominator.end+1,mgXpr.length);
+            liReturn = liReturn.substr(0,liReturn.indexOf("\\frac"))+" ("+numerator.inside+"/"+denominator.inside+") "+liReturn.substr(denominator.end+1,liReturn.length);
         }
-        sCount = strCount(mgXpr,"\\sqrt[");//convert sqrt_n
+        sCount = strCount(liReturn,"\\sqrt[");//convert sqrt_n
         for (nXf=0;nXf<sCount;nXf++) {
-            parmU = parseBrackets(mgXpr,mgXpr.indexOf("\\sqrt[")+6);
-            parmL = parseBrackets(mgXpr,parmU.end+2);
-            mgXpr = mgXpr.substr(0,mgXpr.indexOf("\\sqrt["))+" nrt("+parmU.inside+","+parmL.inside+") "+mgXpr.substr(parmL.end+1,mgXpr.length);
+            parmU = parseBrackets(liReturn,liReturn.indexOf("\\sqrt[")+6);
+            parmL = parseBrackets(liReturn,parmU.end+2);
+            liReturn = liReturn.substr(0,liReturn.indexOf("\\sqrt["))+" nrt("+parmU.inside+","+parmL.inside+") "+liReturn.substr(parmL.end+1,liReturn.length);
         }
-        sCount = strCount(mgXpr,"\\log_");//convert log_n
+        sCount = strCount(liReturn,"\\log_");//convert log_n
         for (nXf=0;nXf<sCount;nXf++) {
-            parmU = parseBrackets(mgXpr,mgXpr.indexOf("\\log_")+5);
-            parmL = parseBrackets(mgXpr,parmU.end+1);
-            mgXpr = mgXpr.substr(0,mgXpr.indexOf("\\log_"))+" lgn("+parmU.inside+","+parmL.inside+") "+mgXpr.substr(parmL.end+1,mgXpr.length);
+            parmU = parseBrackets(liReturn,liReturn.indexOf("\\log_")+5);
+            parmL = parseBrackets(liReturn,parmU.end+1);
+            liReturn = liReturn.substr(0,liReturn.indexOf("\\log_"))+" lgn("+parmU.inside+","+parmL.inside+") "+liReturn.substr(parmL.end+1,liReturn.length);
         }
         for (tFunc in funcMap) {//convert functions
-            sCount = strCount(mgXpr,funcselect(tFunc,"texfunc"));
+            sCount = strCount(liReturn,funcselect(tFunc,"texfunc"));
             for (nXf=0;nXf<sCount;nXf++) {
-                symTemp = mgXpr.substr(mgXpr.indexOf(funcselect(tFunc,"texfunc")),mgXpr.length);
+                symTemp = liReturn.substr(liReturn.indexOf(funcselect(tFunc,"texfunc")),liReturn.length);
                 for (nXi=1;nXi<symTemp.length;nXi++) {if (tDelimiter.indexOf(symTemp.charAt(nXi)) > -1){break}}
                 if (symTemp.charAt(nXi) == "^") {//convert inverse fn^-1
                     if (symTemp.substr(nXi,5) =="^{-1}") {
                         symTemp = symTemp.substr(1,nXi-1);
                         if (funcselect(tFunc,"texfunc") == "\\"+symTemp && funcselect(tFunc,"trig")) {
-                            operand = parseBrackets(mgXpr,mgXpr.indexOf(funcselect(tFunc,"texfunc"))+funcselect(tFunc,"texfunc").length+5);
-                            mgXpr = mgXpr.substr(0,mgXpr.indexOf(funcselect(tFunc,"texfunc")))+" "+funcselect(tFunc,"invfunc")+"("+operand.inside+")"+mgXpr.substr(operand.end,mgXpr.length);
+                            operand = parseBrackets(liReturn,liReturn.indexOf(funcselect(tFunc,"texfunc"))+funcselect(tFunc,"texfunc").length+5);
+                            liReturn = liReturn.substr(0,liReturn.indexOf(funcselect(tFunc,"texfunc")))+" "+funcselect(tFunc,"invfunc")+"("+operand.inside+")"+liReturn.substr(operand.end,liReturn.length);
                         }
                     }
                     else {//convert fn powers
-                        var superscript = parseBrackets(mgXpr,mgXpr.indexOf(funcselect(tFunc,"texfunc"))+funcselect(tFunc,"texfunc").length+1);
-                        operand = parseBrackets(mgXpr,superscript.end+1);
-                        mgXpr = mgXpr.substr(0,mgXpr.indexOf(funcselect(tFunc,"texfunc")))+" "+tFunc+"("+operand.inside+")^("+superscript.inside+")"+mgXpr.substr(operand.end+1,mgXpr.length);
+                        var superscript = parseBrackets(liReturn,liReturn.indexOf(funcselect(tFunc,"texfunc"))+funcselect(tFunc,"texfunc").length+1);
+                        operand = parseBrackets(liReturn,superscript.end+1);
+                        liReturn = liReturn.substr(0,liReturn.indexOf(funcselect(tFunc,"texfunc")))+" "+tFunc+"("+operand.inside+")^("+superscript.inside+")"+liReturn.substr(operand.end+1,liReturn.length);
                     }
                 }
                 else {//convert all other fn
                     symTemp = symTemp.substr(1,nXi-1);
                     if (funcselect(tFunc,"texfunc") == "\\"+symTemp) {
-                        operand = parseBrackets(mgXpr,mgXpr.indexOf(funcselect(tFunc,"texfunc"))+funcselect(tFunc,"texfunc").length);
-                        mgXpr = mgXpr.substr(0,mgXpr.indexOf(funcselect(tFunc,"texfunc")))+" "+tFunc+"("+operand.inside+")"+mgXpr.substr(operand.end+1,mgXpr.length);
+                        operand = parseBrackets(liReturn,liReturn.indexOf(funcselect(tFunc,"texfunc"))+funcselect(tFunc,"texfunc").length);
+                        liReturn = liReturn.substr(0,liReturn.indexOf(funcselect(tFunc,"texfunc")))+" "+tFunc+"("+operand.inside+")"+liReturn.substr(operand.end+1,liReturn.length);
                     }
                 }
             }
         }
         for (nXt in ulSymbols) {//convert u/l functions
-            sCount = strCount(mgXpr,ulSymbols[nXt]+"_");
+            sCount = strCount(liReturn,ulSymbols[nXt]+"_");
             for (nXf=0;nXf<sCount;nXf++) {
-                limitL = parseBrackets(mgXpr,mgXpr.indexOf(ulSymbols[nXt]+"_")+ulSymbols[nXt].length+1);
-                limitU = parseBrackets(mgXpr,limitL.end+1);
+                limitL = parseBrackets(liReturn,liReturn.indexOf(ulSymbols[nXt]+"_")+ulSymbols[nXt].length+1);
+                limitU = parseBrackets(liReturn,limitL.end+1);
                 limitL.inside = limitL.inside.replace("=","Cv[61]");
-                if (mgXpr.charAt(limitL.end+1) == "^") {mgXpr = mgXpr.substr(0,mgXpr.indexOf(ulSymbols[nXt]+"_"))+ulFuncs[nXt]+limitU.inside+","+limitL.inside+") "+mgXpr.substr(limitU.end+1,mgXpr.length)}
-                else {mgXpr = mgXpr.substr(0,mgXpr.indexOf(ulSymbols[nXt]+"_"))+ulFuncs[nXt]+","+limitL.inside+") "+mgXpr.substr(limitL.end+1,mgXpr.length)}
+                if (liReturn.charAt(limitL.end+1) == "^") {liReturn = liReturn.substr(0,liReturn.indexOf(ulSymbols[nXt]+"_"))+ulFuncs[nXt]+limitU.inside+","+limitL.inside+") "+liReturn.substr(limitU.end+1,liReturn.length)}
+                else {liReturn = liReturn.substr(0,liReturn.indexOf(ulSymbols[nXt]+"_"))+ulFuncs[nXt]+","+limitL.inside+") "+liReturn.substr(limitL.end+1,liReturn.length)}
             }
-            sCount = strCount(mgXpr,ulSymbols[nXt]+"^");
+            sCount = strCount(liReturn,ulSymbols[nXt]+"^");
             for (nXf=0;nXf<sCount;nXf++) {
-                limitU= parseBrackets(mgXpr,mgXpr.indexOf(ulSymbols[nXt]+"^")+ulSymbols[nXt].length+1);
-                limitL = parseBrackets(mgXpr,limitU.end+1);
+                limitU= parseBrackets(liReturn,liReturn.indexOf(ulSymbols[nXt]+"^")+ulSymbols[nXt].length+1);
+                limitL = parseBrackets(liReturn,limitU.end+1);
                 limitL.inside = limitL.inside.replace("=","Cv[61]");
-                if (mgXpr.charAt(limitU.end+1) == "_") {mgXpr = mgXpr.substr(0,mgXpr.indexOf(ulSymbols[nXt]+"^"))+ulFuncs[nXt]+limitU.inside+","+limitL.inside+") "+mgXpr.substr(limitL.end+1,mgXpr.length)}
-                else {mgXpr = mgXpr.substr(0,mgXpr.indexOf(ulSymbols[nXt]+"^"))+ulFuncs[nXt]+limitU.inside+",) "+mgXpr.substr(limitU.end+1,mgXpr.length)}
+                if (liReturn.charAt(limitU.end+1) == "_") {liReturn = liReturn.substr(0,liReturn.indexOf(ulSymbols[nXt]+"^"))+ulFuncs[nXt]+limitU.inside+","+limitL.inside+") "+liReturn.substr(limitL.end+1,liReturn.length)}
+                else {liReturn = liReturn.substr(0,liReturn.indexOf(ulSymbols[nXt]+"^"))+ulFuncs[nXt]+limitU.inside+",) "+liReturn.substr(limitU.end+1,liReturn.length)}
             }
         }
 
-        sCount = strCount(mgXpr,"\\lim_");//convert /lim
+        sCount = strCount(liReturn,"\\lim_");//convert /lim
         for (nXf=0;nXf<sCount;nXf++) {
-            limitX = parseBrackets(mgXpr,mgXpr.indexOf("\\lim_")+5);
+            limitX = parseBrackets(liReturn,liReturn.indexOf("\\lim_")+5);
             limitU = [limitX.inside,""];
             if (limitX.inside.indexOf("\\to") > -1) {limitU = limitX.inside.split("\\to")}
             if (limitX.inside.indexOf("\\rightarrow") > -1) {limitU = limitX.inside.split("\\rightarrow")}
-            mgXpr = mgXpr.substr(0,mgXpr.indexOf("\\lim_"))+" lim("+limitU[0]+","+limitU[1]+") "+mgXpr.substr(limitX.end+1,mgXpr.length)
+            liReturn = liReturn.substr(0,liReturn.indexOf("\\lim_"))+" lim("+limitU[0]+","+limitU[1]+") "+liReturn.substr(limitX.end+1,liReturn.length)
         }
-        sCount = strCount(mgXpr,"_");//convert subscripts
+        sCount = strCount(liReturn,"_");//convert subscripts
         for (nXf=0;nXf<sCount;nXf++) {
-            tTemp = mgXpr.charAt(mgXpr.indexOf("_")+1)
+            tTemp = liReturn.charAt(liReturn.indexOf("_")+1)
             if (tTemp == "{" || tTemp == "(") {
-                var subscript = parseBrackets(mgXpr,mgXpr.indexOf("_"));
-                mgXpr = mgXpr.substr(0,mgXpr.indexOf("_"))+" sbt("+subscript.inside+") "+mgXpr.substr(subscript.end+1,mgXpr.length)
+                var subscript = parseBrackets(liReturn,liReturn.indexOf("_"));
+                liReturn = liReturn.substr(0,liReturn.indexOf("_"))+" sbt("+subscript.inside+") "+liReturn.substr(subscript.end+1,liReturn.length)
             }
             else {
-                for (nXi=mgXpr.indexOf("_")+1;nXi<mgXpr.length;nXi++) {if (tDelimiter.indexOf(mgXpr.charAt(nXi)) > -1){break}}
-                if (mgXpr.substr(mgXpr.indexOf("_"),nXi).search(/[a-z][a-z][a-z]\(\)/i) == -1) {mgXpr = mgXpr.substr(0,mgXpr.indexOf("_"))+" sbt("+tTemp+") "+mgXpr.substr(mgXpr.indexOf("_")+2,mgXpr.length)}
-                else {mgXpr = mgXpr.replace(/_/,"")}
+                for (nXi=liReturn.indexOf("_")+1;nXi<liReturn.length;nXi++) {if (tDelimiter.indexOf(liReturn.charAt(nXi)) > -1){break}}
+                if (liReturn.substr(liReturn.indexOf("_"),nXi).search(/[a-z][a-z][a-z]\(\)/i) == -1) {liReturn = liReturn.substr(0,liReturn.indexOf("_"))+" sbt("+tTemp+") "+liReturn.substr(liReturn.indexOf("_")+2,liReturn.length)}
+                else {liReturn = liReturn.replace(/_/,"")}
             }
         }
 
-        sCount = strCount(mgXpr,"^");//convert superscripts
+        sCount = strCount(liReturn,"^");//convert superscripts
         for (nXf=0;nXf<sCount;nXf++) {
-            tTemp = mgXpr.charAt(mgXpr.indexOf("^")+1)
+            tTemp = liReturn.charAt(liReturn.indexOf("^")+1)
             if (tTemp == "{" || tTemp == "(") {
-                var superscr = parseBrackets(mgXpr,mgXpr.indexOf("^")+1);
-                if (superscr.inside.length > 1) {mgXpr = mgXpr.substr(0,mgXpr.indexOf("^"))+" ^("+superscr.inside+") "+mgXpr.substr(superscr.end+1,mgXpr.length)}
+                var superscr = parseBrackets(liReturn,liReturn.indexOf("^")+1);
+                if (superscr.inside.length > 1) {liReturn = liReturn.substr(0,liReturn.indexOf("^"))+" ^("+superscr.inside+") "+liReturn.substr(superscr.end+1,liReturn.length)}
             }
         }
-        sCount = strCount(mgXpr,"\\");//convert symbols
+        sCount = strCount(liReturn,"\\");//convert symbols
         for (nXf=0;nXf<sCount;nXf++) {
-            symTemp = mgXpr.substr(mgXpr.indexOf("\\"),mgXpr.length);
+            symTemp = liReturn.substr(liReturn.indexOf("\\"),liReturn.length);
             for (nXi=1;nXi<symTemp.length;nXi++) {if (tDelimiter.indexOf(symTemp.charAt(nXi)) > -1){break}}
             symTemp = symTemp.substr(1,nXi-1);
-            for (nXs=1;nXs<=9500;nXs++) {if (typeof Ct[nXs] != "undefined" && (Ct[nXs] == "\\"+symTemp || Ct[nXs] == "\\"+symTemp+" ")) {mgXpr = mgXpr.replace("\\"+symTemp," Cv["+nXs+"]");break} }
+            for (nXs=1;nXs<=9500;nXs++) {if (typeof Ct[nXs] != "undefined" && (Ct[nXs] == "\\"+symTemp || Ct[nXs] == "\\"+symTemp+" ")) {liReturn = liReturn.replace("\\"+symTemp," Cv["+nXs+"]");break} }
         }
-        sCount = strCount(mgXpr,"\\");//remove unknown tags
+        sCount = strCount(liReturn,"\\");//remove unknown tags
         for (nXf=0;nXf<sCount;nXf++) {
-            symTemp = mgXpr.substr(mgXpr.indexOf("\\"),mgXpr.length);
+            symTemp = liReturn.substr(liReturn.indexOf("\\"),liReturn.length);
             for (nXi=1;nXi<symTemp.length;nXi++) {if (",!=<>|+-*^/{}()\\ ".indexOf(symTemp.charAt(nXi)) > -1){break}}
             symTemp = symTemp.substr(1,nXi-1);
-            mgXpr = mgXpr.replace("\\"+symTemp,"");
+            liReturn = liReturn.replace("\\"+symTemp,"");
         }
-        for (nXf=0;nXf<mgXpr.length;nXf++) {//convert variables
-            for (tFunc in funcMap) {if (mgXpr.substr(nXf,4) == tFunc+"(") {nXf = nXf+3;break}}
-            if (mgXpr.substr(nXf,3) == "Cv[") {nXf = nXf+3}
-            var asciiChar = mgXpr.charAt(nXf).charCodeAt(0);
-            if (asciiTest(asciiChar)) {mgXpr = mgXpr.substr(0,nXf)+"Cv["+(asciiChar+10000)+"]"+mgXpr.substr(nXf+1,mgXpr.length);nXf = nXf+6}
+        for (nXf=0;nXf<liReturn.length;nXf++) {//convert variables
+            for (tFunc in funcMap) {if (liReturn.substr(nXf,4) == tFunc+"(") {nXf = nXf+3;break}}
+            if (liReturn.substr(nXf,3) == "Cv[") {nXf = nXf+3}
+            var asciiChar = liReturn.charAt(nXf).charCodeAt(0);
+            if (asciiTest(asciiChar)) {liReturn = liReturn.substr(0,nXf)+"Cv["+(asciiChar+10000)+"]"+liReturn.substr(nXf+1,liReturn.length);nXf = nXf+6}
         }
-        mgXpr = mgXpr.replace(/ /g,""); //cleanup spaces
-        mgXpr = mgXpr.replace(/\(Cv\[10100\]\)/g,"Cv[10100]");
-        sCount = strCount(mgXpr,"Cv[10100]");//convert derivatives
+        liReturn = liReturn.replace(/ /g,""); //cleanup spaces
+        liReturn = liReturn.replace(/\(Cv\[10100\]\)/g,"Cv[10100]");
+        sCount = strCount(liReturn,"Cv[10100]");//convert derivatives
         for (nXf=0;nXf<sCount;nXf++) {
-            mgXpr = mgXpr.replace(/\(Cv\[10100\]\/Cv\[10100\]Cv\[(\d+)\]\)/,"tdr(Cv[$1])");
-            mgXpr = mgXpr.replace(/\(Cv\[10100\]Cv\[(\d+)\]\/Cv\[10100\]Cv\[(\d+)\]\)/,"sdr(Cv[$1],Cv[$2])");
+            liReturn = liReturn.replace(/\(Cv\[10100\]\/Cv\[10100\]Cv\[(\d+)\]\)/,"tdr(Cv[$1])");
+            liReturn = liReturn.replace(/\(Cv\[10100\]Cv\[(\d+)\]\/Cv\[10100\]Cv\[(\d+)\]\)/,"sdr(Cv[$1],Cv[$2])");
             //nth derivative
-            mgXpr = mgXpr.replace(/\(Cv\[10100\]\^\d+\/Cv\[10100\]Cv\[(\d+)\]\^(\d+)\)/,"tdr(Cv[$1],$2)");
-            mgXpr = mgXpr.replace(/\(Cv\[10100\]\^\d+Cv\[(\d+)\]\/Cv\[10100\]Cv\[(\d+)\]\^(\d+)\)/,"sdr(Cv[$1],Cv[$2],$3)");
+            liReturn = liReturn.replace(/\(Cv\[10100\]\^\d+\/Cv\[10100\]Cv\[(\d+)\]\^(\d+)\)/,"tdr(Cv[$1],$2)");
+            liReturn = liReturn.replace(/\(Cv\[10100\]\^\d+Cv\[(\d+)\]\/Cv\[10100\]Cv\[(\d+)\]\^(\d+)\)/,"sdr(Cv[$1],Cv[$2],$3)");
         }
-        mgXpr = mgXpr.replace(/\(Cv\[8706\]\)/g,"Cv[8706]");
-        sCount = strCount(mgXpr,"Cv[8706]");//convert partial derivatives
+        liReturn = liReturn.replace(/\(Cv\[8706\]\)/g,"Cv[8706]");
+        sCount = strCount(liReturn,"Cv[8706]");//convert partial derivatives
         for (nXf=0;nXf<sCount;nXf++) {
-            mgXpr = mgXpr.replace(/\(Cv\[8706\]\/Cv\[8706\]Cv\[(\d+)\]\)/,"idr(Cv[$1])");
-            mgXpr = mgXpr.replace(/\(Cv\[8706\]Cv\[(\d+)\]\/Cv\[8706\]Cv\[(\d+)\]\)/,"psd(Cv[$1],Cv[$2])");
+            liReturn = liReturn.replace(/\(Cv\[8706\]\/Cv\[8706\]Cv\[(\d+)\]\)/,"idr(Cv[$1])");
+            liReturn = liReturn.replace(/\(Cv\[8706\]Cv\[(\d+)\]\/Cv\[8706\]Cv\[(\d+)\]\)/,"psd(Cv[$1],Cv[$2])");
             //nth derivative
-            mgXpr = mgXpr.replace(/\(Cv\[8706\]\^\d+\/Cv\[8706\]Cv\[(\d+)\]\^(\d+)\)/,"idr(Cv[$1],$2)");
-            mgXpr = mgXpr.replace(/\(Cv\[8706\]\^\d+Cv\[(\d+)\]\/Cv\[8706\]Cv\[(\d+)\]\^(\d+)\)/,"psd(Cv[$1],Cv[$2],$3)");
+            liReturn = liReturn.replace(/\(Cv\[8706\]\^\d+\/Cv\[8706\]Cv\[(\d+)\]\^(\d+)\)/,"idr(Cv[$1],$2)");
+            liReturn = liReturn.replace(/\(Cv\[8706\]\^\d+Cv\[(\d+)\]\/Cv\[8706\]Cv\[(\d+)\]\^(\d+)\)/,"psd(Cv[$1],Cv[$2],$3)");
         }
-        sCount = strCount(mgXpr,"Cv[10100]");//convert differentials
+        sCount = strCount(liReturn,"Cv[10100]");//convert differentials
         for (nXf=0;nXf<sCount;nXf++) {
-            mgXpr = mgXpr.replace(/\{Cv\[10100\]\}/,"Cv[10100]").replace(/Cv\[10100\]Cv\[(\d+)\]/,"Cv[8748]Cv[$1]");
+            liReturn = liReturn.replace(/\{Cv\[10100\]\}/,"Cv[10100]").replace(/Cv\[10100\]Cv\[(\d+)\]/,"Cv[8748]Cv[$1]");
         }
-        mgXpr = mgXpr.replace(/Cv\[10101\]/g,"Cv[8]").replace(/Cv\[10105\]/g,"Cv[46]").replace(/Cv\[215\]/g,"*"); //special variables
-        mgXpr = mgXpr.replace(/ /g,"").replace(/\{/g,"").replace(/\}/g,"").replace(/_/g,"").replace(/\'/g,"Cv[8242]").replace(/\`/g,"Cv[8242]");//cleanup
-        mgXpr = dedupParens(mgXpr);
-        return mgXpr
+        liReturn = liReturn.replace(/Cv\[10101\]/g,"Cv[8]").replace(/Cv\[10105\]/g,"Cv[46]").replace(/Cv\[215\]/g,"*"); //special variables
+        liReturn = liReturn.replace(/ /g,"").replace(/\{/g,"").replace(/\}/g,"").replace(/_/g,"").replace(/\'/g,"Cv[8242]").replace(/\`/g,"Cv[8242]");//cleanup
+        liReturn = dedupParens(liReturn);
+        return liReturn
     }
     // check config
     function configCheck() {
