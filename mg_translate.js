@@ -1877,7 +1877,7 @@ var mgTrans = function() {
     }
     //
     function mgExport(funcIn) { //export from FUNC to MG format
-		var mgReturn = funcIn+"";
+        var mgReturn = funcIn+"";
         if (mgReturn == "NaN" || mgReturn == "undefined") {return "undefined"}
         mgReturn += "";
         mgReturn = mgReturn.replace(/\,\)/g,",'')").replace(/\(\,/g,"('',").replace(/\,\,/g,",'',").replace(/\(\)/g,"('')");
@@ -2069,8 +2069,8 @@ var mgTrans = function() {
     }
     //
     function texImport(latIn) { //convert LaTeX to MG format
+        function assemble(xpr,bSym,inside,end) {return xpr.substr(0,xpr.indexOf(bSym)) + inside + xpr.substr(end,xpr.length)} //replace and reassemble expression
         function asciiTest(xA) {if ((xA >= 65 && xA <= 90) || (xA >= 97 && xA <= 122)) {return true} return false} //test for ascii symbols
-        function funcselect(func,key) {return funcMap[func][key]}
         function matI(xM) {
             var mArray = xM.split("\\\\");
             var mReturn = ""
@@ -2082,7 +2082,7 @@ var mgTrans = function() {
             return "mat(" + mReturn + ")"
         }
         //
-		var liReturn = latIn+"";
+        var liReturn = latIn+"";
         const ulSymbols = ["\\int","\\sum","\\prod","\\cap","\\cup"];
         const ulFuncs  =  ["itg(","sum(","prd(","cap(","cup("];
         const lBrackets = ["{","[","|"];
@@ -2119,44 +2119,44 @@ var mgTrans = function() {
             var denominator = parseBrackets(liReturn,numerator.end+1);
             if (numerator.inside.indexOf("+") > -1 || numerator.inside.indexOf("-") > -1){numerator.inside = "("+numerator.inside+")"}
             if (denominator.inside.indexOf("+") > -1 || denominator.inside.indexOf("-") > -1){denominator.inside = "("+denominator.inside+")"}
-            liReturn = liReturn.substr(0,liReturn.indexOf("\\frac"))+" ("+numerator.inside+"/"+denominator.inside+") "+liReturn.substr(denominator.end+1,liReturn.length);
+            liReturn = assemble(liReturn, "\\frac", " ("+numerator.inside+"/"+denominator.inside+") ", denominator.end+1)
         }
-        sCount = strCount(liReturn,"\\sqrt[");//convert sqrt_n
+        sCount = strCount(liReturn,"\\sqrt[");//convert sqrt[n]
         for (nXf=0;nXf<sCount;nXf++) {
             parmU = parseBrackets(liReturn,liReturn.indexOf("\\sqrt[")+6);
             parmL = parseBrackets(liReturn,parmU.end+2);
-            liReturn = liReturn.substr(0,liReturn.indexOf("\\sqrt["))+" nrt("+parmU.inside+","+parmL.inside+") "+liReturn.substr(parmL.end+1,liReturn.length);
+            liReturn = assemble(liReturn, "\\sqrt[", " nrt("+parmU.inside+","+parmL.inside+") ", parmL.end+1)
         }
         sCount = strCount(liReturn,"\\log_");//convert log_n
         for (nXf=0;nXf<sCount;nXf++) {
             parmU = parseBrackets(liReturn,liReturn.indexOf("\\log_")+5);
             parmL = parseBrackets(liReturn,parmU.end+1);
-            liReturn = liReturn.substr(0,liReturn.indexOf("\\log_"))+" lgn("+parmU.inside+","+parmL.inside+") "+liReturn.substr(parmL.end+1,liReturn.length);
+            liReturn = assemble(liReturn, "\\log_", " lgn("+parmU.inside+","+parmL.inside+") ", parmL.end+1)
         }
         for (tFunc in funcMap) {//convert functions
-            sCount = strCount(liReturn,funcselect(tFunc,"texfunc"));
+            sCount = strCount(liReturn,funcMap[tFunc]["texfunc"]); //iterate through all latex functions
             for (nXf=0;nXf<sCount;nXf++) {
-                symTemp = liReturn.substr(liReturn.indexOf(funcselect(tFunc,"texfunc")),liReturn.length);
+                symTemp = liReturn.substr(liReturn.indexOf(funcMap[tFunc]["texfunc"]),liReturn.length);
                 for (nXi=1;nXi<symTemp.length;nXi++) {if (tDelimiter.indexOf(symTemp.charAt(nXi)) > -1){break}}
                 if (symTemp.charAt(nXi) == "^") {//convert inverse fn^-1
                     if (symTemp.substr(nXi,5) =="^{-1}") {
                         symTemp = symTemp.substr(1,nXi-1);
-                        if (funcselect(tFunc,"texfunc") == "\\"+symTemp && funcselect(tFunc,"trig")) {
-                            operand = parseBrackets(liReturn,liReturn.indexOf(funcselect(tFunc,"texfunc"))+funcselect(tFunc,"texfunc").length+5);
-                            liReturn = liReturn.substr(0,liReturn.indexOf(funcselect(tFunc,"texfunc")))+" "+funcselect(tFunc,"invfunc")+"("+operand.inside+")"+liReturn.substr(operand.end,liReturn.length);
+                        if (funcMap[tFunc]["texfunc"] == "\\"+symTemp && funcMap[tFunc]["trig"]) {
+                            operand = parseBrackets(liReturn,liReturn.indexOf(funcMap[tFunc]["texfunc"])+funcMap[tFunc]["texfunc"].length+5);
+                            liReturn = assemble(liReturn, funcMap[tFunc]["texfunc"], " "+funcMap[tFunc]["invfunc"]+"("+operand.inside+")", operand.end)
                         }
                     }
                     else {//convert fn powers
-                        var superscript = parseBrackets(liReturn,liReturn.indexOf(funcselect(tFunc,"texfunc"))+funcselect(tFunc,"texfunc").length+1);
+                        var superscript = parseBrackets(liReturn,liReturn.indexOf(funcMap[tFunc]["texfunc"])+funcMap[tFunc]["texfunc"].length+1);
                         operand = parseBrackets(liReturn,superscript.end+1);
-                        liReturn = liReturn.substr(0,liReturn.indexOf(funcselect(tFunc,"texfunc")))+" "+tFunc+"("+operand.inside+")^("+superscript.inside+")"+liReturn.substr(operand.end+1,liReturn.length);
+                        liReturn = assemble(liReturn, funcMap[tFunc]["texfunc"], tFunc+"("+operand.inside+")^("+superscript.inside+")", operand.end+1)
                     }
                 }
                 else {//convert all other fn
                     symTemp = symTemp.substr(1,nXi-1);
-                    if (funcselect(tFunc,"texfunc") == "\\"+symTemp) {
-                        operand = parseBrackets(liReturn,liReturn.indexOf(funcselect(tFunc,"texfunc"))+funcselect(tFunc,"texfunc").length);
-                        liReturn = liReturn.substr(0,liReturn.indexOf(funcselect(tFunc,"texfunc")))+" "+tFunc+"("+operand.inside+")"+liReturn.substr(operand.end+1,liReturn.length);
+                    if (funcMap[tFunc]["texfunc"] == "\\"+symTemp) {
+                        operand = parseBrackets(liReturn,liReturn.indexOf(funcMap[tFunc]["texfunc"])+funcMap[tFunc]["texfunc"].length);
+                        liReturn = assemble(liReturn, funcMap[tFunc]["texfunc"], " "+tFunc+"("+operand.inside+")", operand.end+1)
                     }
                 }
             }
@@ -2167,16 +2167,24 @@ var mgTrans = function() {
                 limitL = parseBrackets(liReturn,liReturn.indexOf(ulSymbols[nXt]+"_")+ulSymbols[nXt].length+1);
                 limitU = parseBrackets(liReturn,limitL.end+1);
                 limitL.inside = limitL.inside.replace("=","Cv[61]");
-                if (liReturn.charAt(limitL.end+1) == "^") {liReturn = liReturn.substr(0,liReturn.indexOf(ulSymbols[nXt]+"_"))+ulFuncs[nXt]+limitU.inside+","+limitL.inside+") "+liReturn.substr(limitU.end+1,liReturn.length)}
-                else {liReturn = liReturn.substr(0,liReturn.indexOf(ulSymbols[nXt]+"_"))+ulFuncs[nXt]+","+limitL.inside+") "+liReturn.substr(limitL.end+1,liReturn.length)}
+                if (liReturn.charAt(limitL.end+1) == "^") {
+                    liReturn = assemble(liReturn, ulSymbols[nXt]+"_", ulFuncs[nXt]+limitU.inside+","+limitL.inside+") ", limitU.end+1)
+                }
+                else {
+                    liReturn = assemble(liReturn, ulSymbols[nXt]+"_", ulFuncs[nXt]+","+limitL.inside+") ", limitL.end+1)
+                }
             }
             sCount = strCount(liReturn,ulSymbols[nXt]+"^");
             for (nXf=0;nXf<sCount;nXf++) {
                 limitU= parseBrackets(liReturn,liReturn.indexOf(ulSymbols[nXt]+"^")+ulSymbols[nXt].length+1);
                 limitL = parseBrackets(liReturn,limitU.end+1);
                 limitL.inside = limitL.inside.replace("=","Cv[61]");
-                if (liReturn.charAt(limitU.end+1) == "_") {liReturn = liReturn.substr(0,liReturn.indexOf(ulSymbols[nXt]+"^"))+ulFuncs[nXt]+limitU.inside+","+limitL.inside+") "+liReturn.substr(limitL.end+1,liReturn.length)}
-                else {liReturn = liReturn.substr(0,liReturn.indexOf(ulSymbols[nXt]+"^"))+ulFuncs[nXt]+limitU.inside+",) "+liReturn.substr(limitU.end+1,liReturn.length)}
+                if (liReturn.charAt(limitU.end+1) == "_") {
+                    liReturn = assemble(liReturn, ulSymbols[nXt]+"^", ulFuncs[nXt]+limitU.inside+","+limitL.inside+") ", limitL.end+1)
+                }
+                else {
+                    liReturn = assemble(liReturn, ulSymbols[nXt]+"^", ulFuncs[nXt]+limitU.inside+",) ", limitU.end+1)
+                }
             }
         }
 
@@ -2186,18 +2194,20 @@ var mgTrans = function() {
             limitU = [limitX.inside,""];
             if (limitX.inside.indexOf("\\to") > -1) {limitU = limitX.inside.split("\\to")}
             if (limitX.inside.indexOf("\\rightarrow") > -1) {limitU = limitX.inside.split("\\rightarrow")}
-            liReturn = liReturn.substr(0,liReturn.indexOf("\\lim_"))+" lim("+limitU[0]+","+limitU[1]+") "+liReturn.substr(limitX.end+1,liReturn.length)
+            liReturn = assemble(liReturn, "\\lim_", " lim("+limitU[0]+","+limitU[1]+") ", limitX.end+1)
         }
         sCount = strCount(liReturn,"_");//convert subscripts
         for (nXf=0;nXf<sCount;nXf++) {
             tTemp = liReturn.charAt(liReturn.indexOf("_")+1)
             if (tTemp == "{" || tTemp == "(") {
                 var subscript = parseBrackets(liReturn,liReturn.indexOf("_"));
-                liReturn = liReturn.substr(0,liReturn.indexOf("_"))+" sbt("+subscript.inside+") "+liReturn.substr(subscript.end+1,liReturn.length)
+                liReturn = assemble(liReturn, "_", " sbt("+subscript.inside+") ", subscript.end+1)
             }
             else {
                 for (nXi=liReturn.indexOf("_")+1;nXi<liReturn.length;nXi++) {if (tDelimiter.indexOf(liReturn.charAt(nXi)) > -1){break}}
-                if (liReturn.substr(liReturn.indexOf("_"),nXi).search(/[a-z][a-z][a-z]\(\)/i) == -1) {liReturn = liReturn.substr(0,liReturn.indexOf("_"))+" sbt("+tTemp+") "+liReturn.substr(liReturn.indexOf("_")+2,liReturn.length)}
+                if (liReturn.substr(liReturn.indexOf("_"),nXi).search(/[a-z][a-z][a-z]\(\)/i) == -1) {
+                    liReturn = assemble(liReturn, "_", " sbt("+tTemp+") ", liReturn.indexOf("_")+2)
+                }
                 else {liReturn = liReturn.replace(/_/,"")}
             }
         }
@@ -2207,7 +2217,9 @@ var mgTrans = function() {
             tTemp = liReturn.charAt(liReturn.indexOf("^")+1)
             if (tTemp == "{" || tTemp == "(") {
                 var superscr = parseBrackets(liReturn,liReturn.indexOf("^")+1);
-                if (superscr.inside.length > 1) {liReturn = liReturn.substr(0,liReturn.indexOf("^"))+" ^("+superscr.inside+") "+liReturn.substr(superscr.end+1,liReturn.length)}
+                if (superscr.inside.length > 1) {
+                    liReturn = assemble(liReturn, "^", " ^("+superscr.inside+") ", superscr.end+1)
+                }
             }
         }
         sCount = strCount(liReturn,"\\");//convert symbols
@@ -2228,7 +2240,10 @@ var mgTrans = function() {
             for (tFunc in funcMap) {if (liReturn.substr(nXf,4) == tFunc+"(") {nXf = nXf+3;break}}
             if (liReturn.substr(nXf,3) == "Cv[") {nXf = nXf+3}
             var asciiChar = liReturn.charAt(nXf).charCodeAt(0);
-            if (asciiTest(asciiChar)) {liReturn = liReturn.substr(0,nXf)+"Cv["+(asciiChar+10000)+"]"+liReturn.substr(nXf+1,liReturn.length);nXf = nXf+6}
+            if (asciiTest(asciiChar)) {
+                liReturn = liReturn.substr(0,nXf)+"Cv["+(asciiChar+10000)+"]"+liReturn.substr(nXf+1,liReturn.length);
+                nXf = nXf+6
+            }
         }
         liReturn = liReturn.replace(/ /g,""); //cleanup spaces
         liReturn = liReturn.replace(/\(Cv\[10100\]\)/g,"Cv[10100]");
