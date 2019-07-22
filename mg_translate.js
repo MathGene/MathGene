@@ -1743,23 +1743,23 @@ var mgTrans = function() {
         }
         return args
     }   
-    function parseParens(xB,bSym) {//parse parens and return inside string, begin index, end index, source string, upper/lower args
+    function parseParens(xB,beginI) {//parse parens and return inside string, begin index, end index, source string, upper/lower args
         xB += "";
         var oComma = 0,lPar = 0,rPar = 0,bDelim = " ",eDelim = " ",cFind = "",ins = "";
-        for (var iU=bSym;iU<xB.length;iU++) {
+        for (var iU=beginI;iU<xB.length;iU++) {
             cFind = xB.charAt(iU);
             if (cFind == "(") {bDelim = "(";eDelim = ")";break}
             if (cFind == "{") {bDelim = "{";eDelim = "}";break}
         }
-        for (var iU=bSym;iU<xB.length;iU++) {
+        for (var iU=beginI;iU<xB.length;iU++) {
             cFind = xB.charAt(iU);
-            if (cFind == "," && lPar-1 == rPar) {oComma = iU-bSym}
-            if (cFind == bDelim ) {lPar++;if(lPar == 1) {bSym = iU}}
+            if (cFind == "," && lPar-1 == rPar) {oComma = iU-beginI}
+            if (cFind == bDelim ) {lPar++;if(lPar == 1) {beginI = iU}}
             if (cFind == eDelim ) {rPar++}
             if (lPar > 0 && lPar == rPar) {break}
         }
-        ins = xB.substr(bSym+1,iU-bSym-1)
-        return {begin:bSym,end:iU,source:xB,inside:ins,upper:ins.substr(0,oComma-1),lower:ins.substr(oComma)}
+        ins = xB.substr(beginI+1,iU-beginI-1)
+        return {begin:beginI,end:iU,source:xB,inside:ins,upper:ins.substr(0,oComma-1),lower:ins.substr(oComma)}
     }
     function oParens(xP) {//remove outside parens
         xP += "";
@@ -1770,29 +1770,29 @@ var mgTrans = function() {
         return xP
     }
     function xParens(xA) {return "(" + oParens(xA) + ")"}
-    function parseBrackets(xB,bSym) {//parse brackets and return inside string, begin index, end index, source string
+    function parseBrackets(xB,beginI) {//parse brackets and return inside string, begin index, end index, source string
         xB += "";
         var lPar = 0,rPar = 0,bDelim = " ",eDelim = " ",iU = 0,dTemp = "",nXi = 0;
         var lSym = xB.length;
-        for (iU=bSym;iU<lSym;iU++) {
+        for (iU=beginI;iU<lSym;iU++) {
             if (xB.charAt(iU) == " ") {iU++}
-            if (xB.charAt(iU).charCodeAt(0) > 47 && tDelimiter.indexOf(xB.charAt(iU)) == -1){return {begin:bSym,inside:xB.charAt(iU),end:iU,source:xB}}
+            if (xB.charAt(iU).charCodeAt(0) > 47 && tDelimiter.indexOf(xB.charAt(iU)) == -1){return {begin:beginI,inside:xB.charAt(iU),end:iU,source:xB}}
             if (xB.charAt(iU) == "\\") {
                 dTemp = xB.substr(iU,xB.length);
                 for (nXi=1;nXi<dTemp.length;nXi++) {if (tDelimiter.indexOf(dTemp.charAt(nXi)) > -1){break}}
                 dTemp = dTemp.substr(0,nXi);
-                return {begin:bSym,inside:dTemp,end:iU+dTemp.length,source:xB}
+                return {begin:beginI,inside:dTemp,end:iU+dTemp.length,source:xB}
             }
             if (xB.charAt(iU) == "(") {bDelim = "(";eDelim = ")";break}
             if (xB.charAt(iU) == "{") {bDelim = "{";eDelim = "}";break}
             if (xB.charAt(iU) == "[") {bDelim = "[";eDelim = "]";break}
         }
-        for (iU=bSym;iU<lSym;iU++) {
-            if (xB.charAt(iU) == bDelim ) {lPar++;if(lPar == 1) {bSym = iU}}
+        for (iU=beginI;iU<lSym;iU++) {
+            if (xB.charAt(iU) == bDelim ) {lPar++;if(lPar == 1) {beginI = iU}}
             if (xB.charAt(iU) == eDelim ) {rPar++}
             if (lPar > 0 && lPar == rPar) {break}
         }
-        return {begin:bSym,inside:xB.substr(bSym+1,iU-bSym-1),end:iU,source:xB}
+        return {begin:beginI,inside:xB.substr(beginI+1,iU-beginI-1),end:iU,source:xB}
     }
     function oBrackets(xP) {//remove outside brackets
         var tparens = parseBrackets(xP,0);
