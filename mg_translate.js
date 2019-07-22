@@ -1044,7 +1044,7 @@ var mgTrans = function() {
         mg: function (parm) {return  'prd('+parm[1]+','+parm[2]+'Cv[61]'+parm[3]+')'+parm[0]},
         },
     lim:{ //limit
-        htmlL1: function (parm) {return "<Xfnc><span style='display:inline-block;'><span style='text-align:center;vertical-align:middle;display:inline-table;'><span style='display:table-row;font-size:40%'>&nbsp;</span><span style='line-height:50%;display:table-row;'>lim</span><span style='display:table-row;font-size:60%'>"+parm[0]+"&#8594;"+parm[1]+"</span></span></span>"},
+        htmlL1: function (parm) {return "<Xfnc><span style='display:inline-block;'><span style='text-align:center;vertical-align:middle;display:inline-table;'><span style='display:table-row;font-size:40%'>&nbsp;</span><span style='line-height:50%;display:table-row;'>lim </span><span style='display:table-row;font-size:60%'>"+parm[0]+"&#8594;"+parm[1]+"</span></span></span>"},
         htmlR1:' ',
         htmlL2: function (parm) {return funcMap['lim']['htmlL1'](parm)},
         htmlR2:'',
