@@ -212,7 +212,7 @@ Examples:
 
 The following MathGene functions compute symbolic math:
 
-- mgCalc.Simplfy(expression) - reduces the expression to simplest form, evaluates all calculus, limits, summations, reduces fractions, etc.
+- mgCalc.Simplify(expression) - reduces the expression to simplest form, evaluates all calculus, limits, summations, reduces fractions, etc.
 - mgCalc.Solve(equation,variable) - solve the equation for the specified variable
 - mgCalc.Substitute(expression,substTarget,substSource) - substitute the expression in substTarget (which is a term in expression) with substSource
 - mgCalc.Factor(expression) - factor symbolically 
@@ -233,8 +233,8 @@ Conventions:
 
 Examples:
 
-	mgSimplify("\\int  \\sqrt{5+ \\sqrt{x}} d x").latex  =>  "\\frac{4 { \\sqrt{x}+5}^{ \\frac{3}{2}} \\sqrt{x}}{3}- \\frac{8 { \\sqrt{x}+5}^{ \\frac{5}{2}}}{15}+C"
-	mgSolve("\\frac{1}{ \\sigma  \\sqrt{2 \\pi }} e^{ \\frac{- \\left(x-m \\right)^{2}}{2 \\sigma^{2}}}=p","m").latex  =>  "m=x- \\sqrt{-2 { \\sigma }^{2} \\ln {p \\sigma  \\sqrt{2 \\pi }}}"
+	mgCalc.Simplify("\\int  \\sqrt{5+ \\sqrt{x}} d x").latex  =>  "\\frac{4 { \\sqrt{x}+5}^{ \\frac{3}{2}} \\sqrt{x}}{3}- \\frac{8 { \\sqrt{x}+5}^{ \\frac{5}{2}}}{15}+C"
+	mgCalc.Solve("\\frac{1}{ \\sigma  \\sqrt{2 \\pi }} e^{ \\frac{- \\left(x-m \\right)^{2}}{2 \\sigma^{2}}}=p","m").latex  =>  "m=x- \\sqrt{-2 { \\sigma }^{2} \\ln {p \\sigma  \\sqrt{2 \\pi }}}"
 
 ## MathGene Configuration
 
@@ -276,13 +276,18 @@ Pipeline tests run against multiple versions of NodeJS (base version 8.0 and cur
 
 ## Basic Theory of Operation
 
+MathGene is split into two modules: mgTranslate.js and mgCalculate.js. 
+mgTranslate.js handles translations between MG, LaTeX, Func, and HTML representations of math.
+This component is coded using an 'object-oriented' paradigm. The primary object in mgTranslate.js is 'funcMap' which contains all of the mappings between the different formats.
+mgCalculate is the calculation module which is coded using a 'functional' paradigm. The functional style is representative of math algorithms so is a natural fit for this paradigm.
+
 MathGene utilizes four distinct representational math formats to perform computations and translations:
 
 'MG' format - The default input format that is similar to standard computer math. example: sin(3/2)*10^2
 
 'LaTeX' - A standardized markup language for math publishing. example: \\frac{x}{y} \\geq z^{2}
 
-'Func' format - The internal processing format for both calculation and rendering. example: cMul(sin(cDiv3,2),cPow(10,2))
+'Func' format - The internal processing 'functional' format for both calculation and rendering. example: cMul(sin(cDiv3,2),cPow(10,2))
 
 'HTML' format - Math as generated into HTML for rendering in browsers
 
@@ -294,14 +299,14 @@ translation and calculation. Internally MG format is translated in the following
 
 	MG > Func > processing > Func > output
 
-'output' is produced in 'HTML', 'LaTeX' and 'MG' formats for all MathGene operations.
+'output' is returned in a JSON object containing 'HTML', 'LaTeX' and 'MG' formats for all MathGene operations.
 
 Some examples of MG format expressions are below. The advantage of this format is realtive simplicity and familiarity.
 
 	"sqt(sin(Cv[10120])/cos(Cv[10121]))"
 	"(2Cv[10120]/3)+5"
 
-In MD format, all functions are represented in a three-character form such as sin(), cos(), int(), etc. Standard operators +-/*^() are used for arithmetic operations.
+In MG format, all functions are represented in a three-character form such as sin(), cos(), int(), etc. Standard operators +-/*^() are used for arithmetic operations.
 A list of all MG functions is in the Reference document.
 	
 - Variables
@@ -313,28 +318,30 @@ Cv indexes are derived from the extended ASCII value using the following scheme:
 	Cv[10097] to Cv[10122] > lowercase italic a-z
 	Cv[20097] to Cv[20122] > lowercase bold a-z
 
-The same scheme is used for all other extended ASCII symbols that are relevant to math notation.
+The same scheme is used for all other extended character entity symbols that are relevant to math notation.
 
 Defined constants are represented by the range Cv[0] to Cv[46]. 
 A list of all defined constants is in the Reference document.
 
 - Func format
 
-'Func' format is an internal representation that can be executed directly via the JavaScript 'exec' command. 
-Each mathematics operation is represented by a recursive JavaScript function. The following examples show how MG format translates into Func format.
+'Func' format is an internal format which is realized as a set of nested recursive functions representing all math operations. 
+The following examples show how MG format translates into Func format.
 
 	2+3/4-10 > cSub(cAdd(2,cDiv(3,4)),10)
 
 The expression '2+3/4-10' has been translated into a functional expression that encodes the standard execution priority conventions. 
-In this case the '3/4' operation is the 'inside' function which will be executed first according to standard JavaScript function execution. 
+In this case the '3/4' operation is the 'inside' function which will be executed first according to standard function execution. 
 
-The result of the above calculation will be a decimal number that is represented as a string.
+The result of the above calculation using mgCalc.Numeric() will be a decimal number that is represented as a string.
+
+The result of the above calculation using mgCalc.Simplify() will be a fraction represented in the output formats.
 
 - HTML Format
 
 If the above expression is sent for HTML output processing then the string is converted using string conversion to the following:
 
-	exec("cSubH(cAddH(2,cDivH(3,4)),10)");
+	"cSubH(cAddH(2,cDivH(3,4)),10)"
 
 The output of the above expression will be a string containg HTML code that will render the expression in standard math noation on a web browser.
 
@@ -351,7 +358,7 @@ for both output rendering and computations. Internally LaTeX is translated in th
 	
 In this example a latex symbolic math expression is converted to func format for computation:
 
-	"\frac{a}{b}+\frac{c}{b}" -> exec("cAddS(cDivS('Cv[10097]',Cv[10098]'),cDivS('Cv[10099','Cv[10098]'))");
+	"\frac{a}{b}+\frac{c}{b}" -> "cAddS(cDivS('Cv[10097]',Cv[10098]'),cDivS('Cv[10099','Cv[10098]'))";
 
 The result of the above symbolic calculation is a the following string in Func format:
 
@@ -363,8 +370,6 @@ The output expression in LaTeX will be the following:
 
 MathGene supports a subset of LaTeX for computation and translation. 
 
-Most translation and computation actions in MathGene use some variant of the above algorithms to provide a consistent method of handling complex 
-recursive math processing.
 
 ## MathGene in Action
 
