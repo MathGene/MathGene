@@ -1008,7 +1008,8 @@ var mgTrans = function() {
         htmlR1:' ',
         htmlL2: function (parm) {return htmlFuncs['overUnder'](parm[0],parm[1],'&#8721;',125)},
         htmlR2:' ',
-        texfunc:[],
+        texfunc:['\\sum_','\\sum^'],
+		texparms: function(parm) {return ulFuncs(parm,'\\sum')},
         latexL1: function (parm) {return '\\sum_{'+parm[1]+'}^{'+parm[0]+'}'},
         latexR1:' ',
         latexL2: function (parm) {return '\\sum_{'+parm[1]+'}^{'+parm[0]+'}'},
@@ -1032,7 +1033,8 @@ var mgTrans = function() {
         htmlR1:' ',
         htmlL2: function (parm) {return htmlFuncs['overUnder'](parm[0],parm[1],'&#8719;',125)},
         htmlR2:'',
-        texfunc:[],
+        texfunc:['\\prod_','\\prod^'],
+		texparms: function(parm) {return ulFuncs(parm,'\\prod')},
         latexL1: function (parm) {return '\\prod_{'+parm[1]+'}^{'+parm[0]+'}'},
         latexR1:' ',
         latexL2: function (parm) {return '\\prod_{'+parm[1]+'}^{'+parm[0]+'}'},
@@ -1056,7 +1058,8 @@ var mgTrans = function() {
         htmlR1:' ',
         htmlL2: function (parm) {return funcMap['itg']['htmlL1'](parm)},
         htmlR2:'',
-        texfunc:[],
+        texfunc:['\\int_','\\int^'],
+		texparms: function(parm) {return ulFuncs(parm,'\\int')},
         latexL1: function (parm) {return '\\int_{'+parm[1]+'}^{'+parm[0]+'}'},
         latexR1:' ',
         latexL2: function (parm) {return '\\int_{'+parm[1]+'}^{'+parm[0]+'}'},
@@ -1140,7 +1143,8 @@ var mgTrans = function() {
         htmlR1:'',
         htmlL2: function (parm) {return htmlFuncs['overUnder'](parm[0],parm[1],'&#8746;',150)},
         htmlR2:' ',
-        texfunc:[],
+        texfunc:['\\cup_','\\cup^'],
+		texparms: function(parm) {return ulFuncs(parm,'\\cup')},
         latexL1: function (parm) {return '\\cup_{'+parm[1]+'}^{'+parm[0]+'}'},
         latexR1:'',
         latexL2: function (parm) {return '\\cup_{'+parm[1]+'}^{'+parm[0]+'}'},
@@ -1152,7 +1156,8 @@ var mgTrans = function() {
         htmlR1:'',
         htmlL2: function (parm) {return htmlFuncs['overUnder'](parm[0],parm[1],'&#8745;',150)},
         htmlR2:' ',
-        texfunc:[],
+        texfunc:['\\cap_','\\cap^'],
+		texparms: function(parm) {return ulFuncs(parm,'\\cap')},
         latexL1: function (parm) {return '\\cup_{'+parm[1]+'}^{'+parm[0]+'}'},
         latexR1:'',
         latexL2: function (parm) {return '\\cup_{'+parm[1]+'}^{'+parm[0]+'}'},
@@ -1849,6 +1854,23 @@ var mgTrans = function() {
         }
         return xP
     }
+	function ulFuncs(parm,func) { //parse U/L latex functions
+		var limitU = {},limitL = {};
+		if (parm.indexOf(func+"_") > -1) {
+			limitL = parseBrackets(parm,parm.indexOf(func+"_")+5);
+			if (parm.charAt(limitL.end+1) == "^") {limitU = parseBrackets(parm,limitL.end+1)}
+			else {limitU = {inside:"",end:limitL.end}}
+			limitL.inside = limitL.inside.replace("=","Cv[61]");
+			return {upper:limitU.inside,lower:limitL.inside,end:limitU.end} 
+		}
+		else {
+			limitU = parseBrackets(parm,parm.indexOf(func+"^")+5);
+			if (parm.charAt(limitU.end+1) == "_") {limitL = parseBrackets(parm,limitU.end+1)}
+			else {limitL = {inside:"",end:limitU.end}}
+			limitL.inside = limitL.inside.replace("=","Cv[61]");
+			return {upper:limitU.inside,lower:limitL.inside,end:limitL.end} 
+		}
+	}
     //conversion routines
     function htmlExport(htmlXpr) { //convert MG format to HTML
         var nXs=0;
@@ -2098,11 +2120,9 @@ var mgTrans = function() {
         }
         //
         var liReturn = latIn+"";
-        const ulSymbols = ["\\int","\\sum","\\prod","\\cap","\\cup"];
-        const ulFuncs  =  ["itg(","sum(","prd(","cap(","cup("];
         const lBrackets = ["{","[","|"];
         const rBrackets = ["}","]","|"];
-        var sCount = 0,symTemp = "",tTemp = "",funcKey = 0,nXs = 0,nXf = 0,nXt = 0,nXi = 0,limitL = {},limitU = {},operand = {},texFunc = "";
+        var sCount = 0,symTemp = "",tTemp = "",funcKey = 0,nXs = 0,nXf = 0,nXt = 0,nXi = 0,operand = {},texFunc = "";
         if (liReturn == "NaN" || liReturn == "undefined") {return "undefined"}
         liReturn += " ";
         liReturn = liReturn.replace(/\\big/g,"\\");//remove big tags
@@ -2150,39 +2170,13 @@ var mgTrans = function() {
                     else {//convert all other fn
                         if (typeof funcMap[funcKey]["texparms"] == "function") { //2 parameter functions
                             var texparms = funcMap[funcKey]["texparms"](liReturn);
-                            liReturn = ltxtomg(liReturn, funcKey, " "+funcKey+"("+texparms.upper+","+texparms.lower+") ", texparms.end+1)
+                            liReturn = ltxtomg(liReturn, texFunc, " "+funcKey+"("+texparms.upper+","+texparms.lower+") ", texparms.end+1)
                         }
                         else { //1 parameter functions
                             operand = parseBrackets(liReturn,liReturn.indexOf(texFunc)+texFunc.length)
                             liReturn = ltxtomg(liReturn, texFunc, " "+funcKey+"("+operand.inside+")", operand.end+1)
                         }
                     }
-                }
-            }
-        }
-        for (nXt in ulSymbols) {//convert u/l functions
-            sCount = strCount(liReturn,ulSymbols[nXt]+"_");
-            for (nXf=0;nXf<sCount;nXf++) {
-                limitL = parseBrackets(liReturn,liReturn.indexOf(ulSymbols[nXt]+"_")+ulSymbols[nXt].length+1);
-                limitU = parseBrackets(liReturn,limitL.end+1);
-                limitL.inside = limitL.inside.replace("=","Cv[61]");
-                if (liReturn.charAt(limitL.end+1) == "^") {
-                    liReturn = ltxtomg(liReturn, ulSymbols[nXt]+"_", ulFuncs[nXt]+limitU.inside+","+limitL.inside+") ", limitU.end+1)
-                }
-                else {
-                    liReturn = ltxtomg(liReturn, ulSymbols[nXt]+"_", ulFuncs[nXt]+","+limitL.inside+") ", limitL.end+1)
-                }
-            }
-            sCount = strCount(liReturn,ulSymbols[nXt]+"^");
-            for (nXf=0;nXf<sCount;nXf++) {
-                limitU= parseBrackets(liReturn,liReturn.indexOf(ulSymbols[nXt]+"^")+ulSymbols[nXt].length+1);
-                limitL = parseBrackets(liReturn,limitU.end+1);
-                limitL.inside = limitL.inside.replace("=","Cv[61]");
-                if (liReturn.charAt(limitU.end+1) == "_") {
-                    liReturn = ltxtomg(liReturn, ulSymbols[nXt]+"^", ulFuncs[nXt]+limitU.inside+","+limitL.inside+") ", limitL.end+1)
-                }
-                else {
-                    liReturn = ltxtomg(liReturn, ulSymbols[nXt]+"^", ulFuncs[nXt]+limitU.inside+",) ", limitU.end+1)
                 }
             }
         }
