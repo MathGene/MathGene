@@ -2003,6 +2003,7 @@ var mport =
 "\\sin^\\mu{\\frac{x}{y}}","sin(Cv[10120]/Cv[10121])^Cv[956]",
 "\\lim_{x\\to3}\\frac{x}{y}","lim(Cv[10120],3)Cv[10120]/Cv[10121]",
 "\\lim_{x\\rightarrow 3}\\frac{x}{y}","lim(Cv[10120],3)Cv[10120]/Cv[10121]",
+"{\\lim}\\limits_{x \\to 2} \\left( {8 - 3x + 12{x^2}} \\right)","lim(Cv[10120],2)(8-3Cv[10120]+12Cv[10120]^2)",
 "\\prod_{n=1}^{x} \\frac{e^{-n}}{2}","prd(Cv[10120],Cv[10110]=1)Cv[8]^-Cv[10110]/2",
 "\\sum_{n=1}^{\\infty }\\frac{e^{n}}{2}","sum(Cv[8734],Cv[10110]=1)Cv[8]^Cv[10110]/2",
 "\\left(\\frac{d}{dx}f\\left(x\\right)\\right)+\\left(\\frac{d}{dy}g\\left(y\\right)\\right)=f\\prime\\left(x\\right)+g\\prime\\left(y\\right)","(tdr(Cv[10120])Cv[10102](Cv[10120]))+(tdr(Cv[10121])Cv[10103](Cv[10121]))=Cv[10102]Cv[8242](Cv[10120])+Cv[10103]Cv[8242](Cv[10121])",
