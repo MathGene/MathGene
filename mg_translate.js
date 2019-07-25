@@ -1529,6 +1529,18 @@ var mgTrans = function() {
         latexR2:'',
         mg: function (parm) {return 'lim('+parm[1]+','+parm[2]+')'+parm[0]},
         },
+    sbt:{ //subscript
+        htmlL1: function (parm) {return '<sub><sub>'+parm[0]+'</sub></sub>'},
+        htmlR1:'',
+        htmlL2: function (parm) {return '<sub><sub>'+parm[0]+'</sub></sub>'},
+        htmlR2:'',
+        texfunc:['_'],
+        latexL1: function (parm) {return '_{'+parm[0]+'}'},
+        latexR1:'',
+        latexL2: function (parm) {return '_{'+parm[0]+'}'},
+        latexR2:'',
+        mg:  function (parm) {return 'sbt('+parm[0]+')'},
+        },
     cPow:{ //x^n
         htmlL1: function (parm) {return htmlFuncs['cPowL'](parm[0],parm[1])},
         htmlR1:'',
@@ -1540,18 +1552,6 @@ var mgTrans = function() {
         latexL2: function (parm) {return latexFuncs['cPowX'](parm[0],parm[1])},
         latexR2:'',
         mg: function (parm) {return mgFuncs['cPowE'](parm[0],parm[1])},
-        },
-    sbt:{ //subscript
-        htmlL1: function (parm) {return '<sub><sub>'+parm[0]+'</sub></sub>'},
-        htmlR1:'',
-        htmlL2: function (parm) {return '<sub><sub>'+parm[0]+'</sub></sub>'},
-        htmlR2:'',
-        texfunc:[],
-        latexL1: function (parm) {return '_{'+parm[0]+'}'},
-        latexR1:'',
-        latexL2: function (parm) {return '_{'+parm[0]+'}'},
-        latexR2:'',
-        mg:  function (parm) {return 'sbt('+parm[0]+')'},
         },
     }
     //mg handlers
@@ -2132,7 +2132,7 @@ var mgTrans = function() {
         var liReturn = latIn+"";
         const lBrackets = ["{","[","|"];
         const rBrackets = ["}","]","|"];
-        var sCount = 0,symTemp = "",tTemp = "",funcKey = 0,nXs = 0,nXf = 0,nXt = 0,nXi = 0,operand = {},texFunc = "";
+        var sCount = 0,symTemp = "",tTemp = "",funcKey = 0,nXs = 0,nXf = 0,nXi = 0,operand = {},texFunc = "";
         if (liReturn == "NaN" || liReturn == "undefined") {return "undefined"}
         liReturn += " ";
         liReturn = liReturn.replace(/\\big/g,"\\");//remove big tags
@@ -2180,23 +2180,7 @@ var mgTrans = function() {
                 }
             }
         }
-        sCount = strCount(liReturn,"_");//convert subscripts
-        for (nXf=0;nXf<sCount;nXf++) {
-            tTemp = liReturn.charAt(liReturn.indexOf("_")+1)
-            if (tTemp == "{" || tTemp == "(") {
-                var subscript = parseBrackets(liReturn,liReturn.indexOf("_"));
-                liReturn = ltxtomg(liReturn, "_", " sbt("+subscript.inside+") ", subscript.end+1)
-            }
-            else {
-                for (nXi=liReturn.indexOf("_")+1;nXi<liReturn.length;nXi++) {if (tDelimiter.indexOf(liReturn.charAt(nXi)) > -1){break}}
-                if (liReturn.substr(liReturn.indexOf("_"),nXi).search(/[a-z][a-z][a-z]\(\)/i) == -1) {
-                    liReturn = ltxtomg(liReturn, "_", " sbt("+tTemp+") ", liReturn.indexOf("_")+2)
-                }
-                else {liReturn = liReturn.replace(/_/,"")}
-            }
-        }
-
-        sCount = strCount(liReturn,"^");//convert superscripts
+        sCount = strCount(liReturn,"^");//fix superscripts
         for (nXf=0;nXf<sCount;nXf++) {
             tTemp = liReturn.charAt(liReturn.indexOf("^")+1)
             if (tTemp == "{" || tTemp == "(") {
