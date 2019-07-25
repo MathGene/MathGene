@@ -2127,7 +2127,7 @@ var mgTrans = function() {
         var liReturn = latIn+"";
         const lBrackets = ["{","[","|"];
         const rBrackets = ["}","]","|"];
-        var sCount = 0,symTemp = "",tTemp = "",funcKey = 0,nXs = 0,nXf = 0,nXi = 0,operand = {},texFunc = "";
+        var sCount = 0,symTemp = "",tTemp = "",funcKey = 0,nXs = 0,nXf = 0,nXi = 0,xF = 0,operand = {},texFunc = "";
         if (liReturn == "NaN" || liReturn == "undefined") {return "undefined"}
         liReturn += " ";
         liReturn = liReturn.replace(/\\big/g,"\\");//remove big tags
