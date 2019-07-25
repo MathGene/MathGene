@@ -2310,7 +2310,7 @@ var mgCalc = function() {
         if (sReturn == lVar) {return xLim}
         var args = opExtract(sReturn);
         if (!strTest(sReturn,lVar) || args.func == "") {return sReturn}
-        sReturn = xReduce(cSubst(lmtFunc[args.func+"L"](args.upper,args.lower),lVar,xLim));
+        sReturn = cReduce(cSubst(lmtFunc[args.func+"L"](args.upper,args.lower),lVar,xLim));
         return sReturn
     }
 
