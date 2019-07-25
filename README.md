@@ -278,8 +278,10 @@ Pipeline tests run against multiple versions of NodeJS (base version 8.0 and cur
 
 MathGene is split into two modules: mgTranslate.js and mgCalculate.js. 
 mgTranslate.js handles translations between MG, LaTeX, Func, and HTML representations of math.
-This component is coded using an 'object-oriented' paradigm. The primary object in mgTranslate.js is 'funcMap' which contains all of the mappings between the different formats.
-mgCalculate is the calculation module which is coded using a 'functional' paradigm. The functional style is representative of math algorithms so is a natural fit for this paradigm.
+This module is coded using an 'object-oriented' paradigm that maps all translation activities through the 'funcMap' object, which contains all of the mappings between the different formats.
+
+mgCalculate is the calculation module which is coded using a 'functional' paradigm. 
+The functional paradigm is most representative of math algorithms so is a natural fit for this task.
 
 MathGene utilizes four distinct representational math formats to perform computations and translations:
 
