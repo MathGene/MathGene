@@ -311,6 +311,25 @@ var mgTrans = function() {
     //HTML/LaTex Translation map for functions
     const funcMap =
     {
+    cDiv:{ //divide
+        htmlL1: function (parm) {return htmlFuncs['cDivL'](parm[0],parm[1])},
+        htmlR1:'',
+        htmlL2: function (parm) {return htmlFuncs['cDivL'](parm[0],parm[1])},
+        htmlR2:'',
+        texfunc:['\\frac'],
+        texparms: function(parm) {
+                                var numerator = parseBrackets(parm,parm.indexOf("\\frac")+5);
+                                var denominator = parseBrackets(parm,numerator.end+1);
+                                if (numerator.inside.indexOf("+") > -1 || numerator.inside.indexOf("-") > -1){numerator.inside = "("+numerator.inside+")"}
+                                if (denominator.inside.indexOf("+") > -1 || denominator.inside.indexOf("-") > -1){denominator.inside = "("+denominator.inside+")"}
+                                return {upper:numerator.inside,lower:denominator.inside,end:denominator.end,delim:"/",func:' '} 
+                                },
+        latexL1: function (parm) {return '<Xdiv>\\frac{'+oBrackets(parm[0])+'}{'+oBrackets(parm[1])+'}<Xdve>'},
+        latexR1:'',
+        latexL2: function (parm) {return '<Xdiv>\\frac{'+oBrackets(parm[0])+'}{'+oBrackets(parm[1])+'}<Xdve>'},
+        latexR2:'',
+        mg: function (parm) {return mgFuncs['cDivE'](parm[0],parm[1])},
+        },
     asn:{
         htmlL1: function (parm) {return '<Xfnc>asin<Xfnx>('+parm[0]},
         htmlR1:')',
@@ -691,7 +710,7 @@ var mgTrans = function() {
         texfunc:['\\sqrt['],
         texparms: function (parm) {var parmU = parseBrackets(parm,parm.indexOf("\\sqrt[")+6);
                                    var parmL = parseBrackets(parm,parmU.end+2);
-                                   return {upper:parmU.inside,lower:parmL.inside,end:parmL.end}
+                                   return {upper:parmU.inside,lower:parmL.inside,end:parmL.end,delim:",",func:'nrt'}
                                    },
         latexL1: function (parm) {return '\\sqrt['+parm[0]+']{'+parm[1]},
         latexR1:'}',
@@ -719,7 +738,7 @@ var mgTrans = function() {
         texfunc:['\\log_'],
         texparms: function (parm) {var parmU = parseBrackets(parm,parm.indexOf("\\log_")+5);
                                    var parmL = parseBrackets(parm,parmU.end+1);
-                                   return {upper:parmU.inside,lower:parmL.inside,end:parmL.end}
+                                   return {upper:parmU.inside,lower:parmL.inside,end:parmL.end,delim:",",func:'lgn'}
                                    },
         latexL1: function (parm) {return '\\log_{'+parm[0]+'}(<Xfnx>'+parm[1]},
         latexR1:')',
@@ -1009,7 +1028,7 @@ var mgTrans = function() {
         htmlL2: function (parm) {return htmlFuncs['overUnder'](parm[0],parm[1],'&#8721;',125)},
         htmlR2:' ',
         texfunc:['\\sum_','\\sum^'],
-        texparms: function(parm) {return ulFuncs(parm,'\\sum')},
+        texparms: function(parm) {return ulFuncs(parm,'\\sum','sum')},
         latexL1: function (parm) {return '\\sum_{'+parm[1]+'}^{'+parm[0]+'}'},
         latexR1:' ',
         latexL2: function (parm) {return '\\sum_{'+parm[1]+'}^{'+parm[0]+'}'},
@@ -1034,7 +1053,7 @@ var mgTrans = function() {
         htmlL2: function (parm) {return htmlFuncs['overUnder'](parm[0],parm[1],'&#8719;',125)},
         htmlR2:'',
         texfunc:['\\prod_','\\prod^'],
-        texparms: function(parm) {return ulFuncs(parm,'\\prod')},
+        texparms: function(parm) {return ulFuncs(parm,'\\prod','prd')},
         latexL1: function (parm) {return '\\prod_{'+parm[1]+'}^{'+parm[0]+'}'},
         latexR1:' ',
         latexL2: function (parm) {return '\\prod_{'+parm[1]+'}^{'+parm[0]+'}'},
@@ -1059,7 +1078,7 @@ var mgTrans = function() {
         htmlL2: function (parm) {return funcMap['itg']['htmlL1'](parm)},
         htmlR2:'',
         texfunc:['\\int_','\\int^'],
-        texparms: function(parm) {return ulFuncs(parm,'\\int')},
+        texparms: function(parm) {return ulFuncs(parm,'\\int','itg')},
         latexL1: function (parm) {return '\\int_{'+parm[1]+'}^{'+parm[0]+'}'},
         latexR1:' ',
         latexL2: function (parm) {return '\\int_{'+parm[1]+'}^{'+parm[0]+'}'},
@@ -1144,7 +1163,7 @@ var mgTrans = function() {
         htmlL2: function (parm) {return htmlFuncs['overUnder'](parm[0],parm[1],'&#8746;',150)},
         htmlR2:' ',
         texfunc:['\\cup_','\\cup^'],
-        texparms: function(parm) {return ulFuncs(parm,'\\cup')},
+        texparms: function(parm) {return ulFuncs(parm,'\\cup','cup')},
         latexL1: function (parm) {return '\\cup_{'+parm[1]+'}^{'+parm[0]+'}'},
         latexR1:'',
         latexL2: function (parm) {return '\\cup_{'+parm[1]+'}^{'+parm[0]+'}'},
@@ -1157,7 +1176,7 @@ var mgTrans = function() {
         htmlL2: function (parm) {return htmlFuncs['overUnder'](parm[0],parm[1],'&#8745;',150)},
         htmlR2:' ',
         texfunc:['\\cap_','\\cap^'],
-        texparms: function(parm) {return ulFuncs(parm,'\\cap')},
+        texparms: function(parm) {return ulFuncs(parm,'\\cap','cap')},
         latexL1: function (parm) {return '\\cup_{'+parm[1]+'}^{'+parm[0]+'}'},
         latexR1:'',
         latexL2: function (parm) {return '\\cup_{'+parm[1]+'}^{'+parm[0]+'}'},
@@ -1344,30 +1363,6 @@ var mgTrans = function() {
         latexR2:'',
         mg: function (parm) {return mgFuncs['cMulE'](parm[0],parm[1])},
         },
-    cDiv:{ //divide
-        htmlL1: function (parm) {return htmlFuncs['cDivL'](parm[0],parm[1])},
-        htmlR1:'',
-        htmlL2: function (parm) {return htmlFuncs['cDivL'](parm[0],parm[1])},
-        htmlR2:'',
-        texfunc:['\\frac'],
-        latexL1: function (parm) {return '<Xdiv>\\frac{'+oBrackets(parm[0])+'}{'+oBrackets(parm[1])+'}<Xdve>'},
-        latexR1:'',
-        latexL2: function (parm) {return '<Xdiv>\\frac{'+oBrackets(parm[0])+'}{'+oBrackets(parm[1])+'}<Xdve>'},
-        latexR2:'',
-        mg: function (parm) {return mgFuncs['cDivE'](parm[0],parm[1])},
-        },
-    cPow:{ //x^n
-        htmlL1: function (parm) {return htmlFuncs['cPowL'](parm[0],parm[1])},
-        htmlR1:'',
-        htmlL2: function (parm) {return htmlFuncs['cPowL'](parm[0],parm[1])},
-        htmlR2:'',
-        texfunc:[],
-        latexL1: function (parm) {return parm[0]+'^{'+oBrackets(parm[1])+'}'},
-        latexR1:'',
-        latexL2: function (parm) {return latexFuncs['cPowX'](parm[0],parm[1])},
-        latexR2:'',
-        mg: function (parm) {return mgFuncs['cPowE'](parm[0],parm[1])},
-        },
     cNeg:{ //negative
         htmlL1: function (parm) {return '&minus;'+parm[0]},
         htmlR1:'',
@@ -1507,13 +1502,14 @@ var mgTrans = function() {
         htmlR2:'',
         texfunc:['{ \\lim} \\limits_','\\lim_'],
         texparms: function(parm) {
-                                var limitX = {},limitU = {};
+                                var limitX = {},limitU = {},fReturn = {delim:",",func:'lim'};
                                 if (parm.indexOf("{ \\lim} \\limits_") > -1) {limitX = parseBrackets(parm,parm.indexOf("{ \\lim} \\limits_")+15)}
                                 else {limitX = parseBrackets(parm,parm.indexOf("\\lim_")+5)}
                                 limitU = [limitX.inside,""];
                                 if (limitX.inside.indexOf("\\to") > -1) {limitU = limitX.inside.split("\\to")}
                                 if (limitX.inside.indexOf("\\rightarrow") > -1) {limitU = limitX.inside.split("\\rightarrow")}
-                                return {upper:limitU[0],lower:limitU[1],end:limitX.end}         
+                                fReturn.upper = limitU[0];fReturn.lower = limitU[1];fReturn.end=limitX.end;
+                                return fReturn       
                                 },
         latexL1: function (parm) {return '\\lim_{'+parm[0]+' \\to '+parm[1]+'}'},
         latexR1:' ',
@@ -1532,6 +1528,18 @@ var mgTrans = function() {
         latexL2:'',
         latexR2:'',
         mg: function (parm) {return 'lim('+parm[1]+','+parm[2]+')'+parm[0]},
+        },
+    cPow:{ //x^n
+        htmlL1: function (parm) {return htmlFuncs['cPowL'](parm[0],parm[1])},
+        htmlR1:'',
+        htmlL2: function (parm) {return htmlFuncs['cPowL'](parm[0],parm[1])},
+        htmlR2:'',
+        texfunc:[],
+        latexL1: function (parm) {return parm[0]+'^{'+oBrackets(parm[1])+'}'},
+        latexR1:'',
+        latexL2: function (parm) {return latexFuncs['cPowX'](parm[0],parm[1])},
+        latexR2:'',
+        mg: function (parm) {return mgFuncs['cPowE'](parm[0],parm[1])},
         },
     sbt:{ //subscript
         htmlL1: function (parm) {return '<sub><sub>'+parm[0]+'</sub></sub>'},
@@ -1856,21 +1864,21 @@ var mgTrans = function() {
         }
         return xP
     }
-    function ulFuncs(parm,func) { //parse U/L latex functions
+    function ulFuncs(parm,latfunc,func) { //parse U/L latex functions
         var limitU = {},limitL = {};
-        if (parm.indexOf(func+"_") > -1) {
-            limitL = parseBrackets(parm,parm.indexOf(func+"_")+5);
+        if (parm.indexOf(latfunc+"_") > -1) {
+            limitL = parseBrackets(parm,parm.indexOf(latfunc+"_")+5);
             if (parm.charAt(limitL.end+1) == "^") {limitU = parseBrackets(parm,limitL.end+1)}
             else {limitU = {inside:"",end:limitL.end}}
             limitL.inside = limitL.inside.replace("=","Cv[61]");
-            return {upper:limitU.inside,lower:limitL.inside,end:limitU.end} 
+            return {upper:limitU.inside,lower:limitL.inside,end:limitU.end,delim:",",func:func} 
         }
         else {
-            limitU = parseBrackets(parm,parm.indexOf(func+"^")+5);
+            limitU = parseBrackets(parm,parm.indexOf(latfunc+"^")+5);
             if (parm.charAt(limitU.end+1) == "_") {limitL = parseBrackets(parm,limitU.end+1)}
             else {limitL = {inside:"",end:limitU.end}}
             limitL.inside = limitL.inside.replace("=","Cv[61]");
-            return {upper:limitU.inside,lower:limitL.inside,end:limitL.end} 
+            return {upper:limitU.inside,lower:limitL.inside,end:limitL.end,delim:",",func:func} 
         }
     }
     //conversion routines
@@ -2150,14 +2158,6 @@ var mgTrans = function() {
             sCount = strCount(liReturn,"\\left\\"+lBrackets[iBr]);
             for (nXf=0;nXf<sCount;nXf++) {liReturn = liReturn.replace("\\left\\"+lBrackets[iBr],"cbr(").replace("\\right\\"+rBrackets[iBr],")")   }
         }
-        sCount = strCount(liReturn,"\\frac");//convert frac
-        for (nXf=0;nXf<sCount;nXf++) {
-            var numerator = parseBrackets(liReturn,liReturn.indexOf("\\frac")+5);
-            var denominator = parseBrackets(liReturn,numerator.end+1);
-            if (numerator.inside.indexOf("+") > -1 || numerator.inside.indexOf("-") > -1){numerator.inside = "("+numerator.inside+")"}
-            if (denominator.inside.indexOf("+") > -1 || denominator.inside.indexOf("-") > -1){denominator.inside = "("+denominator.inside+")"}
-            liReturn = ltxtomg(liReturn, "\\frac", " ("+numerator.inside+"/"+denominator.inside+") ", denominator.end+1)
-        }
         for (funcKey in funcMap) {//convert functions
             for (xF in funcMap[funcKey]["texfunc"]) {
                 texFunc = funcMap[funcKey]["texfunc"][xF] //latex function symbol
@@ -2169,15 +2169,13 @@ var mgTrans = function() {
                         operand = parseBrackets(liReturn,superscript.end+1);
                         liReturn = ltxtomg(liReturn, texFunc, funcKey+"("+operand.inside+")^("+superscript.inside+")", operand.end+1)
                     }
-                    else {//convert all other fn
-                        if (typeof funcMap[funcKey]["texparms"] == "function") { //2 parameter functions
-                            var texparms = funcMap[funcKey]["texparms"](liReturn);
-                            liReturn = ltxtomg(liReturn, texFunc, " "+funcKey+"("+texparms.upper+","+texparms.lower+") ", texparms.end+1)
-                        }
-                        else { //1 parameter functions
-                            operand = parseBrackets(liReturn,liReturn.indexOf(texFunc)+texFunc.length)
-                            liReturn = ltxtomg(liReturn, texFunc, " "+funcKey+"("+operand.inside+")", operand.end+1)
-                        }
+                    else if (typeof funcMap[funcKey]["texparms"] == "function") { //two parameter functions
+                        var texparms = funcMap[funcKey]["texparms"](liReturn);
+                        liReturn = ltxtomg(liReturn, texFunc, " "+texparms.func+"("+texparms.upper+texparms.delim+texparms.lower+") ", texparms.end+1)
+                    }
+                    else { //one parameter functions
+                        operand = parseBrackets(liReturn,liReturn.indexOf(texFunc)+texFunc.length)
+                        liReturn = ltxtomg(liReturn, texFunc, " "+funcKey+"("+operand.inside+")", operand.end+1)
                     }
                 }
             }
