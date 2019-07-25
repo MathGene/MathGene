@@ -317,7 +317,7 @@ var mgTrans = function() {
         htmlL2: function (parm) {return htmlFuncs['cDivL'](parm[0],parm[1])},
         htmlR2:'',
         texfunc:['\\frac'],
-        texparms: function(parm) {
+        texparms: function(parm){
                                 var numerator = parseBrackets(parm,parm.indexOf("\\frac")+5);
                                 var denominator = parseBrackets(parm,numerator.end+1);
                                 if (numerator.inside.indexOf("+") > -1 || numerator.inside.indexOf("-") > -1){numerator.inside = "("+numerator.inside+")"}
@@ -708,10 +708,10 @@ var mgTrans = function() {
         htmlL2: function (parm,strg) {return funcMap['nrt']['htmlL1'](parm,strg)},
         htmlR2: function () {return htmlFuncs['radR']()},
         texfunc:['\\sqrt['],
-        texparms: function (parm) {var parmU = parseBrackets(parm,parm.indexOf("\\sqrt[")+6);
-                                   var parmL = parseBrackets(parm,parmU.end+2);
-                                   return {upper:parmU.inside,lower:parmL.inside,end:parmL.end,delim:",",func:'nrt'}
-                                   },
+        texparms: function (parm){var parmU = parseBrackets(parm,parm.indexOf("\\sqrt[")+6);
+                                 var parmL = parseBrackets(parm,parmU.end+2);
+                                 return {upper:parmU.inside,lower:parmL.inside,end:parmL.end,delim:",",func:'nrt'}
+                                 },
         latexL1: function (parm) {return '\\sqrt['+parm[0]+']{'+parm[1]},
         latexR1:'}',
         latexL2: function (parm) {return '\\sqrt['+parm[0]+']{'+parm[1]},
@@ -736,10 +736,10 @@ var mgTrans = function() {
         htmlL2: function (parm) {return '<Xfnc>log<sub>'+parm[0]+'</sub> '+parm[1]},
         htmlR2:' <Xfxp>',
         texfunc:['\\log_'],
-        texparms: function (parm) {var parmU = parseBrackets(parm,parm.indexOf("\\log_")+5);
-                                   var parmL = parseBrackets(parm,parmU.end+1);
-                                   return {upper:parmU.inside,lower:parmL.inside,end:parmL.end,delim:",",func:'lgn'}
-                                   },
+        texparms: function (parm){var parmU = parseBrackets(parm,parm.indexOf("\\log_")+5);
+                                 var parmL = parseBrackets(parm,parmU.end+1);
+                                 return {upper:parmU.inside,lower:parmL.inside,end:parmL.end,delim:",",func:'lgn'}
+                                 },
         latexL1: function (parm) {return '\\log_{'+parm[0]+'}(<Xfnx>'+parm[1]},
         latexR1:')',
         latexL2: function (parm) {return '\\log_{'+parm[0]+'}{'+parm[1]},
@@ -1501,15 +1501,14 @@ var mgTrans = function() {
         htmlL2: function (parm) {return funcMap['lim']['htmlL1'](parm)},
         htmlR2:'',
         texfunc:['{ \\lim} \\limits_','\\lim_'],
-        texparms: function(parm) {
-                                var limitX = {},limitU = {},fReturn = {delim:",",func:'lim'};
+        texparms: function(parm){
+                                var limitX = {},limitU = {};
                                 if (parm.indexOf("{ \\lim} \\limits_") > -1) {limitX = parseBrackets(parm,parm.indexOf("{ \\lim} \\limits_")+15)}
                                 else {limitX = parseBrackets(parm,parm.indexOf("\\lim_")+5)}
                                 limitU = [limitX.inside,""];
                                 if (limitX.inside.indexOf("\\to") > -1) {limitU = limitX.inside.split("\\to")}
                                 if (limitX.inside.indexOf("\\rightarrow") > -1) {limitU = limitX.inside.split("\\rightarrow")}
-                                fReturn.upper = limitU[0];fReturn.lower = limitU[1];fReturn.end=limitX.end;
-                                return fReturn       
+                                return {upper:limitU[0],lower:limitU[1],end:limitX.end,delim:",",func:'lim'}       
                                 },
         latexL1: function (parm) {return '\\lim_{'+parm[0]+' \\to '+parm[1]+'}'},
         latexR1:' ',
@@ -1641,10 +1640,6 @@ var mgTrans = function() {
     radR: function () {//radicals
         if (mgConfig.divScale == 50) {return "</span></span>"}
         else {return "</span></span></span></span>"}
-        },
-    itgL: function (xA,xB) {
-        return "<Xdiv><span style='display:inline-block;vertical-align:middle;'><table cellpadding='0' cellspacing='0'><tr><td rowspan='4'><span style='vertical-align:middle;display:inline-table;'><span style='display:table-row;line-height:90%'>&#8992;</span><span style='display:table-row;line-height:90%'>&#8993;</span></span></td><tr><td style='font-size:45%'>"
-                +xA+"</td></tr><tr><td>&nbsp;</td></tr><td style='font-size:45%'>"+xB+"</td></tr></table></span><Xdve>"
         },
     tdrL: function (xA,xN) {
         var xTmp = "";
