@@ -550,7 +550,7 @@ var mgCalc = function() {
                 xprTerms = xprTerms.substr(0,bSym)+xprTerms.substr(strg.end+1,xprTerms.length)
             }
         }
-        return nTerms
+        return nTerms.sort()
     }
     function parsePoly(xP) { //parse polynomials into terms array
         function pAddS(xU,xL) {
@@ -566,8 +566,7 @@ var mgCalc = function() {
         if (xTractU.func == "cMul" || xTractU.func == "cDiv" || xTractU.func == "cNeg" || xTractU.func == "cPow") {
             if (!strTest(xP,"cAdd") && !strTest(xP,"cSub")) {nTerms.push(xP)}
             else {return [xP]}
-        }
-		/*
+        }	
 		var xprTerms = strConvert(xP),strg = [],bSym = 0,aSym = 0;
         var sCount = xprTerms.split("cAdd(").length-1 + xprTerms.split("cSub(").length-1
         for (var iXf=0;iXf<sCount;iXf++) {
@@ -584,9 +583,19 @@ var mgCalc = function() {
                 xprTerms = xprTerms.substr(0,bSym)+xprTerms.substr(strg.end+1,xprTerms.length)
             }		
         }
-		*/
-        eval(xP.replace(/cAdd\(/g,"pAdd(").replace(/cSub\(/g,"pSub(").replace(/([a-z])\(/g,"$1S(").replace(/(Cv\[\d+\])/g,"'$1'"));
-        return nTerms
+        return nTerms.sort(//sort alpha with powers in descending polynomial order
+            function(aS,bS){
+                if (strTest(aS,"cPow") || strTest(bS,"cPow")) {
+                    if (!strTest(bS,"cPow") && strTest(aS,"cPow")) {return 1}
+                    else if (!strTest(aS,"cPow") && strTest(bS,"cPow")) {return -1}
+                    else  {
+                        var aP = aS.match(/cPow\(Cv\[\d+\]\,(\d+)\)/)+"",bP = bS.match(/cPow\(Cv\[\d+\]\,(\d+)\)/)+"";
+                        return aP > bP ? 1 : aP < bP ? -1 : 0;
+                    }
+                }
+                return aS < bS ? -1 : aS > bS ? 1 : 0;
+            }
+        );
     }
     function aGcf(xG){ //find GCF of integer array
         var tGcf = new Array(xG.length), xI = 0;
