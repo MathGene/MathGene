@@ -192,32 +192,21 @@ var mgCalc = function() {
         return opReturn
     }
     function cDissect(xDsect) { //return array of all components of expression
-        var tDsect = [];
-        function dct(xT,xB)  {if (!strTest(tDsect,xT)) {tDsect.push(xT)};if (xB && !strTest(tDsect,xB)) {tDsect.push(xB)}}
-        function cdct(xT,xB) {if (!strTest(tDsect,xT)) {tDsect.push(xT)};if (!strTest(tDsect,xB)) {tDsect.push(xB)}}
-		/*
-		var funcKey = "",strg = [];
-		var xprTerms = strConvert(xDsect)
-		for (var iXf=0;iXf<xprTerms.length;iXf++) {
-			funcKey3 = xprTerms.substr(iXf,3)
-			funcKey4 = xprTerms.substr(iXf,4)
-			if (typeof mgTrans.funcMap[funcKey3] != "undefined") {
-				strg = mgTrans.parseParens(xprTerms,iXf+3)
-				dct(strg.upper,strg.lower)
-			}
-			else if (typeof mgTrans.funcMap[funcKey4] != "undefined") {
-				strg = mgTrans.parseParens(xprTerms,iXf+4)
-				cdct(strg.upper,strg.lower)
-			}
-		}
-		*/
-		eval(strConvert(xDsect).replace(/[a-z][a-z][a-z]\(/gi,"dct(").replace(/(Cv\[\d+\])/g,"'$1'"));
+        xDsect = strConvert(xDsect);
+        var tDsect = [],vTmp = "";
+        var vCount = xDsect.split("Cv[").length-1;
+        for (var xV=0;xV<vCount;xV++) { //variables and constants
+            vTmp = strConvert(xDsect.match(/Cv\[\d+\]/));
+            vTmp = vTmp.replace(/Cv\[(\d+)\]/,"$1");
+            xDsect = xDsect.replace(/Cv\[\d+\]/,"");
+            if (varTest(vTmp) || vTmp <= 46) {if (!strTest(tDsect,vTmp)) {tDsect.push("Cv["+vTmp+"]")}}
+        }       
         return tDsect.sort()
     }
     function cInventory(xInv) { //return array of indexes of all unique variables
         xInv = strConvert(xInv);
-        var vCount = xInv.split("Cv[").length-1;
         var vTmp = "",xVars = [];
+        var vCount = xInv.split("Cv[").length-1;
         for (var xV=0;xV<vCount;xV++) {
             vTmp = strConvert(xInv.match(/Cv\[\d+\]/));
             vTmp = vTmp.replace(/Cv\[(\d+)\]/,"$1");
@@ -540,50 +529,63 @@ var mgCalc = function() {
     }
     //Polynomials
     function parseTerms(xP) { //parse terms into elements array
-        function pTrmS(xU,xL) {
+        function pMulS(xU,xL) {
             var xTractU = opExtract(xU);
             var xTractL = opExtract(xL);
-            if (xTractU.func == "cMul") {pTrmS(xTractU.upper,xTractU.lower)}
-            if (xTractL.func == "cMul") {pTrmS(xTractL.upper,xTractL.lower)}
-            if (typeof xU != "undefined" && xTractU.func != "cMul" && xTractU.func != "cNeg") {nTerms.push(xU)}
-            if (typeof xL != "undefined" && xTractL.func != "cMul" && xTractL.func != "cNeg") {nTerms.push(xL)}
+            if (xTractU.func == "cMul") {pMulS(xTractU.upper,xTractU.lower)}
+            if (xTractL.func == "cMul") {pMulS(xTractL.upper,xTractL.lower)}
+            if (typeof xU != "undefined" && xTractU.func != "cMul" && xTractU.func != "cNeg" && xU != "") {nTerms.push(xU)}
+            if (typeof xL != "undefined" && xTractL.func != "cMul" && xTractL.func != "cNeg" && xL != "") {nTerms.push(xL)}
         }
         var xprTerms = strConvert(xP);
         var nTerms = [],strg = [];
         var xTractU = opExtract(xprTerms);
         if (xTractU.func != "cMul" && xTractU.func != "cNeg") {return [xprTerms]}
-		for (var iXf=0;iXf<xprTerms.length;iXf++) {
-			if (xprTerms.substr(iXf,5) == "cMul(") {
-				strg = mgTrans.parseParens(xprTerms,iXf+4)
-				pTrmS(strg.upper,strg.lower)
-				xprTerms = xprTerms.substr(0,iXf)+xprTerms.substr(strg.end,xprTerms.length)
-			}
-		}
-        //eval(xP.replace(/([a-z])\(/g,"$1S(").replace(/cMulS\(/,"pTrmS(").replace(/(Cv\[\d+\])/g,"'$1'"));
+        var sCount = xprTerms.split("cMul(").length-1
+        for (var iXf=0;iXf<sCount;iXf++) {
+            var bSym = xprTerms.indexOf("cMul(");
+            if (bSym > -1) {
+                strg = mgTrans.parseParens(xprTerms,bSym)
+                pMulS(strg.upper,strg.lower)
+                xprTerms = xprTerms.substr(0,bSym)+xprTerms.substr(strg.end+1,xprTerms.length)
+            }
+        }
         return nTerms
     }
     function parsePoly(xP) { //parse polynomials into terms array
-        function pAddS(xU,xL) {if (typeof xU != "undefined") {nTerms.push(xU)};if (typeof xL != "undefined") {nTerms.push(xL)}}
-        function pSubS(xU,xL) {if (typeof xU != "undefined") {nTerms.push(xU)};if (typeof xL != "undefined") {nTerms.push(cNegS(xL))}}
-        var nTerms = [],strg = [],fn = "";
+        function pAddS(xU,xL) {
+			if (typeof xU != "undefined" && xU != "") {nTerms.push(xU)}
+			if (typeof xL != "undefined" && xL != "") {nTerms.push(xL)}
+		}
+        function pSubS(xU,xL) {
+			if (typeof xU != "undefined" && xU != "") {nTerms.push(xU)}
+			if (typeof xL != "undefined" && xL != "") {nTerms.push(cNegS(xL))}
+		}
+        var nTerms = [];
         var xTractU = opExtract(xP);
         if (xTractU.func == "cMul" || xTractU.func == "cDiv" || xTractU.func == "cNeg" || xTractU.func == "cPow") {
             if (!strTest(xP,"cAdd") && !strTest(xP,"cSub")) {nTerms.push(xP)}
             else {return [xP]}
         }
 		/*
-        var xprTerms = strConvert(xP);
-		for (var iXf=0;iXf<xprTerms.length;iXf++) {
-			fn = xprTerms.substr(iXf,5) 
-			if (fn == "cAdd(" || fn == "cSub(") {
-				strg = mgTrans.parseParens(xprTerms,iXf+4)
-				if (fn == "cAdd(") {pAddS(strg.upper,strg.lower)}
-				else {pSubS(strg.upper,strg.lower)}
-				xprTerms = xprTerms.substr(0,iXf)+xprTerms.substr(strg.end,xprTerms.length)
-			}
-		}
+		var xprTerms = strConvert(xP),strg = [],bSym = 0,aSym = 0;
+        var sCount = xprTerms.split("cAdd(").length-1 + xprTerms.split("cSub(").length-1
+        for (var iXf=0;iXf<sCount;iXf++) {
+            aSym = xprTerms.lastIndexOf("cAdd(");
+			bSym = xprTerms.lastIndexOf("cSub(");
+            if (aSym > -1 && aSym > bSym) {
+                strg = mgTrans.parseParens(xprTerms,aSym+4)
+                pAddS(strg.upper,strg.lower)
+                xprTerms = xprTerms.substr(0,aSym)+xprTerms.substr(strg.end+1,xprTerms.length)
+            }
+            if (bSym > -1 && bSym > aSym) {
+                strg = mgTrans.parseParens(xprTerms,bSym+4)
+                pSubS(strg.upper,strg.lower)
+                xprTerms = xprTerms.substr(0,bSym)+xprTerms.substr(strg.end+1,xprTerms.length)
+            }		
+        }
 		*/
-		eval(xP.replace(/cAdd\(/g,"pAdd(").replace(/cSub\(/g,"pSub(").replace(/([a-z])\(/g,"$1S(").replace(/(Cv\[\d+\])/g,"'$1'"));
+        eval(xP.replace(/cAdd\(/g,"pAdd(").replace(/cSub\(/g,"pSub(").replace(/([a-z])\(/g,"$1S(").replace(/(Cv\[\d+\])/g,"'$1'"));
         return nTerms
     }
     function aGcf(xG){ //find GCF of integer array
