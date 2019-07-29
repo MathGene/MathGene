@@ -282,6 +282,17 @@ var mgCalc = function() {
         if (typeof xA == "object") {return xA}
         return xprEval(xA.replace(/([a-z])\(/g,"$1S(").replace(/matS\(/g,"mat(").replace(/(Cv\[\d+\])/g,"'$1'"))
     }
+    function sortTerms(aS,bS){ //sort alpha with powers in descending polynomial order
+        if (strTest(aS,"cPow") || strTest(bS,"cPow")) {
+            if (!strTest(bS,"cPow") && strTest(aS,"cPow")) {return 1}
+            else if (!strTest(aS,"cPow") && strTest(bS,"cPow")) {return -1}
+            else  {
+                var aP = aS.match(/cPow\(Cv\[\d+\]\,(\d+)\)/)+"",bP = bS.match(/cPow\(Cv\[\d+\]\,(\d+)\)/)+"";
+                return aP > bP ? 1 : aP < bP ? -1 : 0;
+            }
+        }
+        return aS < bS ? -1 : aS > bS ? 1 : 0;
+    }
     function xprEval(xpr) {xpr = strConvert(xpr);return eval(xpr)}
     
     //Expression reduction
@@ -327,18 +338,7 @@ var mgCalc = function() {
             var rgx = new RegExp("Sv\\["+yI+"\\]","g");
             for (var zI in Sv ) {Sv[zI] = Sv[zI].map(function(mP){return mP.toString().replace(rgx,"Sv["+xI+"]")})}
         }}}
-        var tSum = Sv[xU].sort(//sort alpha with powers in descending polynomial order
-            function(aS,bS){
-                if (strTest(aS,"cPow") || strTest(bS,"cPow")) {
-                    if (!strTest(bS,"cPow") && strTest(aS,"cPow")) {return 1}
-                    else if (!strTest(aS,"cPow") && strTest(bS,"cPow")) {return -1}
-                    else  {
-                        var aP = aS.match(/cPow\(Cv\[\d+\]\,(\d+)\)/)+"",bP = bS.match(/cPow\(Cv\[\d+\]\,(\d+)\)/)+"";
-                        return aP > bP ? 1 : aP < bP ? -1 : 0;
-                    }
-                }
-                return aS < bS ? -1 : aS > bS ? 1 : 0;
-            }
+        var tSum = Sv[xU].sort(function(aS,bS){return sortTerms(aS,bS)}
         );
         var sTerms = {Terms:[],Factors:[],Divisors:[]} //collector for segregated terms
         var tReturn = 0,tExtract = "";
@@ -554,24 +554,24 @@ var mgCalc = function() {
     }
     function parsePoly(xP) { //parse polynomials into terms array
         function pAddS(xU,xL) {
-			if (typeof xU != "undefined" && xU != "") {nTerms.push(xU)}
-			if (typeof xL != "undefined" && xL != "") {nTerms.push(xL)}
-		}
+            if (typeof xU != "undefined" && xU != "") {nTerms.push(xU)}
+            if (typeof xL != "undefined" && xL != "") {nTerms.push(xL)}
+        }
         function pSubS(xU,xL) {
-			if (typeof xU != "undefined" && xU != "") {nTerms.push(xU)}
-			if (typeof xL != "undefined" && xL != "") {nTerms.push(cNegS(xL))}
-		}
+            if (typeof xU != "undefined" && xU != "") {nTerms.push(xU)}
+            if (typeof xL != "undefined" && xL != "") {nTerms.push(cNegS(xL))}
+        }
         var nTerms = [];
         var xTractU = opExtract(xP);
         if (xTractU.func == "cMul" || xTractU.func == "cDiv" || xTractU.func == "cNeg" || xTractU.func == "cPow") {
             if (!strTest(xP,"cAdd") && !strTest(xP,"cSub")) {nTerms.push(xP)}
             else {return [xP]}
-        }	
-		var xprTerms = strConvert(xP),strg = [],bSym = 0,aSym = 0;
+        }   
+        var xprTerms = strConvert(xP),strg = [],bSym = 0,aSym = 0;
         var sCount = xprTerms.split("cAdd(").length-1 + xprTerms.split("cSub(").length-1
         for (var iXf=0;iXf<sCount;iXf++) {
             aSym = xprTerms.lastIndexOf("cAdd(");
-			bSym = xprTerms.lastIndexOf("cSub(");
+            bSym = xprTerms.lastIndexOf("cSub(");
             if (aSym > -1 && aSym > bSym) {
                 strg = mgTrans.parseParens(xprTerms,aSym+4)
                 pAddS(strg.upper,strg.lower)
@@ -581,21 +581,9 @@ var mgCalc = function() {
                 strg = mgTrans.parseParens(xprTerms,bSym+4)
                 pSubS(strg.upper,strg.lower)
                 xprTerms = xprTerms.substr(0,bSym)+xprTerms.substr(strg.end+1,xprTerms.length)
-            }		
+            }       
         }
-        return nTerms.sort(//sort alpha with powers in descending polynomial order
-            function(aS,bS){
-                if (strTest(aS,"cPow") || strTest(bS,"cPow")) {
-                    if (!strTest(bS,"cPow") && strTest(aS,"cPow")) {return 1}
-                    else if (!strTest(aS,"cPow") && strTest(bS,"cPow")) {return -1}
-                    else  {
-                        var aP = aS.match(/cPow\(Cv\[\d+\]\,(\d+)\)/)+"",bP = bS.match(/cPow\(Cv\[\d+\]\,(\d+)\)/)+"";
-                        return aP > bP ? 1 : aP < bP ? -1 : 0;
-                    }
-                }
-                return aS < bS ? -1 : aS > bS ? 1 : 0;
-            }
-        );
+        return nTerms.sort(function(aS,bS){return sortTerms(aS,bS)})
     }
     function aGcf(xG){ //find GCF of integer array
         var tGcf = new Array(xG.length), xI = 0;
