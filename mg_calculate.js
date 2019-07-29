@@ -195,8 +195,24 @@ var mgCalc = function() {
         var tDsect = [];
         function dct(xT,xB)  {if (!strTest(tDsect,xT)) {tDsect.push(xT)};if (xB && !strTest(tDsect,xB)) {tDsect.push(xB)}}
         function cdct(xT,xB) {if (!strTest(tDsect,xT)) {tDsect.push(xT)};if (!strTest(tDsect,xB)) {tDsect.push(xB)}}
-        eval(strConvert(xDsect).replace(/[a-z][a-z][a-z]\(/gi,"dct(").replace(/(Cv\[\d+\])/g,"'$1'"));
-        return tDsect
+		/*
+		var funcKey = "",strg = [];
+		var xprTerms = strConvert(xDsect)
+		for (var iXf=0;iXf<xprTerms.length;iXf++) {
+			funcKey3 = xprTerms.substr(iXf,3)
+			funcKey4 = xprTerms.substr(iXf,4)
+			if (typeof mgTrans.funcMap[funcKey3] != "undefined") {
+				strg = mgTrans.parseParens(xprTerms,iXf+3)
+				dct(strg.upper,strg.lower)
+			}
+			else if (typeof mgTrans.funcMap[funcKey4] != "undefined") {
+				strg = mgTrans.parseParens(xprTerms,iXf+4)
+				cdct(strg.upper,strg.lower)
+			}
+		}
+		*/
+		eval(strConvert(xDsect).replace(/[a-z][a-z][a-z]\(/gi,"dct(").replace(/(Cv\[\d+\])/g,"'$1'"));
+        return tDsect.sort()
     }
     function cInventory(xInv) { //return array of indexes of all unique variables
         xInv = strConvert(xInv);
@@ -208,8 +224,7 @@ var mgCalc = function() {
             xInv = xInv.replace(/Cv\[\d+\]/,"");
             if (varTest(vTmp)) {if (!strTest(xVars,vTmp)) {xVars.push(vTmp)}}
         }
-        xVars.sort();
-        return xVars
+        return xVars.sort();
     }
     function varTest(iDv) { //test if string is a MG variable (Cv[xxx])
         iDv = strConvert(iDv);
@@ -533,25 +548,42 @@ var mgCalc = function() {
             if (typeof xU != "undefined" && xTractU.func != "cMul" && xTractU.func != "cNeg") {nTerms.push(xU)}
             if (typeof xL != "undefined" && xTractL.func != "cMul" && xTractL.func != "cNeg") {nTerms.push(xL)}
         }
-        xP = strConvert(xP);
-        var nTerms = [];
-        var xTractU = opExtract(xP);
-        if (xTractU.func != "cMul" && xTractU.func != "cNeg") {return [xP]}
-        eval(xP.replace(/([a-z])\(/g,"$1S(").replace(/cMulS\(/,"pTrmS(").replace(/(Cv\[\d+\])/g,"'$1'"));
+        var xprTerms = strConvert(xP);
+        var nTerms = [],strg = [];
+        var xTractU = opExtract(xprTerms);
+        if (xTractU.func != "cMul" && xTractU.func != "cNeg") {return [xprTerms]}
+		for (var iXf=0;iXf<xprTerms.length;iXf++) {
+			if (xprTerms.substr(iXf,5) == "cMul(") {
+				strg = mgTrans.parseParens(xprTerms,iXf+4)
+				pTrmS(strg.upper,strg.lower)
+				xprTerms = xprTerms.substr(0,iXf)+xprTerms.substr(strg.end,xprTerms.length)
+			}
+		}
+        //eval(xP.replace(/([a-z])\(/g,"$1S(").replace(/cMulS\(/,"pTrmS(").replace(/(Cv\[\d+\])/g,"'$1'"));
         return nTerms
     }
-    //parse polynomials into terms array
-    function parsePoly(xP) {
+    function parsePoly(xP) { //parse polynomials into terms array
         function pAddS(xU,xL) {if (typeof xU != "undefined") {nTerms.push(xU)};if (typeof xL != "undefined") {nTerms.push(xL)}}
         function pSubS(xU,xL) {if (typeof xU != "undefined") {nTerms.push(xU)};if (typeof xL != "undefined") {nTerms.push(cNegS(xL))}}
-        var nTerms = [];
+        var nTerms = [],strg = [],fn = "";
         var xTractU = opExtract(xP);
         if (xTractU.func == "cMul" || xTractU.func == "cDiv" || xTractU.func == "cNeg" || xTractU.func == "cPow") {
             if (!strTest(xP,"cAdd") && !strTest(xP,"cSub")) {nTerms.push(xP)}
             else {return [xP]}
         }
-        xP = strConvert(xP);
-        eval(xP.replace(/cAdd\(/g,"pAdd(").replace(/cSub\(/g,"pSub(").replace(/([a-z])\(/g,"$1S(").replace(/(Cv\[\d+\])/g,"'$1'"));
+		/*
+        var xprTerms = strConvert(xP);
+		for (var iXf=0;iXf<xprTerms.length;iXf++) {
+			fn = xprTerms.substr(iXf,5) 
+			if (fn == "cAdd(" || fn == "cSub(") {
+				strg = mgTrans.parseParens(xprTerms,iXf+4)
+				if (fn == "cAdd(") {pAddS(strg.upper,strg.lower)}
+				else {pSubS(strg.upper,strg.lower)}
+				xprTerms = xprTerms.substr(0,iXf)+xprTerms.substr(strg.end,xprTerms.length)
+			}
+		}
+		*/
+		eval(xP.replace(/cAdd\(/g,"pAdd(").replace(/cSub\(/g,"pSub(").replace(/([a-z])\(/g,"$1S(").replace(/(Cv\[\d+\])/g,"'$1'"));
         return nTerms
     }
     function aGcf(xG){ //find GCF of integer array
