@@ -204,7 +204,8 @@ var numerical =
 "mat(mat(mat(mat(1,2),mat(11,12)),mat(mat(3,4),mat(11,12))),mat(mat(mat(1,2),mat(11,12)),mat(mat(3,4),mat(11,12))))^0","mat(mat(mat(mat(1,0),mat(0,1)),mat(mat(0,0),mat(0,0))),mat(mat(mat(0,0),mat(0,0)),mat(mat(1,0),mat(0,1))))",
 "mat(mat(mat(mat(1,2),mat(11,12)),mat(mat(3,4),mat(11,12))),mat(mat(mat(1,2),mat(11,12)),mat(mat(3,4),mat(11,12))))^2","mat(mat(mat(mat(70,80),mat(286,332)),mat(mat(78,88),mat(330,376))),mat(mat(mat(70,80),mat(286,332)),mat(mat(78,88),mat(330,376))))",
 "mat(mat(mat(mat(1)),mat(mat(3))),mat(mat(mat(5)),mat(mat(7))))^-1*mat(mat(mat(mat(1)),mat(mat(3))),mat(mat(mat(5)),mat(mat(7))))","mat(mat(1,0),mat(0,1))",
-
+"arg(-Cv[46])","-1.57079633",
+"arg(0)","0",
 ];
 
 var range =
@@ -2103,6 +2104,7 @@ var internal =
 "mgTrans.mgExport('prd(1,10)cTms(Cv[10120],Cv[10121])')","prd(1,10)Cv[10120]*Cv[10121]",
 "mgTrans.mgExport('lim(1,10)cTms(Cv[10120],Cv[10121])')","lim(1,10)Cv[10120]*Cv[10121]",
 "mgTrans.mgExport('itg(1,10)cTms(Cv[10120],Cv[10121])')","itg(1,10)Cv[10120]*Cv[10121]",
+"mgCalc.Inventory('Cv[0]Cv[93]Cv[97]Cv[10075]Cv[913]Cv[971]')","Cv[10075],Cv[913],Cv[97]",
 ];
 
 

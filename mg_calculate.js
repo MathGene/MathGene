@@ -3201,7 +3201,6 @@ var mgCalc = function() {
     function log(xU) {return lne(xU)} //natural log
     function lgn(xU,xL) {return cDiv(lne(xL),lne(xU))} //log base n
     function sqt(xU) {//square root
-        if (getType(xU) == "complex" && xU.i == 0) {xU = xU.r}
         if (nbrTest(cPow(xU,0.5))) {
             if (xU == cPow(rou(cPow(xU,0.5)),2)) {return rou(cPow(xU,0.5))} //preserve integers
             return cPow(xU,0.5)
@@ -3209,7 +3208,6 @@ var mgCalc = function() {
         return cPow(toCplx(xU),0.5)
     }
     function cbt(xU) { //cube root
-        if (getType(xU) == "complex" && xU.i == 0) {xU = xU.r}
         if (getType(cPow(xU,cDiv(1,3))) == "real") {
             if (xU == cPow(rou(cPow(xU,cDiv(1,3))),3)) {return rou(cPow(xU,cDiv(1,3)))} //preserve integers
             return cPow(xU,cDiv(1,3))
@@ -3218,7 +3216,7 @@ var mgCalc = function() {
     }
     function nrt(xU,xL) { //n'th root
         if (getType(xU) == "real" && getType(xL) == "real") {
-            if (xU == cPow(rou(cPow(xU,cDiv(1,xU))),xU)) {return rou(cPow(xU,cDiv(1,xU)))} //preserve integers
+            if (xU == cPow(rou(cPow(xL,cDiv(1,xU))),xU)) {return rou(cPow(xL,cDiv(1,xU)))} //preserve integers
             return cPow(xL,cDiv(1,xU))
         }
         return cPow(toCplx(xL),cDiv(1,toCplx(xU)))
