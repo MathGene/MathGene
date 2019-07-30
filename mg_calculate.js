@@ -338,8 +338,7 @@ var mgCalc = function() {
             var rgx = new RegExp("Sv\\["+yI+"\\]","g");
             for (var zI in Sv ) {Sv[zI] = Sv[zI].map(function(mP){return mP.toString().replace(rgx,"Sv["+xI+"]")})}
         }}}
-        var tSum = Sv[xU].sort(function(aS,bS){return sortTerms(aS,bS)}
-        );
+        var tSum = Sv[xU].sort(function(aS,bS){return sortTerms(aS,bS)})
         var sTerms = {Terms:[],Factors:[],Divisors:[]} //collector for segregated terms
         var tReturn = 0,tExtract = "";
         for (var xI in tSum) { //extract factors from tSum array
@@ -553,14 +552,6 @@ var mgCalc = function() {
         return nTerms.sort()
     }
     function parsePoly(xP) { //parse polynomials into terms array
-        function pAddS(xU,xL) {
-            if (typeof xU != "undefined" && xU != "") {nTerms.push(xU)}
-            if (typeof xL != "undefined" && xL != "") {nTerms.push(xL)}
-        }
-        function pSubS(xU,xL) {
-            if (typeof xU != "undefined" && xU != "") {nTerms.push(xU)}
-            if (typeof xL != "undefined" && xL != "") {nTerms.push(cNegS(xL))}
-        }
         var nTerms = [];
         var xTractU = opExtract(xP);
         if (xTractU.func == "cMul" || xTractU.func == "cDiv" || xTractU.func == "cNeg" || xTractU.func == "cPow") {
@@ -574,12 +565,16 @@ var mgCalc = function() {
             bSym = xprTerms.lastIndexOf("cSub(");
             if (aSym > -1 && aSym > bSym) {
                 strg = mgTrans.parseParens(xprTerms,aSym+4)
-                pAddS(strg.upper,strg.lower)
+                if (strg.upper != "") {nTerms.push(strg.upper)}
+                if (strg.lower != "") {nTerms.push(strg.lower)}     
                 xprTerms = xprTerms.substr(0,aSym)+xprTerms.substr(strg.end+1,xprTerms.length)
             }
+            aSym = xprTerms.lastIndexOf("cAdd(");
+            bSym = xprTerms.lastIndexOf("cSub(");
             if (bSym > -1 && bSym > aSym) {
                 strg = mgTrans.parseParens(xprTerms,bSym+4)
-                pSubS(strg.upper,strg.lower)
+                if (strg.upper != "") {nTerms.push(strg.upper)}
+                if (strg.lower != "") {nTerms.push(cNegS(strg.lower))}
                 xprTerms = xprTerms.substr(0,bSym)+xprTerms.substr(strg.end+1,xprTerms.length)
             }       
         }
