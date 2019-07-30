@@ -202,10 +202,15 @@ var mgCalc = function() {
             if (varTest(vTmp) || conTest(vTmp)) {if (!strTest(tDsect,"Cv["+vTmp+"]")) {tDsect.push("Cv["+vTmp+"]")}}
         }
         vCount = xDsect.length-1;
-        for (xV=0;xV<vCount;xV++) { //integers
-            vTmp = strConvert(xDsect.match(/\d+/));
-            xDsect = xDsect.replace(/\d+/,"");
-            if (vTmp != "null" && !strTest(tDsect,vTmp)) {tDsect.push(vTmp)}
+        for (xV=0;xV<vCount;xV++) {
+            vTmp = strConvert(xDsect.match(/\d+\.\d+/)); //decimals
+            if (vTmp == "null") {break}
+            if (!strTest(tDsect,vTmp)) {xDsect = xDsect.replace(/\d+\.\d+/,"");tDsect.push(vTmp)}
+        }
+        for (xV=0;xV<vCount;xV++) {
+            vTmp = strConvert(xDsect.match(/\d+/)); //integers
+            if (vTmp == "null") {break}
+            if (!strTest(tDsect,vTmp)) {xDsect = xDsect.replace(/\d+/,"");tDsect.push(vTmp)}
         }
         return tDsect.sort()
     }
@@ -308,10 +313,10 @@ var mgCalc = function() {
         if (xIter.search(/,,/) > -1 || xIter.search(/,\)/) > -1 || xIter.search(/\(,/) > -1 || xIter.search(/\(\)/) > -1) {return cError("Missing operand(s)")}
         return strConvert(xprEval(xIter.replace(/([a-z])\(/g,"$1S(").replace(/(Pv\[\d+\])/g,"'$1'").replace(/(Sv\[\d+\])/g,"'$1'").replace(/(Cv\[\d+\])/g,"'$1'")));
     }
-    function cReduce(cRdce) {
+    function cReduce(cRdce) { //complete expression reduction
         var sReturn = iReduce(xReduce(cRdce));
         return sReturn
-    } //complete expression reduction
+    }
     function pxpExecute(xIn) {Pv = [];return xprIterate(xprIterate(xIn.replace(/cMul\(/g,"vMul(").replace(/cDiv\(/g,"vDiv(").replace(/cNeg\(/g,"vNeg(")).replace(/Pv\[(\d+)\]/g,"pxp($1)"))}
     function smxExecute(xIn) {Sv = [];return xprIterate(xprIterate(xIn.replace(/cAdd\(/g,"vAdd(").replace(/cSub\(/g,"vSub(")).replace(/Sv\[(\d+)\]/g,"smx($1)"))}
     function xReduce(xRdce) { //basic expression reduction
@@ -1383,11 +1388,11 @@ var mgCalc = function() {
         if (xU == 0 || xU == 1) {return 1}
         return "gam("+xU+")"
     }
-    function sdrS(xU,xL,xN) {//total derivative (old style)
+    function sdrS(xU,xL,xN) {//total derivative (dy/dx)
         if (typeof xN == "undefined") {return "tdv("+xU+","+xL+")"}
         return "tdv("+xU+","+xL+","+xN+")"
     }
-    function psdS(xU,xL,xN) {//partial derivatove (old style)
+    function psdS(xU,xL,xN) {//partial derivative (dy/dx)
         if (typeof xN == "undefined") {return "drv("+xU+","+xL+")"}
         return "drv("+xU+","+xL+","+xN+")"
     }

@@ -84,7 +84,7 @@ may be missing some extended HTML symbols which will then render as blank square
 There is also variablitiy in the implementation of IEEE754-2008 numeric math within different browsers. In some cases, integers are rendered as x.99999997 or similar. MathGene has code to preserve integer values when possible.
 There will also be variablitiy in decimal rounding for different JavaScript engines. This will be typically in the 8+ decimal place. The Numeric test suite rounds all tests to 8 decimal places to compensate for the different numeric rounding behavior.
 
-Javascript performance varies quite significanly between browsers. Chrome and IE are the fastest while Firefox appears about 50% slower in math computations. 
+Javascript performance varies quite significanly between browsers. Chrome and IE are the fastest while Firefox appears about 20% slower in math computations. 
 HTML math rendering performance is good on all tested browsers. Mobile devices are typically far slower at calculations than desktops, 
 particularly with advanced symbolic math such as evaluating integrals. Math rendering is fast on all supported mobile devices.
 
