@@ -191,40 +191,46 @@ var mgCalc = function() {
         }
         return opReturn
     }
-    function cDissect(xDsect) { //return array of all components of expression
-        xDsect = strConvert(xDsect);
-        var tDsect = [],vTmp = "";
-        var vCount = xDsect.split("Cv[").length-1;
-        for (var xV=0;xV<vCount;xV++) { //variables and constants
+    function cDissect(xD) { //return array of all components of expression
+        var xDsect = strConvert(xD);
+        var tDsect = [],vTmp = "",xV = 0,vCount = 0;
+        vCount = xDsect.split("Cv[").length-1;
+        for (xV=0;xV<vCount;xV++) { //variables and constants
             vTmp = strConvert(xDsect.match(/Cv\[\d+\]/));
             vTmp = vTmp.replace(/Cv\[(\d+)\]/,"$1");
             xDsect = xDsect.replace(/Cv\[\d+\]/,"");
-            if (varTest(vTmp) || vTmp <= 46) {if (!strTest(tDsect,vTmp)) {tDsect.push("Cv["+vTmp+"]")}}
-        }       
+            if (varTest(vTmp) || conTest(vTmp)) {if (!strTest(tDsect,"Cv["+vTmp+"]")) {tDsect.push("Cv["+vTmp+"]")}}
+        }
+        vCount = xDsect.length-1;
+        for (xV=0;xV<vCount;xV++) { //integers
+            vTmp = strConvert(xDsect.match(/\d+/));
+            xDsect = xDsect.replace(/\d+/,"");
+            if (vTmp != "null" && !strTest(tDsect,vTmp)) {tDsect.push(vTmp)}
+        }
         return tDsect.sort()
     }
-    function cInventory(xInv) { //return array of indexes of all unique variables
-        xInv = strConvert(xInv);
-        var vTmp = "",xVars = [];
-        var vCount = xInv.split("Cv[").length-1;
-        for (var xV=0;xV<vCount;xV++) {
+    function cInventory(xI) { //return array of all unique variables
+        var xInv = strConvert(xI);
+        var xVars = [],vTmp = "",xV = 0,vCount = 0;
+        vCount = xInv.split("Cv[").length-1;
+        for (xV=0;xV<vCount;xV++) {
             vTmp = strConvert(xInv.match(/Cv\[\d+\]/));
             vTmp = vTmp.replace(/Cv\[(\d+)\]/,"$1");
             xInv = xInv.replace(/Cv\[\d+\]/,"");
-            if (varTest(vTmp)) {if (!strTest(xVars,vTmp)) {xVars.push(vTmp)}}
+            if (varTest(vTmp)) {if (!strTest(xVars,"Cv["+vTmp+"]")) {xVars.push("Cv["+vTmp+"]")}}
         }
         return xVars.sort();
     }
     function varTest(iDv) { //test if string is a MG variable (Cv[xxx])
         iDv = strConvert(iDv);
         iDv = iDv.replace(/Cv\[(\d+)\]/,"$1");
-        if ((iDv > 64 && iDv < 91) || (iDv > 96 && iDv < 123) || (iDv > 10064 && iDv < 10091) || (iDv > 10096 && iDv < 10123) || (iDv > 913 && iDv < 969)) {return true}
+        if ((iDv > 64 && iDv < 91) || (iDv > 96 && iDv < 123) || (iDv > 10064 && iDv < 10091) || (iDv > 10096 && iDv < 10123) || (iDv > 912 && iDv < 970)) {return true}
         return false
     }
-    function varConst(iDv) { //test if string is a MG constant (Cv[xxx])
+    function conTest(iDv) { //test if string is a MG constant (Cv[xxx])
         iDv = strConvert(iDv);
         iDv = iDv.replace(/Cv\[(\d+)\]/,"$1");
-        if (iDv > 0 && iDv < 44) {return true}
+        if (iDv >= 0 && iDv <= 46) {return true}
         return false
     }
     function xprMatch(Xpression,Pattern) { //match exact pattern template to expression Cv[9999] = wildcard
@@ -282,7 +288,7 @@ var mgCalc = function() {
         if (typeof xA == "object") {return xA}
         return xprEval(xA.replace(/([a-z])\(/g,"$1S(").replace(/matS\(/g,"mat(").replace(/(Cv\[\d+\])/g,"'$1'"))
     }
-    function sortTerms(aS,bS){ //sort alpha with powers in descending polynomial order
+    function sortTerms(aS,bS){ //sort terms array alpha with powers in descending polynomial order
         if (strTest(aS,"cPow") || strTest(bS,"cPow")) {
             if (!strTest(bS,"cPow") && strTest(aS,"cPow")) {return 1}
             else if (!strTest(aS,"cPow") && strTest(bS,"cPow")) {return -1}
@@ -533,22 +539,15 @@ var mgCalc = function() {
             var xTractL = opExtract(xL);
             if (xTractU.func == "cMul") {pMulS(xTractU.upper,xTractU.lower)}
             if (xTractL.func == "cMul") {pMulS(xTractL.upper,xTractL.lower)}
-            if (typeof xU != "undefined" && xTractU.func != "cMul" && xTractU.func != "cNeg" && xU != "") {nTerms.push(xU)}
-            if (typeof xL != "undefined" && xTractL.func != "cMul" && xTractL.func != "cNeg" && xL != "") {nTerms.push(xL)}
+            if (typeof xU != "undefined" && xU != "" && xTractU.func != "cMul" && xTractU.func != "cNeg") {nTerms.push(xU)}
+            if (typeof xL != "undefined" && xL != "" && xTractL.func != "cMul" && xTractL.func != "cNeg") {nTerms.push(xL)}
         }
-        var xprTerms = strConvert(xP);
         var nTerms = [],strg = [];
+        var xprTerms = strConvert(xP);
         var xTractU = opExtract(xprTerms);
         if (xTractU.func != "cMul" && xTractU.func != "cNeg") {return [xprTerms]}
-        var sCount = xprTerms.split("cMul(").length-1
-        for (var iXf=0;iXf<sCount;iXf++) {
-            var bSym = xprTerms.indexOf("cMul(");
-            if (bSym > -1) {
-                strg = mgTrans.parseParens(xprTerms,bSym)
-                pMulS(strg.upper,strg.lower)
-                xprTerms = xprTerms.substr(0,bSym)+xprTerms.substr(strg.end+1,xprTerms.length)
-            }
-        }
+        strg = mgTrans.parseParens(xprTerms,xprTerms.indexOf("cMul("));
+        pMulS(strg.upper,strg.lower);
         return nTerms.sort()
     }
     function parsePoly(xP) { //parse polynomials into terms array
@@ -564,18 +563,18 @@ var mgCalc = function() {
             aSym = xprTerms.lastIndexOf("cAdd(");
             bSym = xprTerms.lastIndexOf("cSub(");
             if (aSym > -1 && aSym > bSym) {
-                strg = mgTrans.parseParens(xprTerms,aSym+4)
+                strg = mgTrans.parseParens(xprTerms,aSym+4);
                 if (strg.upper != "") {nTerms.push(strg.upper)}
                 if (strg.lower != "") {nTerms.push(strg.lower)}     
-                xprTerms = xprTerms.substr(0,aSym)+xprTerms.substr(strg.end+1,xprTerms.length)
+                xprTerms = xprTerms.substr(0,aSym)+xprTerms.substr(strg.end+1,xprTerms.length);
             }
             aSym = xprTerms.lastIndexOf("cAdd(");
             bSym = xprTerms.lastIndexOf("cSub(");
             if (bSym > -1 && bSym > aSym) {
-                strg = mgTrans.parseParens(xprTerms,bSym+4)
+                strg = mgTrans.parseParens(xprTerms,bSym+4);
                 if (strg.upper != "") {nTerms.push(strg.upper)}
                 if (strg.lower != "") {nTerms.push(cNegS(strg.lower))}
-                xprTerms = xprTerms.substr(0,bSym)+xprTerms.substr(strg.end+1,xprTerms.length)
+                xprTerms = xprTerms.substr(0,bSym)+xprTerms.substr(strg.end+1,xprTerms.length);
             }       
         }
         return nTerms.sort(function(aS,bS){return sortTerms(aS,bS)})
@@ -633,8 +632,8 @@ var mgCalc = function() {
         vP = strConvert(vP);
         var pTest = [],vReturn = "",vInv = cInventory(vP);
         for (var nXs in vInv) {
-            var vTmp = "Cv[" + vInv[nXs] + "]"
-            var pTemp = pNomial(vP,vTmp)
+            var vTmp = vInv[nXs];
+            var pTemp = pNomial(vP,vTmp);
             if (pTest.length < pTemp.length) {pTest = pTemp;vReturn = vTmp}
         }
         return vReturn
@@ -1369,7 +1368,7 @@ var mgCalc = function() {
 
     function absS(xU) {//absolute value
         var xTractU = opExtract(xU);
-        if (varConst(xU)) {return xU}
+        if (conTest(xU)) {return xU}
         if (nbrTest(xU)) {return abs(xU)}
         if (xTractU.func == "abs") {return absS(xTractU.upper)}
         if (xTractU.func == "cNeg") {return absS(xTractU.upper)}
@@ -1463,7 +1462,7 @@ var mgCalc = function() {
         for (nC=0;nC<sCount;nC++) {
             if (!strTest(dExp,"dif(")) {
                 invTemp = cInventory(dExp);
-                if (invTemp.length == 1) {dExp = dExp + "dif(Cv[" + invTemp[0] +"])"}
+                if (invTemp.length == 1) {dExp = dExp + "dif(" + invTemp[0] +")"}
                 else {return cError("Missing dx")}
             }
             dExp = dExp.replace(/Cv\[8747\]/,"tmp(");
@@ -1482,7 +1481,7 @@ var mgCalc = function() {
         for (nC=0;nC<sCount;nC++) {
             if (!strTest(dExp,"dif(")) {
                 invTemp = cInventory(dExp);
-                if (invTemp.length == 1) {dExp = dExp + "dif(Cv[" + invTemp[0] +"])"}
+                if (invTemp.length == 1) {dExp = dExp + "dif(" + invTemp[0] +")"}
                 else {return cError("Missing dx")}
             }
             dV = mgTrans.parseParens(dExp,dExp.indexOf("itg(")+3)
@@ -1601,7 +1600,7 @@ var mgCalc = function() {
         if (cInv.length > 1) {
             var totDeriv = "0";
             for (var nTd in cInv) {
-                totDeriv = cAddS(totDeriv,cMulS(drvS(dXpr,"Cv["+cInv[nTd]+"]",nTh),difS("Cv["+cInv[nTd]+"]")))
+                totDeriv = cAddS(totDeriv,cMulS(drvS(dXpr,cInv[nTd],nTh),difS(cInv[nTd])))
             }
             return totDeriv
         }
@@ -2482,7 +2481,7 @@ var mgCalc = function() {
             var zArray = [],zString = "",iZ = 0;
             var zVars = cInventory(nZ+"+"+nC);
             if (zVars.length == 0) {return ""}
-            for (iZ in zVars) {zArray[iZ] = mgTrans.mgExport(xprSolve(mgTrans.cFunc(nZ+"Cv[8800]"+nC),"Cv["+zVars[iZ]+"]"))}
+            for (iZ in zVars) {zArray[iZ] = mgTrans.mgExport(xprSolve(mgTrans.cFunc(nZ+"Cv[8800]"+nC),zVars[iZ]))}
             for (iZ in zVars) {
                 if (!strTest(zArray[iZ],"Cv[8734]")) {
                     zString = zString+zArray[iZ];
@@ -2615,13 +2614,12 @@ var mgCalc = function() {
             }
             return "Cv[9999]"
         }
-        //z
+        //
         xD = strConvert(xD);
         var iV = 0,realVars = [],integerVars = [],dString = "",rString = "",iString = "";
         if (strTest(xD,"=")) {xDom = mgTrans.cFunc(xD.split("=")[1])}
         else {xDom = mgTrans.cFunc(parseCalculus(xD))}
         var allVars = cInventory(xD);
-        for (iV in allVars) {allVars[iV] = "Cv["+allVars[iV]+"]"}
         eval(xDom.replace(/([a-z])\(/g,"$1S(").replace(/(Cv\[\d+\])/g,"'$1'").replace(/ntgS/g,"ntgO").replace(/smmS/g,"smmO").replace(/pmmS/g,"pmmO").replace(/lmtS/g,"lmtO"));
         for (iV in allVars) { //collect master domain vars
             dString = dString + allVars[iV]
