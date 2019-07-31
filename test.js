@@ -2108,6 +2108,7 @@ var internal =
 "mgTrans.mgExport('lim(1,10)cTms(Cv[10120],Cv[10121])')","lim(1,10)Cv[10120]*Cv[10121]",
 "mgTrans.mgExport('itg(1,10)cTms(Cv[10120],Cv[10121])')","itg(1,10)Cv[10120]*Cv[10121]",
 "mgCalc.Inventory('Cv[0]Cv[93]Cv[97]Cv[10075]Cv[913]Cv[971]')","Cv[10075],Cv[913],Cv[97]",
+"mgCalc.Series('sin(Cv[10120])').mg","Cv[10120]-Cv[10120]^3/6+Cv[10120]^5/120+Cv[8230]",
 ];
 
 

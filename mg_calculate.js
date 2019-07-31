@@ -2131,7 +2131,7 @@ var mgCalc = function() {
     function xprSeries(xS,sVar,sCenter,sOrder) {
         if (typeof sCenter == "undefined") {sCenter = 0} //default center = 0
         if (typeof sOrder == "undefined") {sOrder = 6} //default order = 6
-        if (typeof sVar == "undefined") {sVar = pVariable(sVar)} //select primary variable if not specified
+        if (sVar == "undefined") {sVar = pVariable(xS)} //select primary variable if not specified
         var sDerivative = xS;
         var sReturn = xReduce(cSubst(xS,sVar,sCenter));
         var sTerm = 0;
