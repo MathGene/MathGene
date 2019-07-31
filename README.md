@@ -84,7 +84,7 @@ may be missing some extended HTML symbols which will then render as blank square
 There is also variablitiy in the implementation of IEEE754-2008 numeric math within different browsers. In some cases, integers are rendered as x.99999997 or similar. MathGene has code to preserve integer values when possible.
 There will also be variablitiy in decimal rounding for different JavaScript engines. This will be typically in the 8+ decimal place. The Numeric test suite rounds all tests to 8 decimal places to compensate for the different numeric rounding behavior.
 
-Javascript performance varies quite significanly between browsers. Chrome and IE are the fastest while Firefox appears about 50% slower in math computations. 
+Javascript performance varies quite significanly between browsers. Chrome and IE are the fastest while Firefox appears about 20% slower in math computations. 
 HTML math rendering performance is good on all tested browsers. Mobile devices are typically far slower at calculations than desktops, 
 particularly with advanced symbolic math such as evaluating integrals. Math rendering is fast on all supported mobile devices.
 
@@ -278,8 +278,10 @@ Pipeline tests run against multiple versions of NodeJS (base version 8.0 and cur
 
 MathGene is split into two modules: mgTranslate.js and mgCalculate.js. 
 mgTranslate.js handles translations between MG, LaTeX, Func, and HTML representations of math.
-This component is coded using an 'object-oriented' paradigm. The primary object in mgTranslate.js is 'funcMap' which contains all of the mappings between the different formats.
-mgCalculate is the calculation module which is coded using a 'functional' paradigm. The functional style is representative of math algorithms so is a natural fit for this paradigm.
+This module is coded using an 'object-oriented' paradigm that maps all translation activities through the 'funcMap' object, which contains all of the mappings between the different formats.
+
+mgCalculate is the calculation module which is coded using a 'functional' paradigm. 
+The functional paradigm is most representative of math algorithms so is a natural fit for this task.
 
 MathGene utilizes four distinct representational math formats to perform computations and translations:
 
