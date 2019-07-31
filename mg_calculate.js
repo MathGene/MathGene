@@ -2257,7 +2257,7 @@ var mgCalc = function() {
     },
     cMulL: function(xU,xL,lVar,xLim) {
         if (lmtS(xU,lVar,xLim) == 0 && lmtS(xL,lVar,xLim) == "Cv[8734]") {return lmtFunc["cDivL"](xU,cDivS(1,xL),lVar,xLim)} //0*inf
-        if (lmtS(xL,lVar,xLim) == 0 && lmtS(xU,lVar,xLim) == "Cv[8734]") {return lmtFunc["cDivL"](xL,cDivS(1,xU,lVar,xLim))} //inf*0
+        if (lmtS(xL,lVar,xLim) == 0 && lmtS(xU,lVar,xLim) == "Cv[8734]") {return lmtFunc["cDivL"](xL,cDivS(1,xU),lVar,xLim)} //inf*0
         if (!strTest(xU,lVar)) {return cMulS(xU,lmtS(xL,lVar,xLim))} //constant rule
         if (!strTest(xL,lVar)) {return cMulS(xL,lmtS(xU,lVar,xLim))} //constant rule
         return cMulS(lmtS(xU,lVar,xLim),lmtS(xL,lVar,xLim)) //product rule
