@@ -573,9 +573,7 @@ var mgCalc = function() {
                 if (strg.lower != "") {nTerms.push(strg.lower)}     
                 xprTerms = xprTerms.substr(0,aSym)+xprTerms.substr(strg.end+1,xprTerms.length);
             }
-            aSym = xprTerms.lastIndexOf("cAdd(");
-            bSym = xprTerms.lastIndexOf("cSub(");
-            if (bSym > -1 && bSym > aSym) {
+            else if (bSym > -1 && bSym > aSym) {
                 strg = mgTrans.parseParens(xprTerms,bSym+4);
                 if (strg.upper != "") {nTerms.push(strg.upper)}
                 if (strg.lower != "") {nTerms.push(cNegS(strg.lower))}
@@ -3216,7 +3214,7 @@ var mgCalc = function() {
     }
     function nrt(xU,xL) { //n'th root
         if (getType(xU) == "real" && getType(xL) == "real") {
-            if (xU == cPow(rou(cPow(xL,cDiv(1,xU))),xU)) {return rou(cPow(xL,cDiv(1,xU)))} //preserve integers
+            if (xL == cPow(rou(cPow(xL,cDiv(1,xU))),xU)) {return rou(cPow(xL,cDiv(1,xU)))} //preserve integers
             return cPow(xL,cDiv(1,xU))
         }
         return cPow(toCplx(xL),cDiv(1,toCplx(xU)))
