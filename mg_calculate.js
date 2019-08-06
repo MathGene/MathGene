@@ -1332,7 +1332,8 @@ var mgCalc = function() {
     }
     function achS(xU) {//acosh
         var xTractU = opExtract(xU);
-        if (xU == 0) {return "cMul(cDiv(Cv[46],2),Cv[29])"}
+        if (xU == 0 && mgConfig.Domain == "Complex") {return "cMul(cDiv(Cv[46],2),Cv[29])"}
+		if (xU == 0 && mgConfig.Domain == "Real") {return "undefined"}
         if (xTractU.func == "csh") {return xTractU.upper}
         return "ach("+xU+")"
     }
@@ -1356,7 +1357,8 @@ var mgCalc = function() {
     }
     function azhS(xU) {//acoth
         var xTractU = opExtract(xU);
-        if (xU == 0) {return "cMul(cDiv(Cv[46],2),Cv[29])"}
+        if (xU == 0 && mgConfig.Domain == "Complex") {return "cMul(cDiv(Cv[46],2),Cv[29])"}
+		if (xU == 0 && mgConfig.Domain == "Real") {return "undefined"}
         if (xTractU.func == "cth") {return xTractU.upper}
         return "azh("+xU+")"
     }
