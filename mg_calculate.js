@@ -689,25 +689,24 @@ var mgCalc = function() {
             for (var iM=1;iM<xL;iM++) {mReturn = cMulS(mReturn,xU)}
             return mReturn
         }
-        if (xU == "Cv[8734]") { //infinity handlers for limits
+        //infinity handlers for limits
+        if (xU == "Cv[8734]") {
             if (xL <= -1) {return 0}
             else if (!strTest(xL,"Cv[8734]")) {return "Cv[8734]"}
-            else {return "undefined"}
         }
         if (xU == "cNeg(Cv[8734])") {
-            if (!nbrEven(xL)) {return "cNeg(Cv[8734])"}
+            if (xL <= -1) {return 0}
+            else if (!nbrEven(xL)) {return "cNeg(Cv[8734])"}
             else if (nbrEven(xL)) {return "Cv[8734]"}
-            else if (xL <= -1) {return 0}
-            else {return "undefined"}
         }
         if (xL == "Cv[8734]") {
-            if (abs(xU) > 0 && abs(xL) < 1) {return 0}
+            if (abs(xU) > 0 && abs(xU) < 1) {return 0}
             else if (!nbrEven(xU) && xU < 0) {return "cNeg(Cv[8734])"}
             else {return "Cv[8734]"}
         }
         if (xL == "cNeg(Cv[8734])") {
             if (xU == 0) {return "Cv[8734]"}
-            else if (abs(xU) > 0 && abs(xL) < 1) {return "Cv[8734]"}
+            else if (abs(xU) > 0 && abs(xU) < 1) {return "Cv[8734]"}
             else {return 0}
         }
         if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "cTms" || xTractU.func == "cDiv" || xTractU.func == "cMul" || xTractU.func == "cPow") {xU = "("+xU+")"}
@@ -787,11 +786,9 @@ var mgCalc = function() {
         if (!factorFlag && xTractL.func == "cMul" && nbrTest(xU) && nbrTest(xTractL.upper)) {return cMulS(cMul(xU,xTractL.upper),xTractL.lower)}
         if (xTractU.func == "cNeg") {return cNegS(cMulS(xTractU.upper,xL))}
         if (xTractL.func == "cNeg") {return cNegS(cMulS(xU,xTractL.upper))}
-        if (xU == "cNeg(Cv[8734])" && xL == "cNeg(Cv[8734])") {return "Cv[8734]"}
         if (xU == "Cv[8734]" || xL == "Cv[8734]") { //infinity handlers for limits
             if (xU < 0) {return "cNeg(Cv[8734])"}
             else if (xL < 0) {return "cNeg(Cv[8734])"}
-            else if (xTractU.func == "cNeg" || xTractL.func == "cNeg") {return "cNeg(Cv[8734])"}
             else {return "Cv[8734]"}
         }
         if (xTractU.func == "abs" && xTractL.func == "abs") {return absS(cMulS(xTractU.upper,xTractL.upper))}
@@ -894,10 +891,7 @@ var mgCalc = function() {
             return matFunc(mReturn)
         }
         if (xU == "Cv[8734]" && xL == "Cv[8734]") {return "Cv[8734]"} //infinity handlers for limits
-        if (xU == "cNeg(Cv[8734])" && xL == "cNeg(Cv[8734])") {return "cNeg(Cv[8734])"}
-        if (!strTest(xU,"Cv[8734]") && xL == "cNeg(Cv[8734])") {return "cNeg(Cv[8734])"}
         if (!strTest(xU,"Cv[8734]") && xL == "Cv[8734]") {return "Cv[8734]"}
-        if (!strTest(xL,"Cv[8734]") && xU == "cNeg(Cv[8734])") {return "cNeg(Cv[8734])"}
         if (!strTest(xL,"Cv[8734]") && xU == "Cv[8734]") {return "Cv[8734]"}
         if (xL == 0) {return xU}
         if (xU == 0) {return xL}
@@ -1046,7 +1040,6 @@ var mgCalc = function() {
     function sqtS(xU) { //square root
         var xTractU = opExtract(xU);
         if (xU == "Cv[8734]") {return "Cv[8734]"}
-        if (xU == "cNeg(Cv[8734])") {return "undefined"}
         if (nbrTest(xU) && sqt(xU) == int(sqt(xU))){return (fmtResult(sqt(xU)))} //calculate integer roots
         if (pxpFlag && xTractU.func == "cDiv") {return cDivS(sqtS(xTractU.upper),sqtS(xTractU.lower))}
         if (pxpFlag && xTractU.func == "cMul") {return cMulS(sqtS(xTractU.upper),sqtS(xTractU.lower))}
@@ -1077,7 +1070,6 @@ var mgCalc = function() {
         if (xU == 0) {return "cNeg(Cv[8734])"}
         if (xU == "Cv[8]") {return 1}
         if (xU == "Cv[8734]") {return "Cv[8734]"}
-        if (xU == "cNeg(Cv[8734])") {return "undefined"}
         if (xTractU.func == "cNeg" && xTractU.upper == "Cv[8]" && mgConfig.Domain == "Complex") {return "cAdd(1,cMul(Cv[29],Cv[46]))"}
         if (xU == -1 && mgConfig.Domain == "Complex") {return "cMul(Cv[29],Cv[46])"}
         if (nbrTest(xU) && lne(xU) == int(lne(xU)) ) {return (fmtResult(lne(xU)))} //calculate integer logs
@@ -1319,14 +1311,14 @@ var mgCalc = function() {
     }
     function cchS(xU) {//csch
         var xTractU = opExtract(xU);
-        if (xU == 0) {return "undefined"}
+        if (xU == 0) {return "Cv[8734]"}
         if (xTractU.func == "ayh") {return xTractU.upper}
         if (xTractU.func == "cNeg") {return "cNeg(cch("+xTractU.upper+"))"}
         return "cch("+xU+")"
     }
     function cthS(xU) {//coth
         var xTractU = opExtract(xU);
-        if (xU == 0) {return "undefined"}
+        if (xU == 0) {return "Cv[8734]"}
         if (xTractU.func == "azh") {return xTractU.upper}
         if (xTractU.func == "cNeg") {return "cNeg(cth("+xTractU.upper+"))"}
         return "cth("+xU+")"
@@ -1340,7 +1332,8 @@ var mgCalc = function() {
     }
     function achS(xU) {//acosh
         var xTractU = opExtract(xU);
-        if (xU == 0) {return "undefined"}
+        if (xU == 0 && mgConfig.Domain == "Complex") {return "cMul(cDiv(Cv[46],2),Cv[29])"}
+		if (xU == 0 && mgConfig.Domain == "Real") {return "undefined"}
         if (xTractU.func == "csh") {return xTractU.upper}
         return "ach("+xU+")"
     }
@@ -1352,19 +1345,20 @@ var mgCalc = function() {
     }
     function axhS(xU) {//asech
         var xTractU = opExtract(xU);
-        if (xU == 0) {return "undefined"}
+        if (xU == 0) {return "Cv[8734]"}
         if (xTractU.func == "sch") {return xTractU.upper}
         return "axh("+xU+")"
     }
     function ayhS(xU) {//acsch
         var xTractU = opExtract(xU);
-        if (xU == 0) {return "undefined"}
+        if (xU == 0) {return "Cv[8734]"}
         if (xTractU.func == "cch") {return xTractU.upper}
         return "ayh("+xU+")"
     }
     function azhS(xU) {//acoth
         var xTractU = opExtract(xU);
-        if (xU == 0) {return "undefined"}
+        if (xU == 0 && mgConfig.Domain == "Complex") {return "cMul(cDiv(Cv[46],2),Cv[29])"}
+		if (xU == 0 && mgConfig.Domain == "Real") {return "undefined"}
         if (xTractU.func == "cth") {return xTractU.upper}
         return "azh("+xU+")"
     }
