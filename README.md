@@ -341,9 +341,7 @@ The result of the above calculation using mgCalc.Simplify() will be a fraction r
 
 - HTML Format
 
-If the above expression is sent for HTML output processing then the string is converted using string conversion to the following:
-
-	"cSubH(cAddH(2,cDivH(3,4)),10)"
+For HTML output processing, the FUNC formatted string is converted to HTML via the 'funcMap' object, which contains all of the conversion details for each supported format as referenced to the Func code.
 
 The output of the above expression will be a string containg HTML code that will render the expression in standard math noation on a web browser.
 
@@ -366,7 +364,7 @@ The result of the above symbolic calculation is a the following string in Func f
 
 	"cDiv(cAdd('Cv[10097]',Cv[10099]'),'Cv[10098]')"
 
-The output expression in LaTeX will be the following:
+As in HTML, LaTeX output is generated via the 'funcMap' object. In this case, output expression in LaTeX will be the following:
 
 	"\frac{a+c}{b}"
 
