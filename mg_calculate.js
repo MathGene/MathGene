@@ -170,12 +170,11 @@ var mgCalc = function() {
         return sReturn
     }
     function relExtract(fExt) { //extract relational operators in FUNC format, returns func,upper,lower
-        const rOps = ["cEql","cGth","cGeq","cLth","cLeq","cNql"];
         fExt = strConvert(fExt);
-        for (var cI in rOps) {
-            if (fExt.indexOf(rOps[cI]) == 0 ) {
+        for (var cI in mgTrans.funcMap) {
+				if (mgTrans.funcMap[cI].relop && fExt.indexOf(cI) == 0 ) {
                 var strg = mgTrans.parseParens(fExt,fExt.indexOf("("));
-                return {func:rOps[cI],upper:strg.upper,lower:strg.lower}
+                return {func:cI,upper:strg.upper,lower:strg.lower}
             }
         }
         return {func:"",upper:"",lower:""}
@@ -2198,7 +2197,6 @@ var mgCalc = function() {
     }
 
     //Exponential trig conversion
-    const trigFn = ["sin","cos","tan","sec","csc","cot","snh","csh","tnh","sch","cch","cth","asn","acs","atn","asc","acc","act","ash","ach","ath"]
     function sinE(xU) {return cDivS(cSubS(cPowS("Cv[8]",cMulS("Cv[46]",xU)),cPowS("Cv[8]",cMulS(cNegS("Cv[46]"),xU))),cMulS("2","Cv[46]"))}
     function cosE(xU) {return cDivS(cAddS(cPowS("Cv[8]",cMulS("Cv[46]",xU)),cPowS("Cv[8]",cMulS(cNegS("Cv[46]"),xU))),"2")}
     function tanE(xU) {return cDivS(cSubS(cPowS("Cv[8]",cMulS("Cv[46]",xU)),cPowS("Cv[8]",cMulS(cNegS("Cv[46]"),xU))),cMulS("Cv[46]",cAddS(cPowS("Cv[8]",cMulS("Cv[46]",xU)),cPowS("Cv[8]",cMulS(cNegS("Cv[46]"),xU)))))  }
@@ -2223,7 +2221,7 @@ var mgCalc = function() {
     //
     function xprTrigToExp(xU) { //convert trig to exponential forms
         var xReturn = strConvert(xU).replace(/([a-z])\(/g,"$1S(");
-        trigFn.forEach(function(xFn) {var rgx = new RegExp(xFn+"S","g");xReturn = xReturn.replace(rgx,xFn+"E")})
+		for (var xFn in mgTrans.funcMap) {if (mgTrans.funcMap[xFn].trig) {var rgx = new RegExp(xFn+"S","g");xReturn = xReturn.replace(rgx,xFn+"E")}}
         return xReduce(xprEval(xReturn.replace(/(Cv\[\d+\])/g,"'$1'")))
     }
     function xprExpToTrig(xU) { //convert exponential forms to trig
