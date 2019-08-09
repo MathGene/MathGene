@@ -201,15 +201,19 @@ var mgCalc = function() {
             if (varTest(vTmp) || conTest(vTmp)) {if (!strTest(tDsect,"Cv["+vTmp+"]")) {tDsect.push("Cv["+vTmp+"]")}}
         }
         vCount = xDsect.length-1;
-        for (xV=0;xV<vCount;xV++) {
-            vTmp = strConvert(xDsect.match(/\d+\.\d+/)); //decimals
+        for (xV=0;xV<vCount;xV++) { //decimals
+            vTmp = strConvert(xDsect.match(/\d+\.\d+/));
             if (vTmp == "null") {break}
-            if (!strTest(tDsect,vTmp)) {xDsect = xDsect.replace(/\d+\.\d+/,"");tDsect.push(vTmp)}
+            if (!strTest(tDsect,vTmp)) {xDsect = xDsect.replace(vTmp,"");tDsect.push(vTmp)}
         }
-        for (xV=0;xV<vCount;xV++) {
-            vTmp = strConvert(xDsect.match(/\d+/)); //integers
+		vCount = xDsect.length-1;
+        for (xV=0;xV<vCount;xV++) { //integers
+            vTmp = strConvert(xDsect.match(/\(\d+/));
             if (vTmp == "null") {break}
-            if (!strTest(tDsect,vTmp)) {xDsect = xDsect.replace(/\d+/,"");tDsect.push(vTmp)}
+            if (!strTest(tDsect,vTmp)) {xDsect = xDsect.replace(vTmp,"(");vTmp = vTmp.replace("(","");tDsect.push(vTmp)}
+            vTmp = strConvert(xDsect.match(/\d+\)/));
+            if (vTmp == "null") {break}
+            if (!strTest(tDsect,vTmp)) {xDsect = xDsect.replace(vTmp,")");vTmp = vTmp.replace(")","");tDsect.push(vTmp)}			
         }
         return tDsect.sort()
     }
@@ -333,7 +337,11 @@ var mgCalc = function() {
     function iReduce(iRdce) { //reduce by iterative expansion
         var iInv = cDissect(iRdce),iCount = [],xFlag = true,iC = 0;
         //count the number of occurrences of each element, if any greater than 1, run expansion
-        for (iC in iInv) {if (nbrTest(iInv[iC]) || !iInv[iC] || !varTest(iInv[iC])) {iCount[iC] = 0} else {iCount[iC] = iRdce.split(iInv[iC]).length-1};if (iCount[iC] > 1) {xFlag = false}}
+        for (iC in iInv) {
+			if (nbrTest(iInv[iC]) || !iInv[iC] || !varTest(iInv[iC])) {iCount[iC] = 0} 
+			else {iCount[iC] = iRdce.split(iInv[iC]).length-1};
+			if (iCount[iC] > 1) {xFlag = false}
+		}
         if (xFlag) {return iRdce}
         var iTemp = xReduce(xprExpand(iRdce));
         for (iC in iInv) {
