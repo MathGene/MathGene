@@ -172,7 +172,7 @@ var mgCalc = function() {
     function relExtract(fExt) { //extract relational operators in FUNC format, returns func,upper,lower
         fExt = strConvert(fExt);
         for (var cI in mgTrans.funcMap) {
-				if (mgTrans.funcMap[cI].relop && fExt.indexOf(cI) == 0 ) {
+                if (mgTrans.funcMap[cI].relop && fExt.indexOf(cI) == 0 ) {
                 var strg = mgTrans.parseParens(fExt,fExt.indexOf("("));
                 return {func:cI,upper:strg.upper,lower:strg.lower}
             }
@@ -206,14 +206,14 @@ var mgCalc = function() {
             if (vTmp == "null") {break}
             if (!strTest(tDsect,vTmp)) {xDsect = xDsect.replace(vTmp,"");tDsect.push(vTmp)}
         }
-		vCount = xDsect.length-1;
+        vCount = xDsect.length-1;
         for (xV=0;xV<vCount;xV++) { //integers
             vTmp = strConvert(xDsect.match(/\(\d+/));
             if (vTmp == "null") {break}
             if (!strTest(tDsect,vTmp)) {xDsect = xDsect.replace(vTmp,"(");vTmp = vTmp.replace("(","");tDsect.push(vTmp)}
             vTmp = strConvert(xDsect.match(/\d+\)/));
             if (vTmp == "null") {break}
-            if (!strTest(tDsect,vTmp)) {xDsect = xDsect.replace(vTmp,")");vTmp = vTmp.replace(")","");tDsect.push(vTmp)}			
+            if (!strTest(tDsect,vTmp)) {xDsect = xDsect.replace(vTmp,")");vTmp = vTmp.replace(")","");tDsect.push(vTmp)}            
         }
         return tDsect.sort()
     }
@@ -338,20 +338,20 @@ var mgCalc = function() {
         var iInv = cInventory(iRdce),iCount = [],iTemp = "",xFlag = false,iC = 0;
         //count the number of occurrences of each variable, if any greater than 1, run expansion
         for (iC in iInv) {
-			iCount[iC] = iRdce.split(iInv[iC]).length-1
-			if (iCount[iC] > 1) {xFlag = true}
-		}
+            iCount[iC] = iRdce.split(iInv[iC]).length-1
+            if (iCount[iC] > 1) {xFlag = true}
+        }
         if (xFlag) {
-			iTemp = xReduce(xprExpand(iRdce));
-			for (iC in iInv) {if (iTemp.split(iInv[iC]).length-1 > iCount[iC] && iCount[iC] != 0) {return iRdce}} //if variable count is greater then return unchanged
-			for (iC in iInv) {if (iTemp.split(iInv[iC]).length-1 < iCount[iC] && iCount[iC] != 0) {return iTemp}} //if variable count is smaller then return expanded result
-			
-		}
-		else if (iInv.length == 0) {
-			iTemp = xReduce(xprExpand(iRdce));
-			if (cDissect(iTemp).length < cDissect(iRdce).length) {return iTemp}
-		}
-		return iRdce
+            iTemp = xReduce(xprExpand(iRdce));
+            for (iC in iInv) {if (iTemp.split(iInv[iC]).length-1 > iCount[iC] && iCount[iC] != 0) {return iRdce}} //if variable count is greater then return unchanged
+            for (iC in iInv) {if (iTemp.split(iInv[iC]).length-1 < iCount[iC] && iCount[iC] != 0) {return iTemp}} //if variable count is smaller then return expanded result
+            
+        }
+        else if (iInv.length == 0) {
+            iTemp = xReduce(xprExpand(iRdce));
+            if (cDissect(iTemp).length < cDissect(iRdce).length) {return iTemp}
+        }
+        return iRdce
     }
     function smxS(xU) { //consolidate sum-difference terms into Sum array Sv, convert subtrahend to negative value: 2a-b+c/d -> [[2a],[-b],[c/d]]
         for (var xI in Sv) {for (var yI=xI;yI<Sv.length;yI++) { //resolve SV dupes
@@ -1343,7 +1343,7 @@ var mgCalc = function() {
     function achS(xU) {//acosh
         var xTractU = opExtract(xU);
         if (xU == 0 && mgConfig.Domain == "Complex") {return "cMul(cDiv(Cv[46],2),Cv[29])"}
-		if (xU == 0 && mgConfig.Domain == "Real") {return "undefined"}
+        if (xU == 0 && mgConfig.Domain == "Real") {return "undefined"}
         if (xTractU.func == "csh") {return xTractU.upper}
         return "ach("+xU+")"
     }
@@ -1368,7 +1368,7 @@ var mgCalc = function() {
     function azhS(xU) {//acoth
         var xTractU = opExtract(xU);
         if (xU == 0 && mgConfig.Domain == "Complex") {return "cMul(cDiv(Cv[46],2),Cv[29])"}
-		if (xU == 0 && mgConfig.Domain == "Real") {return "undefined"}
+        if (xU == 0 && mgConfig.Domain == "Real") {return "undefined"}
         if (xTractU.func == "cth") {return xTractU.upper}
         return "azh("+xU+")"
     }
@@ -2232,7 +2232,7 @@ var mgCalc = function() {
     //
     function xprTrigToExp(xU) { //convert trig to exponential forms
         var xReturn = strConvert(xU).replace(/([a-z])\(/g,"$1S(");
-		for (var xFn in mgTrans.funcMap) {if (mgTrans.funcMap[xFn].trig) {var rgx = new RegExp(xFn+"S","g");xReturn = xReturn.replace(rgx,xFn+"E")}}
+        for (var xFn in mgTrans.funcMap) {if (mgTrans.funcMap[xFn].trig) {var rgx = new RegExp(xFn+"S","g");xReturn = xReturn.replace(rgx,xFn+"E")}}
         return xReduce(xprEval(xReturn.replace(/(Cv\[\d+\])/g,"'$1'")))
     }
     function xprExpToTrig(xU) { //convert exponential forms to trig
