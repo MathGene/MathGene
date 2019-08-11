@@ -335,20 +335,23 @@ var mgCalc = function() {
         return xRdce
     }
     function iReduce(iRdce) { //reduce by iterative expansion
-        var iInv = cDissect(iRdce),iCount = [],xFlag = true,iC = 0;
-        //count the number of occurrences of each element, if any greater than 1, run expansion
+        var iInv = cInventory(iRdce),iCount = [],iTemp = "",xFlag = false,iC = 0;
+        //count the number of occurrences of each variable, if any greater than 1, run expansion
         for (iC in iInv) {
-			if (nbrTest(iInv[iC]) || !iInv[iC] || !varTest(iInv[iC])) {iCount[iC] = 0} 
-			else {iCount[iC] = iRdce.split(iInv[iC]).length-1};
-			if (iCount[iC] > 1) {xFlag = false}
+			iCount[iC] = iRdce.split(iInv[iC]).length-1
+			if (iCount[iC] > 1) {xFlag = true}
 		}
-        if (xFlag) {return iRdce}
-        var iTemp = xReduce(xprExpand(iRdce));
-        for (iC in iInv) {
-            if (iTemp.split(iInv[iC]).length-1 > iCount[iC] && iCount[iC] != 0) {break} //if element count is greater then return unchanged
-            if (iTemp.split(iInv[iC]).length-1 < iCount[iC] && iCount[iC] != 0) {return iTemp} //if element count is smaller then return expanded result
-        }
-        return iRdce
+        if (xFlag) {
+			iTemp = xReduce(xprExpand(iRdce));
+			for (iC in iInv) {if (iTemp.split(iInv[iC]).length-1 > iCount[iC] && iCount[iC] != 0) {return iRdce}} //if variable count is greater then return unchanged
+			for (iC in iInv) {if (iTemp.split(iInv[iC]).length-1 < iCount[iC] && iCount[iC] != 0) {return iTemp}} //if variable count is smaller then return expanded result
+			
+		}
+		else if (iInv.length == 0) {
+			iTemp = xReduce(xprExpand(iRdce));
+			if (cDissect(iTemp).length < cDissect(iRdce).length) {return iTemp}
+		}
+		return iRdce
     }
     function smxS(xU) { //consolidate sum-difference terms into Sum array Sv, convert subtrahend to negative value: 2a-b+c/d -> [[2a],[-b],[c/d]]
         for (var xI in Sv) {for (var yI=xI;yI<Sv.length;yI++) { //resolve SV dupes
