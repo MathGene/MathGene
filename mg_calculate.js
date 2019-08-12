@@ -1423,6 +1423,7 @@ var mgCalc = function() {
     function cLthS(xU,xL) {return "cLth("+xU+","+xL+")"}
     function cGeqS(xU,xL) {return "cGeq("+xU+","+xL+")"}
     function cLeqS(xU,xL) {return "cLeq("+xU+","+xL+")"}
+    function cBndS(xU,xL) {return "cMul("+xU+","+xL+")"}
     //
 
     function piReduce(xAng) { //normalize degrees/grads to radians
@@ -3381,6 +3382,7 @@ var mgCalc = function() {
         if (getType(xU) == "real") {return trigRound(cDiv(lne(cDiv(cAdd(xU,1),cSub(xU,1))),2))}
         return "undefined"
     }
+    function cBnd(xU,xL) {return cMul(xU,xL)}
 
     //misc functions
     function fac(xU) { //factorial
