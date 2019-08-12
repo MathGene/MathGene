@@ -118,13 +118,13 @@ var mgCalc = function() {
                         rExpr = getOp.upper;
                         strgI = getOp.lower;
                         lExpr = solverMap[getOp.func]["solverU"].replace(/lExpr/,lExpr).replace(/rExpr/,rExpr).replace(/strgI/,strgI).replace(/deeVarP/,deeVarP).replace(/'/g,"");
-                        ineqSwap = cMulS(ineqSwap,strConvert(solverMap[getOp.func]["ineqU"]).replace(/strgI/,strgI));
+                        ineqSwap = cMulS(ineqSwap,String(solverMap[getOp.func]["ineqU"]).replace(/strgI/,strgI));
                     }
                     else if (strTest(getOp.lower,xVar)) {
                         rExpr = getOp.lower;
                         strgI = getOp.upper;
                         lExpr = solverMap[getOp.func]["solverL"].replace(/lExpr/,lExpr).replace(/rExpr/,rExpr).replace(/strgI/,strgI).replace(/deeVarP/,deeVarP).replace(/'/g,"");
-                        ineqSwap = cMulS(ineqSwap,strConvert(solverMap[getOp.func]["ineqL"]).replace(/strgI/,strgI));
+                        ineqSwap = cMulS(ineqSwap,String(solverMap[getOp.func]["ineqL"]).replace(/strgI/,strgI));
                     }
                     else {break}
                 }
@@ -170,7 +170,7 @@ var mgCalc = function() {
         return sReturn
     }
     function relExtract(fExt) { //extract relational operators in FUNC format, returns func,upper,lower
-        fExt = strConvert(fExt);
+        fExt = String(fExt);
         for (var cI in mgTrans.funcMap) {
                 if (mgTrans.funcMap[cI].relop && fExt.indexOf(cI) == 0 ) {
                 var strg = mgTrans.parseParens(fExt,fExt.indexOf("("));
@@ -180,7 +180,7 @@ var mgCalc = function() {
         return {func:"",upper:"",lower:""}
     }
     function opExtract(fExt) {//extract inside function in FUNC format, returns func,upper,lower
-        fExt = strConvert(fExt);
+        fExt = String(fExt);
         var opReturn = {func:"",upper:"",lower:"",third:"",fourth:""}
         var funcKey = fExt.substr(0,fExt.indexOf("("))
         if (funcKey != "" && typeof mgTrans.funcMap[funcKey] != "undefined") {
@@ -191,38 +191,38 @@ var mgCalc = function() {
         return opReturn
     }
     function cDissect(xD) { //return array of all components of expression
-        var xDsect = strConvert(xD);
+        var xDsect = String(xD);
         var tDsect = [],vTmp = "",xV = 0,vCount = 0;
         vCount = xDsect.split("Cv[").length-1;
         for (xV=0;xV<vCount;xV++) { //variables and constants
-            vTmp = strConvert(xDsect.match(/Cv\[\d+\]/));
+            vTmp = String(xDsect.match(/Cv\[\d+\]/));
             vTmp = vTmp.replace(/Cv\[(\d+)\]/,"$1");
             xDsect = xDsect.replace(/Cv\[\d+\]/,"");
             if (varTest(vTmp) || conTest(vTmp)) {if (!strTest(tDsect,"Cv["+vTmp+"]")) {tDsect.push("Cv["+vTmp+"]")}}
         }
         vCount = xDsect.length-1;
         for (xV=0;xV<vCount;xV++) { //decimals
-            vTmp = strConvert(xDsect.match(/\d+\.\d+/));
+            vTmp = String(xDsect.match(/\d+\.\d+/));
             if (vTmp == "null") {break}
             if (!strTest(tDsect,vTmp)) {xDsect = xDsect.replace(vTmp,"");tDsect.push(vTmp)}
         }
         vCount = xDsect.length-1;
         for (xV=0;xV<vCount;xV++) { //integers
-            vTmp = strConvert(xDsect.match(/\(\d+/));
+            vTmp = String(xDsect.match(/\(\d+/));
             if (vTmp == "null") {break}
             if (!strTest(tDsect,vTmp)) {xDsect = xDsect.replace(vTmp,"(");vTmp = vTmp.replace("(","");tDsect.push(vTmp)}
-            vTmp = strConvert(xDsect.match(/\d+\)/));
+            vTmp = String(xDsect.match(/\d+\)/));
             if (vTmp == "null") {break}
             if (!strTest(tDsect,vTmp)) {xDsect = xDsect.replace(vTmp,")");vTmp = vTmp.replace(")","");tDsect.push(vTmp)}            
         }
         return tDsect.sort()
     }
     function cInventory(xI) { //return array of all unique variables
-        var xInv = strConvert(xI);
+        var xInv = String(xI);
         var xVars = [],vTmp = "",xV = 0,vCount = 0;
         vCount = xInv.split("Cv[").length-1;
         for (xV=0;xV<vCount;xV++) {
-            vTmp = strConvert(xInv.match(/Cv\[\d+\]/));
+            vTmp = String(xInv.match(/Cv\[\d+\]/));
             vTmp = vTmp.replace(/Cv\[(\d+)\]/,"$1");
             xInv = xInv.replace(/Cv\[\d+\]/,"");
             if (varTest(vTmp)) {if (!strTest(xVars,"Cv["+vTmp+"]")) {xVars.push("Cv["+vTmp+"]")}}
@@ -230,13 +230,13 @@ var mgCalc = function() {
         return xVars.sort();
     }
     function varTest(iDv) { //test if string is a MG variable (Cv[xxx])
-        iDv = strConvert(iDv);
+        iDv = String(iDv);
         iDv = iDv.replace(/Cv\[(\d+)\]/,"$1");
         if ((iDv > 64 && iDv < 91) || (iDv > 96 && iDv < 123) || (iDv > 10064 && iDv < 10091) || (iDv > 10096 && iDv < 10123) || (iDv > 912 && iDv < 970)) {return true}
         return false
     }
     function conTest(iDv) { //test if string is a MG constant (Cv[xxx])
-        iDv = strConvert(iDv);
+        iDv = String(iDv);
         iDv = iDv.replace(/Cv\[(\d+)\]/,"$1");
         if (iDv >= 0 && iDv <= 46) {return true}
         return false
@@ -276,7 +276,6 @@ var mgCalc = function() {
     function cSubst(sXpr,xI,xO) {sXpr+="";var sCount = sXpr.split(xI).length-1;for (var nXs=0;nXs<sCount;nXs++) {sXpr = sXpr.replace(xI,xO)};return sXpr} //substitution in MG format
     function nbrTest(xT) {if (+xT == +xT*1) {return true}; return false} //test for numerical string
     function nbrEven(xE) {if (cDiv(xE,2) == int(cDiv(xE,2))) {return true};return false} //test for even number
-    function strConvert(xS) {return xS + ""} //convert to string
     function strTest(xTarget,xSearch) { //test if xSearch string is in xTarget
         if (typeof xTarget == "undefined") {return false}
         else if (xTarget == xSearch) {return true}
@@ -301,20 +300,20 @@ var mgCalc = function() {
             if (!strTest(bS,"cPow") && strTest(aS,"cPow")) {return 1}
             else if (!strTest(aS,"cPow") && strTest(bS,"cPow")) {return -1}
             else  {
-                var aP = aS.match(/cPow\(Cv\[\d+\]\,(\d+)\)/)+"",bP = bS.match(/cPow\(Cv\[\d+\]\,(\d+)\)/)+"";
+                var aP = String(aS.match(/cPow\(Cv\[\d+\]\,(\d+)\)/)),bP = String(bS.match(/cPow\(Cv\[\d+\]\,(\d+)\)/));
                 return aP > bP ? 1 : aP < bP ? -1 : 0;
             }
         }
         return aS < bS ? -1 : aS > bS ? 1 : 0;
     }
-    function xprEval(xpr) {xpr = strConvert(xpr);return eval(xpr)}
+    function xprEval(xpr) {'use strict';return eval(String(xpr))}
     
     //Expression reduction
     function xprIterate(xIter) {
-        xIter = strConvert(xIter);
+        xIter = String(xIter);
         if (strTest(xIter,"undefined")) {return "undefined"}
         if (xIter.search(/,,/) > -1 || xIter.search(/,\)/) > -1 || xIter.search(/\(,/) > -1 || xIter.search(/\(\)/) > -1) {return cError("Missing operand(s)")}
-        return strConvert(xprEval(xIter.replace(/([a-z])\(/g,"$1S(").replace(/(Pv\[\d+\])/g,"'$1'").replace(/(Sv\[\d+\])/g,"'$1'").replace(/(Cv\[\d+\])/g,"'$1'")));
+        return String(xprEval(xIter.replace(/([a-z])\(/g,"$1S(").replace(/(Pv\[\d+\])/g,"'$1'").replace(/(Sv\[\d+\])/g,"'$1'").replace(/(Cv\[\d+\])/g,"'$1'")));
     }
     function cReduce(cRdce) { //complete expression reduction
         var sReturn = iReduce(xReduce(cRdce));
@@ -412,17 +411,17 @@ var mgCalc = function() {
                 }
             }
         }
-        tReturn = strConvert(tReturn); //accumulator
+        tReturn = String(tReturn); //accumulator
         var fTempA = 0;//sums accumulator
         var fTempB = 0;//differences accumulator
         var fTempC = 0;//constants of integration accumulator
         for (var xI in sTerms.Terms) {
-            if (strConvert(sTerms.Terms[xI]).search(/Cv\[111\d+\]/) > -1) {fTempC = cAddS(cDivS(cMulS(sTerms.Factors[xI],sTerms.Terms[xI]),sTerms.Divisors[xI]),fTempC)} //collect constants of integration
+            if (String(sTerms.Terms[xI]).search(/Cv\[111\d+\]/) > -1) {fTempC = cAddS(cDivS(cMulS(sTerms.Factors[xI],sTerms.Terms[xI]),sTerms.Divisors[xI]),fTempC)} //collect constants of integration
             else if (+sTerms.Factors[xI] >0) {fTempA = cAddS(cDivS(cMulS(sTerms.Factors[xI],sTerms.Terms[xI]),sTerms.Divisors[xI]),fTempA)} //collect sums
             else {fTempB = cAddS(fTempB,cDivS(cMulS(cNegS(sTerms.Factors[xI]),sTerms.Terms[xI]),sTerms.Divisors[xI]))} //collect differences
         }
         tReturn = cAddS(cAddS(fTempA,cNegS(fTempB)),tReturn);
-        tReturn = strConvert(tReturn);fTempC = strConvert(fTempC);
+        tReturn = String(tReturn);fTempC = String(fTempC);
         tReturn = xprIterate(tReturn.replace(/Sv\[(\d+)\]/g,"smx($1)"));
         tReturn = cAddS(tReturn,fTempC.replace(/Sv\[(\d+)\]/g,"smx($1)"))//constants of integration
         return tReturn
@@ -456,7 +455,7 @@ var mgCalc = function() {
                 }
             }
         }
-        tReturn = strConvert(tReturn); //accumulator
+        tReturn = String(tReturn); //accumulator
         if (strTest(pTerms.Terms,tReturn)) {pTerms.Exp[pTerms.Terms.indexOf(tReturn)] = cAddS(pTerms.Exp[pTerms.Terms.indexOf(tReturn)],1);tReturn = "1"}
         var fTempU = 1,fTempL = 1; //upper and lower accumulators
         for (var xI in pTerms.Terms) { //consolidate terms into accumulaters
@@ -475,19 +474,19 @@ var mgCalc = function() {
         if      (tReturn < -1) {tReturn = cNegS(xprIterate(cDivS(cMulS(cNegS(tReturn),fTempU),fTempL)))} //move negative from numerator to outside
         else if (expFlag) {tReturn = cMulS(cMulS(tReturn,fTempU),"cPow("+fTempL+",-1)")} //use negative power for denominator if neccesary
         else    {tReturn = cDivS(cMulS(tReturn,fTempU),fTempL)}
-        tReturn = strConvert(tReturn);
+        tReturn = String(tReturn);
         tReturn = xprIterate(tReturn.replace(/Pv\[(\d+)\]/g,"pxp($1)"));
         return tReturn
     }
     function SvTest(xTest) {if (xTest == "Sv["+(Sv.length-1)+"]") {return true};return false}
     function PvTest(xTest) {if (xTest == "Pv["+(Pv.length-1)+"]") {return true};return false}
     function SvPointer(xP) { //resolve SV pointers
-        var svTemp = strConvert(xP).match(/Sv\[\d+\]/);
+        var svTemp = String(xP).match(/Sv\[\d+\]/);
         if (xP == svTemp && svTemp != "Sv["+(Sv.length-1)+"]") {return Sv[xP.match(/\d+/)]}
         return [xP]
     }
     function PvPointer(xP) { //resolve PV pointers
-        var svTemp = strConvert(xP).match(/Pv\[\d+\]/);
+        var svTemp = String(xP).match(/Pv\[\d+\]/);
         if (xP == svTemp && svTemp != "Pv["+(Pv.length-1)+"]") {return Pv[xP.match(/\d+/)]}
         return [xP]
     }
@@ -566,7 +565,7 @@ var mgCalc = function() {
             if (typeof xL != "undefined" && xL != "" && xTractL.func != "cMul" && xTractL.func != "cNeg") {nTerms.push(xL)}
         }
         var nTerms = [],strg = [];
-        var xprTerms = strConvert(xP);
+        var xprTerms = String(xP);
         var xTractU = opExtract(xprTerms);
         if (xTractU.func != "cMul" && xTractU.func != "cNeg") {return [xprTerms]}
         strg = mgTrans.parseParens(xprTerms,xprTerms.indexOf("cMul("));
@@ -580,7 +579,7 @@ var mgCalc = function() {
             if (!strTest(xP,"cAdd") && !strTest(xP,"cSub")) {nTerms.push(xP)}
             else {return [xP]}
         }   
-        var xprTerms = strConvert(xP),strg = [],bSym = 0,aSym = 0;
+        var xprTerms = String(xP),strg = [],bSym = 0,aSym = 0;
         var sCount = xprTerms.split("cAdd(").length-1 + xprTerms.split("cSub(").length-1
         for (var iXf=0;iXf<sCount;iXf++) {
             aSym = xprTerms.lastIndexOf("cAdd(");
@@ -640,7 +639,7 @@ var mgCalc = function() {
         return xReduce(xReturn)
     }
     function pVariable(vP) { //ID dominant polynomial variable
-        vP = strConvert(vP);
+        vP = String(vP);
         var pTest = [],vReturn = "",vInv = cInventory(vP);
         for (var nXs in vInv) {
             var vTmp = vInv[nXs];
@@ -911,7 +910,7 @@ var mgCalc = function() {
         if (xTractL.func == "cNeg") {return cSubS(xU,xTractL.upper)}
         if (xTractL.func == "cMul" && xTractL.upper < 0) {return cSubS(xU,cMulS(cNegS(xTractL.upper),xTractL.lower))}
         if (xTractU.func == "cMul" && xTractU.upper < 0) {return cSubS(xL,cMulS(cNegS(xTractU.upper),xTractU.lower))}
-        if (xTractU.func == "cNeg" && strConvert(xL).search(/Cv\[111\d+\]/) == -1) {return cSubS(xL,xTractU.upper)} //constants of integration
+        if (xTractU.func == "cNeg" && String(xL).search(/Cv\[111\d+\]/) == -1) {return cSubS(xL,xTractU.upper)} //constants of integration
         if (nbrTest(xU) && xTractL.func == "cDiv" && nbrTest(xTractL.upper) && nbrTest(xTractL.lower)) {return cDivS(cAddS(cMulS(xU,xTractL.lower),xTractL.upper),xTractL.lower)}
         if (nbrTest(xL) && xTractU.func == "cDiv" && nbrTest(xTractU.upper) && nbrTest(xTractU.lower)) {return cDivS(cAddS(cMulS(xL,xTractU.lower),xTractU.upper),xTractU.lower)}
         if (!pxpFlag && xTractU.func == "cDiv" && xTractL.func == "cDiv" && xTractU.lower == xTractL.lower) {return "cDiv(cAdd("+xTractU.upper+","+xTractL.upper+"),"+xTractU.lower+")"}
@@ -1443,7 +1442,7 @@ var mgCalc = function() {
 
     //Calculus
     function parseCalculus(dExp) { //parse calculus from MG format to FUNC: d/dx(x^2) = idr(x)x^2 -> drv(x^2,x)
-        dExp = strConvert(dExp);
+        dExp = String(dExp);
         var dSplit = dExp.split("=");
         if (dSplit.length > 1) {
             var dReturn = ""
@@ -2198,7 +2197,7 @@ var mgCalc = function() {
     }
     //
     function xprExpand(xE) { //expand (defactor) expression
-        var xReturn = strConvert(xE);
+        var xReturn = String(xE);
         xReturn = xReduce(xprEval(xReturn.replace(/([a-z])\(/g,"$1S(").replace(/(Cv\[\d+\])/g,"'$1'").replace(/sqtS/g,"sqtX").replace(/cPowS/g,"cPowX").replace(/cMulS/g,"cMulX").replace(/cDivS/g,"cDivX").replace(/cAddS/g,"cAddX").replace(/cSubS/g,"cSubX")));
         xReturn = xReturn.replace(/cnt\(/g,"(");
         if (!strTest("undefined",xReturn)) {return xReturn}
@@ -2229,7 +2228,7 @@ var mgCalc = function() {
     function athE(xU) {return cDivS(cMulS(lneS(cAddS(1,xU)),lneS(cSubS(1,xU))),"2")}
     //
     function xprTrigToExp(xU) { //convert trig to exponential forms
-        var xReturn = strConvert(xU).replace(/([a-z])\(/g,"$1S(");
+        var xReturn = String(xU).replace(/([a-z])\(/g,"$1S(");
         for (var xFn in mgTrans.funcMap) {if (mgTrans.funcMap[xFn].trig) {var rgx = new RegExp(xFn+"S","g");xReturn = xReturn.replace(rgx,xFn+"E")}}
         return xReduce(xprEval(xReturn.replace(/(Cv\[\d+\])/g,"'$1'")))
     }
@@ -2338,7 +2337,7 @@ var mgCalc = function() {
     }
     //
     function lmtS(lXpr,lVar,xLim) {
-        xLim = strConvert(xLim);
+        xLim = String(xLim);
         var sReturn = xReduce(lXpr);
         if (sReturn == lVar) {return xLim}
         var args = opExtract(sReturn);
@@ -2462,7 +2461,7 @@ var mgCalc = function() {
         var pfTerms = parseTerms(fTrm);
         pfTerms.sort(
             function(aS,bS){
-                aS = strConvert(aS);bS = strConvert(bS);
+                aS = String(aS);bS = String(bS);
                 if (strTest(aS,"cAdd") && !strTest(bS,"cAdd") && !strTest(bS,"cSub")) {return 1}
                 if (strTest(aS,"cSub") && !strTest(bS,"cSub") && !strTest(bS,"cAdd")) {return 1}
                 if (!strTest(aS,"cAdd") && !strTest(aS,"cSub") && strTest(bS,"cAdd")) {return -1}
@@ -2564,7 +2563,7 @@ var mgCalc = function() {
         function ntpR(nXpr,deeVar,iU,iL) {return ntpS(nXpr,deeVar,iU,iL)}
         function matR() {return "mat(" + Array.prototype.slice.call(arguments) + ")"}
         //
-        xR = strConvert(xR);
+        xR = String(xR);
         var xRang = "",dArray = [],xArray = [];
         if (strTest(xR,"=")) {xRang = mgTrans.cFunc(xR.split("=")[1])}
         else {xRang = mgTrans.cFunc(xR)}
@@ -2619,7 +2618,7 @@ var mgCalc = function() {
             return "Cv[9999]"
         }
         //
-        xD = strConvert(xD);
+        xD = String(xD);
         var iV = 0,realVars = [],integerVars = [],dString = "",rString = "",iString = "";
         if (strTest(xD,"=")) {xDom = mgTrans.cFunc(xD.split("=")[1])}
         else {xDom = mgTrans.cFunc(parseCalculus(xD))}
@@ -2744,7 +2743,7 @@ var mgCalc = function() {
         difM: function(xU) {return "undefined"},
         }
         //
-        sXpr = strConvert(sXpr);sUpper = strConvert(sUpper);dV = strConvert(dV);sLower = strConvert(sLower);
+        sXpr = String(sXpr);sUpper = String(sUpper);dV = String(dV);sLower = String(sLower);
         var sReturn = "smm("+xReduce(sXpr)+","+sUpper+","+dV+","+sLower+")";
         sIterations++;
         if (sIterations > 30) {sReturn = "smm("+sXpr+","+sUpper+","+dV+","+sLower+")"} //break infinite loop
@@ -2845,7 +2844,7 @@ var mgCalc = function() {
         difP: function(xU) {return "undefined"},
         }
         //
-        pXpr = strConvert(pXpr);pUpper = strConvert(pUpper);dV = strConvert(dV);pLower = strConvert(pLower);
+        pXpr = String(pXpr);pUpper = String(pUpper);dV = String(dV);pLower = String(pLower);
         pIterations++;
         var sReturn = "pmm("+xReduce(pXpr)+","+pUpper+","+dV+","+pLower+")";
         if (pIterations > 30) {sReturn = "pmm("+pXpr+","+pUpper+","+dV+","+pLower+")"} //break infinite loop
@@ -2905,7 +2904,7 @@ var mgCalc = function() {
     }
     function roundDecTo(xD,xT) { //round decimal to xT digits
         function expNotation(xN) { //format number in N.NNe+-x
-            xN = strConvert(xN);
+            xN = String(xN);
             var sgn = "",tmp = 0;
             if (xN == "0") {return xN}
             for (var iSc=-323;iSc<308;iSc++) {
@@ -2917,7 +2916,7 @@ var mgCalc = function() {
         if (typeof xT == "undefined" ) {xT = mgConfig.dPrecision}
         if (xD == "NaN" || xD == "-Infinity" || xD == "Infinity") {return xD}
         if (+(xD) < 1 || xD >= 1e12) {xD = expNotation(xD)}
-        xD = strConvert(xD);
+        xD = String(xD);
         var yD = xD.replace(/.*\./,"");
         yD = yD.replace(/e.*/,"")+"000000000000000000";
         var zD = rou(cDiv(yD.substring(xT-1,xT+1),10));

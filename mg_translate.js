@@ -1624,7 +1624,7 @@ var mgTrans = function() {
     fAccentL: function (xB) {return "<Xfnc></span><span style='display:table-row;line-height:20%;font-size:60%'>"+xB+"</span></span></span>"},
     cMulL: function (xU,xL) {
         if (xL.indexOf("<Xfnc>") == 0) {return xU+" "+xL}
-        return xU+""+xL
+        return xU + "" + xL
         },
     cDivL: function (xU,xL) {
         if (mgConfig.divSymbol == "Slash") {return xU+"/"+xL}
@@ -1697,7 +1697,7 @@ var mgTrans = function() {
         if (typeof xA[0] == "string" && xA[0].substr(0,6) == "<Xrow>"){
             for (iM in xA) {
                 xA[iM] = xA[iM].replace(/\<Xrow\>/g,"").replace(/\<Xrwe\>/g,"").replace(/\<Xcel\>/g,"<td>").replace(/\<Xcle\>/g,"</td>");
-                dScale = dScale + dNest(xA+"")*(mgConfig.divScale/100)
+                dScale = dScale + dNest(String(xA))*(mgConfig.divScale/100)
                 mReturn = mReturn + "<tr>" + xA[iM] + "</tr>"
                 prefix = prefix+"<Xdiv>";
                 suffix = suffix+"<Xdve>";
@@ -1904,7 +1904,7 @@ var mgTrans = function() {
         htmlXpr = dFunc(htmlXpr, "html") //process functions
         //render symbols
         sCount = strCount(htmlXpr,"Cv[");
-        for (nXs=0;nXs<sCount;nXs++) {htmlXpr = htmlXpr.replace(/Cv\[\d+\]/,Cs[(htmlXpr.match(/Cv\[\d+\]/)+"").replace(/Cv\[(\d+)\]/,"$1")])} //resolve Cv[] symbols
+        for (nXs=0;nXs<sCount;nXs++) {htmlXpr = htmlXpr.replace(/Cv\[\d+\]/,Cs[(String(htmlXpr.match(/Cv\[\d+\]/))).replace(/Cv\[(\d+)\]/,"$1")])} //resolve Cv[] symbols
         //scale and fix parens
         htmlXpr = htmlXpr.replace(/\(/g,"{").replace(/\)/g,"}");
         sCount = strCount(htmlXpr,"{");
@@ -1937,7 +1937,7 @@ var mgTrans = function() {
     }
     //
     function mgExport(funcIn) { //export from FUNC to MG format
-        var mgReturn = funcIn+"";
+        var mgReturn = String(funcIn);
         if (mgReturn == "NaN" || mgReturn == "undefined") {return "undefined"}
         mgReturn += "";
         mgReturn = mgReturn.replace(/\,\)/g,",'')").replace(/\(\,/g,"('',").replace(/\,\,/g,",'',").replace(/\(\)/g,"('')");
@@ -1989,7 +1989,7 @@ var mgTrans = function() {
     //
     function cFunc(mgIn) { //convert from MG format to FUNC format: a+bc/d -> cAdd(a,cDiv(cMul(b,c),d)))
         var nCf = 0,iXX = 0,key = 0,sbtOperand = "",cIdx = 0,aIdx = 0,sCount = 0;
-        funcReturn = mgIn+"";
+        funcReturn = String(mgIn);
         sCount = strCount(funcReturn,"]sbt(");//var&subscripts into container cnt()
         funcReturn = funcReturn.replace(/\]sbt\(/g,"]SBT(");
         funcReturn = funcReturn.replace(/Infinity/g,"Cv[8734]");
@@ -2094,7 +2094,7 @@ var mgTrans = function() {
     }
     // latex conversions
     function texExport(mgIn) { //convert MG format to LaTeX
-        var lxReturn = mgIn+"";
+        var lxReturn = String(mgIn);
         if (lxReturn == "NaN" || lxReturn == "undefined") {return "undefined"}
         lxReturn = cFunc(lxReturn); //convert to func format
         lxReturn = dFunc(lxReturn, "latex"); //process functions
@@ -2123,7 +2123,7 @@ var mgTrans = function() {
         lxReturn = lxReturn.replace(/\<X\w\w\w\>/g,"").replace(/\%/g,"("); //clean up tags
         //resolve symbols
         sCount = strCount(lxReturn,"Cv[");
-        for (var nXf=0;nXf<sCount;nXf++) {lxReturn = lxReturn.replace(/Cv\[\d+\]/,Ct[(lxReturn.match(/Cv\[\d+\]/)+"").replace(/Cv\[(\d+)\]/,"$1")])} //resolve Cv[] symbols
+        for (var nXf=0;nXf<sCount;nXf++) {lxReturn = lxReturn.replace(/Cv\[\d+\]/,Ct[(String(lxReturn.match(/Cv\[\d+\]/))).replace(/Cv\[(\d+)\]/,"$1")])} //resolve Cv[] symbols
         lxReturn = lxReturn.replace(/\(/g,"\\left(").replace(/\)/g,"\\right)").replace(/\\/g," \\").replace(/  /g," ").replace(/ _/g,"_").replace(/_ /g,"_").replace(/ \^/g,"^").replace(/\^ /g,"^").replace(/ \[/g,"[").replace(/\\ \\/g,"\\\\");//cleanup
         return lxReturn;
     }
@@ -2142,7 +2142,7 @@ var mgTrans = function() {
             return "mat(" + mReturn + ")"
         }
         //
-        var liReturn = latIn+"";
+        var liReturn = String(latIn);
         const lBrackets = ["{","[","|"];
         const rBrackets = ["}","]","|"];
         var sCount = 0,symTemp = "",tTemp = "",funcKey = 0,nXs = 0,nXf = 0,nXi = 0,xF = 0,operand = {},texFunc = "";
