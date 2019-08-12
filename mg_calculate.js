@@ -347,8 +347,8 @@ var mgCalc = function() {
             for (iC in iInv) {if (iTemp.split(iInv[iC]).length-1 < iCount[iC] && iCount[iC] != 0) {return iTemp}} //if variable count is smaller then return expanded result
             
         }
-        else if (iInv.length == 0) {
-            iTemp = xReduce(xprExpand(iRdce));
+        else if (iInv.length == 0) { //no variables
+            iTemp = xReduce(xReduce(xprExpand(iRdce)));
             if (cDissect(iTemp).length < cDissect(iRdce).length) {return iTemp}
         }
         return iRdce
