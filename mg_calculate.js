@@ -336,9 +336,8 @@ var mgCalc = function() {
     }
     function iReduce(iRdce) { //reduce by iterative expansion
         var iInv = cInventory(iRdce),iCount = [],iTemp = "",xFlag = false,iC = 0;
-        //count the number of occurrences of each variable, if any greater than 1, run expansion
-        for (iC in iInv) {
-            iCount[iC] = iRdce.split(iInv[iC]).length-1
+        for (iC in iInv) { //count the number of occurrences of each variable, if any greater than 1, run expansion
+            iCount[iC] = iRdce.split(iInv[iC]).length-1;
             if (iCount[iC] > 1) {xFlag = true}
         }
         if (xFlag) {
@@ -348,7 +347,7 @@ var mgCalc = function() {
         }
         else if (iInv.length == 0 && cDissect(iRdce).length > 2) { //no variables
             iTemp = xReduce(xReduce(xprExpand(iRdce)));
-            if (cDissect(iTemp).length < cDissect(iRdce).length) {return iTemp}
+            if (cDissect(iTemp).length < cDissect(iRdce).length) {return iTemp} //if total element count is smaller, return expanded result
         }
         return iRdce
     }
@@ -547,6 +546,16 @@ var mgCalc = function() {
         return "Pv["+(Pv.length-1)+"]";
     }
     //Polynomials
+    function aGcf(xG){ //find GCF of integer array
+        var tGcf = new Array(xG.length), xI = 0;
+        for (xI in xG) {tGcf[xI]= xG[xI]}
+        tGcf = tGcf.sort(function(aS,bS){return abs(aS) > abs(bS) ? -1 : abs(aS) < abs(bS) ? 1 : 0;})[0];//find largest coeff
+        for (xI in xG) {
+            if (!nbrTest(xG[xI]) || xG[xI] != int(xG[xI]) || typeof xG[xI] == "undefined") {return 1}
+            if (xG[xI] != 0) {tGcf = cGcf(tGcf,xG[xI])}
+        }
+        return tGcf
+    }
     function parseTerms(xP) { //parse terms into elements array
         function pMulS(xU,xL) {
             var xTractU = opExtract(xU);
@@ -590,16 +599,6 @@ var mgCalc = function() {
             }       
         }
         return nTerms.sort(function(aS,bS){return sortTerms(aS,bS)})
-    }
-    function aGcf(xG){ //find GCF of integer array
-        var tGcf = new Array(xG.length), xI = 0;
-        for (xI in xG) {tGcf[xI]= xG[xI]}
-        tGcf = tGcf.sort(function(aS,bS){return abs(aS) > abs(bS) ? -1 : abs(aS) < abs(bS) ? 1 : 0;})[0];//find largest coeff
-        for (xI in xG) {
-            if (!nbrTest(xG[xI]) || xG[xI] != int(xG[xI]) || typeof xG[xI] == "undefined") {return 1}
-            if (xG[xI] != 0) {tGcf = cGcf(tGcf,xG[xI])}
-        }
-        return tGcf
     }
     function pNomial(pN,pVar) { //parse polynomial into ranked array
         var pnTerms = [],pReturn = [],pDegree = 0,pD = 0;
@@ -882,7 +881,7 @@ var mgCalc = function() {
         if (pxpFlag && xTractU.func == "cSub" && (factorFlag)) {return cSubS(cDivS(xTractU.upper,xL),cDivS(xTractU.lower,xL))}
         if (pxpFlag && xTractU.func == "cAdd" && (pNomial(xL).length < 2 || xTractL.func == "cMul")) {return cAddS(cDivS(xTractU.upper,xL),cDivS(xTractU.lower,xL))}
         if (pxpFlag && xTractU.func == "cSub" && (pNomial(xL).length < 2 || xTractL.func == "cMul")) {return cSubS(cDivS(xTractU.upper,xL),cDivS(xTractU.lower,xL))}
-        if ((xTractL.func == "cAdd" || xTractL.func == "cSub") && !pxpFlag && !factorFlag) {return pDivide(xU,xL)}
+        //if ((xTractL.func == "cAdd" || xTractL.func == "cSub") && !pxpFlag && !factorFlag) {return pDivide(xU,xL)}
         return "cDiv("+xU+","+xL+")"
     }
     function cAddS(xU,xL) { //add xU+xL
