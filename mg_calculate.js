@@ -170,12 +170,11 @@ var mgCalc = function() {
         return sReturn
     }
     function relExtract(fExt) { //extract relational operators in FUNC format, returns func,upper,lower
-        const rOps = ["cEql","cGth","cGeq","cLth","cLeq","cNql"];
         fExt = strConvert(fExt);
-        for (var cI in rOps) {
-            if (fExt.indexOf(rOps[cI]) == 0 ) {
+        for (var cI in mgTrans.funcMap) {
+                if (mgTrans.funcMap[cI].relop && fExt.indexOf(cI) == 0 ) {
                 var strg = mgTrans.parseParens(fExt,fExt.indexOf("("));
-                return {func:rOps[cI],upper:strg.upper,lower:strg.lower}
+                return {func:cI,upper:strg.upper,lower:strg.lower}
             }
         }
         return {func:"",upper:"",lower:""}
@@ -202,15 +201,19 @@ var mgCalc = function() {
             if (varTest(vTmp) || conTest(vTmp)) {if (!strTest(tDsect,"Cv["+vTmp+"]")) {tDsect.push("Cv["+vTmp+"]")}}
         }
         vCount = xDsect.length-1;
-        for (xV=0;xV<vCount;xV++) {
-            vTmp = strConvert(xDsect.match(/\d+\.\d+/)); //decimals
+        for (xV=0;xV<vCount;xV++) { //decimals
+            vTmp = strConvert(xDsect.match(/\d+\.\d+/));
             if (vTmp == "null") {break}
-            if (!strTest(tDsect,vTmp)) {xDsect = xDsect.replace(/\d+\.\d+/,"");tDsect.push(vTmp)}
+            if (!strTest(tDsect,vTmp)) {xDsect = xDsect.replace(vTmp,"");tDsect.push(vTmp)}
         }
-        for (xV=0;xV<vCount;xV++) {
-            vTmp = strConvert(xDsect.match(/\d+/)); //integers
+        vCount = xDsect.length-1;
+        for (xV=0;xV<vCount;xV++) { //integers
+            vTmp = strConvert(xDsect.match(/\(\d+/));
             if (vTmp == "null") {break}
-            if (!strTest(tDsect,vTmp)) {xDsect = xDsect.replace(/\d+/,"");tDsect.push(vTmp)}
+            if (!strTest(tDsect,vTmp)) {xDsect = xDsect.replace(vTmp,"(");vTmp = vTmp.replace("(","");tDsect.push(vTmp)}
+            vTmp = strConvert(xDsect.match(/\d+\)/));
+            if (vTmp == "null") {break}
+            if (!strTest(tDsect,vTmp)) {xDsect = xDsect.replace(vTmp,")");vTmp = vTmp.replace(")","");tDsect.push(vTmp)}            
         }
         return tDsect.sort()
     }
@@ -332,14 +335,19 @@ var mgCalc = function() {
         return xRdce
     }
     function iReduce(iRdce) { //reduce by iterative expansion
-        var iInv = cDissect(iRdce),iCount = [],xFlag = true,iC = 0;
-        //count the number of occurrences of each element, if any greater than 1, run expansion
-        for (iC in iInv) {if (nbrTest(iInv[iC]) || !iInv[iC] || !varTest(iInv[iC])) {iCount[iC] = 0} else {iCount[iC] = iRdce.split(iInv[iC]).length-1};if (iCount[iC] > 1) {xFlag = false}}
-        if (xFlag) {return iRdce}
-        var iTemp = xReduce(xprExpand(iRdce));
-        for (iC in iInv) {
-            if (iTemp.split(iInv[iC]).length-1 > iCount[iC] && iCount[iC] != 0) {break} //if element count is greater then return unchanged
-            if (iTemp.split(iInv[iC]).length-1 < iCount[iC] && iCount[iC] != 0) {return iTemp} //if element count is smaller then return expanded result
+        var iInv = cInventory(iRdce),iCount = [],iTemp = "",xFlag = false,iC = 0;
+        for (iC in iInv) { //count the number of occurrences of each variable, if any greater than 1, run expansion
+            iCount[iC] = iRdce.split(iInv[iC]).length-1;
+            if (iCount[iC] > 1) {xFlag = true}
+        }
+        if (xFlag) {
+            iTemp = xReduce(xprExpand(iRdce));
+            for (iC in iInv) {if (iTemp.split(iInv[iC]).length-1 > iCount[iC] && iCount[iC] != 0) {return iRdce}} //if variable count is greater then return unchanged
+            for (iC in iInv) {if (iTemp.split(iInv[iC]).length-1 < iCount[iC] && iCount[iC] != 0) {return iTemp}} //if variable count is smaller then return expanded result
+        }
+        else if (iInv.length == 0 && cDissect(iRdce).length > 2) { //no variables
+            iTemp = xReduce(xReduce(xprExpand(iRdce)));
+            if (cDissect(iTemp).length < cDissect(iRdce).length) {return iTemp} //if total element count is smaller, return expanded result
         }
         return iRdce
     }
@@ -538,6 +546,16 @@ var mgCalc = function() {
         return "Pv["+(Pv.length-1)+"]";
     }
     //Polynomials
+    function aGcf(xG){ //find GCF of integer array
+        var tGcf = new Array(xG.length), xI = 0;
+        for (xI in xG) {tGcf[xI]= xG[xI]}
+        tGcf = tGcf.sort(function(aS,bS){return abs(aS) > abs(bS) ? -1 : abs(aS) < abs(bS) ? 1 : 0;})[0];//find largest coeff
+        for (xI in xG) {
+            if (!nbrTest(xG[xI]) || xG[xI] != int(xG[xI]) || typeof xG[xI] == "undefined") {return 1}
+            if (xG[xI] != 0) {tGcf = cGcf(tGcf,xG[xI])}
+        }
+        return tGcf
+    }
     function parseTerms(xP) { //parse terms into elements array
         function pMulS(xU,xL) {
             var xTractU = opExtract(xU);
@@ -581,16 +599,6 @@ var mgCalc = function() {
             }       
         }
         return nTerms.sort(function(aS,bS){return sortTerms(aS,bS)})
-    }
-    function aGcf(xG){ //find GCF of integer array
-        var tGcf = new Array(xG.length), xI = 0;
-        for (xI in xG) {tGcf[xI]= xG[xI]}
-        tGcf = tGcf.sort(function(aS,bS){return abs(aS) > abs(bS) ? -1 : abs(aS) < abs(bS) ? 1 : 0;})[0];//find largest coeff
-        for (xI in xG) {
-            if (!nbrTest(xG[xI]) || xG[xI] != int(xG[xI]) || typeof xG[xI] == "undefined") {return 1}
-            if (xG[xI] != 0) {tGcf = cGcf(tGcf,xG[xI])}
-        }
-        return tGcf
     }
     function pNomial(pN,pVar) { //parse polynomial into ranked array
         var pnTerms = [],pReturn = [],pDegree = 0,pD = 0;
@@ -1333,7 +1341,7 @@ var mgCalc = function() {
     function achS(xU) {//acosh
         var xTractU = opExtract(xU);
         if (xU == 0 && mgConfig.Domain == "Complex") {return "cMul(cDiv(Cv[46],2),Cv[29])"}
-		if (xU == 0 && mgConfig.Domain == "Real") {return "undefined"}
+        if (xU == 0 && mgConfig.Domain == "Real") {return "undefined"}
         if (xTractU.func == "csh") {return xTractU.upper}
         return "ach("+xU+")"
     }
@@ -1358,7 +1366,7 @@ var mgCalc = function() {
     function azhS(xU) {//acoth
         var xTractU = opExtract(xU);
         if (xU == 0 && mgConfig.Domain == "Complex") {return "cMul(cDiv(Cv[46],2),Cv[29])"}
-		if (xU == 0 && mgConfig.Domain == "Real") {return "undefined"}
+        if (xU == 0 && mgConfig.Domain == "Real") {return "undefined"}
         if (xTractU.func == "cth") {return xTractU.upper}
         return "azh("+xU+")"
     }
@@ -2198,7 +2206,6 @@ var mgCalc = function() {
     }
 
     //Exponential trig conversion
-    const trigFn = ["sin","cos","tan","sec","csc","cot","snh","csh","tnh","sch","cch","cth","asn","acs","atn","asc","acc","act","ash","ach","ath"]
     function sinE(xU) {return cDivS(cSubS(cPowS("Cv[8]",cMulS("Cv[46]",xU)),cPowS("Cv[8]",cMulS(cNegS("Cv[46]"),xU))),cMulS("2","Cv[46]"))}
     function cosE(xU) {return cDivS(cAddS(cPowS("Cv[8]",cMulS("Cv[46]",xU)),cPowS("Cv[8]",cMulS(cNegS("Cv[46]"),xU))),"2")}
     function tanE(xU) {return cDivS(cSubS(cPowS("Cv[8]",cMulS("Cv[46]",xU)),cPowS("Cv[8]",cMulS(cNegS("Cv[46]"),xU))),cMulS("Cv[46]",cAddS(cPowS("Cv[8]",cMulS("Cv[46]",xU)),cPowS("Cv[8]",cMulS(cNegS("Cv[46]"),xU)))))  }
@@ -2223,7 +2230,7 @@ var mgCalc = function() {
     //
     function xprTrigToExp(xU) { //convert trig to exponential forms
         var xReturn = strConvert(xU).replace(/([a-z])\(/g,"$1S(");
-        trigFn.forEach(function(xFn) {var rgx = new RegExp(xFn+"S","g");xReturn = xReturn.replace(rgx,xFn+"E")})
+        for (var xFn in mgTrans.funcMap) {if (mgTrans.funcMap[xFn].trig) {var rgx = new RegExp(xFn+"S","g");xReturn = xReturn.replace(rgx,xFn+"E")}}
         return xReduce(xprEval(xReturn.replace(/(Cv\[\d+\])/g,"'$1'")))
     }
     function xprExpToTrig(xU) { //convert exponential forms to trig
