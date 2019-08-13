@@ -2273,6 +2273,7 @@ var mgTrans = function() {
         Cu:         Cu,
         Cd:         Cd,
         configCheck:function() {configCheck()},
+		strCount:   function(xTarget,xSearch) {return strCount(xTarget,xSearch)},
         parseParens:function(xB,bSym) {return parseParens(xB,bSym)},
         parseArgs:  function(parm) {return parseArgs(parm)},
         cFunc:      function(parm) {return cFunc(parm)},

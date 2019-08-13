@@ -258,17 +258,6 @@ var range =
 
 ];
 
-var domain =
-[
-"lim(Cv[10120],Cv[8734])(2Cv[10120]^3+4Cv[10120]^2)/(3Cv[10120]^3+1)","Cv[10120]Cv[8712]Cv[8477]",
-"itg(Cv[10097],0)Cv[10120]^2Cv[8748]Cv[10120]","Cv[10120]Cv[8712]Cv[8450]Cv[59]Cv[10097]Cv[8712]Cv[8477]",
-"itg(Cv[10097],Cv[10098])Cv[10120]^2Cv[8748]Cv[10120]","Cv[10120]Cv[8712]Cv[8450]Cv[59]Cv[10097]Cv[10044]Cv[10098]Cv[8712]Cv[8477]",
-"sum(Cv[8734],Cv[10120]Cv[61]1)(1/Cv[10120]^2)","Cv[10120]Cv[8712]Cv[8484]",
-"sum(Cv[8734],Cv[10120]Cv[61]1)(Cv[10121]/Cv[10120]^2)","Cv[10121]Cv[8712]Cv[8450]Cv[59]Cv[10120]Cv[8712]Cv[8484]",
-"prd(Cv[10097],Cv[10120]Cv[61]Cv[10098])-Cv[10120]","Cv[10097]Cv[10044]Cv[10098]Cv[10044]Cv[10120]Cv[8712]Cv[8484]",
-"mat(mat(Cv[10120],Cv[10121]))*mat(mat(Cv[10120]),mat(Cv[10121]))","Cv[10120]Cv[10044]Cv[10121]Cv[8712]Cv[8450]",
-];
-
 var matrix =
 [
 "mat(mat(1,2,3),mat(4,5,6))","mat(mat(1,2,3),mat(4,5,6))",
@@ -2148,7 +2137,6 @@ var testList =
 
 "Numerical": "runNumerical()",
 "Range": "runRange()",
-"Domain": "runDomain()",
 "Matrix": "runMatrix()",
 "Reduce": "runReduce()",
 "Factor": "runFactor()",
@@ -2211,22 +2199,6 @@ function runRange() {
 		}
 		else {
 			runTest(mgTrans.Translate(range[index]).html,mgCalc.Range(range[index]).html,mgTrans.Translate(range[index+1]).html)
-		}
-    }
-    toOutput()
-}
-function runDomain() {
-    setTitle("Domain Tests 'mgCalc.Domain()'")
-    increment = 2;
-    degree = 1;
-    for (index=0;index<domain.length;index+=increment) {
-		if (nodejs) {
-			const rceivd = mgCalc.Domain(domain[index]).html;
-			const xpectd = mgTrans.Translate(domain[index+1]).html;
-			test("Domain:"+domain[index], function () {return expect(rceivd).toBe(xpectd)})	
-		}
-		else {
-			runTest(mgTrans.Translate(domain[index]).html,mgCalc.Domain(domain[index]).html,mgTrans.Translate(domain[index+1]).html)
 		}
     }
     toOutput()
