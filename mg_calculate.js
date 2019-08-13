@@ -3575,8 +3575,8 @@ var mgCalc = function() {
     function iSolve(expr,result,nL,nH) {//iterative solver
         var result = toReal(result);
         if (getType(result) != "real") {return "undefined"}
-        if (getType(nL) != "real") {nL = 1e-322}
-        if (getType(nH) != "real") {nH = 1e301}
+        if (typeof nL =="undefined") {nL = -1e10}
+        if (typeof nH =="undefined") {nH = 1e10}
         var t1 = 0, iSlv = nH, ix = 0;
         for (ix=1;ix<100;ix++) {
             iSlv = (nH+nL)/2;
