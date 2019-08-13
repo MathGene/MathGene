@@ -2062,13 +2062,13 @@ var mgTrans = function() {
             if (typeof funcMap[key][fnformat] == "function") {return funcMap[key][fnformat](parm,strg)}
             return funcMap[key][fnformat]
         }
-        //
-        expReturn = funcIn.replace(/ /g,"").replace(/([a-z][a-z][a-z])\(/ig,"$1@"); //mark left parens with @
-        var sCount = strCount(expReturn,"@");
-        var bSym = 0, lSym = 0,lPar = 0,rPar = 0,iXf = 0,payload = "",paramS = "",funcKey = "",rTmp = "",fnformatL = "",fnformatR = "",fnformatLx = "",nXf = 0;
+        // 
+        var bSym = 0, lSym = 0,lPar = 0,rPar = 0,iXf = 0,nXf = 0,sCount = 0,payload = "",paramS = "",funcKey = "",rTmp = "",fnformatL = "",fnformatR = "",fnformatLx = "",expReturn = "";
         if (prefix == "mg") {fnformatL = prefix;fnformatR = prefix}
         else if (mgConfig.fnFmt == "fn(x)") {fnformatL = prefix+"L1";fnformatR = prefix+"R1"} //fn(x)
         else {fnformatL = prefix+"L2";fnformatR = prefix+"R2"}  //fn x
+        expReturn = funcIn.replace(/ /g,"").replace(/([a-z][a-z][a-z])\(/ig,"$1@"); //mark left parens with @
+        sCount = strCount(expReturn,"@");
         for (nXf=0;nXf<sCount;nXf++) {
             fnformatLx = fnformatL;
             lPar = 1,rPar = 0,iXf = 0,rTmp = "";
@@ -2274,6 +2274,7 @@ var mgTrans = function() {
         Cd:         Cd,
         configCheck:function() {configCheck()},
         parseParens:function(xB,bSym) {return parseParens(xB,bSym)},
+        parseArgs:  function(parm) {return parseArgs(parm)},
         cFunc:      function(parm) {return cFunc(parm)},
         mgExport:   function(parm) {return mgExport(parm)},
         htmlExport: function(parm) {return htmlExport(parm)},
