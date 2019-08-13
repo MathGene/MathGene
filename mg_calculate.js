@@ -3513,7 +3513,7 @@ var mgCalc = function() {
     function finD1(fT,fR,fK,fS,fQ,sDv){return (lne(fS/fK)+((fR/mgConfig.pctFactor)-(fQ/mgConfig.pctFactor)+.5*cPow(sDv,2))*fT)/(sDv*sqt(fT))}
     function finD2(fT,fR,fK,fS,fQ,sDv){return (lne(fS/fK)+((fR/mgConfig.pctFactor)-(fQ/mgConfig.pctFactor)-.5*cPow(sDv,2))*fT)/(sDv*sqt(fT))}
     // Loan/Bond functions
-    //JSON parameter: (PV:<present value>,FV:<future value<,PMT:<payment>,RATE:<rate>,TERM:<term>,IPY:<interest payments per year>)
+    //JSON parameter: {PV:<present value>,FV:<future value<,PMT:<payment>,RATE:<rate>,TERM:<term>,IPY:<interest payments per year>}
     function finPV(parm){
         var FVx = toReal(parm.FV),PMTx = toReal(parm.PMT),RATEx = toReal(parm.RATE),TERMx = toReal(parm.TERM),IPYx = toReal(parm.IPY);
         if (RATEx == 0) {return FVx+(IPYx*TERMx*PMTx)}
@@ -3649,6 +3649,7 @@ var mgCalc = function() {
         OptionGamma:function(parm) {return finOPTgamma(parm)},
         OptionVega: function(parm) {return finOPTvega(parm)},
         GCF:        function(p1,p2) {return cGcf(p1,p2)},
+        irSolver:   function(p1,p2,p3,p4) {return iSolve(p1,p2,p3,p4)},
     }
 } ();
 // node.js export
