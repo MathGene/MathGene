@@ -209,7 +209,7 @@ var mgCalc = function() {
             fReturn = funcObj[funcKey](paramS[0],paramS[1],paramS[2],paramS[3])//execute operation
             expReturn = expReturn.substr(0,bSym-(funcKey.length+1))+fReturn+expReturn.substr(iXf+1,lSym); //assemble output
         }
-		return expReturn
+        return expReturn
     }
     function cDissect(xD) { //return array of all components of expression
         var xDsect = String(xD);
@@ -2500,7 +2500,7 @@ var mgCalc = function() {
         }
         return fTrm
     }
-    //Range of expression in MG format
+    //Range of expression in FUNC format
     function xprRange(xR)  {
         function nEqual(nZ,nC) { //range not equal
             var zArray = [],zString = "",iZ = 0;
@@ -2515,7 +2515,7 @@ var mgCalc = function() {
             }
             return zString
         }
-		const rangeFunc = {
+        const rangeFunc = {
         cPow: function (xU,xL) {return "cPow("+xU+","+xL+")"},
         cMul: function (xU,xL) {return "cMul("+xU+","+xL+")"},
         cTms: function (xU,xL) {return "cMul("+xU+","+xL+")"},
@@ -2566,8 +2566,9 @@ var mgCalc = function() {
         abs: function (xU) {return "abs("+xU+")"},
         erf: function (xU) {return "erf("+xU+")"},
         efc: function (xU) {return "efc("+xU+")"},
-        con: function (xU) {return "con("+xU+")"},
+        gam: function (xU) {return "gam("+xU+")"},
         fac: function (xU) {return "fac("+xU+")"},
+        con: function (xU) {return "con("+xU+")"},
         vec: function (xU) {return "vec("+xU+")"},
         hat: function (xU) {return "hat("+xU+")"},
         und: function (xU) {return "und("+xU+")"},
@@ -2575,6 +2576,15 @@ var mgCalc = function() {
         tld: function (xU) {return "tld("+xU+")"},
         cnt: function (xU) {return "cnt("+xU+")"},
         sbt: function (xU) {return "sbt("+xU+")"},
+        cdf: function (xU) {return "cdf("+xU+")"},
+        pdf: function (xU) {return "pdf("+xU+")"},
+        lcf: function (xU) {return "lcf("+xU+")"},
+        lpf: function (xU) {return "lpf("+xU+")"},
+        rou: function (xU) {return "rou("+xU+")"},
+        rnd: function (xU) {return "rnd("+xU+")"},
+        rex: function (xU) {return "rex("+xU+")"},
+        frc: function (xU) {return "frc("+xU+")"},
+        cei: function (xU) {return "cei("+xU+")"},
         dif: function (xU) {return "dif("+xU+")"},
         idr: function (xU) {return "idr("+xU+")"},
         tdr: function (xU) {return "tdv("+xU+")"},
@@ -2585,17 +2595,15 @@ var mgCalc = function() {
         lim: function (xU,xL,xR) {return "lim("+xU+","+xL+","+xR+")"},
         ntp: function (nXpr,deeVar,iU,iL) {return ntpS(nXpr,deeVar,iU,iL)},
         mat: function () {return "mat(" + Array.prototype.slice.call(arguments) + ")"},
-		}
+        }
         //
-        xR = String(xR);
         var xRang = "",dArray = [],xArray = [],xC = 0,rString = "";
-        if (strTest(xR,"=")) {xRang = mgTrans.cFunc(xR.split("=")[1])}
-        else {xRang = mgTrans.cFunc(xR)}
-		execFunc(xRang,rangeFunc)
+        xRang = String(xR);
+        execFunc(xRang,rangeFunc)
         for (xC in dArray) {// fix dups/blanks
             if (!strTest(xArray,dArray[xC]) && dArray[xC] && !strTest(dArray[xC],"undefined") && !strTest(dArray[xC],"Cv[8734]")) {xArray.push(dArray[xC])}
         }
-		xArray.sort()
+        xArray.sort()
         for (xC in xArray) {
             rString = rString+xArray[xC];
             if (xC < xArray.length-1) {rString = rString+"Cv[10044]"} //add comma between terms
@@ -3585,7 +3593,7 @@ var mgCalc = function() {
         Expand:     function(xprA) {mgTrans.configCheck();return mgTrans.Output(mgTrans.mgExport(xprExpand(mgTrans.cFunc(parseCalculus(mgTrans.texImport(xprA))))))},
         TrigToExp:  function(xprA) {mgTrans.configCheck();return mgTrans.Output(mgTrans.mgExport(xprTrigToExp(mgTrans.cFunc(parseCalculus(mgTrans.texImport(xprA))))))},
         ExpToTrig:  function(xprA) {mgTrans.configCheck();return mgTrans.Output(mgTrans.mgExport(xprExpToTrig(mgTrans.cFunc(parseCalculus(mgTrans.texImport(xprA))))))},
-        Range:      function(xprA) {mgTrans.configCheck();return mgTrans.Output(xprRange(mgTrans.texImport(xprA)))},
+        Range:      function(xprA) {mgTrans.configCheck();return mgTrans.Output(xprRange(mgTrans.cFunc(mgTrans.texImport(xprA))))},
         Series:     function(xprA,xprB,xprC,xprD) {mgTrans.configCheck();return mgTrans.Output(mgTrans.mgExport(xprSeries(mgTrans.cFunc(parseCalculus(mgTrans.texImport(xprA))),mgTrans.texImport(xprB),xprC,xprD)))},
         RoundDec:   function(p1,p2) {return roundDecTo(p1,p2)},
         Inventory:  function(xprA) {return cInventory(xprA)},
