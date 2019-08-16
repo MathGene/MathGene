@@ -26,95 +26,102 @@ if (typeof module ==  "object") {
 
 //internal functions-objects
 var mgCalc = function() {
-	const passthruFunc = { //null symbolic functions
-	cPow: function (xU,xL) {return "cPow("+xU+","+xL+")"},
-	cMul: function (xU,xL) {return "cMul("+xU+","+xL+")"},
-	cTms: function (xU,xL) {return "cMul("+xU+","+xL+")"},
-	cDot: function (xU,xL) {return "cDot("+xU+","+xL+")"},
-	cDiv: function (xU,xL) {return "cDiv("+xU+","+xL+")"},
-	cAdd: function (xU,xL) {return "cAdd("+xU+","+xL+")"},
-	cSub: function (xU,xL) {return "cSub("+xU+","+xL+")"},
-	cBnd: function (xU,xL) {return "cBnd("+xU+","+xL+")"},
-	cEql: function (xU,xL) {return "cEql("+xU+","+xL+")"},
-	cNql: function (xU,xL) {return "cNql("+xU+","+xL+")"},
-	cGth: function (xU,xL) {return "cGth("+xU+","+xL+")"},
-	cLth: function (xU,xL) {return "cLth("+xU+","+xL+")"},
-	cGeq: function (xU,xL) {return "cGeq("+xU+","+xL+")"},
-	cLeq: function (xU,xL) {return "cLeq("+xU+","+xL+")"},
-	cNeg: function (xU)    {return "cNeg("+xU+")"},
-	itg: function (xU,xL)  {return "itg("+xU+","+xL+")"},
-	nrt: function (xU,xL)  {return "nrt("+xU+")"},
-	lgn: function (xU,xL)  {return "lgn("+xU+")"},
-	lne: function (xU) {return "lne("+xU+")"},
-	log: function (xU) {return "log("+xU+")"},
-	sqt: function (xU) {return "sqt("+xU+")"},
-	cbt: function (xU) {return "cbt("+xU+")"},
-	sin: function (xU) {return "sin("+xU+")"},
-	cos: function (xU) {return "cos("+xU+")"},
-	tan: function (xU) {return "tan("+xU+")"},
-	cot: function (xU) {return "cot("+xU+")"},
-	csc: function (xU) {return "csc("+xU+")"},
-	sec: function (xU) {return "sec("+xU+")"},
-	snh: function (xU) {return "snh("+xU+")"},
-	csh: function (xU) {return "csh("+xU+")"},
-	tnh: function (xU) {return "tnh("+xU+")"},
-	sch: function (xU) {return "sch("+xU+")"},
-	cch: function (xU) {return "cch("+xU+")"},
-	cth: function (xU) {return "cth("+xU+")"},
-	asn: function (xU) {return "asn("+xU+")"},
-	acs: function (xU) {return "acs("+xU+")"},
-	atn: function (xU) {return "atn("+xU+")"},
-	act: function (xU) {return "act("+xU+")"},
-	asc: function (xU) {return "asc("+xU+")"},
-	acc: function (xU) {return "acc("+xU+")"},
-	ash: function (xU) {return "ash("+xU+")"},
-	ach: function (xU) {return "ach("+xU+")"},
-	ath: function (xU) {return "ath("+xU+")"},
-	axh: function (xU) {return "axh("+xU+")"},
-	ayh: function (xU) {return "ayh("+xU+")"},
-	azh: function (xU) {return "azh("+xU+")"},
-	exp: function (xU) {return "exp("+xU+")"},
-	abs: function (xU) {return "abs("+xU+")"},
-	erf: function (xU) {return "erf("+xU+")"},
-	efc: function (xU) {return "efc("+xU+")"},
-	fac: function (xU) {return "fac("+xU+")"},
-	gam: function (xU) {return "gam("+xU+")"},
-	sbr: function (xU) {return "sbr("+xU+")"},
-	cbr: function (xU) {return "cbr("+xU+")"},
-	con: function (xU) {return "con("+xU+")"},
-	vec: function (xU) {return "vec("+xU+")"},
-	hat: function (xU) {return "hat("+xU+")"},
-	und: function (xU) {return "und("+xU+")"},
-	udt: function (xU) {return "udt("+xU+")"},
-	tld: function (xU) {return "tld("+xU+")"},
-	cnt: function (xU) {return "cnt("+xU+")"},
-	sbt: function (xU) {return "sbt("+xU+")"},
-	cdf: function (xU) {return "cdf("+xU+")"},
-	pdf: function (xU) {return "pdf("+xU+")"},
-	lcf: function (xU) {return "lcf("+xU+")"},
-	lpf: function (xU) {return "lpf("+xU+")"},
-	rou: function (xU) {return "rou("+xU+")"},
-	rnd: function (xU) {return "rnd("+xU+")"},
-	rex: function (xU) {return "rex("+xU+")"},
-	frc: function (xU) {return "frc("+xU+")"},
-	cei: function (xU) {return "cei("+xU+")"},
-	dif: function (xU) {return "dif("+xU+")"},
-	idr: function (xU) {return "idr("+xU+")"},
-	tdr: function (xU) {return "tdv("+xU+")"},
-	sdr: function (xU,xL) {return "sdr("+xU+","+xL+")"},
-	psd: function (xU,xL) {return "psd("+xU+","+xL+")"},
-	smm: function (xU,xL,xR) {return "smm("+xU+","+xL+","+xR+")"},
-	pmm: function (xU,xL,xR) {return "pmm("+xU+","+xL+","+xR+")"},
-	lmt: function (xU,xL,xR) {return "lmt("+xU+","+xL+","+xR+")"},
-	sum: function (xU,xL,xR) {return "sum("+xU+","+xL+")"},
-	prd: function (xU,xL,xR) {return "prd("+xU+","+xL+")"},
-	lim: function (xU,xL,xR) {return "lim("+xU+","+xL+")"},
-	ntg: function (nXpr,deeVar,iU,iL) {return "ntg("+nXpr+","+deeVar+","+iU+","+iL+")"},
-	ntp: function (nXpr,deeVar,iU,iL) {return "ntp("+nXpr+","+deeVar+","+iU+","+iL+")"},
-	tdv: function (dXpr,deeVar,nTh) {return "tdv("+dXpr+","+deeVar+","+nTh+")"},
-	drv: function (dXpr,deeVar,nTh) {return "drv("+dXpr+","+deeVar+","+nTh+")"},
-	mat: function (xU) {return "mat("+xU+")"},
-	}
+    const passthruFunc = { //null symbolic functions
+    cPow: function (xU,xL) {return "cPow("+xU+","+xL+")"},
+    cMul: function (xU,xL) {return "cMul("+xU+","+xL+")"},
+    cTms: function (xU,xL) {return "cMul("+xU+","+xL+")"},
+    cDot: function (xU,xL) {return "cDot("+xU+","+xL+")"},
+    cDiv: function (xU,xL) {return "cDiv("+xU+","+xL+")"},
+    cAdd: function (xU,xL) {return "cAdd("+xU+","+xL+")"},
+    cSub: function (xU,xL) {return "cSub("+xU+","+xL+")"},
+    cBnd: function (xU,xL) {return "cBnd("+xU+","+xL+")"},
+    cEql: function (xU,xL) {return "cEql("+xU+","+xL+")"},
+    cNql: function (xU,xL) {return "cNql("+xU+","+xL+")"},
+    cGth: function (xU,xL) {return "cGth("+xU+","+xL+")"},
+    cLth: function (xU,xL) {return "cLth("+xU+","+xL+")"},
+    cGeq: function (xU,xL) {return "cGeq("+xU+","+xL+")"},
+    cLeq: function (xU,xL) {return "cLeq("+xU+","+xL+")"},
+    cNeg: function (xU)    {return "cNeg("+xU+")"},
+    itg: function (xU,xL)  {return "itg("+xU+","+xL+")"},
+    nrt: function (xU,xL)  {return "nrt("+xU+")"},
+    lgn: function (xU,xL)  {return "lgn("+xU+")"},
+    lne: function (xU) {return "lne("+xU+")"},
+    log: function (xU) {return "log("+xU+")"},
+    sqt: function (xU) {return "sqt("+xU+")"},
+    cbt: function (xU) {return "cbt("+xU+")"},
+    sin: function (xU) {return "sin("+xU+")"},
+    cos: function (xU) {return "cos("+xU+")"},
+    tan: function (xU) {return "tan("+xU+")"},
+    cot: function (xU) {return "cot("+xU+")"},
+    csc: function (xU) {return "csc("+xU+")"},
+    sec: function (xU) {return "sec("+xU+")"},
+    snh: function (xU) {return "snh("+xU+")"},
+    csh: function (xU) {return "csh("+xU+")"},
+    tnh: function (xU) {return "tnh("+xU+")"},
+    sch: function (xU) {return "sch("+xU+")"},
+    cch: function (xU) {return "cch("+xU+")"},
+    cth: function (xU) {return "cth("+xU+")"},
+    asn: function (xU) {return "asn("+xU+")"},
+    acs: function (xU) {return "acs("+xU+")"},
+    atn: function (xU) {return "atn("+xU+")"},
+    act: function (xU) {return "act("+xU+")"},
+    asc: function (xU) {return "asc("+xU+")"},
+    acc: function (xU) {return "acc("+xU+")"},
+    ash: function (xU) {return "ash("+xU+")"},
+    ach: function (xU) {return "ach("+xU+")"},
+    ath: function (xU) {return "ath("+xU+")"},
+    axh: function (xU) {return "axh("+xU+")"},
+    ayh: function (xU) {return "ayh("+xU+")"},
+    azh: function (xU) {return "azh("+xU+")"},
+    exp: function (xU) {return "exp("+xU+")"},
+    abs: function (xU) {return "abs("+xU+")"},
+    erf: function (xU) {return "erf("+xU+")"},
+    efc: function (xU) {return "efc("+xU+")"},
+    fac: function (xU) {return "fac("+xU+")"},
+    gam: function (xU) {return "gam("+xU+")"},
+    sbr: function (xU) {return "sbr("+xU+")"},
+    cbr: function (xU) {return "cbr("+xU+")"},
+    con: function (xU) {return "con("+xU+")"},
+    vec: function (xU) {return "vec("+xU+")"},
+    hat: function (xU) {return "hat("+xU+")"},
+    und: function (xU) {return "und("+xU+")"},
+    udt: function (xU) {return "udt("+xU+")"},
+    tld: function (xU) {return "tld("+xU+")"},
+    cnt: function (xU) {return "cnt("+xU+")"},
+    sbt: function (xU) {return "sbt("+xU+")"},
+    cdf: function (xU) {return "cdf("+xU+")"},
+    pdf: function (xU) {return "pdf("+xU+")"},
+    lcf: function (xU) {return "lcf("+xU+")"},
+    lpf: function (xU) {return "lpf("+xU+")"},
+    rou: function (xU) {return "rou("+xU+")"},
+    rnd: function (xU) {return "rnd("+xU+")"},
+    rex: function (xU) {return "rex("+xU+")"},
+    frc: function (xU) {return "frc("+xU+")"},
+    cei: function (xU) {return "cei("+xU+")"},
+    dif: function (xU) {return "dif("+xU+")"},
+    idr: function (xU) {return "idr("+xU+")"},
+    tdr: function (xU) {return "tdv("+xU+")"},
+    sdr: function (xU,xL) {return "sdr("+xU+","+xL+")"},
+    psd: function (xU,xL) {return "psd("+xU+","+xL+")"},
+    smm: function (xU,xL,xR) {return "smm("+xU+","+xL+","+xR+")"},
+    pmm: function (xU,xL,xR) {return "pmm("+xU+","+xL+","+xR+")"},
+    lmt: function (xU,xL,xR) {return "lmt("+xU+","+xL+","+xR+")"},
+    sum: function (xU,xL,xR) {return "sum("+xU+","+xL+")"},
+    prd: function (xU,xL,xR) {return "prd("+xU+","+xL+")"},
+    lim: function (xU,xL,xR) {return "lim("+xU+","+xL+")"},
+    ntg: function (nXpr,deeVar,iU,iL) {return "ntg("+nXpr+","+deeVar+","+iU+","+iL+")"},
+    ntp: function (nXpr,deeVar,iU,iL) {return "ntp("+nXpr+","+deeVar+","+iU+","+iL+")"},
+    tdv: function (dXpr,deeVar,nTh) {return "tdv("+dXpr+","+deeVar+","+nTh+")"},
+    drv: function (dXpr,deeVar,nTh) {return "drv("+dXpr+","+deeVar+","+nTh+")"},
+    mat: function (xU) {return "mat("+xU+")"},
+    smx: function (xU) {return "smx("+xU+")"},
+    pxp: function (xU) {return "pxp("+xU+")"},
+    vMul: function (xU,xL) {return "vMul("+xU+","+xL+")"},
+    vDiv: function (xU,xL) {return "vDiv("+xU+","+xL+")"},
+    vAdd: function (xU,xL) {return "vAdd("+xU+","+xL+")"},
+    vSub: function (xU,xL) {return "vSub("+xU+","+xL+")"},
+    vNeg: function (xU) {return "vNeg("+xU+")"},
+    }
     const solverMap = //map inverse functions for solver
     {
     sin:{solverU:"asnS(lExpr)",ineqU:0},
@@ -279,9 +286,9 @@ var mgCalc = function() {
         }
         return opReturn
     }
-    function execFunc(expIn,funcObj) { //execute math expression
+    function execFunc(expIn,funcObj) { //execute math transformation from specified object
         var expReturn = expIn.replace(/([a-z][a-z][a-z])\(/ig,"$1@"); //mark left parens with @
-        var sCount = mgTrans.strCount(expReturn,"@"),lPar = 1,rPar = 0,iXf = 0,rTmp = "",payload = "",paramS = [],funcKey = "",fReturn = "";
+        var sCount = mgTrans.strCount(expReturn,"@"),nXf = 0,lPar = 1,rPar = 0,iXf = 0,rTmp = "",payload = "",paramS = [],funcKey = "",fReturn = "";
         for (nXf=0;nXf<sCount;nXf++) {
             lPar = 1,rPar = 0,iXf = 0,rTmp = "";
             bSym = expReturn.lastIndexOf("@")+1; //find inside parens
@@ -294,10 +301,10 @@ var mgCalc = function() {
             payload = expReturn.substr(bSym,iXf-bSym); //parameters between parens
             paramS = mgTrans.parseArgs(payload); //parse parms
             funcKey = expReturn.substr(bSym-4,3); //extract functions xxx()
-            if (typeof mgTrans.funcMap[funcKey] == "undefined") {funcKey = expReturn.substr(bSym-5,4)} //extract operators cXxx()
-			if (typeof funcObj[funcKey] == "undefined") {fReturn = passthruFunc[funcKey](mgTrans.oParens(paramS[0]),mgTrans.oParens(paramS[1]),paramS[2],paramS[3])} //execute passthru
+            if (typeof passthruFunc[funcKey] == "undefined") {funcKey = expReturn.substr(bSym-5,4)} //extract operators cXxx()
+            if (typeof funcObj[funcKey] == "undefined") {fReturn = passthruFunc[funcKey](mgTrans.oParens(paramS[0]),mgTrans.oParens(paramS[1]),paramS[2],paramS[3])} //execute passthru
             else {fReturn = funcObj[funcKey](mgTrans.oParens(paramS[0]),mgTrans.oParens(paramS[1]),paramS[2],paramS[3])}//execute operation
-            expReturn = expReturn.substr(0,bSym-(funcKey.length+1))+fReturn+expReturn.substr(iXf+1,lSym); //assemble output
+            expReturn = expReturn.substr(0,expReturn.lastIndexOf("@")+1-(funcKey.length+1))+fReturn+expReturn.substr(iXf+1,lSym); //assemble output
         }
         return expReturn
     }
@@ -424,7 +431,7 @@ var mgCalc = function() {
         xIter = String(xIter);
         if (strTest(xIter,"undefined")) {return "undefined"}
         if (xIter.search(/,,/) > -1 || xIter.search(/,\)/) > -1 || xIter.search(/\(,/) > -1 || xIter.search(/\(\)/) > -1) {return cError("Missing operand(s)")}
-		//return String(execFunc(xIter,symFunc))
+        //return String(execFunc(xIter,symFunc))
         return String(xprEval(xIter.replace(/([a-z])\(/g,"$1S(").replace(/(Pv\[\d+\])/g,"'$1'").replace(/(Sv\[\d+\])/g,"'$1'").replace(/(Cv\[\d+\])/g,"'$1'")));
     }
     function cReduce(cRdce) { //complete expression reduction
@@ -796,77 +803,77 @@ var mgCalc = function() {
     }
 
     //Algebra
-	const symFunc = {
-	cPow: function (xU,xL) {return cPowS(xU,xL)},
-	cMul: function (xU,xL) {return cMulS(xU,xL)},
-	cTms: function (xU,xL) {return cTmsS(xU,xL)},
-	cDot: function (xU,xL) {return cDotS(xU,xL)},
-	cDiv: function (xU,xL) {return cDivS(xU,xL)},
-	cAdd: function (xU,xL) {return cAddS(xU,xL)},
-	cSub: function (xU,xL) {return cSubS(xU,xL)},
-	cBnd: function (xU,xL) {return cBndS(xU,xL)},
-	cEql: function (xU,xL) {return cEqlS(xU,xL)},
-	cNql: function (xU,xL) {return cNqlS(xU,xL)},
-	cGth: function (xU,xL) {return cGthS(xU,xL)},
-	cLth: function (xU,xL) {return cLthS(xU,xL)},
-	cGeq: function (xU,xL) {return cGeqS(xU,xL)},
-	cLeq: function (xU,xL) {return cLeqS(xU,xL)},
-	cNeg: function (xU)    {return cNegS(xU)},
-	nrt: function (xU,xL)  {return nrtS(xU,xL)},
-	lgn: function (xU,xL)  {return lgnS(xU,xL)},
-	lne: function (xU) {return lneS(xU)},
-	log: function (xU) {return logS(xU)},
-	sqt: function (xU) {return sqtS(xU)},
-	cbt: function (xU) {return cbtS(xU)},
-	sin: function (xU) {return sinS(xU)},
-	cos: function (xU) {return cosS(xU)},
-	tan: function (xU) {return tanS(xU)},
-	cot: function (xU) {return cotS(xU)},
-	csc: function (xU) {return cscS(xU)},
-	sec: function (xU) {return secS(xU)},
-	snh: function (xU) {return snhS(xU)},
-	csh: function (xU) {return cshS(xU)},
-	tnh: function (xU) {return tnhS(xU)},
-	sch: function (xU) {return schS(xU)},
-	cch: function (xU) {return cchS(xU)},
-	cth: function (xU) {return cthS(xU)},
-	asn: function (xU) {return asnS(xU)},
-	acs: function (xU) {return acsS(xU)},
-	atn: function (xU) {return atnS(xU)},
-	act: function (xU) {return actS(xU)},
-	asc: function (xU) {return ascS(xU)},
-	acc: function (xU) {return accS(xU)},
-	ash: function (xU) {return ashS(xU)},
-	ach: function (xU) {return achS(xU)},
-	ath: function (xU) {return athS(xU)},
-	axh: function (xU) {return axhS(xU)},
-	ayh: function (xU) {return ayhS(xU)},
-	azh: function (xU) {return azhS(xU)},
-	exp: function (xU) {return expS(xU)},
-	abs: function (xU) {return absS(xU)},
-	erf: function (xU) {return erfS(xU)},
-	efc: function (xU) {return efcS(xU)},
-	fac: function (xU) {return facS(xU)},
-	gam: function (xU) {return gamS(xU)},
-	sdr: function (xU,xL) {return sdrS(xU,xL)},
-	psd: function (xU,xL) {return psdS(xU,xL)},
-	ntg: function (nXpr,deeVar,iU,iL) {return ntgS(nXpr,deeVar,iU,iL)},
-	ntp: function (nXpr,deeVar,iU,iL) {return ntpS(nXpr,deeVar,iU,iL)},
-	tdv: function (dXpr,deeVar,nTh) {return tdvS(dXpr,deeVar,nTh)},
-	drv: function (dXpr,deeVar,nTh) {return drvS(dXpr,deeVar,nTh)},
-	smm: function (xU,xL,xR) {return smmS(xU,xL,xR)},
-	pmm: function (xU,xL,xR) {return pmmS(xU,xL,xR)},
-	lmt: function (xU,xL,xR) {return lmtS(xU,xL,xR)},
-	ntp: function (nXpr,deeVar,iU,iL) {return ntpS(nXpr,deeVar,iU,iL)},
-	//mat: function () {return matS(arguments)},
-	smx: function (xU) {return smxS(xu)},
-	pxp: function (xU) {return pxpS(xu)},
-	vMul: function (xU,xL) {return vMulS(xU,xL)},
-	vDiv: function (xU,xL) {return vDivS(xU,xL)},
-	vAdd: function (xU,xL) {return vAddS(xU,xL)},
-	vSub: function (xU,xL) {return vSubS(xU,xL)},
-	vNeg: function (xU) {return vNegS(xU)},
-	}
+    const symFunc = {
+    cPow: function (xU,xL) {return cPowS(xU,xL)},
+    cMul: function (xU,xL) {return cMulS(xU,xL)},
+    cTms: function (xU,xL) {return cTmsS(xU,xL)},
+    cDot: function (xU,xL) {return cDotS(xU,xL)},
+    cDiv: function (xU,xL) {return cDivS(xU,xL)},
+    cAdd: function (xU,xL) {return cAddS(xU,xL)},
+    cSub: function (xU,xL) {return cSubS(xU,xL)},
+    cBnd: function (xU,xL) {return cBndS(xU,xL)},
+    cEql: function (xU,xL) {return cEqlS(xU,xL)},
+    cNql: function (xU,xL) {return cNqlS(xU,xL)},
+    cGth: function (xU,xL) {return cGthS(xU,xL)},
+    cLth: function (xU,xL) {return cLthS(xU,xL)},
+    cGeq: function (xU,xL) {return cGeqS(xU,xL)},
+    cLeq: function (xU,xL) {return cLeqS(xU,xL)},
+    cNeg: function (xU)    {return cNegS(xU)},
+    nrt: function (xU,xL)  {return nrtS(xU,xL)},
+    lgn: function (xU,xL)  {return lgnS(xU,xL)},
+    lne: function (xU) {return lneS(xU)},
+    log: function (xU) {return logS(xU)},
+    sqt: function (xU) {return sqtS(xU)},
+    cbt: function (xU) {return cbtS(xU)},
+    sin: function (xU) {return sinS(xU)},
+    cos: function (xU) {return cosS(xU)},
+    tan: function (xU) {return tanS(xU)},
+    cot: function (xU) {return cotS(xU)},
+    csc: function (xU) {return cscS(xU)},
+    sec: function (xU) {return secS(xU)},
+    snh: function (xU) {return snhS(xU)},
+    csh: function (xU) {return cshS(xU)},
+    tnh: function (xU) {return tnhS(xU)},
+    sch: function (xU) {return schS(xU)},
+    cch: function (xU) {return cchS(xU)},
+    cth: function (xU) {return cthS(xU)},
+    asn: function (xU) {return asnS(xU)},
+    acs: function (xU) {return acsS(xU)},
+    atn: function (xU) {return atnS(xU)},
+    act: function (xU) {return actS(xU)},
+    asc: function (xU) {return ascS(xU)},
+    acc: function (xU) {return accS(xU)},
+    ash: function (xU) {return ashS(xU)},
+    ach: function (xU) {return achS(xU)},
+    ath: function (xU) {return athS(xU)},
+    axh: function (xU) {return axhS(xU)},
+    ayh: function (xU) {return ayhS(xU)},
+    azh: function (xU) {return azhS(xU)},
+    exp: function (xU) {return expS(xU)},
+    abs: function (xU) {return absS(xU)},
+    erf: function (xU) {return erfS(xU)},
+    efc: function (xU) {return efcS(xU)},
+    fac: function (xU) {return facS(xU)},
+    gam: function (xU) {return gamS(xU)},
+    sdr: function (xU,xL) {return sdrS(xU,xL)},
+    psd: function (xU,xL) {return psdS(xU,xL)},
+    ntg: function (nXpr,deeVar,iU,iL) {return ntgS(nXpr,deeVar,iU,iL)},
+    ntp: function (nXpr,deeVar,iU,iL) {return ntpS(nXpr,deeVar,iU,iL)},
+    tdv: function (dXpr,deeVar,nTh) {return tdvS(dXpr,deeVar,nTh)},
+    drv: function (dXpr,deeVar,nTh) {return drvS(dXpr,deeVar,nTh)},
+    smm: function (xU,xL,xR) {return smmS(xU,xL,xR)},
+    pmm: function (xU,xL,xR) {return pmmS(xU,xL,xR)},
+    lmt: function (xU,xL,xR) {return lmtS(xU,xL,xR)},
+    ntp: function (nXpr,deeVar,iU,iL) {return ntpS(nXpr,deeVar,iU,iL)},
+    //mat: function () {return matS(arguments)},
+    smx: function (xU) {return smxS(xU)},
+    pxp: function (xU) {return pxpS(xU)},
+    vMul: function (xU,xL) {return vMulS(xU,xL)},
+    vDiv: function (xU,xL) {return vDivS(xU,xL)},
+    vAdd: function (xU,xL) {return vAddS(xU,xL)},
+    vSub: function (xU,xL) {return vSubS(xU,xL)},
+    vNeg: function (xU) {return vNegS(xU)},
+    }
     function cPowS(xU,xL) { //exponent xU^xL
         var xTractU = opExtract(xU);
         var xTractL = opExtract(xL);
@@ -1626,14 +1633,14 @@ var mgCalc = function() {
 
     // Expand functions
     const expFunc = {
-	cPow: function (xU,xL) {return cPowX(xU,xL)},
-	cMul: function (xU,xL) {return cMulX(xU,xL)},
-	cTms: function (xU,xL) {return cMulX(xU,xL)},
-	cDot: function (xU,xL) {return cMulX(xU,xL)},
-	cDiv: function (xU,xL) {return cDivX(xU,xL)},
-	cAdd: function (xU,xL) {return cAddX(xU,xL)},
-	cSub: function (xU,xL) {return cSubX(xU,xL)},
-	sqt: function (xU) {return sqtX(xU)},
+    cPow: function (xU,xL) {return cPowX(xU,xL)},
+    cMul: function (xU,xL) {return cMulX(xU,xL)},
+    cTms: function (xU,xL) {return cMulX(xU,xL)},
+    cDot: function (xU,xL) {return cMulX(xU,xL)},
+    cDiv: function (xU,xL) {return cDivX(xU,xL)},
+    cAdd: function (xU,xL) {return cAddX(xU,xL)},
+    cSub: function (xU,xL) {return cSubX(xU,xL)},
+    sqt: function (xU) {return sqtX(xU)},
     }
     function cAddX(xU,xL) {
         var xTractU = opExtract(xU);
@@ -1686,13 +1693,12 @@ var mgCalc = function() {
     }
     //
     function xprExpand(xE) { //expand (defactor) expression
-        var xReturn = String(xE);
-		xReturn = xReduce(execFunc(xReturn,expFunc))
+        var xReturn = xReduce(execFunc(String(xE),expFunc));
         xReturn = xReturn.replace(/cnt\(/g,"(");
         if (!strTest("undefined",xReturn)) {return xReturn}
         return xE
     }
-	
+    
     //Calculus
     function parseCalculus(dExp) { //parse calculus from MG format to FUNC: d/dx(x^2) = idr(x)x^2 -> drv(x^2,x)
         dExp = String(dExp);
@@ -2469,14 +2475,14 @@ var mgCalc = function() {
         efcM: function(xU) {return "undefined"},
         conM: function(xU) {return "undefined"},
         facM: function(xU) {return "undefined"},
-        vecM: function(xU) {return "undefined"},
-        hatM: function(xU) {return "undefined"},
-        undM: function(xU) {return "undefined"},
-        udtM: function(xU) {return "undefined"},
-        tldM: function(xU) {return "undefined"},
-        cntM: function(xU) {return "undefined"},
-        sbtM: function(xU) {return "undefined"},
-        difM: function(xU) {return "undefined"},
+        vecM: function(xU) {return "vec("+xU+")"},
+        hatM: function(xU) {return "hat("+xU+")"},
+        undM: function(xU) {return "und("+xU+")"},
+        udtM: function(xU) {return "udt("+xU+")"},
+        tldM: function(xU) {return "tld("+xU+")"},
+        cntM: function(xU) {return "cnt("+xU+")"},
+        sbtM: function(xU) {return "sbt("+xU+")"},
+        drvM: function(xU) {return "drv("+xU+")"},
         }
         //
         sXpr = String(sXpr);sUpper = String(sUpper);dV = String(dV);sLower = String(sLower);
@@ -2570,14 +2576,14 @@ var mgCalc = function() {
         efcP: function(xU) {return "undefined"},
         conP: function(xU) {return "undefined"},
         facP: function(xU) {return "undefined"},
-        vecP: function(xU) {return "undefined"},
-        hatP: function(xU) {return "undefined"},
-        undP: function(xU) {return "undefined"},
-        udtP: function(xU) {return "undefined"},
-        tldP: function(xU) {return "undefined"},
-        cntP: function(xU) {return "undefined"},
-        sbtP: function(xU) {return "undefined"},
-        difP: function(xU) {return "undefined"},
+        vecP: function(xU) {return "vec("+xU+")"},
+        hatP: function(xU) {return "hat("+xU+")"},
+        undP: function(xU) {return "und("+xU+")"},
+        udtP: function(xU) {return "udt("+xU+")"},
+        tldP: function(xU) {return "tld("+xU+")"},
+        cntP: function(xU) {return "cnt("+xU+")"},
+        sbtP: function(xU) {return "sbt("+xU+")"},
+        drvP: function(xU) {return "drv("+xU+")"},
         }
         //
         pXpr = String(pXpr);pUpper = String(pUpper);dV = String(dV);pLower = String(pLower);
@@ -2687,7 +2693,7 @@ var mgCalc = function() {
     ntpL: function(nXpr,deeVar,iU,iL) {return ntpS(nXpr,deeVar,iU,iL)},
     matL: function() {return "mat(" + Array.prototype.slice.call(arguments) + ")"},
     }
-	
+    
     //
     function lmtS(lXpr,lVar,xLim) {
         xLim = String(xLim);
@@ -2716,32 +2722,32 @@ var mgCalc = function() {
     }
 
     //Exponential trig conversion
-    function sinE(xU) {return cDivS(cSubS(cPowS("Cv[8]",cMulS("Cv[46]",xU)),cPowS("Cv[8]",cMulS(cNegS("Cv[46]"),xU))),cMulS("2","Cv[46]"))}
-    function cosE(xU) {return cDivS(cAddS(cPowS("Cv[8]",cMulS("Cv[46]",xU)),cPowS("Cv[8]",cMulS(cNegS("Cv[46]"),xU))),"2")}
-    function tanE(xU) {return cDivS(cSubS(cPowS("Cv[8]",cMulS("Cv[46]",xU)),cPowS("Cv[8]",cMulS(cNegS("Cv[46]"),xU))),cMulS("Cv[46]",cAddS(cPowS("Cv[8]",cMulS("Cv[46]",xU)),cPowS("Cv[8]",cMulS(cNegS("Cv[46]"),xU)))))  }
-    function secE(xU) {return cDivS("2",cAddS(cPowS("Cv[8]",cMulS("Cv[46]",xU)),cPowS("Cv[8]",cMulS(cNegS("Cv[46]"),xU))))}
-    function cscE(xU) {return cDivS(cMulS("2","Cv[46]"),cSubS(cPowS("Cv[8]",cMulS("Cv[46]",xU)),cPowS("Cv[8]",cMulS(cNegS("Cv[46]"),xU))))}
-    function cotE(xU) {return cDivS(cMulS("Cv[46]",cAddS(cPowS("Cv[8]",cMulS("Cv[46]",xU)),cPowS("Cv[8]",cMulS(cNegS("Cv[46]"),xU)))),cSubS(cPowS("Cv[8]",cMulS("Cv[46]",xU)),cPowS("Cv[8]",cMulS(cNegS("Cv[46]"),xU))))  }
-    function snhE(xU) {return cDivS(cSubS(cPowS("Cv[8]",xU),cPowS("Cv[8]",cNegS(xU))),"2")}
-    function cshE(xU) {return cDivS(cAddS(cPowS("Cv[8]",xU),cPowS("Cv[8]",cNegS(xU))),"2")}
-    function tnhE(xU) {return cDivS(cSubS(cPowS("Cv[8]",xU),cDivS(1,cPowS("Cv[8]",xU))),cAddS(cPowS("Cv[8]",xU),cDivS(1,cPowS("Cv[8]",xU))))}
-    function schE(xU) {return cDivS("2",cAddS(cPowS("Cv[8]",xU),cPowS("Cv[8]",cNegS(xU))))}
-    function cchE(xU) {return cDivS("2",cSubS(cPowS("Cv[8]",xU),cPowS("Cv[8]",cNegS(xU))))}
-    function cthE(xU) {return cDivS(cAddS(cPowS("Cv[8]",xU),cDivS(1,cPowS("Cv[8]",xU))),cSubS(cPowS("Cv[8]",xU),cDivS(1,cPowS("Cv[8]",xU))))}
-    function asnE(xU) {return cNegS(cMulS("Cv[46]",lneS(cAddS(cMulS("Cv[46]",xU),sqtS(cSubS(1,cPowS(xU,"2")))))))}
-    function acsE(xU) {return cMulS("Cv[46]",lneS(cAddS(xU,cMulS("Cv[46]",sqtS(cSubS(1,cPowS(xU,"2")))))))}
-    function atnE(xU) {return cDivS(cMulS("Cv[46]",lneS(cDivS(cAddS("Cv[46]",xU),cSubS("Cv[46]",xU)))),"2")}
-    function ascE(xU) {return cNegS(cDivS(lneS(cAddS(cDivS("Cv[46]",xU),sqtS(cSubS(1,cDivS("Cv[46]",cPowS(xU,"2")))))),"2"))}
-    function accE(xU) {return cNegS(cDivS(lneS(cAddS(cDivS("Cv[46]",xU),sqtS(cSubS("Cv[46]",cDivS("Cv[46]",cPowS(xU,"2")))))),"2"))}
-    function actE(xU) {return cDivS(cMulS("Cv[46]",lneS(cDivS(cSubS("Cv[46]",xU),cAddS("Cv[46]",xU)))),"2")}
-    function ashE(xU) {return lneS(cAddS(xU,sqtS(cAddS(cPowS(xU,"2"),1))))}
-    function achE(xU) {return lneS(cAddS(xU,sqtS(cSubS(cPowS(xU,"2"),1))))}
-    function athE(xU) {return cDivS(cMulS(lneS(cAddS(1,xU)),lneS(cSubS(1,xU))),"2")}
+    const trigexpFunc = {
+    sin: function (xU) {return cDivS(cSubS(cPowS("Cv[8]",cMulS("Cv[46]",xU)),cPowS("Cv[8]",cMulS(cNegS("Cv[46]"),xU))),cMulS("2","Cv[46]"))},
+    cos: function (xU) {return cDivS(cAddS(cPowS("Cv[8]",cMulS("Cv[46]",xU)),cPowS("Cv[8]",cMulS(cNegS("Cv[46]"),xU))),"2")},
+    tan: function (xU) {return cDivS(cSubS(cPowS("Cv[8]",cMulS("Cv[46]",xU)),cPowS("Cv[8]",cMulS(cNegS("Cv[46]"),xU))),cMulS("Cv[46]",cAddS(cPowS("Cv[8]",cMulS("Cv[46]",xU)),cPowS("Cv[8]",cMulS(cNegS("Cv[46]"),xU)))))},
+    sec: function (xU) {return cDivS("2",cAddS(cPowS("Cv[8]",cMulS("Cv[46]",xU)),cPowS("Cv[8]",cMulS(cNegS("Cv[46]"),xU))))},
+    csc: function (xU) {return cDivS(cMulS("2","Cv[46]"),cSubS(cPowS("Cv[8]",cMulS("Cv[46]",xU)),cPowS("Cv[8]",cMulS(cNegS("Cv[46]"),xU))))},
+    cot: function (xU) {return cDivS(cMulS("Cv[46]",cAddS(cPowS("Cv[8]",cMulS("Cv[46]",xU)),cPowS("Cv[8]",cMulS(cNegS("Cv[46]"),xU)))),cSubS(cPowS("Cv[8]",cMulS("Cv[46]",xU)),cPowS("Cv[8]",cMulS(cNegS("Cv[46]"),xU))))},
+    snh: function (xU) {return cDivS(cSubS(cPowS("Cv[8]",xU),cPowS("Cv[8]",cNegS(xU))),"2")},
+    csh: function (xU) {return cDivS(cAddS(cPowS("Cv[8]",xU),cPowS("Cv[8]",cNegS(xU))),"2")},
+    tnh: function (xU) {return cDivS(cSubS(cPowS("Cv[8]",xU),cDivS(1,cPowS("Cv[8]",xU))),cAddS(cPowS("Cv[8]",xU),cDivS(1,cPowS("Cv[8]",xU))))},
+    sch: function (xU) {return cDivS("2",cAddS(cPowS("Cv[8]",xU),cPowS("Cv[8]",cNegS(xU))))},
+    cch: function (xU) {return cDivS("2",cSubS(cPowS("Cv[8]",xU),cPowS("Cv[8]",cNegS(xU))))},
+    cth: function (xU) {return cDivS(cAddS(cPowS("Cv[8]",xU),cDivS(1,cPowS("Cv[8]",xU))),cSubS(cPowS("Cv[8]",xU),cDivS(1,cPowS("Cv[8]",xU))))},
+    asn: function (xU) {return cNegS(cMulS("Cv[46]",lneS(cAddS(cMulS("Cv[46]",xU),sqtS(cSubS(1,cPowS(xU,"2")))))))},
+    acs: function (xU) {return cMulS("Cv[46]",lneS(cAddS(xU,cMulS("Cv[46]",sqtS(cSubS(1,cPowS(xU,"2")))))))},
+    atn: function (xU) {return cDivS(cMulS("Cv[46]",lneS(cDivS(cAddS("Cv[46]",xU),cSubS("Cv[46]",xU)))),"2")},
+    asc: function (xU) {return cNegS(cDivS(lneS(cAddS(cDivS("Cv[46]",xU),sqtS(cSubS(1,cDivS("Cv[46]",cPowS(xU,"2")))))),"2"))},
+    acc: function (xU) {return cNegS(cDivS(lneS(cAddS(cDivS("Cv[46]",xU),sqtS(cSubS("Cv[46]",cDivS("Cv[46]",cPowS(xU,"2")))))),"2"))},
+    act: function (xU) {return cDivS(cMulS("Cv[46]",lneS(cDivS(cSubS("Cv[46]",xU),cAddS("Cv[46]",xU)))),"2")},
+    ash: function (xU) {return lneS(cAddS(xU,sqtS(cAddS(cPowS(xU,"2"),1))))},
+    ach: function (xU) {return lneS(cAddS(xU,sqtS(cSubS(cPowS(xU,"2"),1))))},
+    ath: function (xU) {return cDivS(cMulS(lneS(cAddS(1,xU)),lneS(cSubS(1,xU))),"2")},
+    }
     //
     function xprTrigToExp(xU) { //convert trig to exponential forms
-        var xReturn = String(xU).replace(/([a-z])\(/g,"$1S(");
-        for (var xFn in mgTrans.funcMap) {if (mgTrans.funcMap[xFn].trig) {var rgx = new RegExp(xFn+"S","g");xReturn = xReturn.replace(rgx,xFn+"E")}}
-        return xReduce(xprEval(xReturn.replace(/(Cv\[\d+\])/g,"'$1'")))
+        return xReduce(execFunc(xU,trigexpFunc))
     }
     function xprExpToTrig(xU) { //convert exponential forms to trig
         const expFn = ["sin","cos","tan","sec","csc","cot"]
@@ -2891,7 +2897,7 @@ var mgCalc = function() {
         }
         return fTrm
     }
-	
+    
     //Range of expression in FUNC format
     function xprRange(xR)  {
         function nEqual(nZ,nC) { //range not equal
