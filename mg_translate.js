@@ -2276,6 +2276,7 @@ var mgTrans = function() {
 		strCount:   function(xTarget,xSearch) {return strCount(xTarget,xSearch)},
         parseParens:function(xB,bSym) {return parseParens(xB,bSym)},
         parseArgs:  function(parm) {return parseArgs(parm)},
+		oParens:    function(parm) {return oParens(parm)},
         cFunc:      function(parm) {return cFunc(parm)},
         mgExport:   function(parm) {return mgExport(parm)},
         htmlExport: function(parm) {return htmlExport(parm)},
