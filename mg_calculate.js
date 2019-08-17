@@ -188,9 +188,9 @@ var mgCalc = function() {
     cnt:{solverU:"cnt(rExpr)",ineqU:1},
     drv:{solverU:"ntg(lExpr,deeVarP)",ineqU:0},
     tdv:{solverU:"ntg(lExpr,deeVarP)",ineqU:0},
-    nrt:{solverU:"cDiv(lneS(strgI),lneS(lExpr))",solverL:"cPow(lExpr,strgI)",ineqU:0,ineqL:0},
-    lgn:{solverU:"cDiv(lneS(strgI),lneS(lExpr))",solverL:"cPow(lExpr,strgI)",ineqU:0,ineqL:0},
-    cPow:{solverU:"cPow(lExpr,(cDivS(1,strgI)))",solverL:"lgn(strgI,lExpr)",ineqU:0,ineqL:0},
+    nrt:{solverU:"cDiv(lne(strgI),lne(lExpr))",solverL:"cPow(lExpr,strgI)",ineqU:0,ineqL:0},
+    lgn:{solverU:"cDiv(lne(strgI),lne(lExpr))",solverL:"cPow(lExpr,strgI)",ineqU:0,ineqL:0},
+    cPow:{solverU:"cPow(lExpr,(cDiv(1,strgI)))",solverL:"lgn(strgI,lExpr)",ineqU:0,ineqL:0},
     cNeg:{solverU:"cNeg(lExpr)",ineqU:-1},
     cMul:{solverU:"cDiv(lExpr,strgI)",solverL:"cDiv(lExpr,strgI)",ineqU:"strgI",ineqL:"strgI"},
     cTms:{solverU:"cDiv(lExpr,strgI)",solverL:"cDiv(lExpr,strgI)",ineqU:"strgI",ineqL:"strgI"},
@@ -306,7 +306,7 @@ var mgCalc = function() {
             if (typeof passthruFunc[funcKey] == "undefined") {funcKey = expReturn.substr(bSym-5,4)} //extract operators cXxx()
             if (typeof funcObj[funcKey] == "undefined") {fReturn = passthruFunc[funcKey](mgTrans.oParens(paramS[0]),mgTrans.oParens(paramS[1]),paramS[2],paramS[3])} //execute passthru
             else {fReturn = funcObj[funcKey](mgTrans.oParens(paramS[0]),mgTrans.oParens(paramS[1]),paramS[2],paramS[3])}//execute operation
-            expReturn = expReturn.substr(0,expReturn.lastIndexOf("@")+1-(funcKey.length+1))+fReturn+expReturn.substr(iXf+1,lSym); //assemble output
+            expReturn = expReturn.substr(0,(expReturn.lastIndexOf("@")+1)-(funcKey.length+1))+fReturn+expReturn.substr(iXf+1,lSym); //assemble output
         }
         return expReturn
     }
@@ -1216,12 +1216,12 @@ var mgCalc = function() {
     }
     function trcS(xU) { //matrix trace
         if (typeof xU == "object") {return trc(xU)}
-        if (opExtract(xU).func == "mat") {return trc(matArray(xU))}
+        if (opExtract(xU).func == "mat") {return matFunc(trc(matArray(xU)))}
         return "undefined"
     }
     function detS(xU) { //matrix determinant
         if (typeof xU == "object") {return det(xU)}
-        if (opExtract(xU).func == "mat") {return det(matArray(xU))}
+        if (opExtract(xU).func == "mat") {return matFunc(det(matArray(xU)))}
         return "undefined"
     }
     function invS(xU) { //matrix inverse
