@@ -288,28 +288,6 @@ var mgCalc = function() {
         }
         return opReturn
     }
-    function execFunc(expIn,funcObj) { //execute math transformation from specified object
-        var expReturn = expIn.replace(/([a-z][a-z][a-z])\(/ig,"$1@"); //mark left parens with @
-        var sCount = mgTrans.strCount(expReturn,"@"),nXf = 0,lPar = 1,rPar = 0,iXf = 0,rTmp = "",payload = "",paramS = [],funcKey = "",fReturn = "";
-        for (nXf=0;nXf<sCount;nXf++) {
-            lPar = 1,rPar = 0,iXf = 0,rTmp = "";
-            bSym = expReturn.lastIndexOf("@")+1; //find inside parens
-            lSym = expReturn.length;
-            for (iXf=bSym;iXf<lSym;iXf++) {
-                if (expReturn.charAt(iXf) == "@" || expReturn.charAt(iXf) == "(") {lPar++}
-                if (expReturn.charAt(iXf) == ")") {rPar++}
-                if (lPar == rPar) {break;}
-            }
-            payload = expReturn.substr(bSym,iXf-bSym); //parameters between parens
-            paramS = mgTrans.parseArgs(payload); //parse parms
-            funcKey = expReturn.substr(bSym-4,3); //extract functions xxx()
-            if (typeof passthruFunc[funcKey] == "undefined") {funcKey = expReturn.substr(bSym-5,4)} //extract operators cXxx()
-            if (typeof funcObj[funcKey] == "undefined") {fReturn = passthruFunc[funcKey](mgTrans.oParens(paramS[0]),mgTrans.oParens(paramS[1]),paramS[2],paramS[3])} //execute passthru
-            else {fReturn = funcObj[funcKey](mgTrans.oParens(paramS[0]),mgTrans.oParens(paramS[1]),paramS[2],paramS[3])}//execute operation
-            expReturn = expReturn.substr(0,(expReturn.lastIndexOf("@")+1)-(funcKey.length+1))+fReturn+expReturn.substr(iXf+1,lSym); //assemble output
-        }
-        return expReturn
-    }
     function cDissect(xD) { //return array of all components of expression
         var xDsect = String(xD);
         var tDsect = [],vTmp = "",xV = 0,vCount = 0;
@@ -426,6 +404,28 @@ var mgCalc = function() {
         }
         return aS < bS ? -1 : aS > bS ? 1 : 0;
     }
+    function execFunc(expIn,funcObj) { //execute math transformation from specified object
+        var expReturn = expIn.replace(/([a-z][a-z][a-z])\(/ig,"$1@"); //mark left parens with @
+        var sCount = mgTrans.strCount(expReturn,"@"),nXf = 0,lPar = 1,rPar = 0,iXf = 0,rTmp = "",payload = "",paramS = [],funcKey = "",fReturn = "";
+        for (nXf=0;nXf<sCount;nXf++) {
+            lPar = 1,rPar = 0,iXf = 0,rTmp = "";
+            bSym = expReturn.lastIndexOf("@")+1; //find inside parens
+            lSym = expReturn.length;
+            for (iXf=bSym;iXf<lSym;iXf++) {
+                if (expReturn.charAt(iXf) == "@" || expReturn.charAt(iXf) == "(") {lPar++}
+                if (expReturn.charAt(iXf) == ")") {rPar++}
+                if (lPar == rPar) {break;}
+            }
+            payload = expReturn.substr(bSym,iXf-bSym); //parameters between parens
+            paramS = mgTrans.parseArgs(payload); //parse parms
+            funcKey = expReturn.substr(bSym-4,3); //extract functions xxx()
+            if (typeof passthruFunc[funcKey] == "undefined") {funcKey = expReturn.substr(bSym-5,4)} //extract operators cXxx()
+            if (typeof funcObj[funcKey] == "undefined") {fReturn = passthruFunc[funcKey](mgTrans.oParens(paramS[0]),mgTrans.oParens(paramS[1]),paramS[2],paramS[3])} //execute passthru
+            else {fReturn = funcObj[funcKey](mgTrans.oParens(paramS[0]),mgTrans.oParens(paramS[1]),paramS[2],paramS[3])}//execute operation
+            expReturn = expReturn.substr(0,(expReturn.lastIndexOf("@")+1)-(funcKey.length+1))+fReturn+expReturn.substr(iXf+1,lSym); //assemble output
+        }
+        return expReturn
+    }
     function xprEval(xpr) {'use strict';return eval(String(xpr))}
     
     //Expression reduction
@@ -433,7 +433,6 @@ var mgCalc = function() {
         xIter = String(xIter);
         if (strTest(xIter,"undefined")) {return "undefined"}
         if (xIter.search(/,,/) > -1 || xIter.search(/,\)/) > -1 || xIter.search(/\(,/) > -1 || xIter.search(/\(\)/) > -1) {return cError("Missing operand(s)")}
-        //return String(execFunc(xIter,symFunc))
         return String(xprEval(xIter.replace(/([a-z])\(/g,"$1S(").replace(/(Pv\[\d+\])/g,"'$1'").replace(/(Sv\[\d+\])/g,"'$1'").replace(/(Cv\[\d+\])/g,"'$1'")));
     }
     function cReduce(cRdce) { //complete expression reduction
@@ -805,76 +804,6 @@ var mgCalc = function() {
     }
 
     //Algebra
-    const symFunc = {
-    cPow: function (xU,xL) {return cPowS(xU,xL)},
-    cMul: function (xU,xL) {return cMulS(xU,xL)},
-    cTms: function (xU,xL) {return cTmsS(xU,xL)},
-    cDot: function (xU,xL) {return cDotS(xU,xL)},
-    cDiv: function (xU,xL) {return cDivS(xU,xL)},
-    cAdd: function (xU,xL) {return cAddS(xU,xL)},
-    cSub: function (xU,xL) {return cSubS(xU,xL)},
-    cBnd: function (xU,xL) {return cBndS(xU,xL)},
-    cEql: function (xU,xL) {return cEqlS(xU,xL)},
-    cNql: function (xU,xL) {return cNqlS(xU,xL)},
-    cGth: function (xU,xL) {return cGthS(xU,xL)},
-    cLth: function (xU,xL) {return cLthS(xU,xL)},
-    cGeq: function (xU,xL) {return cGeqS(xU,xL)},
-    cLeq: function (xU,xL) {return cLeqS(xU,xL)},
-    cNeg: function (xU)    {return cNegS(xU)},
-    nrt: function (xU,xL)  {return nrtS(xU,xL)},
-    lgn: function (xU,xL)  {return lgnS(xU,xL)},
-    lne: function (xU) {return lneS(xU)},
-    log: function (xU) {return logS(xU)},
-    sqt: function (xU) {return sqtS(xU)},
-    cbt: function (xU) {return cbtS(xU)},
-    sin: function (xU) {return sinS(xU)},
-    cos: function (xU) {return cosS(xU)},
-    tan: function (xU) {return tanS(xU)},
-    cot: function (xU) {return cotS(xU)},
-    csc: function (xU) {return cscS(xU)},
-    sec: function (xU) {return secS(xU)},
-    snh: function (xU) {return snhS(xU)},
-    csh: function (xU) {return cshS(xU)},
-    tnh: function (xU) {return tnhS(xU)},
-    sch: function (xU) {return schS(xU)},
-    cch: function (xU) {return cchS(xU)},
-    cth: function (xU) {return cthS(xU)},
-    asn: function (xU) {return asnS(xU)},
-    acs: function (xU) {return acsS(xU)},
-    atn: function (xU) {return atnS(xU)},
-    act: function (xU) {return actS(xU)},
-    asc: function (xU) {return ascS(xU)},
-    acc: function (xU) {return accS(xU)},
-    ash: function (xU) {return ashS(xU)},
-    ach: function (xU) {return achS(xU)},
-    ath: function (xU) {return athS(xU)},
-    axh: function (xU) {return axhS(xU)},
-    ayh: function (xU) {return ayhS(xU)},
-    azh: function (xU) {return azhS(xU)},
-    exp: function (xU) {return expS(xU)},
-    abs: function (xU) {return absS(xU)},
-    erf: function (xU) {return erfS(xU)},
-    efc: function (xU) {return efcS(xU)},
-    fac: function (xU) {return facS(xU)},
-    gam: function (xU) {return gamS(xU)},
-    sdr: function (xU,xL) {return sdrS(xU,xL)},
-    psd: function (xU,xL) {return psdS(xU,xL)},
-    ntg: function (nXpr,deeVar,iU,iL) {return ntgS(nXpr,deeVar,iU,iL)},
-    ntp: function (nXpr,deeVar,iU,iL) {return ntpS(nXpr,deeVar,iU,iL)},
-    tdv: function (dXpr,deeVar,nTh) {return tdvS(dXpr,deeVar,nTh)},
-    drv: function (dXpr,deeVar,nTh) {return drvS(dXpr,deeVar,nTh)},
-    smm: function (xU,xL,xR) {return smmS(xU,xL,xR)},
-    pmm: function (xU,xL,xR) {return pmmS(xU,xL,xR)},
-    lmt: function (xU,xL,xR) {return lmtS(xU,xL,xR)},
-    //mat: function () {return matS(arguments)},
-    smx: function (xU) {return smxS(xU)},
-    pxp: function (xU) {return pxpS(xU)},
-    vMul: function (xU,xL) {return vMulS(xU,xL)},
-    vDiv: function (xU,xL) {return vDivS(xU,xL)},
-    vAdd: function (xU,xL) {return vAddS(xU,xL)},
-    vSub: function (xU,xL) {return vSubS(xU,xL)},
-    vNeg: function (xU) {return vNegS(xU)},
-    }
     function cPowS(xU,xL) { //exponent xU^xL
         var xTractU = opExtract(xU);
         var xTractL = opExtract(xL);
@@ -1633,16 +1562,6 @@ var mgCalc = function() {
     }
 
     // Expand functions
-    const expFunc = {
-    cPow: function (xU,xL) {return cPowX(xU,xL)},
-    cMul: function (xU,xL) {return cMulX(xU,xL)},
-    cTms: function (xU,xL) {return cMulX(xU,xL)},
-    cDot: function (xU,xL) {return cMulX(xU,xL)},
-    cDiv: function (xU,xL) {return cDivX(xU,xL)},
-    cAdd: function (xU,xL) {return cAddX(xU,xL)},
-    cSub: function (xU,xL) {return cSubX(xU,xL)},
-    sqt: function (xU) {return sqtX(xU)},
-    }
     function cAddX(xU,xL) {
         var xTractU = opExtract(xU);
         var xTractL = opExtract(xL);
@@ -1694,7 +1613,8 @@ var mgCalc = function() {
     }
     //
     function xprExpand(xE) { //expand (defactor) expression
-        var xReturn = xReduce(execFunc(String(xE),expFunc));
+        var xReturn = String(xE);
+        xReturn = xReduce(xprEval(xReturn.replace(/([a-z])\(/g,"$1S(").replace(/(Cv\[\d+\])/g,"'$1'").replace(/sqtS/g,"sqtX").replace(/cPowS/g,"cPowX").replace(/cMulS/g,"cMulX").replace(/cDivS/g,"cDivX").replace(/cAddS/g,"cAddX").replace(/cSubS/g,"cSubX")));
         xReturn = xReturn.replace(/cnt\(/g,"(");
         if (!strTest("undefined",xReturn)) {return xReturn}
         return xE
