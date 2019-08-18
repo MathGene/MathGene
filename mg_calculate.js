@@ -86,6 +86,8 @@ var mgCalc = function() {
     und: function (xU) {return "und("+xU+")"},
     udt: function (xU) {return "udt("+xU+")"},
     tld: function (xU) {return "tld("+xU+")"},
+    cup: function (xU) {return "cup("+xU+")"},
+    cap: function (xU) {return "cap("+xU+")"},
     cnt: function (xU) {return "cnt("+xU+")"},
     sbt: function (xU) {return "sbt("+xU+")"},
     cdf: function (xU) {return "cdf("+xU+")"},
@@ -124,8 +126,7 @@ var mgCalc = function() {
     vNeg: function (xU) {return "vNeg("+xU+")"},
     mat: function() {return "mat(" + Array.prototype.slice.call(arguments) + ")"},
     }
-    const solverMap = //map inverse functions for solver
-    {
+    const solverMap = { //map inverse functions for solver
     sin:{solverU:"asn(lExpr)",ineqU:0},
     cos:{solverU:"acs(lExpr)",ineqU:0},
     tan:{solverU:"atn(lExpr)",ineqU:0},
@@ -198,7 +199,7 @@ var mgCalc = function() {
     cDiv:{solverU:"cMul(lExpr,strgI)",solverL:"cDiv(strgI,lExpr)",ineqU:"strgI",ineqL:"strgI"},
     cAdd:{solverU:"cSub(lExpr,strgI)",solverL:"cSub(lExpr,strgI)",ineqU:1,ineqL:1},
     cSub:{solverU:"cAdd(lExpr,strgI)",solverL:"cSub(strgI,lExpr)",ineqU:1,ineqL:-1},
-    };
+    }
     function xprSolve(xSol,cVar) {//solve equation/inequality xSol in FUNC format for variable cVar
         function xprCrawl(lExpr,rExpr,xVar) {
             if (rExpr.split(")").length-1 != rExpr.split("(").length-1) {return cError("Unmatched parentheses/brackets")}
@@ -250,7 +251,6 @@ var mgCalc = function() {
             cRet.ineqSwap = cNegS(cRet.ineqSwap);
         }
         solverFlag = false;
-
         if (!nbrTest(cRet.ineqSwap)) {cRet.ineqSwap = 0}
         var sReturn = "";
         if (sXtract.func == "cEql") {sReturn = cEqlS(cRet.rExpr,xReduce(cRet.lExpr))}
@@ -2382,18 +2382,11 @@ var mgCalc = function() {
         efcM: function(xU) {return "undefined"},
         conM: function(xU) {return "undefined"},
         facM: function(xU) {return "undefined"},
-        vecM: function(xU) {return "vec("+xU+")"},
-        hatM: function(xU) {return "hat("+xU+")"},
-        undM: function(xU) {return "und("+xU+")"},
-        udtM: function(xU) {return "udt("+xU+")"},
-        tldM: function(xU) {return "tld("+xU+")"},
-        cntM: function(xU) {return "cnt("+xU+")"},
-        sbtM: function(xU) {return "sbt("+xU+")"},
-        drvM: function(xU) {return "drv("+xU+")"},
         }
         //
         sXpr = String(sXpr);sUpper = String(sUpper);dV = String(dV);sLower = String(sLower);
         var sReturn = "smm("+xReduce(sXpr)+","+sUpper+","+dV+","+sLower+")";
+        var sumReturn = sXpr;
         sIterations++;
         if (sIterations > 30) {sReturn = "smm("+sXpr+","+sUpper+","+dV+","+sLower+")"} //break infinite loop
         else if (strTest(sLower,"Cv[8734]")) {sReturn = "smm("+xReduce(sXpr)+","+sUpper+","+dV+","+sLower+")"}
@@ -2402,7 +2395,8 @@ var mgCalc = function() {
         else if (!strTest(sXpr,dV)) {sReturn = xReduce(cMulS(sXpr,cAddS(cSubS(sUpper,sLower),1)))}
         else {
             var args = opExtract(sXpr);
-            var sumReturn  = smmFunc[args.func+"M"](args.upper,args.lower);
+            if (typeof smmFunc[args.func+"M"] != "undefined") {sumReturn = smmFunc[args.func+"M"](args.upper,args.lower)}
+            else {sumReturn = passthruFunc[args.func](args.upper,args.lower)}
             if (!strTest(sumReturn,"undefined") && !strTest(sumReturn,"NaN")) {sReturn = xReduce(sumReturn)}
             else {
                 sumReturn = sumIterate(sXpr,sUpper,dV,sLower);
@@ -2483,19 +2477,12 @@ var mgCalc = function() {
         efcP: function(xU) {return "undefined"},
         conP: function(xU) {return "undefined"},
         facP: function(xU) {return "undefined"},
-        vecP: function(xU) {return "vec("+xU+")"},
-        hatP: function(xU) {return "hat("+xU+")"},
-        undP: function(xU) {return "und("+xU+")"},
-        udtP: function(xU) {return "udt("+xU+")"},
-        tldP: function(xU) {return "tld("+xU+")"},
-        cntP: function(xU) {return "cnt("+xU+")"},
-        sbtP: function(xU) {return "sbt("+xU+")"},
-        drvP: function(xU) {return "drv("+xU+")"},
         }
         //
         pXpr = String(pXpr);pUpper = String(pUpper);dV = String(dV);pLower = String(pLower);
         pIterations++;
         var sReturn = "pmm("+xReduce(pXpr)+","+pUpper+","+dV+","+pLower+")";
+        var prdReturn = pXpr;
         if (pIterations > 30) {sReturn = "pmm("+pXpr+","+pUpper+","+dV+","+pLower+")"} //break infinite loop
         else if (strTest(pLower,"Cv[8734]") || strTest(pUpper,"Cv[8734]")) {sReturn = "pmm("+pXpr+","+pUpper+","+dV+","+pLower+")"}
         else if (pXpr == dV && pLower == 0) {sReturn = 0}
@@ -2503,7 +2490,8 @@ var mgCalc = function() {
         else if (!strTest(pXpr,dV)) {sReturn = cPowS(xReduce(pXpr),cAddS(cNegS(pLower),cAddS(pUpper,1)))}
         else {
             var args = opExtract(pXpr);
-            var prdReturn  = pmmFunc[args.func+"P"](args.upper,args.lower);
+            if (typeof pmmFunc[args.func+"P"] != "undefined") {prdReturn = pmmFunc[args.func+"P"](args.upper,args.lower)}
+            else {prdReturn = passthruFunc[args.func](args.upper,args.lower)}
             if (!strTest(prdReturn,"undefined") && !strTest(prdReturn,"NaN")) {sReturn = xReduce(prdReturn)}
             else {
                 prdReturn = prdIterate(pXpr,pUpper,dV,pLower);
