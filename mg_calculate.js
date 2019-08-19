@@ -2392,7 +2392,7 @@ var mgCalc = function() {
         else if (sXpr == dV && sUpper == "Cv[8734]" && sLower != 0) {sReturn = "Cv[8734]"}
         else if (!strTest(sXpr,dV)) {sReturn = xReduce(cMulS(sXpr,cAddS(cSubS(sUpper,sLower),1)))}
         else {
-            var sumReturn = sXpr;
+            var sumReturn = "";
             var args = opExtract(sXpr);
             if (typeof smmFunc[args.func+"M"] != "undefined") {sumReturn = smmFunc[args.func+"M"](args.upper,args.lower)}
             else {sumReturn = passthruFunc[args.func](args.upper,args.lower)}
@@ -2487,7 +2487,7 @@ var mgCalc = function() {
         else if (pXpr == dV) {sReturn = cDivS(facS(pUpper),facS(cSubS(pLower,1)))} //factorial
         else if (!strTest(pXpr,dV)) {sReturn = cPowS(xReduce(pXpr),cAddS(cNegS(pLower),cAddS(pUpper,1)))}
         else {
-            var prdReturn = pXpr;
+            var prdReturn = "";
             var args = opExtract(pXpr);
             if (typeof pmmFunc[args.func+"P"] != "undefined") {prdReturn = pmmFunc[args.func+"P"](args.upper,args.lower)}
             else {prdReturn = passthruFunc[args.func](args.upper,args.lower)}
