@@ -406,7 +406,7 @@ var mgCalc = function() {
     }
     function execInside(expIn,funcObj) { //execute math transformation inside out from specified object
         var expReturn = expIn.replace(/([a-z][a-z][a-z])\(/ig,"$1@"); //mark left parens with @
-        var sCount = mgTrans.strCount(expReturn,"@"),nXf = 0,lPar = 1,rPar = 0,iXf = 0,rTmp = "",payload = "",paramS = [],funcKey = "",fReturn = "";
+        var sCount = mgTrans.strCount(expReturn,"@"),nXf = 0,lPar = 0,rPar = 0,iXf = 0,rTmp = "",payload = "",paramS = [],funcKey = "",fReturn = "";
         for (nXf=0;nXf<sCount;nXf++) {
             lPar = 1,rPar = 0,iXf = 0,rTmp = "";
             bSym = expReturn.lastIndexOf("@")+1; //find inside parens
@@ -1784,7 +1784,6 @@ var mgCalc = function() {
             var args = opExtract(xIn);
             if (typeof drvFunc[args.func+"D"] != "undefined") {return drvFunc[args.func+"D"](args.upper,args.lower,deeVar)}
             else {return passthruFunc[args.func](args.upper,args.lower)}
-            return xIn
         }
         //
         if (typeof nTh == "undefined" || nTh == "undefined") {nTh = 1}
@@ -2386,7 +2385,6 @@ var mgCalc = function() {
         //
         sXpr = String(sXpr);sUpper = String(sUpper);dV = String(dV);sLower = String(sLower);
         var sReturn = "smm("+xReduce(sXpr)+","+sUpper+","+dV+","+sLower+")";
-        var sumReturn = sXpr;
         sIterations++;
         if (sIterations > 30) {sReturn = "smm("+sXpr+","+sUpper+","+dV+","+sLower+")"} //break infinite loop
         else if (strTest(sLower,"Cv[8734]")) {sReturn = "smm("+xReduce(sXpr)+","+sUpper+","+dV+","+sLower+")"}
@@ -2394,6 +2392,7 @@ var mgCalc = function() {
         else if (sXpr == dV && sUpper == "Cv[8734]" && sLower != 0) {sReturn = "Cv[8734]"}
         else if (!strTest(sXpr,dV)) {sReturn = xReduce(cMulS(sXpr,cAddS(cSubS(sUpper,sLower),1)))}
         else {
+            var sumReturn = sXpr;
             var args = opExtract(sXpr);
             if (typeof smmFunc[args.func+"M"] != "undefined") {sumReturn = smmFunc[args.func+"M"](args.upper,args.lower)}
             else {sumReturn = passthruFunc[args.func](args.upper,args.lower)}
@@ -2482,13 +2481,13 @@ var mgCalc = function() {
         pXpr = String(pXpr);pUpper = String(pUpper);dV = String(dV);pLower = String(pLower);
         pIterations++;
         var sReturn = "pmm("+xReduce(pXpr)+","+pUpper+","+dV+","+pLower+")";
-        var prdReturn = pXpr;
         if (pIterations > 30) {sReturn = "pmm("+pXpr+","+pUpper+","+dV+","+pLower+")"} //break infinite loop
         else if (strTest(pLower,"Cv[8734]") || strTest(pUpper,"Cv[8734]")) {sReturn = "pmm("+pXpr+","+pUpper+","+dV+","+pLower+")"}
         else if (pXpr == dV && pLower == 0) {sReturn = 0}
         else if (pXpr == dV) {sReturn = cDivS(facS(pUpper),facS(cSubS(pLower,1)))} //factorial
         else if (!strTest(pXpr,dV)) {sReturn = cPowS(xReduce(pXpr),cAddS(cNegS(pLower),cAddS(pUpper,1)))}
         else {
+            var prdReturn = pXpr;
             var args = opExtract(pXpr);
             if (typeof pmmFunc[args.func+"P"] != "undefined") {prdReturn = pmmFunc[args.func+"P"](args.upper,args.lower)}
             else {prdReturn = passthruFunc[args.func](args.upper,args.lower)}
