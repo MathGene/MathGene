@@ -337,7 +337,7 @@ var mgTrans = function() {
         htmlR2:' <Xfxp>',
         htmlInv1: function (parm) {return '<Xfnc>sin<sup>-1</sup><Xfnx>('+parm[0]},
         htmlInv2: function (parm) {return '<Xfnc>sin<sup>-1</sup> <Xfnx>'+parm[0]},
-		trig:true,
+        trig:true,
         texfunc:['\\sin^{-1}','\\arcsin'],
         latexL1: function (parm) {return '\\arcsin(<Xfnx>'+parm[0]},
         latexR1:')',
@@ -354,7 +354,7 @@ var mgTrans = function() {
         htmlR2:' <Xfxp>',
         htmlInv1: function (parm) {return '<Xfnc>cos<sup>-1</sup><Xfnx>('+parm[0]},
         htmlInv2: function (parm) {return '<Xfnc>cos<sup>-1</sup> <Xfnx>'+parm[0]},
-		trig:true,
+        trig:true,
         texfunc:['\\cos^{-1}','\\arccos'],
         latexL1: function (parm) {return '\\arccos(<Xfnx>'+parm[0]},
         latexR1:')',
@@ -371,7 +371,7 @@ var mgTrans = function() {
         htmlR2:' <Xfxp>',
         htmlInv1: function (parm) {return '<Xfnc>tan<sup>-1</sup><Xfnx>('+parm[0]},
         htmlInv2: function (parm) {return '<Xfnc>tan<sup>-1</sup> <Xfnx>'+parm[0]},
-		trig:true,
+        trig:true,
         texfunc:['\\tan^{-1}','\\arctan'],
         latexL1: function (parm) {return '\\arctan(<Xfnx>'+parm[0]},
         latexR1:')',
@@ -388,7 +388,7 @@ var mgTrans = function() {
         htmlR2:' <Xfxp>',
         htmlInv1: function (parm) {return '<Xfnc>sec<sup>-1</sup><Xfnx>('+parm[0]},
         htmlInv2: function (parm) {return '<Xfnc>sec<sup>-1</sup> <Xfnx>'+parm[0]},
-		trig:true,
+        trig:true,
         texfunc:['\\sec^{-1}','\\arcsec'],
         latexL1: function (parm) {return '\\arcsec(<Xfnx>'+parm[0]},
         latexR1:')',
@@ -405,7 +405,7 @@ var mgTrans = function() {
         htmlR2:' <Xfxp>',
         htmlInv1: function (parm) {return '<Xfnc>csc<sup>-1</sup><Xfnx>('+parm[0]},
         htmlInv2: function (parm) {return '<Xfnc>csc<sup>-1</sup> <Xfnx>'+parm[0]},
-		trig:true,
+        trig:true,
         texfunc:['\\csc^{-1}','\\arccsc'],
         latexL1: function (parm) {return '\\arccsc(<Xfnx>'+parm[0]},
         latexR1:')',
@@ -422,7 +422,7 @@ var mgTrans = function() {
         htmlR2:' <Xfxp>',
         htmlInv1: function (parm) {return '<Xfnc>cot<sup>-1</sup><Xfnx>('+parm[0]},
         htmlInv2: function (parm) {return '<Xfnc>cot<sup>-1</sup> <Xfnx>'+parm[0]},
-		trig:true,
+        trig:true,
         texfunc:['\\cot^{-1}','\\arccot'],
         latexL1: function (parm) {return '\\arccot(<Xfnx>'+parm[0]},
         latexR1:')',
@@ -439,7 +439,7 @@ var mgTrans = function() {
         htmlR2:' <Xfxp>',
         htmlInv1: function (parm) {return '<Xfnc>sinh<sup>-1</sup><Xfnx>('+parm[0]},
         htmlInv2: function (parm) {return '<Xfnc>sinh<sup>-1</sup> <Xfnx>'+parm[0]},
-		trig:true,
+        trig:true,
         texfunc:['\\sinh^{-1}','\\arcsinh'],
         latexL1: function (parm) {return '\\arcsinh(<Xfnx>'+parm[0]},
         latexR1:')',
@@ -456,7 +456,7 @@ var mgTrans = function() {
         htmlR2:' <Xfxp>',
         htmlInv1: function (parm) {return '<Xfnc>cosh<sup>-1</sup><Xfnx>('+parm[0]},
         htmlInv2: function (parm) {return '<Xfnc>cosh<sup>-1</sup> <Xfnx>'+parm[0]},
-		trig:true,
+        trig:true,
         texfunc:['\\cosh^{-1}','\\arccosh'],
         latexL1: function (parm) {return '\\arccosh(<Xfnx>'+parm[0]},
         latexR1:')',
@@ -473,7 +473,7 @@ var mgTrans = function() {
         htmlR2:' <Xfxp>',
         htmlInv1: function (parm) {return '<Xfnc>tanh<sup>-1</sup><Xfnx>('+parm[0]},
         htmlInv2: function (parm) {return '<Xfnc>tanh<sup>-1</sup> <Xfnx>'+parm[0]},
-		trig:true,
+        trig:true,
         texfunc:['\\tanh^{-1}','\\arctanh'],
         latexL1: function (parm) {return '\\arctanh(<Xfnx>'+parm[0]},
         latexR1:')',
@@ -490,7 +490,7 @@ var mgTrans = function() {
         htmlR2:' <Xfxp>',
         htmlInv1: function (parm) {return '<Xfnc>sech<sup>-1</sup><Xfnx>('+parm[0]},
         htmlInv2: function (parm) {return '<Xfnc>sech<sup>-1</sup> <Xfnx>'+parm[0]},
-		trig:true,
+        trig:true,
         texfunc:['\\sech^{-1}','\\arcsech'],
         latexL1: function (parm) {return '\\arcsech(<Xfnx>'+parm[0]},
         latexR1:')',
@@ -507,7 +507,7 @@ var mgTrans = function() {
         htmlR2:' <Xfxp>',
         htmlInv1: function (parm) {return '<Xfnc>csch<sup>-1</sup><Xfnx>('+parm[0]},
         htmlInv2: function (parm) {return '<Xfnc>csch<sup>-1</sup> <Xfnx>'+parm[0]},
-		trig:true,
+        trig:true,
         texfunc:['\\csch^{-1}','\\arccsch'],
         latexL1: function (parm) {return '\\arccsch(<Xfnx>'+parm[0]},
         latexR1:')',
@@ -524,7 +524,7 @@ var mgTrans = function() {
         htmlR2:' <Xfxp>',
         htmlInv1: function (parm) {return '<Xfnc>coth<sup>-1</sup><Xfnx>('+parm[0]},
         htmlInv2: function (parm) {return '<Xfnc>coth<sup>-1</sup> <Xfnx>'+parm[0]},
-		trig:true,
+        trig:true,
         texfunc:['\\coth^{-1}','\\arccoth'],
         latexL1: function (parm) {return '\\arccoth(<Xfnx>'+parm[0]},
         latexR1:')',
@@ -1416,7 +1416,7 @@ var mgTrans = function() {
         htmlR1:'',
         htmlL2: function (parm) {return parm[0]+' = '+parm[1]},
         htmlR2:'',
-		relop:true,
+        relop:true,
         texfunc:[],
         latexL1: function (parm) {return parm[0]+'='+parm[1]},
         latexR1:'',
@@ -1429,7 +1429,7 @@ var mgTrans = function() {
         htmlR1:'',
         htmlL2: function (parm) {return parm[0]+' &gt; '+parm[1]},
         htmlR2:'',
-		relop:true,
+        relop:true,
         texfunc:['>'],
         latexL1: function (parm) {return parm[0]+'>'+parm[1]},
         latexR1:'',
@@ -1442,7 +1442,7 @@ var mgTrans = function() {
         htmlR1:'',
         htmlL2: function (parm) {return parm[0]+' &lt; '+parm[1]},
         htmlR2:'',
-		relop:true,
+        relop:true,
         texfunc:['<'],
         latexL1: function (parm) {return parm[0]+'<'+parm[1]},
         latexR1:'',
@@ -1455,7 +1455,7 @@ var mgTrans = function() {
         htmlR1:'',
         htmlL2: function (parm) {return parm[0]+' &#8805; '+parm[1]},
         htmlR2:'',
-		relop:true,
+        relop:true,
         texfunc:['\\geq'],
         latexL1: function (parm) {return parm[0]+'\\geq '+parm[1]},
         latexR1:'',
@@ -1468,7 +1468,7 @@ var mgTrans = function() {
         htmlR1:'',
         htmlL2: function (parm) {return parm[0]+' &#8804; '+parm[1]},
         htmlR2:'',
-		relop:true,
+        relop:true,
         texfunc:['\\leq'],
         latexL1: function (parm) {return parm[0]+'\\leq '+parm[1]},
         latexR1:'',
@@ -1481,7 +1481,7 @@ var mgTrans = function() {
         htmlR1:'',
         htmlL2: function (parm) {return parm[0]+' &#8800; '+parm[1]},
         htmlR2:'',
-		relop:true,
+        relop:true,
         texfunc:['\\neq'],
         latexL1: function (parm) {return parm[0]+'\\neq '+parm[1]},
         latexR1:'',
@@ -1624,7 +1624,7 @@ var mgTrans = function() {
     fAccentL: function (xB) {return "<Xfnc></span><span style='display:table-row;line-height:20%;font-size:60%'>"+xB+"</span></span></span>"},
     cMulL: function (xU,xL) {
         if (xL.indexOf("<Xfnc>") == 0) {return xU+" "+xL}
-        return xU+""+xL
+        return xU + "" + xL
         },
     cDivL: function (xU,xL) {
         if (mgConfig.divSymbol == "Slash") {return xU+"/"+xL}
@@ -1697,7 +1697,7 @@ var mgTrans = function() {
         if (typeof xA[0] == "string" && xA[0].substr(0,6) == "<Xrow>"){
             for (iM in xA) {
                 xA[iM] = xA[iM].replace(/\<Xrow\>/g,"").replace(/\<Xrwe\>/g,"").replace(/\<Xcel\>/g,"<td>").replace(/\<Xcle\>/g,"</td>");
-                dScale = dScale + dNest(xA+"")*(mgConfig.divScale/100)
+                dScale = dScale + dNest(String(xA))*(mgConfig.divScale/100)
                 mReturn = mReturn + "<tr>" + xA[iM] + "</tr>"
                 prefix = prefix+"<Xdiv>";
                 suffix = suffix+"<Xdve>";
@@ -1904,7 +1904,7 @@ var mgTrans = function() {
         htmlXpr = dFunc(htmlXpr, "html") //process functions
         //render symbols
         sCount = strCount(htmlXpr,"Cv[");
-        for (nXs=0;nXs<sCount;nXs++) {htmlXpr = htmlXpr.replace(/Cv\[\d+\]/,Cs[(htmlXpr.match(/Cv\[\d+\]/)+"").replace(/Cv\[(\d+)\]/,"$1")])} //resolve Cv[] symbols
+        for (nXs=0;nXs<sCount;nXs++) {htmlXpr = htmlXpr.replace(/Cv\[\d+\]/,Cs[(String(htmlXpr.match(/Cv\[\d+\]/))).replace(/Cv\[(\d+)\]/,"$1")])} //resolve Cv[] symbols
         //scale and fix parens
         htmlXpr = htmlXpr.replace(/\(/g,"{").replace(/\)/g,"}");
         sCount = strCount(htmlXpr,"{");
@@ -1937,7 +1937,7 @@ var mgTrans = function() {
     }
     //
     function mgExport(funcIn) { //export from FUNC to MG format
-        var mgReturn = funcIn+"";
+        var mgReturn = String(funcIn);
         if (mgReturn == "NaN" || mgReturn == "undefined") {return "undefined"}
         mgReturn += "";
         mgReturn = mgReturn.replace(/\,\)/g,",'')").replace(/\(\,/g,"('',").replace(/\,\,/g,",'',").replace(/\(\)/g,"('')");
@@ -1989,7 +1989,7 @@ var mgTrans = function() {
     //
     function cFunc(mgIn) { //convert from MG format to FUNC format: a+bc/d -> cAdd(a,cDiv(cMul(b,c),d)))
         var nCf = 0,iXX = 0,key = 0,sbtOperand = "",cIdx = 0,aIdx = 0,sCount = 0;
-        funcReturn = mgIn+"";
+        funcReturn = String(mgIn);
         sCount = strCount(funcReturn,"]sbt(");//var&subscripts into container cnt()
         funcReturn = funcReturn.replace(/\]sbt\(/g,"]SBT(");
         funcReturn = funcReturn.replace(/Infinity/g,"Cv[8734]");
@@ -2062,13 +2062,13 @@ var mgTrans = function() {
             if (typeof funcMap[key][fnformat] == "function") {return funcMap[key][fnformat](parm,strg)}
             return funcMap[key][fnformat]
         }
-        //
-        expReturn = funcIn.replace(/ /g,"").replace(/([a-z][a-z][a-z])\(/ig,"$1@"); //mark left parens with @
-        var sCount = strCount(expReturn,"@");
-        var bSym = 0, lSym = 0,lPar = 0,rPar = 0,iXf = 0,payload = "",paramS = "",funcKey = "",rTmp = "",fnformatL = "",fnformatR = "",fnformatLx = "",nXf = 0;
+        // 
+        var bSym = 0, lSym = 0,lPar = 0,rPar = 0,iXf = 0,nXf = 0,sCount = 0,payload = "",paramS = "",funcKey = "",rTmp = "",fnformatL = "",fnformatR = "",fnformatLx = "",expReturn = "";
         if (prefix == "mg") {fnformatL = prefix;fnformatR = prefix}
         else if (mgConfig.fnFmt == "fn(x)") {fnformatL = prefix+"L1";fnformatR = prefix+"R1"} //fn(x)
         else {fnformatL = prefix+"L2";fnformatR = prefix+"R2"}  //fn x
+        expReturn = funcIn.replace(/ /g,"").replace(/([a-z][a-z][a-z])\(/ig,"$1@"); //mark left parens with @
+        sCount = strCount(expReturn,"@");
         for (nXf=0;nXf<sCount;nXf++) {
             fnformatLx = fnformatL;
             lPar = 1,rPar = 0,iXf = 0,rTmp = "";
@@ -2094,7 +2094,7 @@ var mgTrans = function() {
     }
     // latex conversions
     function texExport(mgIn) { //convert MG format to LaTeX
-        var lxReturn = mgIn+"";
+        var lxReturn = String(mgIn);
         if (lxReturn == "NaN" || lxReturn == "undefined") {return "undefined"}
         lxReturn = cFunc(lxReturn); //convert to func format
         lxReturn = dFunc(lxReturn, "latex"); //process functions
@@ -2123,7 +2123,7 @@ var mgTrans = function() {
         lxReturn = lxReturn.replace(/\<X\w\w\w\>/g,"").replace(/\%/g,"("); //clean up tags
         //resolve symbols
         sCount = strCount(lxReturn,"Cv[");
-        for (var nXf=0;nXf<sCount;nXf++) {lxReturn = lxReturn.replace(/Cv\[\d+\]/,Ct[(lxReturn.match(/Cv\[\d+\]/)+"").replace(/Cv\[(\d+)\]/,"$1")])} //resolve Cv[] symbols
+        for (var nXf=0;nXf<sCount;nXf++) {lxReturn = lxReturn.replace(/Cv\[\d+\]/,Ct[(String(lxReturn.match(/Cv\[\d+\]/))).replace(/Cv\[(\d+)\]/,"$1")])} //resolve Cv[] symbols
         lxReturn = lxReturn.replace(/\(/g,"\\left(").replace(/\)/g,"\\right)").replace(/\\/g," \\").replace(/  /g," ").replace(/ _/g,"_").replace(/_ /g,"_").replace(/ \^/g,"^").replace(/\^ /g,"^").replace(/ \[/g,"[").replace(/\\ \\/g,"\\\\");//cleanup
         return lxReturn;
     }
@@ -2142,7 +2142,7 @@ var mgTrans = function() {
             return "mat(" + mReturn + ")"
         }
         //
-        var liReturn = latIn+"";
+        var liReturn = String(latIn);
         const lBrackets = ["{","[","|"];
         const rBrackets = ["}","]","|"];
         var sCount = 0,symTemp = "",tTemp = "",funcKey = 0,nXs = 0,nXf = 0,nXi = 0,xF = 0,operand = {},texFunc = "";
@@ -2273,7 +2273,10 @@ var mgTrans = function() {
         Cu:         Cu,
         Cd:         Cd,
         configCheck:function() {configCheck()},
+		strCount:   function(xTarget,xSearch) {return strCount(xTarget,xSearch)},
         parseParens:function(xB,bSym) {return parseParens(xB,bSym)},
+        parseArgs:  function(parm) {return parseArgs(parm)},
+		oParens:    function(parm) {return oParens(parm)},
         cFunc:      function(parm) {return cFunc(parm)},
         mgExport:   function(parm) {return mgExport(parm)},
         htmlExport: function(parm) {return htmlExport(parm)},

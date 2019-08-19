@@ -238,9 +238,9 @@ var range =
 "Cv[10099]sqt(1-Cv[10108]^2/Cv[10076]^2)","Cv[10076]Cv[8800]0",
 "Cv[10120](Cv[10121]+1)/(Cv[10121]+1)","Cv[10121]Cv[8800]-1",
 "2cos(Cv[10120]Cv[10121])/Cv[10121]^3+2Cv[10120]sin(Cv[10120]Cv[10121])/Cv[10121]^2-Cv[10120]^2cos(Cv[10120]Cv[10121])/Cv[10121]+Cv[11100]","Cv[10121]Cv[8800]0",
-"tan(Cv[10120]Cv[10121])+tan(Cv[10120]/Cv[10121])","Cv[10120]Cv[8800]Cv[29]/2Cv[10121]Cv[10044]Cv[10121]Cv[8800]Cv[29]/2Cv[10120]Cv[10044]Cv[10121]Cv[8800]0Cv[10044]Cv[10120]Cv[8800]Cv[10121]Cv[29]/2Cv[10044]Cv[10121]Cv[8800]2Cv[10120]/Cv[29]",
+"tan(Cv[10120]Cv[10121])+tan(Cv[10120]/Cv[10121])","Cv[10120]Cv[8800]Cv[10121]Cv[29]/2Cv[10044]Cv[10121]Cv[8800]2Cv[10120]/Cv[29]Cv[10044]Cv[10120]Cv[8800]Cv[29]/2Cv[10121]Cv[10044]Cv[10121]Cv[8800]Cv[29]/2Cv[10120]Cv[10044]Cv[10121]Cv[8800]0",
 "atn(Cv[10120])Cv[10120]^2-2Cv[10120](Cv[10120]atn(Cv[10120])-lne(Cv[10120]^2+1)/2)+Cv[11100]","-(Cv[29]/2)Cv[8804]Cv[10120]Cv[8804]Cv[29]/2Cv[10044]Cv[10120]Cv[8800]sqt(-1)",
-"Cv[10120]lne(Cv[10120]^2+1)-atn(Cv[10120])Cv[10120]^2+Cv[11100]","Cv[10120]Cv[8800]sqt(-1)Cv[10044]-Cv[29]/2Cv[8804]Cv[10120]Cv[8804]Cv[29]/2",
+"Cv[10120]lne(Cv[10120]^2+1)-atn(Cv[10120])Cv[10120]^2+Cv[11100]","-(Cv[29]/2)Cv[8804]Cv[10120]Cv[8804]Cv[29]/2Cv[10044]Cv[10120]Cv[8800]sqt(-1)",
 "(Cv[8]^Cv[10120]sin(Cv[10120]))/2+Cv[8]^Cv[10120]cos(Cv[10120])-(Cv[8]^Cv[10120]sin(Cv[10120]))/2","",
 "Cv[10109]-lne(Cv[10120])/lne(Cv[10121])","Cv[10120]Cv[8800]0Cv[10044]Cv[10121]Cv[8800]0Cv[10044]Cv[10121]Cv[8800]1",
 "(Cv[10120]^2+2Cv[10120]^2Cv[10121]-2Cv[10120]Cv[10121]+2Cv[10120]Cv[10121]^2-3Cv[10121]^2)/(2Cv[10120]-3Cv[10121]^2)","Cv[10120]Cv[8800]3Cv[10121]^2/2Cv[10044]Cv[10121]Cv[8800]sqt(2Cv[10120])/sqt(3)",
@@ -253,20 +253,16 @@ var range =
 "tdr(Cv[10120])1/Cv[10120]^2","Cv[10120]Cv[8800]0",
 "lim(Cv[10120],Cv[8734])(2Cv[10120]^3+4Cv[10120]^2)/(3Cv[10120]^3+1)","Cv[10120]Cv[8800]cbt(-(1/3))",
 
-"-lne(cos(Cv[10120]Cv[10121]))/Cv[10121]-Cv[10121]lne(cos(Cv[10120]/Cv[10121]))+Cv[11100]","Cv[10120]Cv[8800]Cv[29]/2Cv[10121]Cv[10044]Cv[10121]Cv[8800]Cv[29]/2Cv[10120]Cv[10044]Cv[10121]Cv[8800]0Cv[10044]Cv[10120]Cv[8800]Cv[10121]Cv[29]/2Cv[10044]Cv[10121]Cv[8800]2Cv[10120]/Cv[29]",
+"-lne(cos(Cv[10120]Cv[10121]))/Cv[10121]-Cv[10121]lne(cos(Cv[10120]/Cv[10121]))+Cv[11100]","Cv[10120]Cv[8800]Cv[10121]Cv[29]/2Cv[10044]Cv[10121]Cv[8800]2Cv[10120]/Cv[29]Cv[10044]Cv[10120]Cv[8800]Cv[29]/2Cv[10121]Cv[10044]Cv[10121]Cv[8800]Cv[29]/2Cv[10120]Cv[10044]Cv[10121]Cv[8800]0",
 "2Cv[10120]cos(Cv[10121]^2)/Cv[10121]cos(Cv[10120]^2)","Cv[10120]Cv[8800]sqt(Cv[29])/sqt(2)Cv[10044]Cv[10121]Cv[8800]0",
 
-];
+"Cv[10110]=lim(Cv[10120],Cv[8734])(2Cv[10120]^3+4Cv[10120]^2)/(3Cv[10120]^3+1)","Cv[10120]Cv[8800]cbt(-(1/3))",
+"lne(Cv[10120])Cv[60]2","Cv[10120]Cv[8800]0",
+"lne(Cv[10120])Cv[62]2","Cv[10120]Cv[8800]0",
+"lne(Cv[10120])Cv[8804]2","Cv[10120]Cv[8800]0",
+"lne(Cv[10120])Cv[8805]2","Cv[10120]Cv[8800]0",
+"lne(Cv[10120])Cv[8800]2","Cv[10120]Cv[8800]0",
 
-var domain =
-[
-"lim(Cv[10120],Cv[8734])(2Cv[10120]^3+4Cv[10120]^2)/(3Cv[10120]^3+1)","Cv[10120]Cv[8712]Cv[8477]",
-"itg(Cv[10097],0)Cv[10120]^2Cv[8748]Cv[10120]","Cv[10120]Cv[8712]Cv[8450]Cv[59]Cv[10097]Cv[8712]Cv[8477]",
-"itg(Cv[10097],Cv[10098])Cv[10120]^2Cv[8748]Cv[10120]","Cv[10120]Cv[8712]Cv[8450]Cv[59]Cv[10097]Cv[10044]Cv[10098]Cv[8712]Cv[8477]",
-"sum(Cv[8734],Cv[10120]Cv[61]1)(1/Cv[10120]^2)","Cv[10120]Cv[8712]Cv[8484]",
-"sum(Cv[8734],Cv[10120]Cv[61]1)(Cv[10121]/Cv[10120]^2)","Cv[10121]Cv[8712]Cv[8450]Cv[59]Cv[10120]Cv[8712]Cv[8484]",
-"prd(Cv[10097],Cv[10120]Cv[61]Cv[10098])-Cv[10120]","Cv[10097]Cv[10044]Cv[10098]Cv[10044]Cv[10120]Cv[8712]Cv[8484]",
-"mat(mat(Cv[10120],Cv[10121]))*mat(mat(Cv[10120]),mat(Cv[10121]))","Cv[10120]Cv[10044]Cv[10121]Cv[8712]Cv[8450]",
 ];
 
 var matrix =
@@ -831,6 +827,13 @@ var expand =
 "sqt(Cv[10120]/Cv[10121])+sqt(Cv[10097]/Cv[10098])","(sqt(Cv[10098])sqt(Cv[10120])+sqt(Cv[10097])sqt(Cv[10121]))/sqt(Cv[10098])sqt(Cv[10121])",
 "sqt(Cv[10120]/Cv[10121])-sqt(Cv[10097]/Cv[10098])","(sqt(Cv[10098])sqt(Cv[10120])-sqt(Cv[10097])sqt(Cv[10121]))/sqt(Cv[10098])sqt(Cv[10121])",
 "(3Cv[10120]Cv[10121]^2Cv[10122]-2Cv[10120]Cv[10121])/Cv[10121]Cv[10120]","3Cv[10121]Cv[10122]-2",
+
+"lne(sqt(hat(Cv[10120])))","lne(hat(Cv[10120]))/2",
+"lne(sqt(vec(Cv[10120])))","lne(vec(Cv[10120]))/2",
+"lne(sqt(und(Cv[10120])))","lne(und(Cv[10120]))/2",
+"lne(sqt(udt(Cv[10120])))","lne(udt(Cv[10120]))/2",
+"lne(sqt(tld(Cv[10120])))","lne(tld(Cv[10120]))/2",
+
 ];
 
 var factor =
@@ -1219,9 +1222,16 @@ var limits =
 "itg(2,Cv[8734])1/Cv[10120]^2Cv[8748]Cv[10120]","-(1/2)",
 "itg(2,1)Cv[10120]","3/2",
 
+"lim(hat(Cv[10120]),0)sin(hat(Cv[10120]))/hat(Cv[10120])","1",
+"lim(vec(Cv[10120]),0)sin(vec(Cv[10120]))/vec(Cv[10120])","1",
+"lim(und(Cv[10120]),0)sin(und(Cv[10120]))/und(Cv[10120])","1",
+"lim(udt(Cv[10120]),0)sin(udt(Cv[10120]))/udt(Cv[10120])","1",
+"lim(tld(Cv[10120]),0)sin(tld(Cv[10120]))/tld(Cv[10120])","1",
+
 ];
 var derivatives =
 [
+
 "idr(Cv[10120])1","0",
 "idr(Cv[10120])Cv[10121]","0",
 "idr(Cv[10120])Cv[10120]Cv[10121]","Cv[10121]",
@@ -1319,9 +1329,18 @@ var derivatives =
 "idr(Cv[10110])lim(Cv[10120],0)(1+Cv[10120])^(Cv[10110]/Cv[10120])","Cv[8]^Cv[10110]",
 "idr(Cv[10120])Cv[10120]^(3Cv[10120]","(3lne(x)+3)x^(3x)",
 
+"idr(Cv[10121])sqt(Cv[10121])hat(Cv[10122])","hat(Cv[10122])/2sqt(Cv[10121])",
+"idr(Cv[10121])sqt(Cv[10121])vec(Cv[10122])","vec(Cv[10122])/2sqt(Cv[10121])",
+"idr(Cv[10121])sqt(Cv[10121])und(Cv[10122])","und(Cv[10122])/2sqt(Cv[10121])",
+"idr(Cv[10121])sqt(Cv[10121])udt(Cv[10122])","udt(Cv[10122])/2sqt(Cv[10121])",
+"idr(Cv[10121])sqt(Cv[10121])tld(Cv[10122])","tld(Cv[10122])/2sqt(Cv[10121])",
+"idr(hat(Cv[10121]))sqt(hat(Cv[10121]))","1/2sqt(hat(Cv[10121]))",
+
 ];
 var integrals =
 [
+
+
 "Cv[8747]Cv[8748]Cv[10120]","Cv[10120]+Cv[11100]",
 "Cv[8747]Cv[8748]Cv[10121]","Cv[10121]+Cv[11100]",
 "Cv[8747]Cv[10120]Cv[8748]Cv[10120]","Cv[10120]^2/2+Cv[11100]",
@@ -1551,10 +1570,16 @@ var integrals =
 "idr(Cv[10120])Cv[8747]cot(Cv[10120])^2Cv[8748]Cv[10120]","cot(Cv[10120])^2",
 "Cv[8747]lne(Cv[10120])Cv[8748]Cv[10120]+idr(Cv[10121])Cv[10121]^2","Cv[10120]lne(Cv[10120])+2Cv[10121]-Cv[10120]+Cv[11100]",
 "Cv[8747]lne(Cv[10120])Cv[8748]Cv[10120]-idr(Cv[10121])Cv[10121]^2","Cv[10120]lne(Cv[10120])-2Cv[10121]-Cv[10120]+Cv[11100]",
+
+// integrals with accents
+"Cv[8747]Cv[10120]hat(Cv[10121])Cv[8748]Cv[10120]","Cv[10120]^2hat(Cv[10121])/2+Cv[11100]",
+"Cv[8747]Cv[10120]tld(Cv[10121])Cv[8748]Cv[10120]","Cv[10120]^2tld(Cv[10121])/2+Cv[11100]",
+
 ];
 
 var real_calculus =
 [
+
 "idr(Cv[10120])asc(Cv[10120])","1/abs(Cv[10120])sqt(Cv[10120]^2-1)",
 "idr(Cv[10120])acc(Cv[10120])","-(1/abs(Cv[10120])sqt(Cv[10120]^2-1))",
 "Cv[8747]2Cv[10121]/Cv[10122]Cv[10120]Cv[8748]Cv[10120]","2Cv[10121]lne(abs(Cv[10120]))/Cv[10122]+Cv[11100]",
@@ -1666,6 +1691,7 @@ var real_calculus =
 "Cv[8747]ash(2Cv[10120])Cv[8748]Cv[10120]","Cv[10120]ash(2Cv[10120])-sqt(4Cv[10120]^2+1)/2+Cv[11100]",
 "Cv[8747]ach(2Cv[10120])Cv[8748]Cv[10120]","Cv[10120]ach(2Cv[10120])-sqt(4Cv[10120]^2-1)/2+Cv[11100]",
 "Cv[8747]ath(2Cv[10120])Cv[8748]Cv[10120]","Cv[10120]ath(2Cv[10120])+lne(4Cv[10120]^2-1)/4+Cv[11100]",
+"Cv[8747]axh(Cv[10120])Cv[8748]Cv[10120]","Cv[10120]axh(Cv[10120])-atn(sqt(2/(Cv[10120]+1)-1)+sqt(2/(Cv[10120]+1)-1)/(Cv[10120]-1))+Cv[11100]",
 "Cv[8747]1/csh(Cv[10120])Cv[8748]Cv[10120]","2atn(snh(Cv[10120]/2))+Cv[11100]",
 "Cv[8747]1/snh(Cv[10120])Cv[8748]Cv[10120]","lne(abs(tnh(Cv[10120]/2)))+Cv[11100]",
 
@@ -1689,7 +1715,8 @@ var real_calculus =
 
 //"Cv[8747]axh(2Cv[10120])Cv[8748]Cv[10120]","Cv[8747]axh(2Cv[10120])Cv[8748]Cv[10120]+Cv[11100]", //slow
 //"Cv[8747]ayh(2Cv[10120])Cv[8748]Cv[10120]","Cv[8747]ayh(2Cv[10120])Cv[8748]Cv[10120]+Cv[11100]", //slow
-//"Cv[8747]axh(Cv[10120])Cv[8748]Cv[10120]","Cv[10120]axh(Cv[10120])-atn((Cv[10120]/(Cv[10120]-1))sqt((1-Cv[10120])/(1+Cv[10120])))", //asech()
+
+
 ];
 var summation =
 [
@@ -2139,6 +2166,7 @@ var internal =
 "mgTrans.mgExport('itg(1,10)cTms(Cv[10120],Cv[10121])')","itg(1,10)Cv[10120]*Cv[10121]",
 "mgCalc.Inventory('Cv[0]Cv[93]Cv[97]Cv[10075]Cv[913]Cv[971]')","Cv[10075],Cv[913],Cv[97]",
 "mgCalc.Series('sin(Cv[10120])').mg","Cv[10120]-Cv[10120]^3/6+Cv[10120]^5/120+Cv[8230]",
+"mgCalc.irSolver(function(a){return Math.pow(a,3)},8)","2",
 ];
 
 
@@ -2147,7 +2175,6 @@ var testList =
 
 "Numerical": "runNumerical()",
 "Range": "runRange()",
-"Domain": "runDomain()",
 "Matrix": "runMatrix()",
 "Reduce": "runReduce()",
 "Factor": "runFactor()",
@@ -2210,22 +2237,6 @@ function runRange() {
 		}
 		else {
 			runTest(mgTrans.Translate(range[index]).html,mgCalc.Range(range[index]).html,mgTrans.Translate(range[index+1]).html)
-		}
-    }
-    toOutput()
-}
-function runDomain() {
-    setTitle("Domain Tests 'mgCalc.Domain()'")
-    increment = 2;
-    degree = 1;
-    for (index=0;index<domain.length;index+=increment) {
-		if (nodejs) {
-			const rceivd = mgCalc.Domain(domain[index]).html;
-			const xpectd = mgTrans.Translate(domain[index+1]).html;
-			test("Domain:"+domain[index], function () {return expect(rceivd).toBe(xpectd)})	
-		}
-		else {
-			runTest(mgTrans.Translate(domain[index]).html,mgCalc.Domain(domain[index]).html,mgTrans.Translate(domain[index+1]).html)
 		}
     }
     toOutput()
