@@ -3342,7 +3342,6 @@ var mgCalc = function() {
         if (getType(xU) == "real") {return trigRound(cDiv(lne(cDiv(cAdd(xU,1),cSub(xU,1))),2))}
         return "undefined"
     }
-    function cBnd(xU,xL) {return cMul(xU,xL)}
 
     //misc functions
     function fac(xU) { //factorial
