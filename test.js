@@ -158,7 +158,7 @@ var numerical =
 "int(2.5Cv[46])","2Cv[46]",
 "int(3.5+2.5Cv[46])","3+2Cv[46]",
 "int(3.5-2.5Cv[46])","3-3Cv[46]",
-"cei(1.5)","2",
+"cei(1.4)","2",
 "cei(-1.5)","-1",
 "cei(1.5Cv[46])","2Cv[46]",
 "cei(2.5Cv[46])","3Cv[46]",
@@ -262,6 +262,11 @@ var range =
 "lne(Cv[10120])Cv[8804]2","Cv[10120]Cv[8800]0",
 "lne(Cv[10120])Cv[8805]2","Cv[10120]Cv[8800]0",
 "lne(Cv[10120])Cv[8800]2","Cv[10120]Cv[8800]0",
+
+"lne(sqt(sbr(Cv[10120])))","Cv[10120]Cv[8800]0",
+"lne(sqt(cbr(Cv[10120])))","Cv[10120]Cv[8800]0",
+"abs(con(erf(Cv[10120])))","",
+"gam(efc(Cv[10120]))","",
 
 ];
 
@@ -833,7 +838,6 @@ var expand =
 "lne(sqt(und(Cv[10120])))","lne(und(Cv[10120]))/2",
 "lne(sqt(udt(Cv[10120])))","lne(udt(Cv[10120]))/2",
 "lne(sqt(tld(Cv[10120])))","lne(tld(Cv[10120]))/2",
-
 ];
 
 var factor =
@@ -1050,6 +1054,13 @@ var trigtoexp =
 "ash(Cv[10120])","lne(sqt(Cv[10120]^2+1)+Cv[10120])",
 "ach(Cv[10120])","lne(sqt(Cv[10120]^2-1)+Cv[10120])",
 "ath(Cv[10120])","lne(Cv[10120]+1)lne(1-Cv[10120])/2",
+
+"snh(hat(Cv[10120]))","Cv[8]^hat(Cv[10120])/2-1/2Cv[8]^hat(Cv[10120])",
+"snh(vec(Cv[10120]))","Cv[8]^vec(Cv[10120])/2-1/2Cv[8]^vec(Cv[10120])",
+"snh(und(Cv[10120]))","Cv[8]^und(Cv[10120])/2-1/2Cv[8]^und(Cv[10120])",
+"snh(udt(Cv[10120]))","Cv[8]^udt(Cv[10120])/2-1/2Cv[8]^udt(Cv[10120])",
+"snh(tld(Cv[10120]))","Cv[8]^tld(Cv[10120])/2-1/2Cv[8]^tld(Cv[10120])",
+
 ];
 
 var exptotrig =
@@ -1715,7 +1726,6 @@ var real_calculus =
 
 //"Cv[8747]axh(2Cv[10120])Cv[8748]Cv[10120]","Cv[8747]axh(2Cv[10120])Cv[8748]Cv[10120]+Cv[11100]", //slow
 //"Cv[8747]ayh(2Cv[10120])Cv[8748]Cv[10120]","Cv[8747]ayh(2Cv[10120])Cv[8748]Cv[10120]+Cv[11100]", //slow
-
 
 ];
 var summation =

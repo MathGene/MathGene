@@ -730,8 +730,7 @@ var mgCalc = function() {
             else {
                 var xTractD = opExtract(pnTerms[pD]);
                 for (var iXf=0;iXf<6;iXf++) {
-                    if (xTractD == pVar) {break}
-                    else if (xTractD.func == "cPow" && xTractD.upper == pVar) {break}
+                    if (xTractD.func == "cPow" && xTractD.upper == pVar) {break}
                     else if (xTractD.func == "cPow" && strTest(xTractD.upper,pVar)) {return [pN]}
                     else if (xTractD.func == "cPow" && strTest(xTractD.lower,pVar)) {return [pN]}
                     else if (xTractD.upper == pVar || xTractD.lower == pVar)  {xTractD = pVar;break}
@@ -774,8 +773,6 @@ var mgCalc = function() {
             var tExtract = opExtract(xC[xI]);
             if      (nbrTest(xC[xI])) {xCoeff[xI] = (+xC[xI])}
             else if (tExtract.func == "cMul" && nbrTest(tExtract.upper)) {xCoeff[xI] = +tExtract.upper}
-            else if (tExtract.func == "cMul" && nbrTest(tExtract.lower)) {xCoeff[xI] = +tExtract.lower}
-            else if (tExtract.func == "cNeg" && nbrTest(tExtract.upper)) {xCoeff[xI] = +tExtract.upper}
             else if (tExtract.func == "cNeg" && !nbrTest(tExtract.upper)) {xCoeff[xI] = -1}
             else    {xCoeff[xI] = 1}
         }
@@ -1759,10 +1756,7 @@ var mgCalc = function() {
     efcD: function(xU,xL,deeVar) {return cMulS(cNegS(cDivS(cMulS(2,cPowS("Cv[8]",cNegS(cPowS(xU,2)))),sqtS("Cv[29]"))),drvS(xU,deeVar)) },
     expD: function(xU,xL,deeVar) {return cMulS(cPowS("Cv[8]",xU),drvS(xU,deeVar)) },
     absD: function(xU,xL,deeVar) {return cMulS("cDiv("+xU+",abs("+xU+"))",drvS(xU,deeVar))},
-    ntpD: function(nXpr,deeVar) {
-        if (typeof iU == "undefined" && typeof iL == "undefined") {return nXpr}
-        return "drv(ntp("+nXpr+","+deeVar+"),"+deeVar+")"
-    },
+    ntpD: function(nXpr,deeVar)  {return nXpr},
     }
     function tdvS(dXpr,deeVar,nTh) { //nTh total derivative
         if (typeof nTh == "undefined" || nTh == "undefined") {nTh = 1}
