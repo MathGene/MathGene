@@ -2694,11 +2694,11 @@ var mgCalc = function() {
         var facB1 = xReduce(cAddS(cMulS(gcfA,pRoot),cMulS(gcfB,yVar)));
         var facB2 = xReduce(cSubS(cMulS(gcfA,pRoot),cMulS(gcfB,yVar)));
         tReturn = cMulS(fGcf,cMulS(facB1,facA1));
-        if (xReduce(xprExpand(tReturn)) == xReduce(xFac)) {return tReturn}
+        if (xReduce(xprExpand(tReturn)) == xReduce(xFac)) {return tReturn} //test factored expression
         tReturn = cMulS(fGcf,cMulS(facB2,facA1));
-        if (xReduce(xprExpand(tReturn)) == xReduce(xFac)) {return tReturn}
+        if (xReduce(xprExpand(tReturn)) == xReduce(xFac)) {return tReturn} //test factored expression
         tReturn = "cMul("+xReduce(fGcf)+","+xReduce(cDivS(xFac,fGcf))+")";
-        if (xprExpand(tReturn) == xReduce(xFac) && fGcf != 1) {return tReturn}
+        if (xprExpand(tReturn) == xReduce(xFac) && fGcf != 1) {return tReturn} //test factored expression
         return xFac
     }
     function mdFactor(pfFac) { //factor cMul and cDiv
@@ -2773,7 +2773,7 @@ var mgCalc = function() {
         return fTrm
     }
     
-    //Range of expression in FUNC format
+    //Range/domain of expression in FUNC format
     function xprRange(xR)  {
         function nEqual(nZ,nC) { //range not equal
             var zArray = [],zString = "",iZ = 0;
@@ -2813,11 +2813,11 @@ var mgCalc = function() {
         //
         var xRang = "",dArray = [],xArray = [],xC = 0,rString = "";
         xRang = String(xR);
-        execInside(xRang,rangeFunc)
+        execInside(xRang,rangeFunc);
         for (xC in dArray) {// fix dups/blanks
             if (!strTest(xArray,dArray[xC]) && dArray[xC] && !strTest(dArray[xC],"undefined") && !strTest(dArray[xC],"Cv[8734]")) {xArray.push(dArray[xC])}
         }
-        xArray.sort()
+        xArray.sort();
         for (xC in xArray) {
             rString = rString+xArray[xC];
             if (xC < xArray.length-1) {rString = rString+"Cv[10044]"} //add comma between terms
