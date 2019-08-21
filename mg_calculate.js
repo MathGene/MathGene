@@ -730,8 +730,7 @@ var mgCalc = function() {
             else {
                 var xTractD = opExtract(pnTerms[pD]);
                 for (var iXf=0;iXf<6;iXf++) {
-                    if (xTractD == pVar) {break}
-                    else if (xTractD.func == "cPow" && xTractD.upper == pVar) {break}
+                    if (xTractD.func == "cPow" && xTractD.upper == pVar) {break}
                     else if (xTractD.func == "cPow" && strTest(xTractD.upper,pVar)) {return [pN]}
                     else if (xTractD.func == "cPow" && strTest(xTractD.lower,pVar)) {return [pN]}
                     else if (xTractD.upper == pVar || xTractD.lower == pVar)  {xTractD = pVar;break}
@@ -774,8 +773,6 @@ var mgCalc = function() {
             var tExtract = opExtract(xC[xI]);
             if      (nbrTest(xC[xI])) {xCoeff[xI] = (+xC[xI])}
             else if (tExtract.func == "cMul" && nbrTest(tExtract.upper)) {xCoeff[xI] = +tExtract.upper}
-            else if (tExtract.func == "cMul" && nbrTest(tExtract.lower)) {xCoeff[xI] = +tExtract.lower}
-            else if (tExtract.func == "cNeg" && nbrTest(tExtract.upper)) {xCoeff[xI] = +tExtract.upper}
             else if (tExtract.func == "cNeg" && !nbrTest(tExtract.upper)) {xCoeff[xI] = -1}
             else    {xCoeff[xI] = 1}
         }
@@ -1759,10 +1756,7 @@ var mgCalc = function() {
     efcD: function(xU,xL,deeVar) {return cMulS(cNegS(cDivS(cMulS(2,cPowS("Cv[8]",cNegS(cPowS(xU,2)))),sqtS("Cv[29]"))),drvS(xU,deeVar)) },
     expD: function(xU,xL,deeVar) {return cMulS(cPowS("Cv[8]",xU),drvS(xU,deeVar)) },
     absD: function(xU,xL,deeVar) {return cMulS("cDiv("+xU+",abs("+xU+"))",drvS(xU,deeVar))},
-    ntpD: function(nXpr,deeVar) {
-        if (typeof iU == "undefined" && typeof iL == "undefined") {return nXpr}
-        return "drv(ntp("+nXpr+","+deeVar+"),"+deeVar+")"
-    },
+    ntpD: function(nXpr,deeVar)  {return nXpr},
     }
     function tdvS(dXpr,deeVar,nTh) { //nTh total derivative
         if (typeof nTh == "undefined" || nTh == "undefined") {nTh = 1}
@@ -2700,11 +2694,11 @@ var mgCalc = function() {
         var facB1 = xReduce(cAddS(cMulS(gcfA,pRoot),cMulS(gcfB,yVar)));
         var facB2 = xReduce(cSubS(cMulS(gcfA,pRoot),cMulS(gcfB,yVar)));
         tReturn = cMulS(fGcf,cMulS(facB1,facA1));
-        if (xReduce(xprExpand(tReturn)) == xReduce(xFac)) {return tReturn}
+        if (xReduce(xprExpand(tReturn)) == xReduce(xFac)) {return tReturn} //test factored expression
         tReturn = cMulS(fGcf,cMulS(facB2,facA1));
-        if (xReduce(xprExpand(tReturn)) == xReduce(xFac)) {return tReturn}
+        if (xReduce(xprExpand(tReturn)) == xReduce(xFac)) {return tReturn} //test factored expression
         tReturn = "cMul("+xReduce(fGcf)+","+xReduce(cDivS(xFac,fGcf))+")";
-        if (xprExpand(tReturn) == xReduce(xFac) && fGcf != 1) {return tReturn}
+        if (xprExpand(tReturn) == xReduce(xFac) && fGcf != 1) {return tReturn} //test factored expression
         return xFac
     }
     function mdFactor(pfFac) { //factor cMul and cDiv
@@ -2779,7 +2773,7 @@ var mgCalc = function() {
         return fTrm
     }
     
-    //Range of expression in FUNC format
+    //Range/domain of expression in FUNC format
     function xprRange(xR)  {
         function nEqual(nZ,nC) { //range not equal
             var zArray = [],zString = "",iZ = 0;
@@ -2819,11 +2813,11 @@ var mgCalc = function() {
         //
         var xRang = "",dArray = [],xArray = [],xC = 0,rString = "";
         xRang = String(xR);
-        execInside(xRang,rangeFunc)
+        execInside(xRang,rangeFunc);
         for (xC in dArray) {// fix dups/blanks
             if (!strTest(xArray,dArray[xC]) && dArray[xC] && !strTest(dArray[xC],"undefined") && !strTest(dArray[xC],"Cv[8734]")) {xArray.push(dArray[xC])}
         }
-        xArray.sort()
+        xArray.sort();
         for (xC in xArray) {
             rString = rString+xArray[xC];
             if (xC < xArray.length-1) {rString = rString+"Cv[10044]"} //add comma between terms
@@ -3348,7 +3342,6 @@ var mgCalc = function() {
         if (getType(xU) == "real") {return trigRound(cDiv(lne(cDiv(cAdd(xU,1),cSub(xU,1))),2))}
         return "undefined"
     }
-    function cBnd(xU,xL) {return cMul(xU,xL)}
 
     //misc functions
     function fac(xU) { //factorial
