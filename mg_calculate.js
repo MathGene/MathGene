@@ -903,7 +903,8 @@ var mgCalc = function() {
         if (xU == "Cv[46]" && nbrTest(xL))  {return cMulS(xL,xU)}
         if (xTractU.func == "fac" && xTractL.func == "fac" && nbrTest(xTractU.upper) && nbrTest(xTractL.upper)) {return cMulS(fac(xTractU.upper),fac(xTractL.upper))}
         if (xL == 0 || xU == 0) {return 0}
-		if (!pxpFlag && nbrTest(xU) && xU != int(xU)) {return cMulS(xL,decToFrac(xU))}
+		if (!factorFlag && !pxpFlag && nbrTest(xU) && xU != int(xU)) {return cMulS(decToFrac(xU),xL)}
+		if (!factorFlag && !pxpFlag && nbrTest(xU) && xU != int(xU)) {return cMulS(xU,decToFrac(xL))}
 		if (nbrTest(xU) && nbrTest(xL)) {return cMul(xU,xL)}
         if (nbrTest(xU) && xTractL.func == "cPow" && nbrTest(xTractL.upper)) {xL = "("+xL+")"}
         if (xL == 1)  {return xU}
@@ -951,8 +952,8 @@ var mgCalc = function() {
         if (xL == 1) {return xU}
         if (xU == xL) {return 1}
         if (xL < 0)  {return cDivS(cNegS(xU),cNegS(xL))}
-		if (!pxpFlag && nbrTest(xU) && xU != int(xU)) {return cDivS(decToFrac(xU),xL)}
-		if (!pxpFlag && nbrTest(xL) && xL != int(xL)) {return cDivS(xU,decToFrac(xL))}
+		if (!factorFlag && !pxpFlag && nbrTest(xU) && xU != int(xU)) {return cDivS(decToFrac(xU),xL)}
+		if (!factorFlag && !pxpFlag && nbrTest(xL) && xL != int(xL)) {return cDivS(xU,decToFrac(xL))}
         if (nbrTest(xU) && nbrTest(xL) && cDiv(xU,xL) == int(cDiv(xU,xL))) {return cDiv(xU,xL)}
         if (nbrTest(xU) && nbrTest(xL)) {gTmp = cGcf(xU,xL);if (gTmp > 1) {return cDivS(cDiv(xU,gTmp),cDiv(xL,gTmp))}}
         if (xTractU.func == "cMul" && nbrTest(xTractU.upper) && nbrTest(xL)) {
@@ -1032,8 +1033,8 @@ var mgCalc = function() {
         if (xU == "Cv[8230]") {return "cAdd("+xL+","+xU+")"}
         if (xL == "Cv[8230]") {return "cAdd("+xU+","+xL+")"}
         if (xU == xL) {return cMulS(2,xU)}
-		if (!pxpFlag && nbrTest(xU) && xU != int(xU)) {return cAddS(decToFrac(xU),xL)}
-		if (!pxpFlag && nbrTest(xU) && xU != int(xU)) {return cAddS(xU,decToFrac(xL))}
+		if (!factorFlag && !pxpFlag && nbrTest(xU) && xU != int(xU)) {return cAddS(decToFrac(xU),xL)}
+		if (!factorFlag && !pxpFlag && nbrTest(xU) && xU != int(xU)) {return cAddS(xU,decToFrac(xL))}
 		if (nbrTest(xL) && xL < 0) {return cSubS(xU,cNegS(xL))}
 		if (nbrTest(xU) && nbrTest(xL)) {return cAdd(xU,xL)}
         if (xTractL.func == "cNeg") {return cSubS(xU,xTractL.upper)}
@@ -1101,8 +1102,8 @@ var mgCalc = function() {
         if (xL == 0) {return xU}
         if (xU == 0) {return cNegS(xL)}
         if (xU == xL) {return 0}
-		if (!pxpFlag && nbrTest(xU) && xU != int(xU)) {return cSubS(decToFrac(xU),xL)}
-		if (!pxpFlag && nbrTest(xL) && xL != int(xL)) {return cSubS(xU,decToFrac(xL))}
+		if (!factorFlag && !pxpFlag && nbrTest(xU) && xU != int(xU)) {return cSubS(decToFrac(xU),xL)}
+		if (!factorFlag && !pxpFlag && nbrTest(xL) && xL != int(xL)) {return cSubS(xU,decToFrac(xL))}
 		if (nbrTest(xL) && xL < 0) {return cAddS(xU,cNegS(xL))}
         if (nbrTest(xU) && nbrTest(xL)) {return cSub(xU,xL)}
         if (xTractL.func == "cNeg") {return cAddS(xU,xTractL.upper)}
@@ -1151,7 +1152,7 @@ var mgCalc = function() {
         if (xTractU.func == "cMul" && nbrTest(xTractU.upper)) {return cMulS(cNeg(xTractU.upper),xTractU.lower)}
         if (xTractU.func == "cMul" && nbrTest(xTractU.lower)) {return cMulS(cNeg(xTractU.lower),xTractU.upper)}
         if (xTractU.func == "cNeg") {return xTractU.upper}
-		if (!pxpFlag && nbrTest(xU) && xU != int(xU)) {return cNegS(decToFrac(xU))}
+		if (!factorFlag && !pxpFlag && nbrTest(xU) && xU != int(xU)) {return cNegS(decToFrac(xU))}
         if (nbrTest(xU)) {return cMul(xU,-1)}
         return "cNeg("+xU+")"
     }
