@@ -408,7 +408,7 @@ var mgCalc = function() {
 		if (xU == int(xU)) {return xU}
 		for (var xP=1;xP<=5;xP++) {if (abs(xU*Math.pow(10,xP)) == abs(int(xU*Math.pow(10,xP)))) {break}}
 		if (abs(xU*Math.pow(10,xP)) != abs(int(xU*Math.pow(10,xP)))) {return xU}
-		return xReduce(cDivS(cMul(xU,Math.pow(10,xP)),Math.pow(10,xP)))
+		return cDivS(cMul(xU,Math.pow(10,xP)),Math.pow(10,xP))
 	}
     function execInside(expIn,funcObj) { //execute math transformation inside out from specified object
         var expReturn = expIn.replace(/([a-z][a-z][a-z])\(/ig,"$1@"); //mark left parens with @
