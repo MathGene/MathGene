@@ -406,9 +406,9 @@ var mgCalc = function() {
     }
 	function decToFrac(xU) { //convert decimal to fraction up to 10^5
 		if (xU == int(xU)) {return xU}
-		for (var xP=1;xP<=5;xP++) {if (abs(xU*Math.pow(10,xP)) == abs(int(xU*Math.pow(10,xP)))) {break}}
-		if (abs(xU*Math.pow(10,xP)) != abs(int(xU*Math.pow(10,xP)))) {return xU}
-		return cDivS(cMul(xU,Math.pow(10,xP)),Math.pow(10,xP))
+		for (var xP=1;xP<=5;xP++) {if (abs(cMul(xU,cPow(10,xP))) == abs(int(cMul(xU,cPow(10,xP))))) {break}}
+		if (abs(cMul(xU,cPow(10,xP))) != abs(int(cMul(xU,cPow(10,xP))))) {return xU}
+		return cDivS(cMul(xU,cPow(10,xP)),cPow(10,xP))
 	}
     function execInside(expIn,funcObj) { //execute math transformation inside out from specified object
         var expReturn = expIn.replace(/([a-z][a-z][a-z])\(/ig,"$1@"); //mark left parens with @
