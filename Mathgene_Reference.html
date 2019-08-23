@@ -56,8 +56,9 @@ Both modules are required to perform calculations.</p>
 <p>Symbolic calculations:</p>
 <ul>
 <li>Solve equation or inequality for variable</li>
-<li>Simplify expression or equation</li>
-<li>Evaluate derivatives, integrals, summations via simplify function</li>
+<li>Simplify expression or equation to minimum terms</li>
+<li>Reduce fractions and convert decimals to fractions via simplify function</li>
+<li>Evaluate derivatives, integrals, limits, summations via simplify function</li>
 <li>Factor symbolic expressions</li>
 <li>Expand (de-factor) symbolic expression</li>
 <li>Convert trig functions to exponential</li>
@@ -388,13 +389,13 @@ Javascript strings must escape the LaTeX backslash with another backslash such a
 <p>MathGene Numeric calculations will produce a decimal number output for expressions that can be evaluated numerically.The 'mgCalc.Numeric(expression) function has the same basic form as mgTrans.Translate(). It will accept an expression in MG or LaTeX format and produce output in HTML,LaTeX, or MG format.</p>
 
 <h3>Complex Numbers</h3>
-<p>MathGene has full support for complex and imaginary numbers and their operations when in the Complex domain mode is set in mgConfig. 
+<p>MathGene has full support for complex and imaginary numbers and their operations when the Complex domain mode is set in mgConfig. 
 By default, complex numbers are represented in rectangular form a+b<i>i</i>, where <i>i</i> is the imaginary constant.
 Polar forms are also supported using the notation A&#8736;B where A is the magnitude and B is the angle. 
 The mgConfig object selects which form is displayed by default as a calculation result.
 Angles can be represented in Radians (default), Degrees, or Gradians which are also selected in mgConfig.
 Expressions can be entered using either rectangular or polar form and they can be mixed together.
-The result will be converted to form selected in the Settings menu. This allows easy conversions between rectangular and polar forms.
+The result will be converted to form selected in the mgConfig. This allows easy conversions between rectangular and polar forms.
 </p>
 <ul>
   <li>Rectangular form example: 2+3Cv[45] </li>

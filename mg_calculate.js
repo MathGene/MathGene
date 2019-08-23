@@ -404,6 +404,11 @@ var mgCalc = function() {
         }
         return aS < bS ? -1 : aS > bS ? 1 : 0;
     }
+    function decToFrac(xU) { //convert decimal to fraction up to 10^5
+        for (var xP=0;xP<=5;xP++) {if (abs(cMul(xU,cPow(10,xP))) == abs(int(cMul(xU,cPow(10,xP))))) {break}}
+        if (abs(cMul(xU,cPow(10,xP))) != abs(int(cMul(xU,cPow(10,xP))))) {return xU}
+        return cDivS(cMul(xU,cPow(10,xP)),cPow(10,xP))
+    }
     function execInside(expIn,funcObj) { //execute math transformation inside out from specified object
         var expReturn = expIn.replace(/([a-z][a-z][a-z])\(/ig,"$1@"); //mark left parens with @
         var sCount = mgTrans.strCount(expReturn,"@"),nXf = 0,lPar = 0,rPar = 0,iXf = 0,rTmp = "",payload = "",paramS = [],funcKey = "",fReturn = "";
@@ -436,6 +441,7 @@ var mgCalc = function() {
         return String(execEval(xIter.replace(/([a-z])\(/g,"$1S(").replace(/(Pv\[\d+\])/g,"'$1'").replace(/(Sv\[\d+\])/g,"'$1'").replace(/(Cv\[\d+\])/g,"'$1'")));
     }
     function cReduce(cRdce) { //complete expression reduction
+        if (nbrTest(cRdce) && cRdce != int(cRdce)) {return decToFrac(cRdce)} //decimals to fractions
         var sReturn = iReduce(xReduce(cRdce));
         return sReturn
     }
@@ -896,6 +902,8 @@ var mgCalc = function() {
         if (xU == "Cv[46]" && nbrTest(xL))  {return cMulS(xL,xU)}
         if (xTractU.func == "fac" && xTractL.func == "fac" && nbrTest(xTractU.upper) && nbrTest(xTractL.upper)) {return cMulS(fac(xTractU.upper),fac(xTractL.upper))}
         if (xL == 0 || xU == 0) {return 0}
+        if (!factorFlag && !pxpFlag && nbrTest(xU) && xU != int(xU)) {return cMulS(decToFrac(xU),xL)}
+        if (!factorFlag && !pxpFlag && nbrTest(xL) && xL != int(xL)) {return cMulS(xU,decToFrac(xL))}
         if (nbrTest(xU) && nbrTest(xL)) {return cMul(xU,xL)}
         if (nbrTest(xU) && xTractL.func == "cPow" && nbrTest(xTractL.upper)) {xL = "("+xL+")"}
         if (xL == 1)  {return xU}
@@ -904,7 +912,6 @@ var mgCalc = function() {
         if (xU == -1) {return cNegS(xL)}
         if (xU == xL) {return cPowS(xU,2)}
         if (!pxpFlag && xTractU.func == "sqt" && xTractL.func == "sqt") {return "sqt(cMul("+xTractU.upper+","+xTractL.upper+"))"}
-        if (!pxpFlag && xU == 0.5)  {return cDivS(xL,2)}
         if (xTractU.func == "cPow" && xTractL.func == "cPow" && xTractU.upper == xTractL.upper)  {return cPowS(xTractU.upper,cAddS(xTractU.lower,xTractL.lower))}
         if (xTractL.func == "cPow" && xTractU.func == "cPow" && xTractL.lower == xTractU.lower && !nbrTest(xTractL.lower)) {return cPowS(cMulS(xTractL.upper,xTractU.upper),xTractU.lower)} // reduce
         if (!factorFlag && xTractL.func == "cMul" && nbrTest(xU) && nbrTest(xTractL.upper)) {return cMulS(cMul(xU,xTractL.upper),xTractL.lower)}
@@ -943,6 +950,8 @@ var mgCalc = function() {
         if (xL == 1) {return xU}
         if (xU == xL) {return 1}
         if (xL < 0)  {return cDivS(cNegS(xU),cNegS(xL))}
+        if (!factorFlag && !pxpFlag && nbrTest(xU) && xU != int(xU)) {return cDivS(decToFrac(xU),xL)}
+        if (!factorFlag && !pxpFlag && nbrTest(xL) && xL != int(xL)) {return cDivS(xU,decToFrac(xL))}
         if (nbrTest(xU) && nbrTest(xL) && cDiv(xU,xL) == int(cDiv(xU,xL))) {return cDiv(xU,xL)}
         if (nbrTest(xU) && nbrTest(xL)) {gTmp = cGcf(xU,xL);if (gTmp > 1) {return cDivS(cDiv(xU,gTmp),cDiv(xL,gTmp))}}
         if (xTractU.func == "cMul" && nbrTest(xTractU.upper) && nbrTest(xL)) {
@@ -1022,6 +1031,8 @@ var mgCalc = function() {
         if (xU == "Cv[8230]") {return "cAdd("+xL+","+xU+")"}
         if (xL == "Cv[8230]") {return "cAdd("+xU+","+xL+")"}
         if (xU == xL) {return cMulS(2,xU)}
+        if (!factorFlag && !pxpFlag && nbrTest(xU) && xU != int(xU)) {return cAddS(decToFrac(xU),xL)}
+        if (!factorFlag && !pxpFlag && nbrTest(xL) && xL != int(xL)) {return cAddS(xU,decToFrac(xL))}
         if (nbrTest(xL) && xL < 0) {return cSubS(xU,cNegS(xL))}
         if (nbrTest(xU) && nbrTest(xL)) {return cAdd(xU,xL)}
         if (xTractL.func == "cNeg") {return cSubS(xU,xTractL.upper)}
@@ -1089,6 +1100,8 @@ var mgCalc = function() {
         if (xL == 0) {return xU}
         if (xU == 0) {return cNegS(xL)}
         if (xU == xL) {return 0}
+        if (!factorFlag && !pxpFlag && nbrTest(xU) && xU != int(xU)) {return cSubS(decToFrac(xU),xL)}
+        if (!factorFlag && !pxpFlag && nbrTest(xL) && xL != int(xL)) {return cSubS(xU,decToFrac(xL))}
         if (nbrTest(xL) && xL < 0) {return cAddS(xU,cNegS(xL))}
         if (nbrTest(xU) && nbrTest(xL)) {return cSub(xU,xL)}
         if (xTractL.func == "cNeg") {return cAddS(xU,xTractL.upper)}
@@ -1137,6 +1150,7 @@ var mgCalc = function() {
         if (xTractU.func == "cMul" && nbrTest(xTractU.upper)) {return cMulS(cNeg(xTractU.upper),xTractU.lower)}
         if (xTractU.func == "cMul" && nbrTest(xTractU.lower)) {return cMulS(cNeg(xTractU.lower),xTractU.upper)}
         if (xTractU.func == "cNeg") {return xTractU.upper}
+        if (!factorFlag && !pxpFlag && nbrTest(xU) && xU != int(xU)) {return cNegS(decToFrac(xU))}
         if (nbrTest(xU)) {return cMul(xU,-1)}
         return "cNeg("+xU+")"
     }
@@ -1540,7 +1554,6 @@ var mgCalc = function() {
     function cLthS(xU,xL) {return "cLth("+xU+","+xL+")"}
     function cGeqS(xU,xL) {return "cGeq("+xU+","+xL+")"}
     function cLeqS(xU,xL) {return "cLeq("+xU+","+xL+")"}
-    function cBndS(xU,xL) {return "cMul("+xU+","+xL+")"}
     //
 
     function piReduce(xAng) { //normalize degrees/grads to radians
@@ -1845,8 +1858,6 @@ var mgCalc = function() {
         //general cases
         if (strTest(xU,deeVar) && !strTest(xL,deeVar)) {return cMulS(xL,ntgS(xU,deeVar))}
         if (strTest(xL,deeVar) && !strTest(xU,deeVar)) {return cMulS(xU,ntgS(xL,deeVar))}
-        if (xTractU.func == "cMul" && !strTest(xTractU.upper,deeVar)) {return cMulS(xTractU.upper,ntgS(cMulS(xTractU.lower,xL),deeVar))}
-        if (xTractU.func == "cMul" && !strTest(xTractU.lower,deeVar)) {return cMulS(xTractU.lower,ntgS(cMulS(xTractU.upper,xL),deeVar))}
         if (xTractL.func == "cMul" && !strTest(xTractL.upper,deeVar)) {return cMulS(xTractL.upper,ntgS(cMulS(xTractL.lower,xU),deeVar))}
         if (xTractL.func == "cMul" && !strTest(xTractL.lower,deeVar)) {return cMulS(xTractL.lower,ntgS(cMulS(xTractL.upper,xU),deeVar))}
         //special cases
@@ -1969,7 +1980,7 @@ var mgCalc = function() {
         if (deeVar == xU && !strTest(xL,deeVar)) {return cDivS(cPowS(xU,2),cMulS(xL,2))}
         if (strTest(xU,deeVar) && !strTest(xL,deeVar)) {return cMulS(cDivS(1,xL),ntgS(xU,deeVar))}
         if (strTest(xL,deeVar) && pNomial(xL).length > 2 && iIterations < 2) { //integration by partial fractions
-            fTemp = mdFactor("cDiv("+xU+","+xL+")");
+            fTemp = xprFactor("cDiv("+xU+","+xL+")");
             if (!strTest(xU,deeVar) || (!strTest(fTemp,xU) && !strTest(fTemp,xL))) {
                 pTemp = ntgS(fTemp,deeVar);
                 if (ntgFunc.ntgTest(pTemp)) {return pTemp}
