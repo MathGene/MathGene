@@ -330,7 +330,7 @@ var mgCalc = function() {
     function varTest(iDv) { //test if string is a MG variable (Cv[xxx])
         iDv = String(iDv);
         iDv = iDv.replace(/Cv\[(\d+)\]/,"$1");
-        if ((iDv > 64 && iDv < 91) || (iDv > 96 && iDv < 123) || (iDv > 10064 && iDv < 10091) || (iDv > 10096 && iDv < 10123) || (iDv > 912 && iDv < 970)) {return true}
+        if ((iDv > 64 && iDv < 91) || (iDv > 96 && iDv < 123) || (iDv > 10064 && iDv < 10091) || (iDv > 10096 && iDv < 10123) || (iDv > 912 && iDv < 970) || (iDv > 11100 && iDv < 11109)) {return true}
         return false
     }
     function conTest(iDv) { //test if string is a MG constant (Cv[xxx])
@@ -2799,7 +2799,7 @@ var mgCalc = function() {
             }
             return zString
         }
-        const rangeFunc = {
+        const rangeDomFunc = {
         cDiv: function (xU,xL) {dArray.push(nEqual(xL,"0"));return "cDiv("+xU+","+xL+")"},
         nrt: function (xU,xL)  {dArray.push(nEqual(xU,"0"));return "nrt("+xU+")"},
         lgn: function (xU,xL)  {dArray.push(nEqual(xL,"0"));dArray.push(nEqual(xU,"0"));return "lgn("+xU+")"},
@@ -2822,23 +2822,30 @@ var mgCalc = function() {
         azh: function (xU) {dArray.push("-1Cv[8804]"+xU+"Cv[8804]1");return "azh("+xU+")"},
         }
         //
-        var xRang = "",dArray = [],xArray = [],xC = 0,rString = "";
-        xRang = String(xR);
-        execInside(xRang,rangeFunc);
+        var xRangDom = "",dArray = [],xArray = [],xC = 0,rString = "",vars = cInventory(xR);
+        xRangDom = String(xR);
+        for (xC in vars) { //list of variables in domain
+            if (xC < vars.length-1) {rString = rString+vars[xC]+"Cv[10044]"} //add comma between terms
+            else {rString = rString+vars[xC]}
+        }
+        if (mgConfig.Domain == "Real" && rString != "") {rString = rString+"Cv[8712]Cv[8477]"}
+        if (mgConfig.Domain == "Complex" && rString != "") {rString = rString+"Cv[8712]Cv[8450]"}
+        execInside(xRangDom,rangeDomFunc);
         for (xC in dArray) {// fix dups/blanks
             if (!strTest(xArray,dArray[xC]) && dArray[xC] && !strTest(dArray[xC],"undefined") && !strTest(dArray[xC],"Cv[8734]")) {xArray.push(dArray[xC])}
         }
         xArray.sort();
-        for (xC in xArray) {
-            rString = rString+xArray[xC];
-            if (xC < xArray.length-1) {rString = rString+"Cv[10044]"} //add comma between terms
+        if (xArray.length > 0) {rString = rString+"Cv[59]"}
+        for (xC in xArray) { //list of variable ranges
+            if (xC < xArray.length-1) {rString = rString+xArray[xC]+"Cv[10044]"} //add comma between terms
+            else {rString = rString+xArray[xC]}
         }
         return rString
     }
 
     //Numerical Math Functions
     function fmtResult(xIn) { //format numerical output
-        var cIn = toCplx(xIn),cT = 7,tCmpx = "";;
+        var cIn = toCplx(xIn),cT = 7,tCmpx = "";
         if (getType(xIn) == "real" || getType(xIn) == "complex") {
             if (cIn.i != 0 && mgConfig.Domain == "Real") {return "undefined"}
             if (mgConfig.dPrecision <= 6) {cT = mgConfig.dPrecision}
