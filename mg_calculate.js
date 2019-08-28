@@ -410,6 +410,7 @@ var mgCalc = function() {
         return cDivS(cMul(xU,cPow(10,xP)),cPow(10,xP))
     }
     function execInside(expIn,funcObj) { //execute math transformation inside out from specified object
+        expIn = String(expIn);
         var expReturn = expIn.replace(/([a-z][a-z][a-z])\(/ig,"$1@"); //mark left parens with @
         var sCount = mgTrans.strCount(expReturn,"@"),nXf = 0,lPar = 0,rPar = 0,iXf = 0,rTmp = "",payload = "",paramS = [],funcKey = "",fReturn = "";
         for (nXf=0;nXf<sCount;nXf++) {
@@ -699,30 +700,25 @@ var mgCalc = function() {
         return nTerms.sort()
     }
     function parsePoly(xP) { //parse polynomials into terms array
+        const polyFuncs = {
+        cAdd: function (xU,xL) {
+            if (!strTest(xU,"Cv[9999]")) {nTerms.push(xU)}
+            if (!strTest(xL,"Cv[9999]")) {nTerms.push(xL)}
+            return "Cv[9999]"
+        },
+        cSub: function (xU,xL) {
+            if (!strTest(xU,"Cv[9999]")) {nTerms.push(xU)}
+            if (!strTest(xL,"Cv[9999]")) {nTerms.push(cNegS(xL))}
+            return "Cv[9999]"
+        },
+        }
         var nTerms = [];
         var xTractU = opExtract(xP);
         if (xTractU.func == "cMul" || xTractU.func == "cDiv" || xTractU.func == "cNeg" || xTractU.func == "cPow") {
             if (!strTest(xP,"cAdd") && !strTest(xP,"cSub")) {nTerms.push(xP)}
             else {return [xP]}
         }   
-        var xprTerms = String(xP),strg = [],bSym = 0,aSym = 0;
-        var sCount = xprTerms.split("cAdd(").length-1 + xprTerms.split("cSub(").length-1
-        for (var iXf=0;iXf<sCount;iXf++) {
-            aSym = xprTerms.lastIndexOf("cAdd(");
-            bSym = xprTerms.lastIndexOf("cSub(");
-            if (aSym > -1 && aSym > bSym) {
-                strg = mgTrans.parseParens(xprTerms,aSym+4);
-                if (strg.upper != "") {nTerms.push(strg.upper)}
-                if (strg.lower != "") {nTerms.push(strg.lower)}     
-                xprTerms = xprTerms.substr(0,aSym)+xprTerms.substr(strg.end+1,xprTerms.length);
-            }
-            else if (bSym > -1 && bSym > aSym) {
-                strg = mgTrans.parseParens(xprTerms,bSym+4);
-                if (strg.upper != "") {nTerms.push(strg.upper)}
-                if (strg.lower != "") {nTerms.push(cNegS(strg.lower))}
-                xprTerms = xprTerms.substr(0,bSym)+xprTerms.substr(strg.end+1,xprTerms.length);
-            }       
-        }
+        execInside(xP,polyFuncs);
         return nTerms.sort(function(aS,bS){return sortTerms(aS,bS)})
     }
     function pNomial(pN,pVar) { //parse polynomial into ranked array
