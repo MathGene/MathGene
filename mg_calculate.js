@@ -691,12 +691,13 @@ var mgCalc = function() {
             if (typeof xU != "undefined" && xU != "" && xTractU.func != "cMul" && xTractU.func != "cNeg") {nTerms.push(xU)}
             if (typeof xL != "undefined" && xL != "" && xTractL.func != "cMul" && xTractL.func != "cNeg") {nTerms.push(xL)}
         }
-        var nTerms = [],strg = [];
+        var nTerms = [];
         var xprTerms = String(xP);
         var xTractU = opExtract(xprTerms);
-        if (xTractU.func != "cMul" && xTractU.func != "cNeg") {return [xprTerms]}
-        strg = mgTrans.parseParens(xprTerms,xprTerms.indexOf("cMul("));
-        pMulS(strg.upper,strg.lower);
+        var xTractT = opExtract(xTractU.upper);
+        if (xTractU.func == "cMul") {pMulS(xTractU.upper,xTractU.lower)}
+        else if (xTractU.func == "cNeg" && xTractT.func == "cMul") {pMulS(cNegS(xTractT.upper),xTractT.lower)}
+        else {return [xprTerms]}
         return nTerms.sort()
     }
     function parsePoly(xP) { //parse polynomials into terms array
