@@ -692,12 +692,9 @@ var mgCalc = function() {
             if (typeof xL != "undefined" && xL != "" && xTractL.func != "cMul" && xTractL.func != "cNeg") {nTerms.push(xL)}
         }
         var nTerms = [];
-        var xprTerms = String(xP);
-        var xTractU = opExtract(xprTerms);
-        var xTractT = opExtract(xTractU.upper);
+        var xTractU = opExtract(xP);
         if (xTractU.func == "cMul") {pMulS(xTractU.upper,xTractU.lower)}
-        else if (xTractU.func == "cNeg" && xTractT.func == "cMul") {pMulS(cNegS(xTractT.upper),xTractT.lower)}
-        else {return [xprTerms]}
+        else {return [xP]}
         return nTerms.sort()
     }
     function parsePoly(xP) { //parse polynomials into terms array
