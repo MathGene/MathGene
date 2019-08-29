@@ -2733,9 +2733,12 @@ var mgCalc = function() {
         }
         return pfFac
     }
-    function asFactor(sfFac) { //factor cAdd and cSub
-        var xTract = opExtract(sfFac);
-        if (xTract.func == "cAdd" || xTract.func == "cSub" ) {
+    function asFactor(aFac) { //factor cAdd and cSub
+        const asFunc = {
+            cAdd: function (xU,xL) {return asFac("cAdd("+xU+","+xL+")")},
+            cSub: function (xU,xL) {return asFac("cSub("+xU+","+xL+")")},
+        }
+        function asFac(sfFac) {
             var sFac = parsePoly(sfFac);
             var nGcf = aGcf(pCoeff(sFac));
             var sInv = cDissect(sfFac);
@@ -2757,8 +2760,11 @@ var mgCalc = function() {
                 }
                 return xReduce(cMulS(tFactor,fReturn))
             }
+            return sfFac
         }
-        return sfFac
+        var args = opExtract(aFac);
+        if (typeof asFunc[args.func] != "undefined") {return asFunc[args.func](args.upper,args.lower)}
+        return aFac
     }
     function facTerms(fTrm) { //factor terms and sort
         var pfTerms = parseTerms(fTrm);
