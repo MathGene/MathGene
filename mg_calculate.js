@@ -428,7 +428,7 @@ var mgCalc = function() {
             if (typeof passthruFunc[funcKey] == "undefined") {funcKey = expReturn.substr(bSym-5,4)} //extract operators cXxx()
             if (typeof funcObj[funcKey] == "undefined") {fReturn = passthruFunc[funcKey](mgTrans.oParens(paramS[0]),mgTrans.oParens(paramS[1]),paramS[2],paramS[3])} //execute passthru
             else {fReturn = funcObj[funcKey](mgTrans.oParens(paramS[0]),mgTrans.oParens(paramS[1]),paramS[2],paramS[3])}//execute operation
-            expReturn = expReturn.substr(0,(expReturn.lastIndexOf("@")+1)-(funcKey.length+1))+fReturn+expReturn.substr(iXf+1,lSym); //assemble output
+            expReturn = expReturn.substr(0,(expReturn.lastIndexOf("@")+1)-(funcKey.length+1))+fReturn+expReturn.substr(iXf+1,expReturn.length); //assemble output
         }
         return expReturn
     }
@@ -2651,16 +2651,12 @@ var mgCalc = function() {
         cFac = xReduce(cFac);
         factorFlag = true;
         facTemp = mdFactor(cFac);
-        factorFlag = false;
-        if (facTemp != cFac) {return facTemp}
-        factorFlag = true;
+        if (facTemp != cFac) {factorFlag = false;return facTemp}
         facTemp = mdFactor(asFactor(xprExpand(cFac)));
-        factorFlag = false;
-        if (facTemp != cFac) {return facTemp}
-        factorFlag = true;
+        if (facTemp != cFac) {factorFlag = false;return facTemp}
         facTemp = facTerms(cFac);
+        if (facTemp != cFac) {factorFlag = false;return facTemp}
         factorFlag = false;
-        if (facTemp != cFac) {return facTemp}
         return cFac
     }
     function pFactor(xFac) { //factor polynomials
@@ -2739,9 +2735,7 @@ var mgCalc = function() {
                 return "cDiv("+xU+","+xL+")"
             },
         }
-        var args = opExtract(mdFac);
-        if (typeof mdFunc[args.func] != "undefined") {return mdFunc[args.func](args.upper,args.lower)}
-        return mdFac
+        return execInside(mdFac,mdFunc)
     }
     function asFactor(aFac) { //factor cAdd and cSub
         const asFunc = {
