@@ -2709,10 +2709,7 @@ var mgCalc = function() {
     function mdFactor(mdFac) { //factor cMul and cDiv
         const mdFunc = {
             cMul: function (xU,xL) {
-                var xuTemp = facTerms(facTerms(xU));
-                var xlTemp = facTerms(facTerms(xL));
-                if (xuTemp != xU || xlTemp != xL) {return "cMul("+xuTemp+","+xlTemp+")"}
-                return "cMul("+xU+","+xL+")"
+                return "cMul("+facTerms(facTerms(xU))+","+facTerms(facTerms(xL))+")"
             },
             cDiv: function (xU,xL) {
                 if (pNomial(xL).length > pNomial(xU).length) { //proper partial fractions
@@ -2729,10 +2726,7 @@ var mgCalc = function() {
                         if (Z1 == int(Z1) && Z2 == int(Z2)) {return xReduce(cAddS(cDivS(A2,cMulS(B1,termsL[1])),cDivS(A1,cMulS(B2,termsL[0]))))}
                     }
                 }
-                var xuTemp = facTerms(facTerms(xU));
-                var xlTemp = facTerms(facTerms(xL));
-                if (xuTemp != xU || xlTemp != xL) {return "cDiv("+xuTemp+","+xlTemp+")"}
-                return "cDiv("+xU+","+xL+")"
+                return "cDiv("+facTerms(facTerms(xU))+","+facTerms(facTerms(xL))+")"
             },
         }
         return execInside(mdFac,mdFunc)
