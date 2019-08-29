@@ -410,7 +410,7 @@ var mgCalc = function() {
         return cDivS(cMul(xU,cPow(10,xP)),cPow(10,xP))
     }
     function execInside(expIn,funcObj) { //execute math transformation inside out from specified object
-        expIn = String(expIn);
+        expIn = mgTrans.oParens(expIn);
         var expReturn = expIn.replace(/([a-z][a-z][a-z])\(/ig,"$1@"); //mark left parens with @
         var sCount = mgTrans.strCount(expReturn,"@"),nXf = 0,lPar = 0,rPar = 0,iXf = 0,rTmp = "",payload = "",paramS = [],funcKey = "",fReturn = "";
         for (nXf=0;nXf<sCount;nXf++) {
@@ -2710,28 +2710,38 @@ var mgCalc = function() {
         if (xprExpand(tReturn) == xReduce(xFac) && fGcf != 1) {return tReturn} //test factored expression
         return xFac
     }
-    function mdFactor(pfFac) { //factor cMul and cDiv
-        var xTract = opExtract(pfFac);
-        if (xTract.func == "cDiv" && pNomial(xTract.lower).length > pNomial(xTract.upper).length) {//proper partial fractions
-            var fVar = pVariable(xTract.lower);
-            var pFac = pFactor(xprExpand(xTract.lower));
-            var termsL = parseTerms(pFac);
-            if (termsL.length == 2 && (!pVariable(xTract.upper) || pVariable(xTract.upper) == pVariable(xTract.lower)) ) {
-                var Z1 = relExtract(xprSolve(cEqlS("0",termsL[0]),fVar)).lower;
-                var Z2 = relExtract(xprSolve(cEqlS("0",termsL[1]),fVar)).lower;
-                var A1 = xReduce(cSubst(xTract.upper,fVar,Z1));
-                var A2 = xReduce(cSubst(xTract.upper,fVar,Z2));
-                var B1 = xReduce(cSubst(termsL[0],fVar,Z2));
-                var B2 = xReduce(cSubst(termsL[1],fVar,Z1));
-                if (Z1 == int(Z1) && Z2 == int(Z2)) {return xReduce(cAddS(cDivS(A2,cMulS(B1,termsL[1])),cDivS(A1,cMulS(B2,termsL[0]))))}
-            }
+    function mdFactor(mdFac) { //factor cMul and cDiv
+        const mdFunc = {
+            cMul: function (xU,xL) {
+                var xuTemp = facTerms(facTerms(xU));
+                var xlTemp = facTerms(facTerms(xL));
+                if (xuTemp != xU || xlTemp != xL) {return "cMul("+xuTemp+","+xlTemp+")"}
+                return "cMul("+xU+","+xL+")"
+            },
+            cDiv: function (xU,xL) {
+                if (pNomial(xL).length > pNomial(xU).length) { //proper partial fractions
+                    var fVar = pVariable(xL);
+                    var pFac = pFactor(xprExpand(xL));
+                    var termsL = parseTerms(pFac);
+                    if (termsL.length == 2 && (!pVariable(xU) || pVariable(xU) == pVariable(xL)) ) {
+                        var Z1 = relExtract(xprSolve(cEqlS("0",termsL[0]),fVar)).lower;
+                        var Z2 = relExtract(xprSolve(cEqlS("0",termsL[1]),fVar)).lower;
+                        var A1 = xReduce(cSubst(xU,fVar,Z1));
+                        var A2 = xReduce(cSubst(xU,fVar,Z2));
+                        var B1 = xReduce(cSubst(termsL[0],fVar,Z2));
+                        var B2 = xReduce(cSubst(termsL[1],fVar,Z1));
+                        if (Z1 == int(Z1) && Z2 == int(Z2)) {return xReduce(cAddS(cDivS(A2,cMulS(B1,termsL[1])),cDivS(A1,cMulS(B2,termsL[0]))))}
+                    }
+                }
+                var xuTemp = facTerms(facTerms(xU));
+                var xlTemp = facTerms(facTerms(xL));
+                if (xuTemp != xU || xlTemp != xL) {return "cDiv("+xuTemp+","+xlTemp+")"}
+                return "cDiv("+xU+","+xL+")"
+            },
         }
-        if (xTract.func == "cDiv" || xTract.func == "cMul" ) {
-            var xuTemp = facTerms(facTerms(xTract.upper));
-            var xlTemp = facTerms(facTerms(xTract.lower));
-            if (xuTemp != xTract.upper || xlTemp != xTract.lower) {return xTract.func+"("+xuTemp+","+xlTemp+")"}
-        }
-        return pfFac
+        var args = opExtract(mdFac);
+        if (typeof mdFunc[args.func] != "undefined") {return mdFunc[args.func](args.upper,args.lower)}
+        return mdFac
     }
     function asFactor(aFac) { //factor cAdd and cSub
         const asFunc = {
