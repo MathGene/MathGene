@@ -2647,17 +2647,21 @@ var mgCalc = function() {
 
     // Factor
     function xprFactor(cFac) {
+        var facTemp = "";
         cFac = xReduce(cFac);
         factorFlag = true;
-        var sReturn = cFac;
-        var facTemp = mdFactor(cFac);
-        if (facTemp != cFac && !strTest(facTemp, "undefined")) {factorFlag = false;sReturn = facTemp}
-        else {facTemp = mdFactor(asFactor(xprExpand(cFac)))}
-        if (factorFlag == true && facTemp != cFac && !strTest(facTemp, "undefined")) {factorFlag = false;sReturn = facTemp}
-        else {facTemp = facTerms(facTerms(cFac))}
-        if (factorFlag == true && facTemp != cFac && !strTest(facTemp, "undefined")) {factorFlag = false;sReturn = facTemp}
+        facTemp = mdFactor(cFac);
         factorFlag = false;
-        return sReturn
+        if (facTemp != cFac) {return facTemp}
+        factorFlag = true;
+        facTemp = mdFactor(asFactor(xprExpand(cFac)));
+        factorFlag = false;
+        if (facTemp != cFac) {return facTemp}
+        factorFlag = true;
+        facTemp = facTerms(cFac);
+        factorFlag = false;
+        if (facTemp != cFac) {return facTemp}
+        return cFac
     }
     function pFactor(xFac) { //factor polynomials
         function fAddMul(D2,D1,D0) {
