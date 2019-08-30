@@ -1617,11 +1617,7 @@ var mgCalc = function() {
     }
     //
     function xprExpand(xE) { //expand (defactor) expression
-        var xReturn = String(xE);
-        xReturn = xReduce(execEval(xReturn.replace(/([a-z])\(/g,"$1S(").replace(/(Cv\[\d+\])/g,"'$1'").replace(/sqtS/g,"sqtX").replace(/cPowS/g,"cPowX").replace(/cMulS/g,"cMulX").replace(/cDivS/g,"cDivX").replace(/cAddS/g,"cAddX").replace(/cSubS/g,"cSubX")));
-        xReturn = xReturn.replace(/cnt\(/g,"(");
-        if (!strTest("undefined",xReturn)) {return xReturn}
-        return xE
+        return xReduce(execEval(String(xE).replace(/([a-z])\(/g,"$1S(").replace(/(Cv\[\d+\])/g,"'$1'").replace(/sqtS/g,"sqtX").replace(/cPowS/g,"cPowX").replace(/cMulS/g,"cMulX").replace(/cDivS/g,"cDivX").replace(/cAddS/g,"cAddX").replace(/cSubS/g,"cSubX"))).replace(/cnt\(/g,"(");
     }
     
     //Calculus
