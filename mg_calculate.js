@@ -410,6 +410,7 @@ var mgCalc = function() {
         return cDivS(cMul(xU,cPow(10,xP)),cPow(10,xP))
     }
     function execInside(expIn,funcObj) { //execute math transformation inside out from specified object
+        expIn = mgTrans.oParens(expIn);
         var expReturn = expIn.replace(/([a-z][a-z][a-z])\(/ig,"$1@"); //mark left parens with @
         var sCount = mgTrans.strCount(expReturn,"@"),nXf = 0,lPar = 0,rPar = 0,iXf = 0,rTmp = "",payload = "",paramS = [],funcKey = "",fReturn = "";
         for (nXf=0;nXf<sCount;nXf++) {
@@ -427,7 +428,7 @@ var mgCalc = function() {
             if (typeof passthruFunc[funcKey] == "undefined") {funcKey = expReturn.substr(bSym-5,4)} //extract operators cXxx()
             if (typeof funcObj[funcKey] == "undefined") {fReturn = passthruFunc[funcKey](mgTrans.oParens(paramS[0]),mgTrans.oParens(paramS[1]),paramS[2],paramS[3])} //execute passthru
             else {fReturn = funcObj[funcKey](mgTrans.oParens(paramS[0]),mgTrans.oParens(paramS[1]),paramS[2],paramS[3])}//execute operation
-            expReturn = expReturn.substr(0,(expReturn.lastIndexOf("@")+1)-(funcKey.length+1))+fReturn+expReturn.substr(iXf+1,lSym); //assemble output
+            expReturn = expReturn.substr(0,(expReturn.lastIndexOf("@")+1)-(funcKey.length+1))+fReturn+expReturn.substr(iXf+1,expReturn.length); //assemble output
         }
         return expReturn
     }
@@ -690,39 +691,32 @@ var mgCalc = function() {
             if (typeof xU != "undefined" && xU != "" && xTractU.func != "cMul" && xTractU.func != "cNeg") {nTerms.push(xU)}
             if (typeof xL != "undefined" && xL != "" && xTractL.func != "cMul" && xTractL.func != "cNeg") {nTerms.push(xL)}
         }
-        var nTerms = [],strg = [];
-        var xprTerms = String(xP);
-        var xTractU = opExtract(xprTerms);
-        if (xTractU.func != "cMul" && xTractU.func != "cNeg") {return [xprTerms]}
-        strg = mgTrans.parseParens(xprTerms,xprTerms.indexOf("cMul("));
-        pMulS(strg.upper,strg.lower);
+        var nTerms = [];
+        var xTractU = opExtract(xP);
+        if (xTractU.func == "cMul") {pMulS(xTractU.upper,xTractU.lower)}
+        else {return [xP]}
         return nTerms.sort()
     }
     function parsePoly(xP) { //parse polynomials into terms array
+        const polyFuncs = {
+        cAdd: function (xU,xL) {
+            if (!strTest(xU,"Cv[9999]")) {nTerms.push(xU)}
+            if (!strTest(xL,"Cv[9999]")) {nTerms.push(xL)}
+            return "Cv[9999]"
+        },
+        cSub: function (xU,xL) {
+            if (!strTest(xU,"Cv[9999]")) {nTerms.push(xU)}
+            if (!strTest(xL,"Cv[9999]")) {nTerms.push(cNegS(xL))}
+            return "Cv[9999]"
+        },
+        }
         var nTerms = [];
         var xTractU = opExtract(xP);
         if (xTractU.func == "cMul" || xTractU.func == "cDiv" || xTractU.func == "cNeg" || xTractU.func == "cPow") {
             if (!strTest(xP,"cAdd") && !strTest(xP,"cSub")) {nTerms.push(xP)}
             else {return [xP]}
         }   
-        var xprTerms = String(xP),strg = [],bSym = 0,aSym = 0;
-        var sCount = xprTerms.split("cAdd(").length-1 + xprTerms.split("cSub(").length-1
-        for (var iXf=0;iXf<sCount;iXf++) {
-            aSym = xprTerms.lastIndexOf("cAdd(");
-            bSym = xprTerms.lastIndexOf("cSub(");
-            if (aSym > -1 && aSym > bSym) {
-                strg = mgTrans.parseParens(xprTerms,aSym+4);
-                if (strg.upper != "") {nTerms.push(strg.upper)}
-                if (strg.lower != "") {nTerms.push(strg.lower)}     
-                xprTerms = xprTerms.substr(0,aSym)+xprTerms.substr(strg.end+1,xprTerms.length);
-            }
-            else if (bSym > -1 && bSym > aSym) {
-                strg = mgTrans.parseParens(xprTerms,bSym+4);
-                if (strg.upper != "") {nTerms.push(strg.upper)}
-                if (strg.lower != "") {nTerms.push(cNegS(strg.lower))}
-                xprTerms = xprTerms.substr(0,bSym)+xprTerms.substr(strg.end+1,xprTerms.length);
-            }       
-        }
+        execInside(xP,polyFuncs);
         return nTerms.sort(function(aS,bS){return sortTerms(aS,bS)})
     }
     function pNomial(pN,pVar) { //parse polynomial into ranked array
@@ -1623,11 +1617,7 @@ var mgCalc = function() {
     }
     //
     function xprExpand(xE) { //expand (defactor) expression
-        var xReturn = String(xE);
-        xReturn = xReduce(execEval(xReturn.replace(/([a-z])\(/g,"$1S(").replace(/(Cv\[\d+\])/g,"'$1'").replace(/sqtS/g,"sqtX").replace(/cPowS/g,"cPowX").replace(/cMulS/g,"cMulX").replace(/cDivS/g,"cDivX").replace(/cAddS/g,"cAddX").replace(/cSubS/g,"cSubX")));
-        xReturn = xReturn.replace(/cnt\(/g,"(");
-        if (!strTest("undefined",xReturn)) {return xReturn}
-        return xE
+        return xReduce(execEval(String(xE).replace(/([a-z])\(/g,"$1S(").replace(/(Cv\[\d+\])/g,"'$1'").replace(/sqtS/g,"sqtX").replace(/cPowS/g,"cPowX").replace(/cMulS/g,"cMulX").replace(/cDivS/g,"cDivX").replace(/cAddS/g,"cAddX").replace(/cSubS/g,"cSubX"))).replace(/cnt\(/g,"(");
     }
     
     //Calculus
@@ -2653,17 +2643,17 @@ var mgCalc = function() {
 
     // Factor
     function xprFactor(cFac) {
+        var facTemp = "";
         cFac = xReduce(cFac);
         factorFlag = true;
-        var sReturn = cFac;
-        var facTemp = mdFactor(cFac);
-        if (facTemp != cFac && !strTest(facTemp, "undefined")) {factorFlag = false;sReturn = facTemp}
-        else {facTemp = mdFactor(asFactor(xprExpand(cFac)))}
-        if (factorFlag == true && facTemp != cFac && !strTest(facTemp, "undefined")) {factorFlag = false;sReturn = facTemp}
-        else {facTemp = facTerms(facTerms(cFac))}
-        if (factorFlag == true && facTemp != cFac && !strTest(facTemp, "undefined")) {factorFlag = false;sReturn = facTemp}
+        facTemp = mdFactor(cFac);
+        if (facTemp != cFac) {factorFlag = false;return facTemp}
+        facTemp = mdFactor(asFactor(xprExpand(cFac)));
+        if (facTemp != cFac) {factorFlag = false;return facTemp}
+        facTemp = facTerms(cFac);
+        if (facTemp != cFac) {factorFlag = false;return facTemp}
         factorFlag = false;
-        return sReturn
+        return cFac
     }
     function pFactor(xFac) { //factor polynomials
         function fAddMul(D2,D1,D0) {
@@ -2712,32 +2702,37 @@ var mgCalc = function() {
         if (xprExpand(tReturn) == xReduce(xFac) && fGcf != 1) {return tReturn} //test factored expression
         return xFac
     }
-    function mdFactor(pfFac) { //factor cMul and cDiv
-        var xTract = opExtract(pfFac);
-        if (xTract.func == "cDiv" && pNomial(xTract.lower).length > pNomial(xTract.upper).length) {//proper partial fractions
-            var fVar = pVariable(xTract.lower);
-            var pFac = pFactor(xprExpand(xTract.lower));
-            var termsL = parseTerms(pFac);
-            if (termsL.length == 2 && (!pVariable(xTract.upper) || pVariable(xTract.upper) == pVariable(xTract.lower)) ) {
-                var Z1 = relExtract(xprSolve(cEqlS("0",termsL[0]),fVar)).lower;
-                var Z2 = relExtract(xprSolve(cEqlS("0",termsL[1]),fVar)).lower;
-                var A1 = xReduce(cSubst(xTract.upper,fVar,Z1));
-                var A2 = xReduce(cSubst(xTract.upper,fVar,Z2));
-                var B1 = xReduce(cSubst(termsL[0],fVar,Z2));
-                var B2 = xReduce(cSubst(termsL[1],fVar,Z1));
-                if (Z1 == int(Z1) && Z2 == int(Z2)) {return xReduce(cAddS(cDivS(A2,cMulS(B1,termsL[1])),cDivS(A1,cMulS(B2,termsL[0]))))}
-            }
+    function mdFactor(mdFac) { //factor cMul and cDiv
+        const mdFunc = {
+            cMul: function (xU,xL) {
+                return "cMul("+facTerms(facTerms(xU))+","+facTerms(facTerms(xL))+")"
+            },
+            cDiv: function (xU,xL) {
+                if (pNomial(xL).length > pNomial(xU).length) { //proper partial fractions
+                    var fVar = pVariable(xL);
+                    var pFac = pFactor(xprExpand(xL));
+                    var termsL = parseTerms(pFac);
+                    if (termsL.length == 2 && (!pVariable(xU) || pVariable(xU) == pVariable(xL)) ) {
+                        var Z1 = relExtract(xprSolve(cEqlS("0",termsL[0]),fVar)).lower;
+                        var Z2 = relExtract(xprSolve(cEqlS("0",termsL[1]),fVar)).lower;
+                        var A1 = xReduce(cSubst(xU,fVar,Z1));
+                        var A2 = xReduce(cSubst(xU,fVar,Z2));
+                        var B1 = xReduce(cSubst(termsL[0],fVar,Z2));
+                        var B2 = xReduce(cSubst(termsL[1],fVar,Z1));
+                        if (Z1 == int(Z1) && Z2 == int(Z2)) {return xReduce(cAddS(cDivS(A2,cMulS(B1,termsL[1])),cDivS(A1,cMulS(B2,termsL[0]))))}
+                    }
+                }
+                return "cDiv("+facTerms(facTerms(xU))+","+facTerms(facTerms(xL))+")"
+            },
         }
-        if (xTract.func == "cDiv" || xTract.func == "cMul" ) {
-            var xuTemp = facTerms(facTerms(xTract.upper));
-            var xlTemp = facTerms(facTerms(xTract.lower));
-            if (xuTemp != xTract.upper || xlTemp != xTract.lower) {return xTract.func+"("+xuTemp+","+xlTemp+")"}
-        }
-        return pfFac
+        return execInside(mdFac,mdFunc)
     }
-    function asFactor(sfFac) { //factor cAdd and cSub
-        var xTract = opExtract(sfFac);
-        if (xTract.func == "cAdd" || xTract.func == "cSub" ) {
+    function asFactor(aFac) { //factor cAdd and cSub
+        const asFunc = {
+            cAdd: function (xU,xL) {return asFac("cAdd("+xU+","+xL+")")},
+            cSub: function (xU,xL) {return asFac("cSub("+xU+","+xL+")")},
+        }
+        function asFac(sfFac) {
             var sFac = parsePoly(sfFac);
             var nGcf = aGcf(pCoeff(sFac));
             var sInv = cDissect(sfFac);
@@ -2759,8 +2754,11 @@ var mgCalc = function() {
                 }
                 return xReduce(cMulS(tFactor,fReturn))
             }
+            return sfFac
         }
-        return sfFac
+        var args = opExtract(aFac);
+        if (typeof asFunc[args.func] != "undefined") {return asFunc[args.func](args.upper,args.lower)}
+        return aFac
     }
     function facTerms(fTrm) { //factor terms and sort
         var pfTerms = parseTerms(fTrm);
