@@ -1816,7 +1816,6 @@ var mgCalc = function() {
     function tdvS(dXpr,deeVar,nTh) { //nTh total derivative
         if (!nbrTest(nTh)) {nTh = 1}
         if (nTh == 0) {return dXpr}
-        if (deeVar) {deeVarP = deeVar}
         if (solverFlag) {return tdvS("tdv("+dXpr+")",deeVar,nTh-1)} //return nested derivatives for solver
         var cInv = cInventory(dXpr);
         if (cInv.length > 1) {
@@ -1836,7 +1835,7 @@ var mgCalc = function() {
         }
         //
         if (!nbrTest(nTh)) {nTh = 1}
-        if (deeVar) {deeVarP = deeVar}
+        if (varTest(deeVar)) {deeVarP = deeVar}
         var sReturn = "";
         if (!solverFlag) {dXpr = cReduce(dXpr)}
         if (nTh == 0) {sReturn = dXpr}
