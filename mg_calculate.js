@@ -124,7 +124,9 @@ var mgCalc = function() {
     vAdd: function (xU,xL) {return "vAdd("+xU+","+xL+")"},
     vSub: function (xU,xL) {return "vSub("+xU+","+xL+")"},
     vNeg: function (xU) {return "vNeg("+xU+")"},
-    mat: function() {return "mat(" + Array.prototype.slice.call(arguments) + ")"},
+    det:  function (xU) {return "det("+xU+")"},
+    trc:  function (xU) {return "trc("+xU+")"},
+    mat: function () {return "mat(" + Array.prototype.slice.call(arguments) + ")"},
     }
     const solverMap = { //map inverse functions for solver
     sin:{solverU:"asn(lExpr)",ineqU:0},
@@ -428,6 +430,7 @@ var mgCalc = function() {
             if (typeof passthruFunc[funcKey] == "undefined") {funcKey = expReturn.substr(bSym-5,4)} //extract operators cXxx()
             if (typeof funcObj[funcKey] == "undefined") {fReturn = passthruFunc[funcKey](mgTrans.oParens(paramS[0]),mgTrans.oParens(paramS[1]),paramS[2],paramS[3])} //execute passthru
             else {fReturn = funcObj[funcKey](mgTrans.oParens(paramS[0]),mgTrans.oParens(paramS[1]),paramS[2],paramS[3])}//execute operation
+            if (funcKey == "mat") {fReturn = passthruFunc[funcKey](paramS)} //matrix parameters
             expReturn = expReturn.substr(0,(expReturn.lastIndexOf("@")+1)-(funcKey.length+1))+fReturn+expReturn.substr(iXf+1,expReturn.length); //assemble output
         }
         return expReturn
@@ -489,8 +492,6 @@ var mgCalc = function() {
     smm: function (xU,xL,xY,xZ) {return smmS(xU,xL,xY,xZ)},
     pmm: function (xU,xL,xY,xZ) {return pmmS(xU,xL,xY,xZ)},
     lmt: function (xU,xL,xR) {return lmtS(xU,xL,xR)},
-    ntp: function (nXpr,deeVar,iU,iL) {return ntpS(nXpr,deeVar,iU,iL)},
-    mat: function () {return matS(arguments)},
     smx: function (xU) {return smxS(xU)},
     pxp: function (xU) {return pxpS(xU)},
     vMul: function (xU,xL) {return vMulS(xU,xL)},
@@ -500,6 +501,8 @@ var mgCalc = function() {
     vNeg: function (xU) {return vNegS(xU)},
     cbr: function (xU) {return "("+xU+")"},
     sbr: function (xU) {return "("+xU+")"},
+    det: function (xU) {return detS(xU)},
+    trc: function (xU) {return trcS(xU)},
     }
 
     function xprIterate(xIter) {
@@ -507,7 +510,6 @@ var mgCalc = function() {
         if (strTest(xIter,"undefined")) {return "undefined"}
         if (xIter.search(/,,/) > -1 || xIter.search(/,\)/) > -1 || xIter.search(/\(,/) > -1 || xIter.search(/\(\)/) > -1) {return cError("Missing operand(s)")}
         return execInside(xIter,symFunc)
-        //return String(execEval(xIter.replace(/([a-z])\(/g,"$1S(").replace(/(Pv\[\d+\])/g,"'$1'").replace(/(Sv\[\d+\])/g,"'$1'").replace(/(Cv\[\d+\])/g,"'$1'")));
     }
     function cReduce(cRdce) { //complete expression reduction
         if (nbrTest(cRdce) && cRdce != int(cRdce)) {return decToFrac(cRdce)} //decimals to fractions
@@ -1669,7 +1671,6 @@ var mgCalc = function() {
     //
     function xprExpand(xE) { //expand (defactor) expression
         return xReduce(execInside(xE,expandFunc)).replace(/cnt\(/g,"(")
-        //return xReduce(execEval(String(xE).replace(/([a-z])\(/g,"$1S(").replace(/(Cv\[\d+\])/g,"'$1'").replace(/sqtS/g,"sqtX").replace(/cPowS/g,"cPowX").replace(/cMulS/g,"expandFunc["cMul"]").replace(/cDivS/g,"cDivX").replace(/cAddS/g,"cAddX").replace(/cSubS/g,"cSubX"))).replace(/cnt\(/g,"(");
     }
     
     //Calculus
@@ -2961,7 +2962,8 @@ var mgCalc = function() {
         if (typeof xT == "undefined") {return "undefined"}
         if (nbrTest(xT)) {return "real"}
         if (nbrTest(xT.r) && mgConfig.Domain == "Complex") {return "complex"}
-        if (typeof xT == "boolean") {return "boolean"}
+        if (xT == "true" || xT =="false") {return "boolean"}
+        if (opExtract(xT).func == "mat") {return "matrix"}
         if (typeof xT == "object" && typeof xT[0] == "object") {return "matrix"}
         if (typeof xT == "object" && typeof xT[0] != "object") {return "array"}
         return "undefined"

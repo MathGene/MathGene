@@ -2247,7 +2247,7 @@ var testList =
 
 "Numerical": "runNumerical()",
 "Range": "runRange()",
-//"Matrix": "runMatrix()",
+"Matrix": "runMatrix()",
 "Reduce": "runReduce()",
 "Factor": "runFactor()",
 "Expand": "runExpand()",
