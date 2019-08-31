@@ -116,7 +116,10 @@ var mgCalc = function() {
     prd: function (xU,xL,xR) {return "prd("+xU+","+xL+")"},
     lim: function (xU,xL,xR) {return "lim("+xU+","+xL+")"},
     ntg: function (nXpr,deeVar,iU,iL) {return "ntg("+nXpr+","+deeVar+","+iU+","+iL+")"},
-    ntp: function (nXpr,deeVar,iU,iL) {return "ntp("+nXpr+","+deeVar+","+iU+","+iL+")"},
+    ntp: function (nXpr,deeVar,iU,iL) {
+        if (typeof iU != "undefined" && typeof iL != "undefined") {return "ntp("+nXpr+","+deeVar+","+iU+","+iL+")"}
+        return "ntp("+nXpr+","+deeVar+")"
+    },
     tdv: function (dXpr,deeVar,nTh) {return "tdv("+dXpr+","+deeVar+","+nTh+")"},
     drv: function (dXpr,deeVar,nTh) {return "drv("+dXpr+","+deeVar+","+nTh+")"},
     smx: function (xU) {return "smx("+xU+")"},
@@ -488,7 +491,6 @@ var mgCalc = function() {
     sdr: function (xU,xL) {return sdrS(xU,xL)},
     psd: function (xU,xL) {return psdS(xU,xL)},
     ntg: function (nXpr,deeVar,iU,iL) {return ntgS(nXpr,deeVar,iU,iL)},
-    ntp: function (nXpr,deeVar,iU,iL) {return ntpS(nXpr,deeVar,iU,iL)},
     tdv: function (dXpr,deeVar,nTh) {return tdvS(dXpr,deeVar,nTh)},
     drv: function (dXpr,deeVar,nTh) {return drvS(dXpr,deeVar,nTh)},
     smm: function (xU,xL,xY,xZ) {return smmS(xU,xL,xY,xZ)},
@@ -2309,10 +2311,6 @@ var mgCalc = function() {
     },
     ntgTest: function (rTest)   {if (ntgFunc.ntgCheck(rTest) &&  !strTest(rTest,"ntp(") && rTest != 0) {return true}; return false}, //test for ntg success
     ntgCheck: function (rCheck) {if (typeof rCheck == "undefined" || strTest(rCheck,"Cv[9998]") || strTest(rCheck,"undefined")) {return false}; return true},
-    }
-    function ntpS(nXpr,deeVar,iU,iL) { //wrapper for unsolved integral
-        if (typeof iU != "undefined" && typeof iL != "undefined") {return "ntp("+nXpr+","+deeVar+","+iU+","+iL+")"}
-        return "ntp("+nXpr+","+deeVar+")"
     }
     function ntgS(nXpr,deeVar,iU,iL) { //integrate (integrand, variable, upper_limit, lower_limit)
         function ntgExecute(xIn) {
