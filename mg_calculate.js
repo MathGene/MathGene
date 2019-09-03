@@ -863,7 +863,7 @@ var mgCalc = function() {
         if (!strTest(xU,pVariable(xL)) || polyU.length < polyL.length || polyU.length < 2 || polyL.length < 2 || strTest(xU,xL)) {return "cDiv("+xU+","+xL+")"}
         if (polyU.length > 1 && polyL.length > 1 && cInventory(polyU[polyU.length-1]).length > 2) {return "cDiv("+xU+","+xL+")"} //fix for compound terms in numerator
         var dReturn = "0",tTemp = "";
-        var uTemp = xReduce(xU);
+        var uTemp = xU;
         for (var pT in polyU) {
             tTemp = xReduce(cDivS(polyU[polyU.length-1],polyL[polyL.length-1]));
             uTemp = xReduce(cSubS(uTemp,xprExpand(cMulS(tTemp,xL))));
@@ -2699,7 +2699,7 @@ var mgCalc = function() {
         var pfTerms = parseTerms(xU);
         var pfReturn = 1;
         for (var xC in pfTerms) {
-            var fTemp = pFactor(pfTerms[xC])
+            var fTemp = pFactor(pfTerms[xC]);
             if (pNomial(pfTerms[xC]).length > 2) {pfReturn = xprIterate(cMulS(pfReturn,fTemp))}
             else {pfReturn = xprIterate(cMulS(pfReturn,pfTerms[xC]))}
         }
@@ -2712,7 +2712,7 @@ var mgCalc = function() {
     cDiv: function (xU,xL) {
         if (pNomial(xL).length > pNomial(xU).length) { //proper partial fractions
             var fVar = pVariable(xL);
-            var pFac = pFactor(xprExpand(xL));
+            var pFac = pFactor(xL);
             var termsL = parseTerms(pFac);
             if (termsL.length == 2 && (!pVariable(xU) || pVariable(xU) == pVariable(xL)) ) {
                 var Z1 = relExtract(xprSolve(cEqlS("0",termsL[0]),fVar)).lower;
@@ -2773,6 +2773,7 @@ var mgCalc = function() {
             return iXu
         }
         var pReturn = 0,xC = 0;
+        pfFac = xReduce(pfFac);
         var pVar = pVariable(pfFac);
         var polyU = pNomial(pfFac,pVar);
         if (polyU.length < 2) {return pfFac}
@@ -2784,13 +2785,15 @@ var mgCalc = function() {
             fGcf = cMulS(fGcf,polyU[polyU.length-1])
             for (xC=1;xC<polyU.length;xC++) {polyU[xC] = xReduce(cDivS(polyU[xC],polyU[polyU.length-1]))}
         }
+        if (polyU.length >= 3) { //refactor GCF
+            for (xC=0;xC<polyU.length;xC++) {if (fCoeff[xC] != 0 ) {fGcf = cMulS(fGcf,cPowS(pVar,xC));break}}
+        }		
         var sqrtA = sqt(abs(fCoeff[polyU.length-1])),sqrtB = sqt(abs(fCoeff[0])); //difference of perfect squares
         pReturn = xReduce(cMulS(fGcf,"cMul((cAdd(cMul("+sqrtA+","+cPowS(pVar,cDiv((polyU.length-1),2))+"),"+sqrtB+")),(cSub(cMul("+sqrtA+","+cPowS(pVar,cDiv((polyU.length-1),2))+"),"+sqrtB+")))"));
-        if (xReduce(xprExpand(pReturn)) == xReduce(pfFac)) {return pReturn} //test perfect squares calc
-        var yVar = 1; //extract secondary quadratic variable
-        if (pNomial(pExpand(polyU)).length == polyU.length) {yVar = pVariable(pExpand(polyU))}
-        if (polyU.length >= 3) {for (xC=0;xC<polyU.length;xC++) {if (fCoeff[xC] != 0 ) {fGcf = cMulS(fGcf,cPowS(pVar,xC));break}}}//factor out secondary quadratic var
+        if (xprExpand(pReturn) == pfFac) {return pReturn} //test perfect squares calc
         //factor quadratic
+        var yVar = 1; //secondary quadratic variable
+        if (pNomial(pExpand(polyU)).length == polyU.length) {yVar = pVariable(pExpand(polyU))}
         polyU = pNomial(xReduce(cDivS(pfFac,fGcf)),pVar);
         fCoeff = pCoeff(polyU); //recalc coefficients
         var pRoot = cPowS(pVar,cDiv((polyU.length-1),2));
@@ -2801,11 +2804,11 @@ var mgCalc = function() {
         var facB1 = xReduce(cAddS(cMulS(gcfA,pRoot),cMulS(gcfB,yVar)));
         var facB2 = xReduce(cSubS(cMulS(gcfA,pRoot),cMulS(gcfB,yVar)));
         pReturn = cMulS(fGcf,cMulS(facB1,facA1));
-        if (xReduce(xprExpand(pReturn)) == xReduce(pfFac)) {return pReturn} //test factored expression
+        if (xprExpand(pReturn) == pfFac) {return pReturn} //test factored expression 1
         pReturn = cMulS(fGcf,cMulS(facB2,facA1));
-        if (xReduce(xprExpand(pReturn)) == xReduce(pfFac)) {return pReturn} //test factored expression
-        pReturn = "cMul("+xReduce(fGcf)+","+xReduce(cDivS(pfFac,fGcf))+")";
-        if (xprExpand(pReturn) == xReduce(pfFac) && fGcf != 1) {return pReturn} //test factored expression
+        if (xprExpand(pReturn) == pfFac) {return pReturn} //test factored expression 2 
+        pReturn = "cMul("+fGcf+","+xReduce(cDivS(pfFac,fGcf))+")";
+        if (xprExpand(pReturn) == pfFac && fGcf != 1) {return pReturn} //test factored expression 3
         return pfFac
     }
     function asFactor(asFac) { //factor out vars and coefficients from cAdd and cSub
@@ -2828,7 +2831,7 @@ var mgCalc = function() {
             for (var zI in sFac) {fReturn = cAddS(fReturn,xReduce(cDivS(sFac[zI],tFactor)))} //sum terms
             asReturn = xReduce(cMulS(tFactor,fReturn));
         }
-        if (xprExpand(asReturn) == asFac) {return asReturn} //test factored expression
+        if (xprExpand(asReturn) == xReduce(asFac)) {return asReturn} //test factored expression
         return asFac
     }
     //
