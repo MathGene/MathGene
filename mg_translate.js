@@ -783,10 +783,10 @@ var mgTrans = function() {
         mg: function (parm) {return 'lne('+parm[0]+')'},
         },
     int:{ //integer component
-        htmlL1: function (parm,strg) {return "<table style='text-align:center;display:inline-table;vertical-align:middle;'><tr><td style='border-left:3px solid black;border-bottom:1px solid black;'>&nbsp;</td><td><table>"+parm[0]},
-        htmlR1: function (parm,strg) {return "</table><td style='border-right:3px solid black;border-bottom:1px solid black;'>&nbsp;</td></tr></table>"},
-        htmlL2: function (parm,strg) {return "<table style='text-align:center;display:inline-table;vertical-align:middle;'><tr><td style='border-left:3px solid black;border-bottom:1px solid black;'>&nbsp;</td><td><table>"+parm[0]},
-        htmlR2: function (parm,strg) {return "</table><td style='border-right:3px solid black;border-bottom:1px solid black;'>&nbsp;</td></tr></table>"},
+        htmlL1: function (parm,strg) {return "<table style='text-align:center;display:inline-table;vertical-align:middle;'><tr><td style='border-left:3px solid black;border-bottom:1px solid black;'>&nbsp;</td><td><table><tr><td>"+parm[0]},
+        htmlR1: function (parm,strg) {return "</tr></td></table></td><td style='border-right:3px solid black;border-bottom:1px solid black;'>&nbsp;</td></tr></table>"},
+        htmlL2: function (parm,strg) {return "<table style='text-align:center;display:inline-table;vertical-align:middle;'><tr><td style='border-left:3px solid black;border-bottom:1px solid black;'>&nbsp;</td><td><table><tr><td>"+parm[0]},
+        htmlR2: function (parm,strg) {return "</tr></td></table></td><td style='border-right:3px solid black;border-bottom:1px solid black;'>&nbsp;</td></tr></table>"},
 
         texfunc:['\\lfloor'],
         latexL1: function (parm) {return '\\left\\lfloor '+parm[0]},
@@ -796,10 +796,10 @@ var mgTrans = function() {
         mg: function (parm) {return 'int('+parm[0]+')'},
         },
     cei:{  //ceiling
-        htmlL1: function (parm,strg) {return "<table style='text-align:center;display:inline-table;vertical-align:middle;'><tr><td style='border-left:3px solid black;border-top:1px solid black;'>&nbsp;</td><td><table><tr><td>"+parm[0]},
-        htmlR1: function (parm,strg) {return "</tr></td></table><td style='border-right:3px solid black;border-top:1px solid black;'>&nbsp;</td></tr></table>"},
-        htmlL2: function (parm,strg) {return "<table style='text-align:center;display:inline-table;vertical-align:middle;'><tr><td style='border-left:3px solid black;border-top:1px solid black;'>&nbsp;</td><td><table><tr><td>"+parm[0]},
-        htmlR2: function (parm,strg) {return "</tr></td></table><td style='border-right:3px solid black;border-top:1px solid black;'>&nbsp;</td></tr></table>"},
+        htmlL1: function (parm,strg) {return "<table style='text-align:center;display:inline-table;vertical-align:middle;'><tr><td style='border-left:3px solid black;border-top:1px solid black;'>&nbsp;<td><table><tr><td>"+parm[0]},
+        htmlR1: function (parm,strg) {return "</tr></td></table></td><td style='border-right:3px solid black;border-top:1px solid black;'>&nbsp;</td></tr></table>"},
+        htmlL2: function (parm,strg) {return "<table style='text-align:center;display:inline-table;vertical-align:middle;'><tr><td style='border-left:3px solid black;border-top:1px solid black;'>&nbsp;<td><table><tr><td>"+parm[0]},
+        htmlR2: function (parm,strg) {return "</tr></td></table></td><td style='border-right:3px solid black;border-top:1px solid black;'>&nbsp;</td></tr></table>"},
 
         texfunc:[],
         latexL1: function (parm) {return '\\left\\lceil '+parm[0]},
@@ -809,10 +809,10 @@ var mgTrans = function() {
         mg:  function (parm) {return 'cei('+parm[0]+')'},
         },
     abs:{ //absolute value
-        htmlL1: function (parm,strg) {return "<table style='text-align:center;display:inline-table;vertical-align:middle;'><tr><td style='border-left:2px solid black;'></td><td><table><tr><td>"+parm[0]},
-        htmlR1: function (parm,strg) {return "</tr></td></table><td style='border-right:2px solid black;'></td></tr></table>"},
-        htmlL2: function (parm,strg) {return "<table style='text-align:center;display:inline-table;vertical-align:middle;'><tr><td style='border-left:2px solid black;'></td><td><table><tr><td>"+parm[0]},
-        htmlR2: function (parm,strg) {return "</tr></td></table><td style='border-right:2px solid black;'></td></tr></table>"},
+        htmlL1: function (parm,strg) {return "<table style='text-align:center;display:inline-table;vertical-align:middle;'><tr><td style='border-left:2px solid black;'><td><table><tr><td>"+parm[0]},
+        htmlR1: function (parm,strg) {return "</tr></td></table></td><td style='border-right:2px solid black;'></td></tr></table>"},
+        htmlL2: function (parm,strg) {return "<table style='text-align:center;display:inline-table;vertical-align:middle;'><tr><td style='border-left:2px solid black;'><td><table><tr><td>"+parm[0]},
+        htmlR2: function (parm,strg) {return "</tr></td></table></td><td style='border-right:2px solid black;'></td></tr></table>"},
         texfunc:['\\|'],
         latexL1:'\\left|',
         latexR1: function (parm,strg) {return '\\right|'+parm[0]},
@@ -1001,10 +1001,10 @@ var mgTrans = function() {
         mg: function (parm) {return 'frc('+parm[0]+')'},
         },
     sbr:{ //straight bracket
-        htmlL1: function (parm,strg) {return "<table style='text-align:center;display:inline-table;vertical-align:middle;'><tr><td style='border-left:3px solid black;border-top:1px solid black;border-bottom:1px solid black;'>&nbsp;</td><td><table><tr><td>"+parm[0]},
-        htmlR1: function (parm,strg) {return "</tr></td></table><td style='border-right:3px solid black;border-top:1px solid black;border-bottom:1px solid black;'>&nbsp;</td></tr></table>"},
-        htmlL2: function (parm,strg) {return "<table style='text-align:center;display:inline-table;vertical-align:middle;'><tr><td style='border-left:3px solid black;border-top:1px solid black;border-bottom:1px solid black;'>&nbsp;</td><td><table><tr><td>"+parm[0]},
-        htmlR2: function (parm,strg) {return "</tr></td></table><td style='border-right:3px solid black;border-top:1px solid black;border-bottom:1px solid black;'>&nbsp;</td></tr></table>"},
+        htmlL1: function (parm,strg) {return "<table style='text-align:center;display:inline-table;vertical-align:middle;'><tr><td style='border-left:3px solid black;border-top:1px solid black;border-bottom:1px solid black;'>&nbsp;<td><table><tr><td>"+parm[0]},
+        htmlR1: function (parm,strg) {return "</tr></td></table></td><td style='border-right:3px solid black;border-top:1px solid black;border-bottom:1px solid black;'>&nbsp;</td></tr></table>"},
+        htmlL2: function (parm,strg) {return "<table style='text-align:center;display:inline-table;vertical-align:middle;'><tr><td style='border-left:3px solid black;border-top:1px solid black;border-bottom:1px solid black;'>&nbsp;<td><table><tr><td>"+parm[0]},
+        htmlR2: function (parm,strg) {return "</tr></td></table></td><td style='border-right:3px solid black;border-top:1px solid black;border-bottom:1px solid black;'>&nbsp;</td></tr></table>"},
         texfunc:[],
         latexL1: function (parm) {return '\\left\\['+parm[0]},
         latexR1:'\\right\\]',
@@ -1704,7 +1704,7 @@ var mgTrans = function() {
                 prefix = prefix+"<Xdiv>";
                 suffix = suffix+"<Xdve>";
             }
-            return prefix+" <table style='text-align:center;display:inline-table;vertical-align:middle'><tr><td style='border-left:2px solid black;border-top:2px solid black;border-bottom:2px solid black'>&nbsp;</td><td><table>" + mReturn + "</table><td style='border-right:2px solid black;border-top:2px solid black;border-bottom:2px solid black'>&nbsp;</td></tr></table> "+suffix
+            return prefix+" <table style='text-align:center;display:inline-table;vertical-align:middle'><tr><td style='border-left:2px solid black;border-top:2px solid black;border-bottom:2px solid black'>&nbsp;</td><td><table>" + mReturn + "</table></td><td style='border-right:2px solid black;border-top:2px solid black;border-bottom:2px solid black'>&nbsp;</td></tr></table> "+suffix
         }
         else {
             for (iM in xA) {mReturn = mReturn + "<Xcel>" + xA[iM] + "<Xcle>"}
@@ -1920,12 +1920,12 @@ var mgTrans = function() {
             }
             else if (dNest(strg) > 0) {//expanded parens
 				if (strCount(htmlXpr.substr(0,bSym+1),"{") > strCount(htmlXpr.substr(iXs.end,lSym),"}")) {
-					htmlXpr = htmlXpr.substr(0,bSym)+"<table style='text-align:center;display:inline-table;vertical-align:middle;'><tr><td style='border-left:1px solid black;border-top:1px solid black;border-bottom:1px solid black;border-radius: 10px 0 0 10px;'>&nbsp;</td><td><table><tr><td>"
-					+strg+"</tr></td></table></tr></table>"+htmlXpr.substr(iXs.end+1,lSym)
+					htmlXpr = htmlXpr.substr(0,bSym)+"<table style='text-align:center;display:inline-table;vertical-align:middle;'><tr><td style='border-left:1px solid black;border-top:1px solid black;border-bottom:1px solid black;border-radius: 10px 0 0 10px;'>&nbsp;<td><table><tr><td>"
+					+strg+"</tr></td></table></td></tr></table>"+htmlXpr.substr(iXs.end+1,lSym)
 				}
 				else {
-					htmlXpr = htmlXpr.substr(0,bSym)+"<table style='text-align:center;display:inline-table;vertical-align:middle;'><tr><td style='border-left:2px solid black;border-top:2px solid black;border-bottom:2px solid black;border-radius: 10px 0 0 10px;'>&nbsp;</td><td><table><tr><td>"
-					+strg+"</tr></td></table><td style='border-right:2px solid black;border-top:2px solid black;border-bottom:2px solid black;border-radius: 0 10px 10px 0;'>&nbsp;</td></tr></table>"+htmlXpr.substr(iXs.end+1,lSym)
+					htmlXpr = htmlXpr.substr(0,bSym)+"<table style='text-align:center;display:inline-table;vertical-align:middle;'><tr><td style='border-left:2px solid black;border-top:2px solid black;border-bottom:2px solid black;border-radius: 10px 0 0 10px;'>&nbsp;<td><table><tr><td>"
+					+strg+"</tr></td></table></td><td style='border-right:2px solid black;border-top:2px solid black;border-bottom:2px solid black;border-radius: 0 10px 10px 0;'>&nbsp;</td></tr></table>"+htmlXpr.substr(iXs.end+1,lSym)
 				}
             }
             else {//normal parens
