@@ -2829,7 +2829,7 @@ var mgCalc = function() {
             }
             tFactor = xReduce(cMulS(tFactor,aGcf(pCoeff(sFac))));
             for (var zI in sFac) {fReturn = cAddS(fReturn,xReduce(cDivS(sFac[zI],tFactor)))} //sum terms
-            asReturn = xReduce(cMulS(tFactor,fReturn));
+            asReturn = xReduce(cMulS(tFactor,pFactor(fReturn)));
         }
         if (xprExpand(asReturn) == xReduce(asFac)) {return asReturn} //test factored expression
         return asFac
