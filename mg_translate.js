@@ -787,7 +787,6 @@ var mgTrans = function() {
         htmlR1: function (parm,strg) {return "</tr></td></table></td><td style='border-right:3px solid black;border-bottom:1px solid black;'>&nbsp;</td></tr></table>"},
         htmlL2: function (parm,strg) {return "<table style='text-align:center;display:inline-table;vertical-align:middle;'><tr><td style='border-left:3px solid black;border-bottom:1px solid black;'>&nbsp;</td><td><table><tr><td style='line-height: 50%'>"+parm[0]},
         htmlR2: function (parm,strg) {return "</tr></td></table></td><td style='border-right:3px solid black;border-bottom:1px solid black;'>&nbsp;</td></tr></table>"},
-
         texfunc:['\\lfloor'],
         latexL1: function (parm) {return '\\left\\lfloor '+parm[0]},
         latexR1:'\\right\\rfloor ',
@@ -800,7 +799,6 @@ var mgTrans = function() {
         htmlR1: function (parm,strg) {return "</tr></td></table></td><td style='border-right:3px solid black;border-top:1px solid black;'>&nbsp;</td></tr></table>"},
         htmlL2: function (parm,strg) {return "<table style='text-align:center;display:inline-table;vertical-align:middle;'><tr><td style='border-left:3px solid black;border-top:1px solid black;'>&nbsp;<td><table><tr><td style='line-height: 50%'>"+parm[0]},
         htmlR2: function (parm,strg) {return "</tr></td></table></td><td style='border-right:3px solid black;border-top:1px solid black;'>&nbsp;</td></tr></table>"},
-
         texfunc:[],
         latexL1: function (parm) {return '\\left\\lceil '+parm[0]},
         latexR1:'\\right\\rceil ',
@@ -809,9 +807,9 @@ var mgTrans = function() {
         mg:  function (parm) {return 'cei('+parm[0]+')'},
         },
     abs:{ //absolute value
-        htmlL1: function (parm,strg) {return "<span style='text-align:center;display:inline-block;vertical-align:middle;border-left:2px solid black;border-right:2px solid black;line-height:70%;padding:2px 0 0 2px'>"+parm[0]},
+        htmlL1: function (parm,strg) {return "<span style='text-align:center;display:inline-table;vertical-align:middle;border-left:2px solid black;border-right:2px solid black;line-height:70%;'>"+parm[0]},
         htmlR1: function (parm,strg) {return "</span>"},
-        htmlL2: function (parm,strg) {return "<span style='text-align:center;display:inline-block;vertical-align:middle;border-left:2px solid black;border-right:2px solid black;line-height:70%;padding:2px 0 0 2px'>"+parm[0]},
+        htmlL2: function (parm,strg) {return "<span style='text-align:center;display:inline-table;vertical-align:middle;border-left:2px solid black;border-right:2px solid black;line-height:70%;'>"+parm[0]},
         htmlR2: function (parm,strg) {return "</span>"},
         texfunc:['\\|'],
         latexL1:'\\left|',
