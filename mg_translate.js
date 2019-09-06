@@ -783,10 +783,10 @@ var mgTrans = function() {
         mg: function (parm) {return 'lne('+parm[0]+')'},
         },
     int:{ //integer component
-        htmlL1: function (parm,strg) {return htmlFuncs['brkt']('&#8970;',strg)+parm[0]},
-        htmlR1: function (parm,strg) {return htmlFuncs['brkt']('&#8971;',strg)},
-        htmlL2: function (parm,strg) {return htmlFuncs['brkt']('&#8970;',strg)+parm[0]},
-        htmlR2: function (parm,strg) {return htmlFuncs['brkt']('&#8971;',strg)},
+        htmlL1: function (parm,strg) {return "<table style='text-align:center;display:inline-table;vertical-align:middle;'><tr><td style='border-left:3px solid black;border-bottom:1px solid black;'>&nbsp;</td><td><table><tr><td style='line-height: 50%'>"+parm[0]},
+        htmlR1: function (parm,strg) {return "</tr></td></table></td><td style='border-right:3px solid black;border-bottom:1px solid black;'>&nbsp;</td></tr></table>"},
+        htmlL2: function (parm,strg) {return funcMap['int']['htmlL1'](parm,strg)},
+        htmlR2: function (parm,strg) {return funcMap['int']['htmlR1'](parm,strg)},
         texfunc:['\\lfloor'],
         latexL1: function (parm) {return '\\left\\lfloor '+parm[0]},
         latexR1:'\\right\\rfloor ',
@@ -795,10 +795,10 @@ var mgTrans = function() {
         mg: function (parm) {return 'int('+parm[0]+')'},
         },
     cei:{  //ceiling
-        htmlL1: function (parm,strg) {return htmlFuncs['brkt']('&#8968;',strg)+parm[0]},
-        htmlR1: function (parm,strg) {return htmlFuncs['brkt']('&#8969;',strg)},
-        htmlL2: function (parm,strg) {return htmlFuncs['brkt']('&#8968;',strg)+parm[0]},
-        htmlR2: function (parm,strg) {return htmlFuncs['brkt']('&#8969;',strg)},
+        htmlL1: function (parm,strg) {return "<table style='text-align:center;display:inline-table;vertical-align:middle;'><tr><td style='border-left:3px solid black;border-top:1px solid black;'>&nbsp;<td><table><tr><td style='line-height: 50%'>"+parm[0]},
+        htmlR1: function (parm,strg) {return "</tr></td></table></td><td style='border-right:3px solid black;border-top:1px solid black;'>&nbsp;</td></tr></table>"},
+        htmlL2: function (parm,strg) {return funcMap['cei']['htmlL1'](parm,strg)},
+        htmlR2: function (parm,strg) {return funcMap['cei']['htmlR1'](parm,strg)},
         texfunc:[],
         latexL1: function (parm) {return '\\left\\lceil '+parm[0]},
         latexR1:'\\right\\rceil ',
@@ -807,10 +807,10 @@ var mgTrans = function() {
         mg:  function (parm) {return 'cei('+parm[0]+')'},
         },
     abs:{ //absolute value
-        htmlL1: function (parm,strg) {return htmlFuncs['brkt']('&#124;',strg)+parm[0]},
-        htmlR1: function (parm,strg) {return htmlFuncs['brkt']('&#124;',strg)},
-        htmlL2: function (parm,strg) {return htmlFuncs['brkt']('&#124;',strg)+parm[0]},
-        htmlR2: function (parm,strg) {return htmlFuncs['brkt']('&#124;',strg)},
+        htmlL1: function (parm,strg) {return "<span style='text-align:center;display:inline-table;vertical-align:middle;border-left:2px solid black;border-right:2px solid black;line-height:70%;'>"+parm[0]},
+        htmlR1: function (parm,strg) {return "</span>"},
+        htmlL2: function (parm,strg) {return funcMap['abs']['htmlL1'](parm,strg)},
+        htmlR2: function (parm,strg) {return funcMap['abs']['htmlR1'](parm,strg)},
         texfunc:['\\|'],
         latexL1:'\\left|',
         latexR1: function (parm,strg) {return '\\right|'+parm[0]},
@@ -999,10 +999,10 @@ var mgTrans = function() {
         mg: function (parm) {return 'frc('+parm[0]+')'},
         },
     sbr:{ //straight bracket
-        htmlL1: function (parm,strg) {return htmlFuncs['brkt']('&#91;',strg)+parm[0]},
-        htmlR1: function (parm,strg) {return htmlFuncs['brkt']('&#93;',strg)},
-        htmlL2: function (parm,strg) {return htmlFuncs['brkt']('&#91;',strg)+parm[0]},
-        htmlR2: function (parm,strg) {return htmlFuncs['brkt']('&#93;',strg)},
+        htmlL1: function (parm,strg) {return "<table style='text-align:center;display:inline-table;vertical-align:middle;'><tr><td style='border-left:3px solid black;border-top:1px solid black;border-bottom:1px solid black;'>&nbsp;<td><table><tr><td style='line-height: 50%'>"+parm[0]},
+        htmlR1: function (parm,strg) {return "</tr></td></table></td><td style='border-right:3px solid black;border-top:1px solid black;border-bottom:1px solid black;'>&nbsp;</td></tr></table>"},
+        htmlL2: function (parm,strg) {return funcMap['sbr']['htmlL1'](parm,strg)},
+        htmlR2: function (parm,strg) {return funcMap['sbr']['htmlR1'](parm,strg)},
         texfunc:[],
         latexL1: function (parm) {return '\\left\\['+parm[0]},
         latexR1:'\\right\\]',
@@ -1608,7 +1608,7 @@ var mgTrans = function() {
 
     //html handlers
     const htmlFuncs = {
-    brkt: function (xS,xO) {//scale brackets
+    brkt: function (xS,xO) {//scale brackets xS=symbol xO=inside expression
         var iNest = dNest(xO);
         if (mgConfig.divScale == 50 || iNest == 0) {return xS}
         else {return "<span style='vertical-align:middle;display:inline-block;font-weight:100;font-size:"+Math.floor(100+(iNest*mgConfig.divScale*1.3))+"%'>"+xS+"</span>"}
@@ -1702,7 +1702,7 @@ var mgTrans = function() {
                 prefix = prefix+"<Xdiv>";
                 suffix = suffix+"<Xdve>";
             }
-            return prefix+" <table style='text-align:center;display:inline-table;vertical-align:middle'><tr><td style='border-left:2px solid black;border-top:2px solid black;border-bottom:2px solid black'>&nbsp;</td><td><table>" + mReturn + "</table><td style='border-right:2px solid black;border-top:2px solid black;border-bottom:2px solid black'>&nbsp;</td></tr></table> "+suffix
+            return prefix+" <table style='text-align:center;display:inline-table;vertical-align:middle'><tr><td style='border-left:2px solid black;border-top:2px solid black;border-bottom:2px solid black'>&nbsp;</td><td><table>" + mReturn + "</table></td><td style='border-right:2px solid black;border-top:2px solid black;border-bottom:2px solid black'>&nbsp;</td></tr></table> "+suffix
         }
         else {
             for (iM in xA) {mReturn = mReturn + "<Xcel>" + xA[iM] + "<Xcle>"}
@@ -1773,9 +1773,9 @@ var mgTrans = function() {
                   String.fromCharCode(8804)+"-",String.fromCharCode(8804)+"|-",String.fromCharCode(8805)+"-",String.fromCharCode(8805)+"|-",
                   String.fromCharCode(8800)+"-",String.fromCharCode(8800)+"|-",String.fromCharCode(8226)+"-",String.fromCharCode(8226)+"|-"];
     //misc functions
-    function strCount(xTarget,xSearch) {xTarget +="";xSearch+="";return xTarget.split(xSearch).length-1} //count occurrences of string
+    function strCount(xTarget,xSearch) {return String(xTarget).split(String(xSearch)).length-1} //count occurrences of string
     function numTest(xT) {if (+xT == +xT*1) {return true}; return false} //test for numerical string
-    function toSciNot(xU) {xU+="";return xU.replace(/(\d+)e(\d+)/g,"$1*10^$2").replace(/(\d+)e\-(\d+)/g,"$1*10^-$2").replace(/(\d+)e\+(\d+)/g,"$1*10^$2")} //convert N.NNe+-NN notation to scientific
+    function toSciNot(xU) {return String(xU).replace(/(\d+)e(\d+)/g,"$1*10^$2").replace(/(\d+)e\-(\d+)/g,"$1*10^-$2").replace(/(\d+)e\+(\d+)/g,"$1*10^$2")} //convert N.NNe+-NN notation to scientific
     function parseArgs(xP) { //parse comma-delimited arguments into array
         var args = [];
         var strSplit = xP.split(",");
@@ -1787,7 +1787,7 @@ var mgTrans = function() {
         return args
     }   
     function parseParens(xB,beginI) {//parse parens and return inside string, begin index, end index, source string, upper/lower args
-        xB += "";
+        xB = String(xB);
         var oComma = 0,lPar = 0,rPar = 0,bDelim = " ",eDelim = " ",cFind = "",ins = "";
         for (var iU=beginI;iU<xB.length;iU++) {
             cFind = xB.charAt(iU);
@@ -1805,7 +1805,7 @@ var mgTrans = function() {
         return {begin:beginI,end:iU,source:xB,inside:ins,upper:ins.substr(0,oComma-1),lower:ins.substr(oComma)}
     }
     function oParens(xP) {//remove outside parens
-        xP += "";
+        xP = String(xP);
         if (xP.charAt(0) == "(" && xP.charAt(xP.length-1) == ")") {
             var tparens = parseParens(xP,0);
             if (tparens.end == xP.length-1) {return tparens.inside}
@@ -1814,7 +1814,7 @@ var mgTrans = function() {
     }
     function xParens(xA) {return "(" + oParens(xA) + ")"}
     function parseBrackets(xB,beginI) {//parse brackets and return inside string, begin index, end index, source string
-        xB += "";
+        xB = String(xB);
         var lPar = 0,rPar = 0,bDelim = " ",eDelim = " ",iU = 0,dTemp = "",nXi = 0;
         var lSym = xB.length;
         for (iU=beginI;iU<lSym;iU++) {
@@ -1868,14 +1868,14 @@ var mgTrans = function() {
         return dDepth
     }
     function dedupParens(xP) {//remove duplicate parens
-        xP += "";
+        var dpReturn = String(xP);
         var nXf = 0,sCount = 0,dparens = "";
-        var dCount = strCount(xP,"(");
+        var dCount = strCount(dpReturn,"(");
         for (nXf=0;nXf<dCount;nXf++) {
-            dparens = parseParens(xP,xP.lastIndexOf("((")+1);
-            if (xP.substr(dparens.end,2) == "))" ) {xP = xP.substr(0,xP.lastIndexOf("((")+1)+dparens.inside+xP.substr(dparens.end+1,xP.length)}
+            dparens = parseParens(dpReturn,dpReturn.lastIndexOf("((")+1);
+            if (dpReturn.substr(dparens.end,2) == "))" ) {dpReturn = dpReturn.substr(0,dpReturn.lastIndexOf("((")+1)+dparens.inside+dpReturn.substr(dparens.end+1,dpReturn.length)}
         }
-        return xP
+        return dpReturn
     }
     function ulFuncs(parm,latfunc,func) { //parse U/L latex functions
         var limitU = {},limitL = {};
@@ -1896,103 +1896,112 @@ var mgTrans = function() {
     }
     //conversion routines
     function htmlExport(htmlXpr) { //convert MG format to HTML
-        var nXs=0;
         if (htmlXpr == "NaN" || htmlXpr == "undefined") {return "undefined"}
-        htmlXpr = cFunc(htmlXpr); //convert to FUNC
-        if (mgConfig.editMode) {htmlXpr = htmlXpr.replace(/\,\)/g,",Cv[9643])").replace(/\(\,/g,"(Cv[9643],").replace(/\,\,/g,",Cv[9643],").replace(/\(\)/g,"(Cv[9643])")} //fill empty fields
-        if (!mgConfig.editMode) {htmlXpr = dedupParens(htmlXpr);htmlXpr = oParens(htmlXpr)}
-        htmlXpr = dFunc(htmlXpr, "html") //process functions
+        var nXs=0;
+        var htmlReturn = cFunc(htmlXpr); //convert to FUNC
+        if (mgConfig.editMode) {htmlReturn = htmlReturn.replace(/\,\)/g,",Cv[9643])").replace(/\(\,/g,"(Cv[9643],").replace(/\,\,/g,",Cv[9643],").replace(/\(\)/g,"(Cv[9643])")} //fill empty fields
+        if (!mgConfig.editMode) {htmlReturn = dedupParens(htmlReturn);htmlReturn = oParens(htmlReturn)}
+        htmlReturn = dFunc(htmlReturn, "html") //process functions
         //render symbols
-        sCount = strCount(htmlXpr,"Cv[");
-        for (nXs=0;nXs<sCount;nXs++) {htmlXpr = htmlXpr.replace(/Cv\[\d+\]/,Cs[(String(htmlXpr.match(/Cv\[\d+\]/))).replace(/Cv\[(\d+)\]/,"$1")])} //resolve Cv[] symbols
+        sCount = strCount(htmlReturn,"Cv[");
+        for (nXs=0;nXs<sCount;nXs++) {htmlReturn = htmlReturn.replace(/Cv\[\d+\]/,Cs[(String(htmlReturn.match(/Cv\[\d+\]/))).replace(/Cv\[(\d+)\]/,"$1")])} //resolve Cv[] symbols
         //scale and fix parens
-        htmlXpr = htmlXpr.replace(/\(/g,"{").replace(/\)/g,"}");
-        sCount = strCount(htmlXpr,"{");
+        htmlReturn = htmlReturn.replace(/\(/g,"{").replace(/\)/g,"}");
+        sCount = strCount(htmlReturn,"{");
         for (nXs=0;nXs<sCount;nXs++) {
-            var bSym = htmlXpr.indexOf("{");
-            var lSym = htmlXpr.length;
-            var iXs = parseParens(htmlXpr,bSym);
+            var bSym = htmlReturn.indexOf("{");
+            var lSym = htmlReturn.length;
+            var iXs = parseParens(htmlReturn,bSym);
             var strg = iXs.inside;
-            if (!mgConfig.editMode && htmlXpr.substr(bSym,7) == "{<Xdiv>" && htmlXpr.substr(iXs.end-6,7) == "<Xdve>}"  && htmlXpr.substr(bSym-6,6) != "<Xfnx>" && strg.search(/\<Xdve\>(.*)\<Xdiv\>/) == -1) {
-                htmlXpr = htmlXpr.substr(0,bSym)+strg+htmlXpr.substr(iXs.end+1,lSym);
+            if (!mgConfig.editMode && htmlReturn.substr(bSym,7) == "{<Xdiv>" && htmlReturn.substr(iXs.end-6,7) == "<Xdve>}"  && htmlReturn.substr(bSym-6,6) != "<Xfnx>" && strg.search(/\<Xdve\>(.*)\<Xdiv\>/) == -1) { //edit mode
+                htmlReturn = htmlReturn.substr(0,bSym)+strg+htmlReturn.substr(iXs.end+1,lSym);
             }
-            else if (dNest(strg) > 0) {//expanded parens
-                if (strCount(htmlXpr.substr(0,bSym+1),"{") > strCount(htmlXpr.substr(iXs.end,lSym),"}")) {htmlXpr = htmlXpr.substr(0,bSym)+htmlFuncs['brkt']("(",strg)+strg+htmlXpr.substr(iXs.end,lSym);}
-                else {htmlXpr = htmlXpr.substr(0,bSym)+htmlFuncs['brkt']("(",strg)+strg+htmlFuncs['brkt'](")",strg)+htmlXpr.substr(iXs.end+1,lSym)}
+            else if (dNest(strg) == 1) { //expanded parens
+                if (strCount(htmlReturn.substr(0,bSym+1),"{") > strCount(htmlReturn.substr(iXs.end,lSym),"}")) {htmlReturn = htmlReturn.substr(0,bSym)+htmlFuncs['brkt']("(",strg)+strg+htmlReturn.substr(iXs.end,lSym);}
+                else {htmlReturn = htmlReturn.substr(0,bSym)+htmlFuncs['brkt']("(",strg)+strg+htmlFuncs['brkt'](")",strg)+htmlReturn.substr(iXs.end+1,lSym)}
             }
-            else {//normal parens
-                if (strCount(htmlXpr.substr(0,bSym+1),"{") > strCount(htmlXpr.substr(iXs.end,lSym),"}"))  {htmlXpr = htmlXpr.substr(0,bSym)+"("+strg+htmlXpr.substr(iXs.end,lSym);}
-                else {htmlXpr = htmlXpr.substr(0,bSym)+"("+strg+")"+htmlXpr.substr(iXs.end+1,lSym)}
+            else if (dNest(strg) > 1) { //extra tall parens
+                if (strCount(htmlReturn.substr(0,bSym+1),"{") > strCount(htmlReturn.substr(iXs.end,lSym),"}")) {
+                    htmlReturn = htmlReturn.substr(0,bSym)+"<table style='text-align:center;display:inline-table;vertical-align:middle;'><tr><td style='border-left:1px solid black;border-top:1px solid black;border-bottom:1px solid black;border-radius: 10px 0 0 10px;'>&nbsp;<td><table><tr><td style='line-height: 70%'>"
+                    +strg+"</tr></td></table></td></tr></table>"+htmlReturn.substr(iXs.end+1,lSym)
+                }
+                else {
+                    htmlReturn = htmlReturn.substr(0,bSym)+"<table style='text-align:center;display:inline-table;vertical-align:middle;'><tr><td style='border-left:2px solid black;border-top:2px solid black;border-bottom:2px solid black;border-radius: 10px 0 0 10px;'>&nbsp;<td><table><tr><td style='line-height: 70%'>"
+                    +strg+"</tr></td></table></td><td style='border-right:2px solid black;border-top:2px solid black;border-bottom:2px solid black;border-radius: 0 10px 10px 0;'>&nbsp;</td></tr></table>"+htmlReturn.substr(iXs.end+1,lSym)
+                }               
+            }
+            else { //normal parens
+                if (strCount(htmlReturn.substr(0,bSym+1),"{") > strCount(htmlReturn.substr(iXs.end,lSym),"}"))  {htmlReturn = htmlReturn.substr(0,bSym)+"("+strg+htmlReturn.substr(iXs.end,lSym);}
+                else {htmlReturn = htmlReturn.substr(0,bSym)+"("+strg+")"+htmlReturn.substr(iXs.end+1,lSym)}
             }
         }
         // format arrays
-        htmlXpr = htmlXpr.replace(/\<Xcel\>/g,"").replace(/\<Xrow\>/g,"{").replace(/\<Xrwe\>/g,"}");
-        sCount = strCount(htmlXpr,"<Xcle>");
+        htmlReturn = htmlReturn.replace(/\<Xcel\>/g,"").replace(/\<Xrow\>/g,"{").replace(/\<Xrwe\>/g,"}");
+        sCount = strCount(htmlReturn,"<Xcle>");
         for (nXs=0;nXs<sCount;nXs++) {
-            if (nXs <sCount-1) {htmlXpr = htmlXpr.replace("<Xcle>",", ")}
-            else {htmlXpr = htmlXpr.replace("<Xcle>","")}
+            if (nXs <sCount-1) {htmlReturn = htmlReturn.replace("<Xcle>",", ")}
+            else {htmlReturn = htmlReturn.replace("<Xcle>","")}
         }
-        htmlXpr = htmlXpr.replace(/\<X\w\w\w\>/g,"");//cleanup tags
-        return htmlXpr
+        htmlReturn = htmlReturn.replace(/\<X\w\w\w\>/g,"");//cleanup tags
+        return htmlReturn
     }
     //
     function mgExport(funcIn) { //export from FUNC to MG format
-        var mgReturn = String(funcIn);
-        if (mgReturn == "NaN" || mgReturn == "undefined") {return "undefined"}
-        mgReturn += "";
-        mgReturn = mgReturn.replace(/\,\)/g,",'')").replace(/\(\,/g,"('',").replace(/\,\,/g,",'',").replace(/\(\)/g,"('')");
-        mgReturn = dFunc(mgReturn, "mg");
-        mgReturn = mgReturn.replace(/\+\-/g,"-").replace(/\-\-/g,"");
+        if (funcIn == "NaN" || funcIn == "undefined") {return "undefined"}
+        var mgReturn = dFunc(funcIn, "mg");
+        mgReturn = mgReturn.replace(/\+\-/g,"-").replace(/\-\-/g,""); //fix for '+-' condition
         mgReturn = toSciNot(mgReturn);
-        return mgReturn //process functions
+        return mgReturn
     }
-    function cParse(xInp,xOp,xFunc) {//parse operators
+    function cParse(xInp,xOp,xFunc) { //parse operators
         const zDelim = ["^","-","#","*","/","+",",","~","@","=","<",">",String.fromCharCode(8800),String.fromCharCode(8804),String.fromCharCode(8805),String.fromCharCode(8226)];
         var ztmp = "",bSym = "",lPar = 0,rPar = 0,dCp = 0,iCp = 0;
-        if (xOp == "^") {bSym = xInp.lastIndexOf(xOp)+1}
-        else  {bSym = xInp.indexOf(xOp)+1;}
+		var cReturn = String(xInp);
+        if (xOp == "^") {bSym = cReturn.lastIndexOf(xOp)+1}
+        else  {bSym = cReturn.indexOf(xOp)+1;}
         var aSym = bSym-2;
-        var lSym = xInp.length;
+        var lSym = cReturn.length;
         for (iCp=bSym;iCp<=lSym;iCp++) {
-            ztmp = xInp.charAt(iCp);
+            ztmp = cReturn.charAt(iCp);
             if (ztmp == "(") {lPar++}
             if (ztmp == ")") {rPar++}
             if (lPar < rPar) {break;}
-            if (lPar == rPar && xInp.charAt(iCp-1)!= "e") { if (zDelim.indexOf(ztmp) > -1) {break} }
+            if (lPar == rPar && cReturn.charAt(iCp-1)!= "e") { if (zDelim.indexOf(ztmp) > -1) {break} }
         }
         lPar = 0;rPar = 0;
         for (dCp=aSym;dCp>=0;dCp--) {
-            ztmp = xInp.charAt(dCp);
+            ztmp = cReturn.charAt(dCp);
             if (ztmp == "(") {lPar++}
             if (ztmp == ")") {rPar++}
             if (lPar > rPar) {break;}
-            if (lPar == rPar && xInp.charAt(dCp-1)!= "e") { if (zDelim.indexOf(ztmp) > -1) {break} }
+            if (lPar == rPar && cReturn.charAt(dCp-1)!= "e") { if (zDelim.indexOf(ztmp) > -1) {break} }
         }
-        xInp = xInp.substr(0,dCp+1)+xFunc+"("+xInp.substr(dCp+1,aSym-dCp)+","+xInp.substr(bSym,iCp-bSym)+")"+xInp.substr(iCp);
-        return xInp;
+        cReturn = cReturn.substr(0,dCp+1)+xFunc+"("+cReturn.substr(dCp+1,aSym-dCp)+","+cReturn.substr(bSym,iCp-bSym)+")"+cReturn.substr(iCp);
+        return cReturn;
     }
-    function nParse(xInp,xOp) {//parse negatives as cNeg()
+    function nParse(xInp,xOp) { //parse negatives as cNeg()
         const zDelim = ["(",")","^","-","#","*","/","+",",","~","@","=","<",">",String.fromCharCode(8800),String.fromCharCode(8804),String.fromCharCode(8805),String.fromCharCode(8226)];
         var iNp = 0,lPar = 0,rPar = 0,ztmp = "";
-        var bSym = xInp.indexOf(xOp)+xOp.length;
-        var lSym = xInp.length;
+		var nReturn = String(xInp);
+        var bSym = nReturn.indexOf(xOp)+xOp.length;
+        var lSym = nReturn.length;
         for (iNp=bSym;iNp<=lSym;iNp++) {
-            ztmp = xInp.charAt(iNp);
+            ztmp = nReturn.charAt(iNp);
             if (ztmp == "(") {lPar++}
             if (ztmp == ")") {rPar++}
             if (lPar < rPar) {break;}
-            if (lPar == rPar && xInp.charAt(iNp-1)!= "e") {if (zDelim.indexOf(ztmp) > -1) {break}}
+            if (lPar == rPar && nReturn.charAt(iNp-1)!= "e") {if (zDelim.indexOf(ztmp) > -1) {break}}
         }
-        xInp = xInp.substr(0,bSym-1)+"cNeg("+xInp.substr(bSym,iNp-bSym)+")"+xInp.substr(iNp);
-        return xInp;
+        nReturn = nReturn.substr(0,bSym-1)+"cNeg("+nReturn.substr(bSym,iNp-bSym)+")"+nReturn.substr(iNp);
+        return nReturn;
     }
     //
     function cFunc(mgIn) { //convert from MG format to FUNC format: a+bc/d -> cAdd(a,cDiv(cMul(b,c),d)))
         var nCf = 0,iXX = 0,key = 0,sbtOperand = "",cIdx = 0,aIdx = 0,sCount = 0;
-        funcReturn = String(mgIn);
+        var funcReturn = String(mgIn).replace(/Infinity/g,"Cv[8734]");
+        if (funcReturn.charAt(0) == "+") {funcReturn = funcReturn.substr(1)} //remove + at beginning of expression
         sCount = strCount(funcReturn,"]sbt(");//var&subscripts into container cnt()
         funcReturn = funcReturn.replace(/\]sbt\(/g,"]SBT(");
-        funcReturn = funcReturn.replace(/Infinity/g,"Cv[8734]");
         for (nCf=0;nCf<sCount;nCf++) {
             sbtOperand = parseParens(funcReturn,funcReturn.indexOf("]SBT("));
             funcReturn = funcReturn.replace(/Cv\[(\d+)\]SBT\(/,"cnt(Cv[$1]SBT(").replace("]SBT("+sbtOperand.inside,"]sbt("+oParens(sbtOperand.inside)+")");
@@ -2011,7 +2020,6 @@ var mgTrans = function() {
             var rgy = new RegExp("#(\\|?)"+nBind[nCf]);
             while (funcReturn.search(rgx) != -1 || funcReturn.search(rgy) != -1) {funcReturn = funcReturn.replace(rgx,"$1$2@").replace(rgy,"@$1$2")}
         }
-        if (funcReturn.charAt(0) == "+") {funcReturn = funcReturn.substr(1)} //remove + at beginning of expression
         sCount = strCount(funcReturn,"-");//parse power negatives to cPow(x,cNeg())
         for (nCf=0;nCf<sCount;nCf++) {
             for (iXX in pCases) {
@@ -2054,7 +2062,6 @@ var mgTrans = function() {
                 funcReturn = cParse(funcReturn,relOps[key],key)
             }
         }
-        funcReturn = funcReturn.replace(/\[\[/g,"'[[").replace(/\]\]/g,"]]'") //quote matrices
         return funcReturn;
     }
     function dFunc(funcIn, prefix) { //map FUNC format to export format
@@ -2063,11 +2070,11 @@ var mgTrans = function() {
             return funcMap[key][fnformat]
         }
         // 
-        var bSym = 0, lSym = 0,lPar = 0,rPar = 0,iXf = 0,nXf = 0,sCount = 0,payload = "",paramS = "",funcKey = "",rTmp = "",fnformatL = "",fnformatR = "",fnformatLx = "",expReturn = "";
+        var bSym = 0, lSym = 0,lPar = 0,rPar = 0,iXf = 0,nXf = 0,sCount = 0,payload = "",paramS = "",funcKey = "",rTmp = "",fnformatL = "",fnformatR = "",fnformatLx = "";
         if (prefix == "mg") {fnformatL = prefix;fnformatR = prefix}
         else if (mgConfig.fnFmt == "fn(x)") {fnformatL = prefix+"L1";fnformatR = prefix+"R1"} //fn(x)
         else {fnformatL = prefix+"L2";fnformatR = prefix+"R2"}  //fn x
-        expReturn = funcIn.replace(/ /g,"").replace(/([a-z][a-z][a-z])\(/ig,"$1@"); //mark left parens with @
+        var expReturn = String(funcIn).replace(/ /g,"").replace(/([a-z][a-z][a-z])\(/ig,"$1@"); //mark left parens with @
         sCount = strCount(expReturn,"@");
         for (nXf=0;nXf<sCount;nXf++) {
             fnformatLx = fnformatL;
@@ -2094,9 +2101,8 @@ var mgTrans = function() {
     }
     // latex conversions
     function texExport(mgIn) { //convert MG format to LaTeX
-        var lxReturn = String(mgIn);
-        if (lxReturn == "NaN" || lxReturn == "undefined") {return "undefined"}
-        lxReturn = cFunc(lxReturn); //convert to func format
+        if (mgIn == "NaN" || mgIn == "undefined") {return "undefined"}
+        var lxReturn = cFunc(mgIn); //convert to func format
         lxReturn = dFunc(lxReturn, "latex"); //process functions
         //clean up extra parens
         lxReturn = lxReturn.replace(/\(/g,"%"); //mark left parens with %
