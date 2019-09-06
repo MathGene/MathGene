@@ -419,7 +419,7 @@ var mgCalc = function() {
     function execFunc(expIn,funcObj) { //execute math transformation inside out from specified object
         expIn = mgTrans.oParens(expIn);
         var expReturn = expIn.replace(/([a-z][a-z][a-z])\(/ig,"$1@"); //mark left parens with @
-        var sCount = mgTrans.strCount(expReturn,"@"),nXf = 0,lPar = 0,rPar = 0,iXf = 0,rTmp = "",payload = "",paramS = [],funcKey = "",fReturn = "";
+        var sCount = mgTrans.strCount(expReturn,"@"),bsym = 0,lSym = 0,nXf = 0,lPar = 0,rPar = 0,iXf = 0,rTmp = "",payload = "",paramS = [],funcKey = "",fReturn = "";
         for (nXf=0;nXf<sCount;nXf++) {
             lPar = 1,rPar = 0,iXf = 0,rTmp = "";
             bSym = expReturn.lastIndexOf("@")+1; //find inside parens

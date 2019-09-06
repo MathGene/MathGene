@@ -190,7 +190,7 @@ var numerical =
 "asn(acs(atn(asc(acc(act(mat(mat(1,2),mat(3,4))))))))","undefined",
 "snh(csh(tnh(sch(cch(cth(mat(mat(1,2),mat(3,4))))))))","undefined",
 "ash(ach(ath(axh(ayh(azh(mat(mat(1,2),mat(3,4))))))))","undefined",
-"arg(rex(imx(con(exp(cei(mat(mat(1,2),mat(3,4))))))))","undefined",
+"arg(rex(imx(exp(cei(con(mat(mat(1,2),mat(3,4))))))))","undefined",
 
 "1/0","Cv[8734]",
 "lne(0)","-Cv[8734]",
