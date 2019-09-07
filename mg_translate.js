@@ -1376,9 +1376,9 @@ var mgTrans = function() {
         mg: function (parm) {return mgFuncs['cMulE'](parm[0],parm[1])},
         },
     cNeg:{ //negative
-        htmlL1: function (parm) {return '&minus;'+parm[0]},
+        htmlL1: function (parm) {return htmlFuncs['cNegL'](parm[0])},
         htmlR1:'',
-        htmlL2: function (parm) {return '&minus;'+parm[0]},
+        htmlL2: function (parm) {return htmlFuncs['cNegL'](parm[0])},
         htmlR2:'',
         texfunc:[],
         latexL1: function (parm) {return '-'+parm[0]},
@@ -1645,6 +1645,11 @@ var mgTrans = function() {
         if ((dNest(xU) > 0 || dNest(xL) > 0 ) && mgConfig.divScale > 50) {return xU+"<sup><span style='vertical-align:super'>"+xL+"</span></sup>"} //lift exponent for big symbols
         return xU+"<sup>"+xL+"</sup>"
         },
+    cNegL: function (xU) {
+        if (strCount(xU,"(") > 0 || strCount(xU,"Cv[1110") > 0) {return "&minus;"+xU}
+        if (strCount(xU,"+") > 0 || strCount(xU,"&minus;") > 0) {return "&minus;("+xU+")"}
+        return "&minus;"+xU
+        },
     radL: function (rSymb,xY,xZ) {//radicals
         var tgtRad = ["&#8730;","<span style='vertical-align:top;display:inline-block;position:relative;'><span style='vertical-align:top;position:absolute;'>&#8730;</span><span style='vertical-align:top;position:absolute;font-size:50%;'><sup>&nbsp;3</sup></span>&nbsp;&nbsp;</span>",
                     "<span style='vertical-align:top;display:inline-block;position:relative;'><span style='vertical-align:top;position:absolute;'>&#8730;</span><span style='vertical-align:top;position:absolute;font-size:50%;'><sup>&nbsp;"+xZ+"</sup></span>&nbsp;&nbsp;</span>"];
@@ -1816,8 +1821,7 @@ var mgTrans = function() {
     function parseBrackets(xB,beginI) {//parse brackets and return inside string, begin index, end index, source string
         xB = String(xB);
         var lPar = 0,rPar = 0,bDelim = " ",eDelim = " ",iU = 0,dTemp = "",nXi = 0;
-        var lSym = xB.length;
-        for (iU=beginI;iU<lSym;iU++) {
+        for (iU=beginI;iU<xB.length;iU++) {
             if (xB.charAt(iU) == " ") {iU++}
             if (xB.charAt(iU).charCodeAt(0) > 47 && tDelimiter.indexOf(xB.charAt(iU)) == -1){return {begin:beginI,inside:xB.charAt(iU),end:iU,source:xB}}
             if (xB.charAt(iU) == "\\") {
@@ -1830,7 +1834,7 @@ var mgTrans = function() {
             if (xB.charAt(iU) == "{") {bDelim = "{";eDelim = "}";break}
             if (xB.charAt(iU) == "[") {bDelim = "[";eDelim = "]";break}
         }
-        for (iU=beginI;iU<lSym;iU++) {
+        for (iU=beginI;iU<xB.length;iU++) {
             if (xB.charAt(iU) == bDelim ) {lPar++;if(lPar == 1) {beginI = iU}}
             if (xB.charAt(iU) == eDelim ) {rPar++}
             if (lPar > 0 && lPar == rPar) {break}
@@ -1948,25 +1952,21 @@ var mgTrans = function() {
     //
     function mgExport(funcIn) { //export from FUNC to MG format
         if (funcIn == "NaN" || funcIn == "undefined") {return "undefined"}
-        var mgReturn = dFunc(funcIn, "mg");
-        mgReturn = mgReturn.replace(/\+\-/g,"-").replace(/\-\-/g,""); //fix for '+-' condition
-        mgReturn = toSciNot(mgReturn);
-        return mgReturn
+        return toSciNot(dFunc(funcIn,"mg").replace(/\+\-/g,"-").replace(/\-\-/g,""));
     }
     function cParse(xInp,xOp,xFunc) { //parse operators
         const zDelim = ["^","-","#","*","/","+",",","~","@","=","<",">",String.fromCharCode(8800),String.fromCharCode(8804),String.fromCharCode(8805),String.fromCharCode(8226)];
         var ztmp = "",bSym = "",lPar = 0,rPar = 0,dCp = 0,iCp = 0;
-		var cReturn = String(xInp);
+        var cReturn = String(xInp);
         if (xOp == "^") {bSym = cReturn.lastIndexOf(xOp)+1}
         else  {bSym = cReturn.indexOf(xOp)+1;}
         var aSym = bSym-2;
-        var lSym = cReturn.length;
-        for (iCp=bSym;iCp<=lSym;iCp++) {
+        for (iCp=bSym;iCp<=cReturn.length;iCp++) {
             ztmp = cReturn.charAt(iCp);
             if (ztmp == "(") {lPar++}
             if (ztmp == ")") {rPar++}
             if (lPar < rPar) {break;}
-            if (lPar == rPar && cReturn.charAt(iCp-1)!= "e") { if (zDelim.indexOf(ztmp) > -1) {break} }
+            if (lPar == rPar && cReturn.charAt(iCp-1)!= "e") {if (zDelim.indexOf(ztmp) > -1) {break} }
         }
         lPar = 0;rPar = 0;
         for (dCp=aSym;dCp>=0;dCp--) {
@@ -1974,7 +1974,7 @@ var mgTrans = function() {
             if (ztmp == "(") {lPar++}
             if (ztmp == ")") {rPar++}
             if (lPar > rPar) {break;}
-            if (lPar == rPar && cReturn.charAt(dCp-1)!= "e") { if (zDelim.indexOf(ztmp) > -1) {break} }
+            if (lPar == rPar && cReturn.charAt(dCp-1)!= "e") {if (zDelim.indexOf(ztmp) > -1) {break} }
         }
         cReturn = cReturn.substr(0,dCp+1)+xFunc+"("+cReturn.substr(dCp+1,aSym-dCp)+","+cReturn.substr(bSym,iCp-bSym)+")"+cReturn.substr(iCp);
         return cReturn;
@@ -1982,10 +1982,9 @@ var mgTrans = function() {
     function nParse(xInp,xOp) { //parse negatives as cNeg()
         const zDelim = ["(",")","^","-","#","*","/","+",",","~","@","=","<",">",String.fromCharCode(8800),String.fromCharCode(8804),String.fromCharCode(8805),String.fromCharCode(8226)];
         var iNp = 0,lPar = 0,rPar = 0,ztmp = "";
-		var nReturn = String(xInp);
+        var nReturn = String(xInp);
         var bSym = nReturn.indexOf(xOp)+xOp.length;
-        var lSym = nReturn.length;
-        for (iNp=bSym;iNp<=lSym;iNp++) {
+        for (iNp=bSym;iNp<=nReturn.length;iNp++) {
             ztmp = nReturn.charAt(iNp);
             if (ztmp == "(") {lPar++}
             if (ztmp == ")") {rPar++}
@@ -2008,8 +2007,7 @@ var mgTrans = function() {
         }
         sCount = strCount(funcReturn,"Cv[8748]");//differential
         for (nCf=0;nCf<sCount;nCf++) {funcReturn = funcReturn.replace(/Cv\[8748\]Cv\[(\d+)\]\/Cv\[8748\]Cv\[(\d+)\]/,"sdr(Cv[$1],Cv[$2])")}
-        funcReturn = funcReturn.replace(/!/g,"Cv[45]"); //factorial
-        funcReturn = funcReturn.replace(/Cv\[8226\]/g,String.fromCharCode(8226)); //dot operator
+        funcReturn = funcReturn.replace(/!/g,"Cv[45]").replace(/Cv\[8226\]/g,String.fromCharCode(8226)); //factorial and dot operator
         for (key in relOperators) {
             sCount = strCount(funcReturn,key);
             for (nCf=0;nCf<sCount;nCf++) {funcReturn = funcReturn.replace(key,relOperators[key])}
@@ -2070,7 +2068,7 @@ var mgTrans = function() {
             return funcMap[key][fnformat]
         }
         // 
-        var bSym = 0, lSym = 0,lPar = 0,rPar = 0,iXf = 0,nXf = 0,sCount = 0,payload = "",paramS = "",funcKey = "",rTmp = "",fnformatL = "",fnformatR = "",fnformatLx = "";
+        var bSym = 0,lPar = 0,rPar = 0,iXf = 0,nXf = 0,sCount = 0,payload = "",paramS = "",funcKey = "",rTmp = "",fnformatL = "",fnformatR = "",fnformatLx = "";
         if (prefix == "mg") {fnformatL = prefix;fnformatR = prefix}
         else if (mgConfig.fnFmt == "fn(x)") {fnformatL = prefix+"L1";fnformatR = prefix+"R1"} //fn(x)
         else {fnformatL = prefix+"L2";fnformatR = prefix+"R2"}  //fn x
@@ -2080,8 +2078,7 @@ var mgTrans = function() {
             fnformatLx = fnformatL;
             lPar = 1,rPar = 0,iXf = 0,rTmp = "";
             bSym = expReturn.lastIndexOf("@")+1; //find inside parens
-            lSym = expReturn.length;
-            for (iXf=bSym;iXf<lSym;iXf++) {
+            for (iXf=bSym;iXf<expReturn.length;iXf++) {
                 if (expReturn.charAt(iXf) == "@" || expReturn.charAt(iXf) == "(") {lPar++}
                 if (expReturn.charAt(iXf) == ")") {rPar++}
                 if (lPar == rPar) {break;}
@@ -2093,9 +2090,9 @@ var mgTrans = function() {
             if (typeof funcMap[funcKey] == "undefined") {funcKey = expReturn.substr(bSym-5,4)} //extract operators cXxx()
             if (typeof funcMap[funcKey][prefix+"Inv1"] != "undefined" && mgConfig.invFmt == "sin<sup>-1</sup>" && mgConfig.fnFmt == "fn(x)") {fnformatLx = prefix+"Inv1"} //inverse fn(x)
             if (typeof funcMap[funcKey][prefix+"Inv1"] != "undefined" && mgConfig.invFmt == "sin<sup>-1</sup>" && mgConfig.fnFmt == "fn x")  {fnformatLx = prefix+"Inv2"} //inverse fn x
-            if ((funcMap[funcKey][fnformatR] == ' ' || funcMap[funcKey][fnformatR] == ' <Xfxp>') && mgConfig.fnFmt == "fn x" && iXf < lSym && paramS[0].replace(/[\|\(\{](.*)[\|\)\}]/g,"").search(/[+(&minus;)]/) > -1 ) {paramS[0] = "("+paramS[0]+")"} //add parens to inside (fn x) functions
-            if (iXf < lSym && prefix != "mg") {rTmp = xFunc(funcKey,paramS,payload,fnformatR)} //enable right side function if parens match
-            expReturn = expReturn.substr(0,bSym-(funcKey.length+1))+xFunc(funcKey,paramS,payload,fnformatLx)+rTmp+expReturn.substr(iXf+1,lSym); //assemble output
+            if ((funcMap[funcKey][fnformatR] == ' ' || funcMap[funcKey][fnformatR] == ' <Xfxp>') && mgConfig.fnFmt == "fn x" && iXf < expReturn.length && paramS[0].replace(/[\|\(\{](.*)[\|\)\}]/g,"").search(/[+(&minus;)]/) > -1 ) {paramS[0] = "("+paramS[0]+")"} //add parens to inside (fn x) functions
+            if (iXf < expReturn.length && prefix != "mg") {rTmp = xFunc(funcKey,paramS,payload,fnformatR)} //enable right side function if parens match
+            expReturn = expReturn.substr(0,bSym-(funcKey.length+1))+xFunc(funcKey,paramS,payload,fnformatLx)+rTmp+expReturn.substr(iXf+1,expReturn.length); //assemble output
         }
         return expReturn
     }
@@ -2111,18 +2108,17 @@ var mgTrans = function() {
             var lPar = 1;
             var rPar = 0;
             var bSym = lxReturn.indexOf("%")+1;
-            var lSym = lxReturn.length;
-            for (var iXs=bSym;iXs<lSym;iXs++) {
+            for (var iXs=bSym;iXs<lxReturn.length;iXs++) {
                 if (lxReturn.charAt(iXs) == "%" ) {lPar++}
                 if (lxReturn.charAt(iXs) == ")" ) {rPar++}
                 if (lPar == rPar) {break;}
             }
             var strg = lxReturn.substr(bSym,iXs-bSym);
             if (lxReturn.substr(bSym-1,7) == "%<Xdiv>" && lxReturn.substr(iXs-6,7) == "<Xdve>)" && lxReturn.substr(iXs+1,1) != "^" && strg.search(/\<Xdve\>(.*)\<Xdiv\>/) == -1) {
-                lxReturn = lxReturn.substr(0,bSym-1)+strg+lxReturn.substr(iXs+1,lSym);
+                lxReturn = lxReturn.substr(0,bSym-1)+strg+lxReturn.substr(iXs+1,lxReturn.length);
             }
             else {
-                lxReturn = lxReturn.substr(0,bSym-1)+"("+strg+")"+lxReturn.substr(iXs+1,lSym);
+                lxReturn = lxReturn.substr(0,bSym-1)+"("+strg+")"+lxReturn.substr(iXs+1,lxReturn.length);
             }
         }
         lxReturn = lxReturn.replace(/\<Xcel\>/g,",&").replace(/\<Xrow\>/g,"\\left\\{\\begin{array}{1}").replace(/\<Xrwe\>/g,"\\end{array}\\right\\}"); //resolve arrays
@@ -2233,7 +2229,7 @@ var mgTrans = function() {
             }
         }
         liReturn = liReturn.replace(/ /g,""); //cleanup spaces
-        liReturn = liReturn.replace(/\(Cv\[10100\]\)/g,"Cv[10100]");
+        liReturn = liReturn.replace(/\(Cv\[10100\]\)/g,"Cv[10100]"); //remove parens from differential
         sCount = strCount(liReturn,"Cv[10100]");//convert derivatives
         for (nXf=0;nXf<sCount;nXf++) {
             liReturn = liReturn.replace(/\(Cv\[10100\]\/Cv\[10100\]Cv\[(\d+)\]\)/,"tdr(Cv[$1])");
