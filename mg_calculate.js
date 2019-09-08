@@ -419,12 +419,11 @@ var mgCalc = function() {
     function execFunc(expIn,funcObj) { //execute math transformation inside out from specified object
         expIn = mgTrans.oParens(expIn);
         var expReturn = expIn.replace(/([a-z][a-z][a-z])\(/ig,"$1@"); //mark left parens with @
-        var sCount = mgTrans.strCount(expReturn,"@"),bSym = 0,lSym = 0,nXf = 0,lPar = 0,rPar = 0,iXf = 0,rTmp = "",payload = "",paramS = [],funcKey = "",fReturn = "";
+        var sCount = mgTrans.strCount(expReturn,"@"),bSym = 0,nXf = 0,lPar = 0,rPar = 0,iXf = 0,rTmp = "",payload = "",paramS = [],funcKey = "",fReturn = "";
         for (nXf=0;nXf<sCount;nXf++) {
             lPar = 1,rPar = 0,iXf = 0,rTmp = "";
             bSym = expReturn.lastIndexOf("@")+1; //find inside parens
-            lSym = expReturn.length;
-            for (iXf=bSym;iXf<lSym;iXf++) {
+            for (iXf=bSym;iXf<expReturn.length;iXf++) {
                 if (expReturn.charAt(iXf) == "@" || expReturn.charAt(iXf) == "(") {lPar++}
                 if (expReturn.charAt(iXf) == ")") {rPar++}
                 if (lPar == rPar) {break;}
@@ -436,7 +435,7 @@ var mgCalc = function() {
             if (typeof funcObj[funcKey] == "undefined") {fReturn = passthruFunc[funcKey](mgTrans.oParens(paramS[0]),mgTrans.oParens(paramS[1]),paramS[2],paramS[3])} //execute passthru
             else {fReturn = funcObj[funcKey](mgTrans.oParens(paramS[0]),mgTrans.oParens(paramS[1]),paramS[2],paramS[3])}//execute operation
             if (funcKey == "mat") {fReturn = passthruFunc[funcKey](paramS)} //matrix parameters
-            expReturn = expReturn.substr(0,(expReturn.lastIndexOf("@")+1)-(funcKey.length+1))+fReturn+expReturn.substr(iXf+1,expReturn.length); //assemble output
+            expReturn = expReturn.substr(0,(expReturn.lastIndexOf("@")+1)-(funcKey.length+1))+fReturn+expReturn.substr(iXf+1); //assemble output
         }
         return expReturn
     }
