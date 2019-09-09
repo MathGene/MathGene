@@ -297,6 +297,8 @@ var range =
 var matrix =
 [
 "mat(mat(1,2,3),mat(4,5,6))","mat(mat(1,2,3),mat(4,5,6))",
+"mat(mat(1,2,3,4,5,6),mat(7,8,9,10,11,12))","mat(mat(1,2,3,4,5,6),mat(7,8,9,10,11,12))",
+"mat(mat(1,2,3,4,5,6),mat(7,8,9,10,11,12))*2","mat(mat(2,4,6,8,10,12),mat(14,16,18,20,22,24))",
 "mat(mat(3,4,2))*mat(mat(13,9,7,15),mat(8,7,4,6),mat(6,4,0,3))","mat(mat(83,63,37,75))",
 "mat(mat(1,2),mat(3,4),mat(5,6))*mat(mat(1,2,3),mat(4,5,6))","mat(mat(9,12,15),mat(19,26,33),mat(29,40,51))",
 "mat(mat(1,2,3),mat(4,5,6))*mat(mat(7,8),mat(9,10),mat(11,12))","mat(mat(58,64),mat(139,154))",
@@ -333,6 +335,7 @@ var matrix =
 "mat(mat(mat(mat(1,2),mat(11,12)),mat(mat(3,4),mat(11,12))),mat(mat(mat(1,2),mat(11,12)),mat(mat(3,4),mat(11,12))))Cv[10120]","mat(mat(mat(mat(Cv[10120],2Cv[10120]),mat(11Cv[10120],12Cv[10120])),mat(mat(3Cv[10120],4Cv[10120]),mat(11Cv[10120],12Cv[10120]))),mat(mat(mat(Cv[10120],2Cv[10120]),mat(11Cv[10120],12Cv[10120])),mat(mat(3Cv[10120],4Cv[10120]),mat(11Cv[10120],12Cv[10120]))))",
 "mat(mat(mat(mat(Cv[10120],2Cv[10120]),mat(11Cv[10120],12Cv[10120])),mat(mat(3Cv[10120],4Cv[10120]),mat(11Cv[10120],12Cv[10120]))),mat(mat(mat(Cv[10120],2Cv[10120]),mat(11Cv[10120],12Cv[10120])),mat(mat(3Cv[10120],4Cv[10120]),mat(11Cv[10120],12Cv[10120]))))*mat(mat(mat(mat(1,0),mat(0,1)),mat(mat(0,0),mat(0,0))),mat(mat(mat(0,0),mat(0,0)),mat(mat(1,0),mat(0,1))))","mat(mat(mat(mat(Cv[10120],2Cv[10120]),mat(11Cv[10120],12Cv[10120])),mat(mat(3Cv[10120],4Cv[10120]),mat(11Cv[10120],12Cv[10120]))),mat(mat(mat(Cv[10120],2Cv[10120]),mat(11Cv[10120],12Cv[10120])),mat(mat(3Cv[10120],4Cv[10120]),mat(11Cv[10120],12Cv[10120]))))",
 //"mat(mat(a_1),mat(a_2),mat(a_3))Cv[8226]mat(mat(b_1,b_2,b_3))","mat(mat(Cv[10098]sbt(1)Cv[10097]sbt(1),Cv[10098]sbt(2)Cv[10097]sbt(1),Cv[10098]sbt(3)Cv[10097]sbt(1)),mat(Cv[10097]sbt(2)Cv[10098]sbt(1),Cv[10097]sbt(2)Cv[10098]sbt(2),Cv[10097]sbt(2)Cv[10098]sbt(3)),mat(Cv[10098]sbt(1)Cv[10097]sbt(3),Cv[10098]sbt(2)Cv[10097]sbt(3),Cv[10097]sbt(3)Cv[10098]sbt(3)))",
+
 ];
 
 var reduce =

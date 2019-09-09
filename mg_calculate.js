@@ -412,7 +412,7 @@ var mgCalc = function() {
         return xA
     }
     function matArray(xA) { //matrix FUNC to array
-		if (typeof xA == "object") {return xA}
+        if (typeof xA == "object") {return xA}
         return execEval(xA.replace(/([a-z])\(/g,"$1S(").replace(/matS\(/g,"mat(").replace(/(Cv\[\d+\])/g,"'$1'"))
     }
     function sortTerms(aS,bS){ //sort terms array alpha with powers in descending polynomial order
