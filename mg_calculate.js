@@ -107,16 +107,28 @@ var mgCalc = function() {
     idr: function (xU) {return "idr("+xU+")"},
     tdr: function (xU) {return "tdr("+xU+")"},
     itg: function (xU,xL) {return "itg("+xU+","+xL+")"},
-    sdr: function (xU,xL) {return "sdr("+xU+","+xL+")"},
-    psd: function (xU,xL) {return "psd("+xU+","+xL+")"},
+    sdr: function (xU,xL,xN) {
+        if (typeof xN == "undefined") {return "sdr("+xU+","+xL+")"}
+        return "sdr("+xU+","+xL+","+xN+")"
+    },
+    psd: function (xU,xL,xN) {
+        if (typeof xN == "undefined") {return "psd("+xU+","+xL+")"}
+        return "psd("+xU+","+xL+","+xN+")"
+    },
     sum: function (xU,xL) {return "sum("+xU+","+xL+")"},
     prd: function (xU,xL) {return "prd("+xU+","+xL+")"},
     lim: function (xU,xL) {return "lim("+xU+","+xL+")"},
     lmt: function (xU,xL,xR) {return "lmt("+xU+","+xL+","+xR+")"},
     smm: function (xU,xL,xY,xZ) {return "smm("+xU+","+xL+","+xY+","+xZ+")"},
     pmm: function (xU,xL,xY,xZ) {return "pmm("+xU+","+xL+","+xY+","+xZ+")"},
-    tdv: function (dXpr,deeVar,nTh) {return "tdv("+dXpr+","+deeVar+","+nTh+")"},
-    drv: function (dXpr,deeVar,nTh) {return "drv("+dXpr+","+deeVar+","+nTh+")"},
+    tdv: function (dXpr,deeVar,nTh) {
+        if (typeof nTh == "undefined") {return "tdv("+dXpr+","+deeVar+")"}
+        return "tdv("+dXpr+","+deeVar+","+nTh+")"
+    },
+    drv: function (dXpr,deeVar,nTh) {
+        if (typeof nTh == "undefined") {return "drv("+dXpr+","+deeVar+")"}
+        return "drv("+dXpr+","+deeVar+","+nTh+")"
+    },
     smx: function (xU) {return "smx("+xU+")"},
     pxp: function (xU) {return "pxp("+xU+")"},
     vMul: function (xU,xL) {return "vMul("+xU+","+xL+")"},
@@ -127,7 +139,10 @@ var mgCalc = function() {
     det:  function (xU) {return "det("+xU+")"},
     trc:  function (xU) {return "trc("+xU+")"},
     mat: function () {return "mat(" + Array.prototype.slice.call(arguments) + ")"},
-    ntg: function (nXpr,deeVar,iU,iL) {return "ntg("+nXpr+","+deeVar+","+iU+","+iL+")"},
+    ntg: function (nXpr,deeVar,iU,iL) {
+        if (typeof iU != "undefined" && typeof iL != "undefined") {return "ntg("+nXpr+","+deeVar+","+iU+","+iL+")"}
+        return "ntg("+nXpr+","+deeVar+")"
+    },
     ntp: function (nXpr,deeVar,iU,iL) {
         if (typeof iU != "undefined" && typeof iL != "undefined") {return "ntp("+nXpr+","+deeVar+","+iU+","+iL+")"}
         return "ntp("+nXpr+","+deeVar+")"
@@ -397,7 +412,7 @@ var mgCalc = function() {
         return xA
     }
     function matArray(xA) { //matrix FUNC to array
-        if (typeof xA == "object") {return xA}
+		if (typeof xA == "object") {return xA}
         return execEval(xA.replace(/([a-z])\(/g,"$1S(").replace(/matS\(/g,"mat(").replace(/(Cv\[\d+\])/g,"'$1'"))
     }
     function sortTerms(aS,bS){ //sort terms array alpha with powers in descending polynomial order
@@ -434,7 +449,10 @@ var mgCalc = function() {
             if (typeof passthruFunc[funcKey] == "undefined") {funcKey = expReturn.substr(bSym-5,4)} //extract operators cXxx()
             if (typeof funcObj[funcKey] == "undefined") {fReturn = passthruFunc[funcKey](mgTrans.oParens(paramS[0]),mgTrans.oParens(paramS[1]),paramS[2],paramS[3])} //execute passthru
             else {fReturn = funcObj[funcKey](mgTrans.oParens(paramS[0]),mgTrans.oParens(paramS[1]),paramS[2],paramS[3])}//execute operation
-            if (funcKey == "mat") {fReturn = passthruFunc[funcKey](paramS)} //matrix parameters
+            if (funcKey == "mat") { //matrix parameters
+                if (typeof funcObj[funcKey] == "undefined") {fReturn = passthruFunc[funcKey](paramS)}
+                else {fReturn = funcObj[funcKey](paramS)}
+            }
             expReturn = expReturn.substr(0,(expReturn.lastIndexOf("@")+1)-(funcKey.length+1))+fReturn+expReturn.substr(iXf+1); //assemble output
         }
         return expReturn
@@ -1593,7 +1611,6 @@ var mgCalc = function() {
         if (typeof xN == "undefined") {return "drv("+xU+","+xL+")"}
         return "drv("+xU+","+xL+","+xN+")"
     }
-    function matS() {return "mat(" + Array.prototype.slice.call(arguments) + ")"}
     //passthru
     function cEqlS(xU,xL) {return "cEql("+xU+","+xL+")"}
     function cNqlS(xU,xL) {return "cNql("+xU+","+xL+")"}
@@ -2786,7 +2803,7 @@ var mgCalc = function() {
         }
         if (polyU.length >= 3) { //refactor GCF
             for (xC=0;xC<polyU.length;xC++) {if (fCoeff[xC] != 0 ) {fGcf = cMulS(fGcf,cPowS(pVar,xC));break}}
-        }		
+        }       
         var sqrtA = sqt(abs(fCoeff[polyU.length-1])),sqrtB = sqt(abs(fCoeff[0])); //difference of perfect squares
         pReturn = xReduce(cMulS(fGcf,"cMul((cAdd(cMul("+sqrtA+","+cPowS(pVar,cDiv((polyU.length-1),2))+"),"+sqrtB+")),(cSub(cMul("+sqrtA+","+cPowS(pVar,cDiv((polyU.length-1),2))+"),"+sqrtB+")))"));
         if (xprExpand(pReturn) == pfFac) {return pReturn} //test perfect squares calc
