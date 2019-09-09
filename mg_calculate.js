@@ -107,28 +107,16 @@ var mgCalc = function() {
     idr: function (xU) {return "idr("+xU+")"},
     tdr: function (xU) {return "tdr("+xU+")"},
     itg: function (xU,xL) {return "itg("+xU+","+xL+")"},
-    sdr: function (xU,xL,xN) {
-        if (typeof xN == "undefined") {return "sdr("+xU+","+xL+")"}
-        return "sdr("+xU+","+xL+","+xN+")"
-    },
-    psd: function (xU,xL,xN) {
-        if (typeof xN == "undefined") {return "psd("+xU+","+xL+")"}
-        return "psd("+xU+","+xL+","+xN+")"
-    },
+    sdr: function (xU,xL,xN) {return "sdr("+xU+","+xL+","+xN+")"},
+    psd: function (xU,xL,xN) {return "psd("+xU+","+xL+","+xN+")"},
     sum: function (xU,xL) {return "sum("+xU+","+xL+")"},
     prd: function (xU,xL) {return "prd("+xU+","+xL+")"},
     lim: function (xU,xL) {return "lim("+xU+","+xL+")"},
     lmt: function (xU,xL,xR) {return "lmt("+xU+","+xL+","+xR+")"},
     smm: function (xU,xL,xY,xZ) {return "smm("+xU+","+xL+","+xY+","+xZ+")"},
     pmm: function (xU,xL,xY,xZ) {return "pmm("+xU+","+xL+","+xY+","+xZ+")"},
-    tdv: function (dXpr,deeVar,nTh) {
-        if (typeof nTh == "undefined") {return "tdv("+dXpr+","+deeVar+")"}
-        return "tdv("+dXpr+","+deeVar+","+nTh+")"
-    },
-    drv: function (dXpr,deeVar,nTh) {
-        if (typeof nTh == "undefined") {return "drv("+dXpr+","+deeVar+")"}
-        return "drv("+dXpr+","+deeVar+","+nTh+")"
-    },
+    tdv: function (dXpr,deeVar,nTh) {return "tdv("+dXpr+","+deeVar+","+nTh+")"},
+    drv: function (dXpr,deeVar,nTh) {return "drv("+dXpr+","+deeVar+","+nTh+")"},
     smx: function (xU) {return "smx("+xU+")"},
     pxp: function (xU) {return "pxp("+xU+")"},
     vMul: function (xU,xL) {return "vMul("+xU+","+xL+")"},
