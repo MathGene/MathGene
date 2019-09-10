@@ -401,7 +401,7 @@ var mgCalc = function() {
     }
     function matArray(xA) { //matrix FUNC to array
         if (typeof xA == "object") {return xA}
-        return execEval(xA.replace(/([a-z])\(/g,"$1S(").replace(/matS\(/g,"mat(").replace(/(Cv\[\d+\])/g,"'$1'"))
+        return eval(xA.replace(/([a-z])\(/g,"$1S(").replace(/matS\(/g,"mat(").replace(/(Cv\[\d+\])/g,"'$1'"))
     }
     function sortTerms(aS,bS){ //sort terms array alpha with powers in descending polynomial order
         if (strTest(aS,"cPow") || strTest(bS,"cPow")) {
@@ -445,8 +445,7 @@ var mgCalc = function() {
         }
         return expReturn
     }
-    function execEval(xpr) {'use strict';return eval(String(xpr))}
-    
+
     //Expression reduction
     const symFunc = {
     cPow: function (xU,xL) {return cPowS(xU,xL)},
@@ -2843,6 +2842,7 @@ var mgCalc = function() {
         factorFlag = true;
         var facReturn = execFunc("cnt("+xReduce(xFac)+")",factorFunc);
         factorFlag = false;
+        if (strTest(facReturn,"undefined")) {facReturn = xFac}
         return facReturn
     }
     
@@ -3660,7 +3660,7 @@ var mgCalc = function() {
     if (mgConfig.trigBase == Cv[29]/200) {invMult = "200"}
 
     return {
-        Numeric:    function(xprA) {mgTrans.configCheck();return mgTrans.Output(mgTrans.mgExport(fmtResult(execEval(mgTrans.cFunc(mgTrans.texImport(xprA))))))},
+        Numeric:    function(xprA) {mgTrans.configCheck();return mgTrans.Output(mgTrans.mgExport(fmtResult(eval(mgTrans.cFunc(mgTrans.texImport(xprA))))))},
         Simplify:   function(xprA) {mgTrans.configCheck();return mgTrans.Output(mgTrans.mgExport(cReduce(mgTrans.cFunc(parseCalculus(mgTrans.texImport(xprA))))))},
         Solve:      function(xprA,xprB) {mgTrans.configCheck();return mgTrans.Output(mgTrans.mgExport(xprSolve(mgTrans.cFunc(parseCalculus(mgTrans.texImport(xprA))),mgTrans.texImport(xprB))))},
         Substitute: function(xprA,xprB,xprC) {mgTrans.configCheck();return mgTrans.Output(cSubst(mgTrans.texImport(xprA),mgTrans.texImport(xprB),mgTrans.texImport(xprC)))},
