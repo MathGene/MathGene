@@ -2928,17 +2928,11 @@ var mgCalc = function() {
             }
         }
         if (getType(xIn) == "matrix") {
-            var mReturn = "";
-            for (var iR in xIn) {
-                var mRow = "";
-                for (var iC in xIn[iR]) {
-                    mRow = mRow + fmtResult(xIn[iR][iC]);
-                    if (iC < xIn[iR].length-1) (mRow = mRow + ",")
-                }
-                mReturn = mReturn +"mat(" + mRow + ")";
-                if (iR < xIn.length-1) (mReturn = mReturn + ",")
+            var mReturn = matArray(xIn);
+            for (var iR in mReturn) {
+                for (var iC in mReturn[iR]) {mReturn[iR][iC] = fmtResult(mReturn[iR][iC])}
             }
-            return "mat(" + mReturn + ")"
+            return matFunc(mReturn)
         }
         return "undefined"
     }
