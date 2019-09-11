@@ -2255,26 +2255,26 @@ var internal =
 var testList =
 {
 
-"Numerical": "runNumerical()",
-"Range": "runRange()",
-"Matrix": "runMatrix()",
-"Reduce": "runReduce()",
-"Factor": "runFactor()",
-"Expand": "runExpand()",
-"Solve": "runSolve()",
-"Trig to Exponential": "runTrigtoexp()",
-"Exponential to Trig": "runExptotrig()",
-"Limits": "runLimits()",
-"Complex Derivatives": "runDerivatives()",
-"Complex Integrals": "runIntegrals()",
-"Real Calculus": "runRealCalculus()",
-"Summation": "runSummation()",
-"Taylor Series": "runSeries()",
-"HTML": "runHTML()",
-"Latex Export": "runExport()",
-"Latex Import": "runImport()",
-"Financial": "runFinancial()",
-"Internal": "runInternal()",
+"Numerical": function () {return runNumerical()},
+"Range": function () {return runRange()},
+"Matrix": function () {return runMatrix()},
+"Reduce": function () {return runReduce()},
+"Factor": function () {return runFactor()},
+"Expand": function () {return runExpand()},
+"Solve": function () {return runSolve()},
+"Trig to Exponential": function () {return runTrigtoexp()},
+"Exponential to Trig": function () {return runExptotrig()},
+"Limits": function () {return runLimits()},
+"Complex Derivatives": function () {return runDerivatives()},
+"Complex Integrals": function () {return runIntegrals()},
+"Real Calculus": function () {return runRealCalculus()},
+"Summation": function () {return runSummation()},
+"Taylor Series": function () {return runSeries()},
+"HTML": function () {runHTML()},
+"Latex Export": function () {return runExport()},
+"Latex Import": function () {return runImport()},
+"Financial": function () {return runFinancial()},
+"Internal": function () {return runInternal()},
 
 };
 
@@ -2285,7 +2285,7 @@ function execTest(testSuite) {
     tPass = 0;
     tFail = 0;
     htmlResults = "";
-    eval(testList[testSuite])
+    testList[testSuite]()
 }
 function setTitle(label) {
     htmlResults =htmlResults+"<br><div align='center'><b>"+label+"</b></div><br>";
