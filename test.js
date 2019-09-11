@@ -297,6 +297,8 @@ var range =
 var matrix =
 [
 "mat(mat(1,2,3),mat(4,5,6))","mat(mat(1,2,3),mat(4,5,6))",
+"mat(mat(1,2,3,4,5,6),mat(7,8,9,10,11,12))","mat(mat(1,2,3,4,5,6),mat(7,8,9,10,11,12))",
+"mat(mat(1,2,3,4,5,6),mat(7,8,9,10,11,12))*2","mat(mat(2,4,6,8,10,12),mat(14,16,18,20,22,24))",
 "mat(mat(3,4,2))*mat(mat(13,9,7,15),mat(8,7,4,6),mat(6,4,0,3))","mat(mat(83,63,37,75))",
 "mat(mat(1,2),mat(3,4),mat(5,6))*mat(mat(1,2,3),mat(4,5,6))","mat(mat(9,12,15),mat(19,26,33),mat(29,40,51))",
 "mat(mat(1,2,3),mat(4,5,6))*mat(mat(7,8),mat(9,10),mat(11,12))","mat(mat(58,64),mat(139,154))",
@@ -333,6 +335,7 @@ var matrix =
 "mat(mat(mat(mat(1,2),mat(11,12)),mat(mat(3,4),mat(11,12))),mat(mat(mat(1,2),mat(11,12)),mat(mat(3,4),mat(11,12))))Cv[10120]","mat(mat(mat(mat(Cv[10120],2Cv[10120]),mat(11Cv[10120],12Cv[10120])),mat(mat(3Cv[10120],4Cv[10120]),mat(11Cv[10120],12Cv[10120]))),mat(mat(mat(Cv[10120],2Cv[10120]),mat(11Cv[10120],12Cv[10120])),mat(mat(3Cv[10120],4Cv[10120]),mat(11Cv[10120],12Cv[10120]))))",
 "mat(mat(mat(mat(Cv[10120],2Cv[10120]),mat(11Cv[10120],12Cv[10120])),mat(mat(3Cv[10120],4Cv[10120]),mat(11Cv[10120],12Cv[10120]))),mat(mat(mat(Cv[10120],2Cv[10120]),mat(11Cv[10120],12Cv[10120])),mat(mat(3Cv[10120],4Cv[10120]),mat(11Cv[10120],12Cv[10120]))))*mat(mat(mat(mat(1,0),mat(0,1)),mat(mat(0,0),mat(0,0))),mat(mat(mat(0,0),mat(0,0)),mat(mat(1,0),mat(0,1))))","mat(mat(mat(mat(Cv[10120],2Cv[10120]),mat(11Cv[10120],12Cv[10120])),mat(mat(3Cv[10120],4Cv[10120]),mat(11Cv[10120],12Cv[10120]))),mat(mat(mat(Cv[10120],2Cv[10120]),mat(11Cv[10120],12Cv[10120])),mat(mat(3Cv[10120],4Cv[10120]),mat(11Cv[10120],12Cv[10120]))))",
 //"mat(mat(a_1),mat(a_2),mat(a_3))Cv[8226]mat(mat(b_1,b_2,b_3))","mat(mat(Cv[10098]sbt(1)Cv[10097]sbt(1),Cv[10098]sbt(2)Cv[10097]sbt(1),Cv[10098]sbt(3)Cv[10097]sbt(1)),mat(Cv[10097]sbt(2)Cv[10098]sbt(1),Cv[10097]sbt(2)Cv[10098]sbt(2),Cv[10097]sbt(2)Cv[10098]sbt(3)),mat(Cv[10098]sbt(1)Cv[10097]sbt(3),Cv[10098]sbt(2)Cv[10097]sbt(3),Cv[10097]sbt(3)Cv[10098]sbt(3)))",
+
 ];
 
 var reduce =
@@ -954,6 +957,9 @@ var factor =
 "2Cv[10121]+2Cv[10122]","2(Cv[10122]+Cv[10121])",
 "(2Cv[10120]+5)(16Cv[10120]+40)","8(2Cv[10120]+5)^2",
 
+//negative tests
+"(Cv[10120]^2-4)/8Cv[10121]","(Cv[10120]^2-4)/8Cv[10121]",
+
 //bugs
 //"(Cv[10120]^2-4)+Cv[10121]","(Cv[10120]+2)(Cv[10120]-2)+Cv[10121]",
 //"Cv[10120]^8-Cv[10121]^4","(Cv[10120]^4-Cv[10121]^2)(Cv[10120]^2+Cv[10121])(Cv[10120]^2-Cv[10121])",
@@ -1074,6 +1080,7 @@ var solve =
 "Cv[10120]/Cv[10121]","Cv[10121]","Cv[10120]/Cv[10121]",
 
 "2Cv[10098](Cv[10120]Cv[10121]-Cv[10120]Cv[10122])=Cv[10097]","Cv[10120]","Cv[10120]=Cv[10097]/(2Cv[10121]-2Cv[10122])Cv[10098]",
+
 ];
 
 var trigtoexp =
@@ -2248,26 +2255,26 @@ var internal =
 var testList =
 {
 
-"Numerical": "runNumerical()",
-"Range": "runRange()",
-"Matrix": "runMatrix()",
-"Reduce": "runReduce()",
-"Factor": "runFactor()",
-"Expand": "runExpand()",
-"Solve": "runSolve()",
-"Trig to Exponential": "runTrigtoexp()",
-"Exponential to Trig": "runExptotrig()",
-"Limits": "runLimits()",
-"Complex Derivatives": "runDerivatives()",
-"Complex Integrals": "runIntegrals()",
-"Real Calculus": "runRealCalculus()",
-"Summation": "runSummation()",
-"Taylor Series": "runSeries()",
-"HTML": "runHTML()",
-"Latex Export": "runExport()",
-"Latex Import": "runImport()",
-"Financial": "runFinancial()",
-"Internal": "runInternal()",
+"Numerical": function () {return runNumerical()},
+"Range": function () {return runRange()},
+"Matrix": function () {return runMatrix()},
+"Reduce": function () {return runReduce()},
+"Factor": function () {return runFactor()},
+"Expand": function () {return runExpand()},
+"Solve": function () {return runSolve()},
+"Trig to Exponential": function () {return runTrigtoexp()},
+"Exponential to Trig": function () {return runExptotrig()},
+"Limits": function () {return runLimits()},
+"Complex Derivatives": function () {return runDerivatives()},
+"Complex Integrals": function () {return runIntegrals()},
+"Real Calculus": function () {return runRealCalculus()},
+"Summation": function () {return runSummation()},
+"Taylor Series": function () {return runSeries()},
+"HTML": function () {runHTML()},
+"Latex Export": function () {return runExport()},
+"Latex Import": function () {return runImport()},
+"Financial": function () {return runFinancial()},
+"Internal": function () {return runInternal()},
 
 };
 
@@ -2278,7 +2285,7 @@ function execTest(testSuite) {
     tPass = 0;
     tFail = 0;
     htmlResults = "";
-    eval(testList[testSuite])
+    testList[testSuite]()
 }
 function setTitle(label) {
     htmlResults =htmlResults+"<br><div align='center'><b>"+label+"</b></div><br>";

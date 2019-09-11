@@ -1877,7 +1877,7 @@ var mgTrans = function() {
         var dCount = strCount(dpReturn,"(");
         for (nXf=0;nXf<dCount;nXf++) {
             dparens = parseParens(dpReturn,dpReturn.lastIndexOf("((")+1);
-            if (dpReturn.substr(dparens.end,2) == "))" ) {dpReturn = dpReturn.substr(0,dpReturn.lastIndexOf("((")+1)+dparens.inside+dpReturn.substr(dparens.end+1,dpReturn.length)}
+            if (dpReturn.substr(dparens.end,2) == "))" ) {dpReturn = dpReturn.substr(0,dpReturn.lastIndexOf("((")+1)+dparens.inside+dpReturn.substr(dparens.end+1)}
         }
         return dpReturn
     }
@@ -1914,29 +1914,28 @@ var mgTrans = function() {
         sCount = strCount(htmlReturn,"{");
         for (nXs=0;nXs<sCount;nXs++) {
             var bSym = htmlReturn.indexOf("{");
-            var lSym = htmlReturn.length;
             var iXs = parseParens(htmlReturn,bSym);
             var strg = iXs.inside;
             if (!mgConfig.editMode && htmlReturn.substr(bSym,7) == "{<Xdiv>" && htmlReturn.substr(iXs.end-6,7) == "<Xdve>}"  && htmlReturn.substr(bSym-6,6) != "<Xfnx>" && strg.search(/\<Xdve\>(.*)\<Xdiv\>/) == -1) { //edit mode
-                htmlReturn = htmlReturn.substr(0,bSym)+strg+htmlReturn.substr(iXs.end+1,lSym);
+                htmlReturn = htmlReturn.substr(0,bSym)+strg+htmlReturn.substr(iXs.end+1);
             }
             else if (dNest(strg) == 1) { //expanded parens
-                if (strCount(htmlReturn.substr(0,bSym+1),"{") > strCount(htmlReturn.substr(iXs.end,lSym),"}")) {htmlReturn = htmlReturn.substr(0,bSym)+htmlFuncs['brkt']("(",strg)+strg+htmlReturn.substr(iXs.end,lSym);}
-                else {htmlReturn = htmlReturn.substr(0,bSym)+htmlFuncs['brkt']("(",strg)+strg+htmlFuncs['brkt'](")",strg)+htmlReturn.substr(iXs.end+1,lSym)}
+                if (strCount(htmlReturn.substr(0,bSym+1),"{") > strCount(htmlReturn.substr(iXs.end),"}")) {htmlReturn = htmlReturn.substr(0,bSym)+htmlFuncs['brkt']("(",strg)+strg+htmlReturn.substr(iXs.end);}
+                else {htmlReturn = htmlReturn.substr(0,bSym)+htmlFuncs['brkt']("(",strg)+strg+htmlFuncs['brkt'](")",strg)+htmlReturn.substr(iXs.end+1)}
             }
             else if (dNest(strg) > 1) { //extra tall parens
-                if (strCount(htmlReturn.substr(0,bSym+1),"{") > strCount(htmlReturn.substr(iXs.end,lSym),"}")) {
+                if (strCount(htmlReturn.substr(0,bSym+1),"{") > strCount(htmlReturn.substr(iXs.end),"}")) {
                     htmlReturn = htmlReturn.substr(0,bSym)+"<table style='text-align:center;display:inline-table;vertical-align:middle;'><tr><td style='border-left:1px solid black;border-top:1px solid black;border-bottom:1px solid black;border-radius: 10px 0 0 10px;'>&nbsp;<td><table><tr><td style='line-height: 70%'>"
-                    +strg+"</tr></td></table></td></tr></table>"+htmlReturn.substr(iXs.end+1,lSym)
+                    +strg+"</tr></td></table></td></tr></table>"+htmlReturn.substr(iXs.end+1)
                 }
                 else {
                     htmlReturn = htmlReturn.substr(0,bSym)+"<table style='text-align:center;display:inline-table;vertical-align:middle;'><tr><td style='border-left:2px solid black;border-top:2px solid black;border-bottom:2px solid black;border-radius: 10px 0 0 10px;'>&nbsp;<td><table><tr><td style='line-height: 70%'>"
-                    +strg+"</tr></td></table></td><td style='border-right:2px solid black;border-top:2px solid black;border-bottom:2px solid black;border-radius: 0 10px 10px 0;'>&nbsp;</td></tr></table>"+htmlReturn.substr(iXs.end+1,lSym)
+                    +strg+"</tr></td></table></td><td style='border-right:2px solid black;border-top:2px solid black;border-bottom:2px solid black;border-radius: 0 10px 10px 0;'>&nbsp;</td></tr></table>"+htmlReturn.substr(iXs.end+1)
                 }               
             }
             else { //normal parens
-                if (strCount(htmlReturn.substr(0,bSym+1),"{") > strCount(htmlReturn.substr(iXs.end,lSym),"}"))  {htmlReturn = htmlReturn.substr(0,bSym)+"("+strg+htmlReturn.substr(iXs.end,lSym);}
-                else {htmlReturn = htmlReturn.substr(0,bSym)+"("+strg+")"+htmlReturn.substr(iXs.end+1,lSym)}
+                if (strCount(htmlReturn.substr(0,bSym+1),"{") > strCount(htmlReturn.substr(iXs.end),"}"))  {htmlReturn = htmlReturn.substr(0,bSym)+"("+strg+htmlReturn.substr(iXs.end);}
+                else {htmlReturn = htmlReturn.substr(0,bSym)+"("+strg+")"+htmlReturn.substr(iXs.end+1)}
             }
         }
         // format arrays
@@ -2092,7 +2091,7 @@ var mgTrans = function() {
             if (typeof funcMap[funcKey][prefix+"Inv1"] != "undefined" && mgConfig.invFmt == "sin<sup>-1</sup>" && mgConfig.fnFmt == "fn x")  {fnformatLx = prefix+"Inv2"} //inverse fn x
             if ((funcMap[funcKey][fnformatR] == ' ' || funcMap[funcKey][fnformatR] == ' <Xfxp>') && mgConfig.fnFmt == "fn x" && iXf < expReturn.length && paramS[0].replace(/[\|\(\{](.*)[\|\)\}]/g,"").search(/[+(&minus;)]/) > -1 ) {paramS[0] = "("+paramS[0]+")"} //add parens to inside (fn x) functions
             if (iXf < expReturn.length && prefix != "mg") {rTmp = xFunc(funcKey,paramS,payload,fnformatR)} //enable right side function if parens match
-            expReturn = expReturn.substr(0,bSym-(funcKey.length+1))+xFunc(funcKey,paramS,payload,fnformatLx)+rTmp+expReturn.substr(iXf+1,expReturn.length); //assemble output
+            expReturn = expReturn.substr(0,bSym-(funcKey.length+1))+xFunc(funcKey,paramS,payload,fnformatLx)+rTmp+expReturn.substr(iXf+1); //assemble output
         }
         return expReturn
     }
@@ -2115,10 +2114,10 @@ var mgTrans = function() {
             }
             var strg = lxReturn.substr(bSym,iXs-bSym);
             if (lxReturn.substr(bSym-1,7) == "%<Xdiv>" && lxReturn.substr(iXs-6,7) == "<Xdve>)" && lxReturn.substr(iXs+1,1) != "^" && strg.search(/\<Xdve\>(.*)\<Xdiv\>/) == -1) {
-                lxReturn = lxReturn.substr(0,bSym-1)+strg+lxReturn.substr(iXs+1,lxReturn.length);
+                lxReturn = lxReturn.substr(0,bSym-1)+strg+lxReturn.substr(iXs+1);
             }
             else {
-                lxReturn = lxReturn.substr(0,bSym-1)+"("+strg+")"+lxReturn.substr(iXs+1,lxReturn.length);
+                lxReturn = lxReturn.substr(0,bSym-1)+"("+strg+")"+lxReturn.substr(iXs+1);
             }
         }
         lxReturn = lxReturn.replace(/\<Xcel\>/g,",&").replace(/\<Xrow\>/g,"\\left\\{\\begin{array}{1}").replace(/\<Xrwe\>/g,"\\end{array}\\right\\}"); //resolve arrays
@@ -2157,7 +2156,7 @@ var mgTrans = function() {
         liReturn = liReturn.replace(/\{matrix\}/g,"{bmatrix}").replace(/\{pmatrix\}/g,"{bmatrix}").replace(/\{vmatrix\}/g,"{bmatrix}").replace(/\{Vmatrix\}/g,"{bmatrix}"); //convert all matrices to bmatrix
         sCount = strCount(liReturn,"\\begin{bmatrix}"); //convert matrices
         for (nXf=0;nXf<sCount;nXf++) {
-            var rTemp = liReturn.substr(liReturn.lastIndexOf("\\begin{bmatrix}")+"\\begin{bmatrix}".length,liReturn.length);
+            var rTemp = liReturn.substr(liReturn.lastIndexOf("\\begin{bmatrix}")+"\\begin{bmatrix}".length);
             var mTemp = rTemp.substr(0,rTemp.indexOf("\\end{bmatrix}"));
             liReturn = liReturn.replace("\\begin{bmatrix}"+mTemp+"\\end{bmatrix}",matI(mTemp));
         }
@@ -2178,7 +2177,7 @@ var mgTrans = function() {
                 texFunc = funcMap[funcKey]["texfunc"][xF] //latex function symbol
                 sCount = strCount(liReturn,texFunc); //iterate through all latex functions and perform conversion on each
                 for (nXf=0;nXf<sCount;nXf++) {
-                    symTemp = liReturn.substr(liReturn.indexOf(texFunc),liReturn.length); //string from start of func
+                    symTemp = liReturn.substr(liReturn.indexOf(texFunc)); //string from start of func
                     if (symTemp.charAt(texFunc.length) == "^") {//convert fn^x
                         var superscript = parseBrackets(liReturn,liReturn.indexOf(texFunc)+texFunc.length+1);
                         operand = parseBrackets(liReturn,superscript.end+1);
@@ -2207,14 +2206,14 @@ var mgTrans = function() {
         }
         sCount = strCount(liReturn,"\\");//convert symbols
         for (nXf=0;nXf<sCount;nXf++) {
-            symTemp = liReturn.substr(liReturn.indexOf("\\"),liReturn.length);
+            symTemp = liReturn.substr(liReturn.indexOf("\\"));
             for (nXi=1;nXi<symTemp.length;nXi++) {if (tDelimiter.indexOf(symTemp.charAt(nXi)) > -1){break}}
             symTemp = symTemp.substr(1,nXi-1);
             for (nXs=1;nXs<=9500;nXs++) {if (typeof Ct[nXs] != "undefined" && (Ct[nXs] == "\\"+symTemp || Ct[nXs] == "\\"+symTemp+" ")) {liReturn = liReturn.replace("\\"+symTemp," Cv["+nXs+"]");break} }
         }
         sCount = strCount(liReturn,"\\");//remove unknown tags
         for (nXf=0;nXf<sCount;nXf++) {
-            symTemp = liReturn.substr(liReturn.indexOf("\\"),liReturn.length);
+            symTemp = liReturn.substr(liReturn.indexOf("\\"));
             for (nXi=1;nXi<symTemp.length;nXi++) {if (",!=<>|+-*^/{}()\\ ".indexOf(symTemp.charAt(nXi)) > -1){break}}
             symTemp = symTemp.substr(1,nXi-1);
             liReturn = liReturn.replace("\\"+symTemp,"");
@@ -2224,7 +2223,7 @@ var mgTrans = function() {
             if (liReturn.substr(nXf,3) == "Cv[") {nXf = nXf+3}
             var asciiChar = liReturn.charAt(nXf).charCodeAt(0);
             if (asciiTest(asciiChar)) {
-                liReturn = liReturn.substr(0,nXf)+"Cv["+(asciiChar+10000)+"]"+liReturn.substr(nXf+1,liReturn.length);
+                liReturn = liReturn.substr(0,nXf)+"Cv["+(asciiChar+10000)+"]"+liReturn.substr(nXf+1);
                 nXf = nXf+6
             }
         }
