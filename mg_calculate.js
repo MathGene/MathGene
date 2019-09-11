@@ -26,7 +26,7 @@ if (typeof module ==  "object") {
 
 //internal functions-objects
 var mgCalc = function() {
-    const passthruFunc = { //null symbolic functions
+    const passthruFunc = { //null functions
     cPow: function (xU,xL) {return "cPow("+xU+","+xL+")"},
     cMul: function (xU,xL) {return "cMul("+xU+","+xL+")"},
     cTms: function (xU,xL) {return "cMul("+xU+","+xL+")"},
@@ -399,9 +399,11 @@ var mgCalc = function() {
         if (typeof xA == "object") {return "mat(" + xA + ")"}
         return xA
     }
-    function matArray(xA) { //matrix FUNC to array
+    function matArray(xA) { //matrix FUNC to array conversion
         if (typeof xA == "object") {return xA}
-        return eval(xA.replace(/([a-z])\(/g,"$1S(").replace(/matS\(/g,"mat(").replace(/(Cv\[\d+\])/g,"'$1'"))
+        var mReturn = mgTrans.parseArgs(mgTrans.oParens(String(xA).substr(3)));
+        for (var iM in mReturn) {if (String(mReturn[iM]).substr(0,3) == "mat") {mReturn[iM] = matArray(mReturn[iM])}}
+        return mReturn
     }
     function sortTerms(aS,bS){ //sort terms array alpha with powers in descending polynomial order
         if (strTest(aS,"cPow") || strTest(bS,"cPow")) {
@@ -419,7 +421,7 @@ var mgCalc = function() {
         if (abs(cMul(xU,cPow(10,xP))) != abs(int(cMul(xU,cPow(10,xP))))) {return xU}
         return cDivS(cMul(xU,cPow(10,xP)),cPow(10,xP))
     }
-    function execFunc(expIn,funcObj) { //execute math transformation inside out from specified object
+    function execFunc(expIn,funcObj) { //execute FUNC math
         expIn = mgTrans.oParens(expIn);
         var expReturn = expIn.replace(/([a-z][a-z][a-z])\(/ig,"$1@"); //mark left parens with @
         var sCount = mgTrans.strCount(expReturn,"@"),bSym = 0,nXf = 0,lPar = 0,rPar = 0,iXf = 0,rTmp = "",payload = "",paramS = [],funcKey = "",fReturn = "";
@@ -437,10 +439,7 @@ var mgCalc = function() {
             if (typeof passthruFunc[funcKey] == "undefined") {funcKey = expReturn.substr(bSym-5,4)} //extract operators cXxx()
             if (typeof funcObj[funcKey] == "undefined") {fReturn = passthruFunc[funcKey](mgTrans.oParens(paramS[0]),mgTrans.oParens(paramS[1]),paramS[2],paramS[3])} //execute passthru
             else {fReturn = funcObj[funcKey](mgTrans.oParens(paramS[0]),mgTrans.oParens(paramS[1]),paramS[2],paramS[3])}//execute operation
-            if (funcKey == "mat") { //matrix parameters
-                if (typeof funcObj[funcKey] == "undefined") {fReturn = passthruFunc[funcKey](paramS)}
-                else {fReturn = funcObj[funcKey](paramS)}
-            }
+            if (funcKey == "mat") {fReturn = passthruFunc[funcKey](paramS)} //matrix parameters
             expReturn = expReturn.substr(0,(expReturn.lastIndexOf("@")+1)-(funcKey.length+1))+fReturn+expReturn.substr(iXf+1); //assemble output
         }
         return expReturn
