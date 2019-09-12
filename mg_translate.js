@@ -1940,6 +1940,7 @@ var mgTrans = function() {
         }
         // format arrays
         htmlReturn = htmlReturn.replace(/\<Xcel\>/g,"").replace(/\<Xrow\>/g,"{").replace(/\<Xrwe\>/g,"}");
+		//format matrices
         sCount = strCount(htmlReturn,"<Xcle>");
         for (nXs=0;nXs<sCount;nXs++) {
             if (nXs <sCount-1) {htmlReturn = htmlReturn.replace("<Xcle>",", ")}
