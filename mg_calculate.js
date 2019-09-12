@@ -940,9 +940,7 @@ var mgCalc = function() {
         function scalarMult(xM,xC) { //matrix scalar multiply
             xM = matArray(xM);
             var mReturn = xM;
-            for (var iR in xM) {
-                for (var iC in xM[iR]) {mReturn[iR][iC] = cMulS(matFunc(xM[iR][iC]),xC)}
-            }
+            for (var iR in xM) {mReturn[iR] = cMulS(matFunc(xM[iR]),xC)}
             return matFunc(mReturn)
         }
         var xTractU = opExtract(xU);
@@ -1087,11 +1085,9 @@ var mgCalc = function() {
         if (xTractU.func == "mat" && xTractL.func == "mat") { //matrix add
             xU = matArray(xU);
             xL = matArray(xL);
+            if (xU.length != xL.length) {return "undefined"}
             var mReturn = xU;
-            for (var iR in xU) {
-                if (xU[iR].length != xL[iR].length) {return "undefined"}
-                for (var iC in xU[iR]) {mReturn[iR][iC] = cAddS(xU[iR][iC],xL[iR][iC])}
-            }
+            for (var iR in xU) {mReturn[iR] = cAddS(matFunc(xU[iR]),matFunc(xL[iR]))}
             return matFunc(mReturn)
         }
         if (xU == "Cv[8734]" && xL == "Cv[8734]") {return "Cv[8734]"} //infinity handlers for limits
@@ -2927,11 +2923,9 @@ var mgCalc = function() {
                 return mgTrans.cFunc(tCmpx.replace(/\+\-/g,"-").replace(/\-1Cv\[46\]/g,"-Cv[46]").replace(/\+1Cv\[46\]/g,"+Cv[46]"))
             }
         }
-        if (getType(xIn) == "matrix") {
+        if (getType(xIn) == "matrix" || getType(xIn) == "array") {
             var mReturn = matArray(xIn);
-            for (var iR in mReturn) {
-                for (var iC in mReturn[iR]) {mReturn[iR][iC] = fmtResult(mReturn[iR][iC])}
-            }
+            for (var iR in mReturn) {mReturn[iR] = fmtResult(mReturn[iR])}
             return matFunc(mReturn)
         }
         return "undefined"
@@ -2967,8 +2961,6 @@ var mgCalc = function() {
         if (typeof xT == "undefined") {return "undefined"}
         if (nbrTest(xT)) {return "real"}
         if (nbrTest(xT.r) && mgConfig.Domain == "Complex") {return "complex"}
-        if (xT == "true" || xT =="false") {return "boolean"}
-        if (opExtract(xT).func == "mat") {return "matrix"}
         if (typeof xT == "object" && typeof xT[0] == "object") {return "matrix"}
         if (typeof xT == "object" && typeof xT[0] != "object") {return "array"}
         return "undefined"
@@ -2990,12 +2982,10 @@ var mgCalc = function() {
             var cA = toCplx(xU),cB = toCplx(xL);
             return {r:(+cA.r)+(+cB.r), i:(+cA.i)+(+cB.i)}
         }
-        if (getType(xU) == "matrix" && getType(xL) == "matrix" && xU.length == xL.length) {
+        if ((getType(xU) == "matrix" || getType(xU) == "array") && (getType(xL) == "matrix" || getType(xL) == "array")) {
             var mReturn = xU;
-            for (var iR in xU) {
-                if (xU[iR].length != xL[iR].length) {return "undefined"}
-                for (var iC in xU[iR]) {mReturn[iR][iC] = cAdd(xU[iR][iC],xL[iR][iC])}
-            }
+            if (xU.length != xL.length) {return "undefined"}
+            for (var iR in xU) {mReturn[iR] = cAdd(xU[iR],xL[iR])}
             return mReturn
         }
         return "undefined"
@@ -3003,9 +2993,7 @@ var mgCalc = function() {
     function cMul(xU,xL) { //multiply by term
         function scalarMult(xM,xC) { //matrix scalar multiply
             var mReturn = xM;
-            for (var iR in xM) {
-                for (var iC in xM[iR]) {mReturn[iR][iC] = cMul(xM[iR][iC],xC)}
-            }
+            for (var iR in xM) {mReturn[iR] = cMul(xM[iR],xC)}
             return mReturn
         }
         if (xL == Cv[45]) {return fac(xU)} //factorial
@@ -3017,8 +3005,8 @@ var mgCalc = function() {
             var cA = toCplx(xU),cB = toCplx(xL);
             return {r:cA.r*cB.r-cA.i*cB.i, i:cA.i*cB.r+cA.r*cB.i}
         }
-        if (getType(xU) == "matrix" && getType(xL) != "matrix") {return scalarMult(xU,xL)}
-        if (getType(xL) == "matrix" && getType(xU) != "matrix") {return scalarMult(xL,xU)}
+        if ((getType(xU) == "matrix" || getType(xU) == "array") && getType(xL) != "matrix" && getType(xL) != "array") {return scalarMult(xU,xL)}
+        if ((getType(xL) == "matrix" || getType(xL) == "array") && getType(xU) != "matrix" && getType(xU) != "array") {return scalarMult(xL,xU)}
         if (getType(xU) == "matrix" && getType(xL) == "matrix") { //matrix multiply
             if (xL.length != xU[0].length) {return "undefined"}
             var mReturn = matCreate(xU.length,xL[0].length);
