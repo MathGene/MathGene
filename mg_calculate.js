@@ -3463,42 +3463,28 @@ var mgCalc = function() {
 
     //statistical functions
     function rnd(xU) { //random number
-        if (getType(xU) == "real") {return Math.random()*xU}
-        return "undefined"
+        return Math.random()*toReal(xU)
     }
     function cdf(xU) { //normalized cumulative density function
-        if (getType(xU) == "complex" && xU.i == 0) {xU = +xU.r}
-        if (getType(xU) == "real") {return normCDF(1,toReal(xU),0)}
-        return "undefined"
+        return normCDF(1,toReal(xU),0)
     }
     function pdf(xU) { //normalized probability density function
-        if (getType(xU) == "complex" && xU.i == 0) {xU = +xU.r}
-        if (getType(xU) == "real") {return normPDF(1,toReal(xU),0)}
-        return "undefined"
+        return normPDF(1,toReal(xU),0)
     }
     function lcf(xU) { //normalized log cumulative density function
-        if (getType(xU) == "complex" && xU.i == 0) {xU = +xU.r}
-        if (getType(xU) == "real") {return lognCDF(1,toReal(xU),0)}
-        return "undefined"
+        return lognCDF(1,toReal(xU),0)
     }
     function lpf(xU) { //normalized log probability density function
-        if (getType(xU) == "complex" && xU.i == 0) {xU = +xU.r}
-        if (getType(xU) == "real") {return lognPDF(1,toReal(xU),0)}
-        return "undefined"
+        return lognPDF(1,toReal(xU),0)
     }
     function erf(xU) {//error function
-        if (getType(xU) == "complex" && xU.i == 0) {xU = +xU.r}
-        if (getType(xU) == "real") {
-            var fE=0;
-            if (xU>3.2) {return 1-cPow(3.14,cNeg(xU)*xU)}
-            else {for (var fn=0;fn<50;fn++){fE = fE+cPow(-1,fn)*(cPow(xU,2*fn+1)/(fac(fn)*(2*fn+1)))};return 1.1283796*fE}
-        }
-        return "undefined"
+		xU = toReal(xU);
+		var fE=0;
+		if (xU > 3.2) {return 1-cPow(3.14,cNeg(xU)*xU)}
+		else {for (var fn=0;fn<50;fn++){fE = fE+cPow(-1,fn)*(cPow(xU,2*fn+1)/(fac(fn)*(2*fn+1)))};return 1.1283796*fE}
     }
     function efc(xU) {//inverse error function
-        if (getType(xU) == "complex" && xU.i == 0) {xU = +xU.r}
-        if (getType(xU) == "real") {return iSolve(function(a){return erf(a)},toReal(xU),0,7)}
-        return "undefined"
+        return iSolve(function(a){return erf(a)},toReal(xU),0,7)
     }
     function normPDF(sigma,xV,mu) { //probability density function
         sigma = toReal(sigma);xV = toReal(xV);mu = toReal(mu);
