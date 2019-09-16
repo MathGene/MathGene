@@ -2911,7 +2911,7 @@ var mgCalc = function() {
             if (cIn.i != 0 && mgConfig.Domain == "Real") {return "undefined"}
             if (cIn.r == "NaN" || cIn.i == "NaN") {return "undefined"}
             if (cIn.r == "Infinity" || cIn.i == "Infinity") {return "Cv[8734]"}
-            if (cIn.r == "-Infinity" || cIn.i == "-Infinity") {return "-Cv[8734]"}
+            if (cIn.r == "-Infinity" || cIn.i == "-Infinity") {return "cNeg(Cv[8734])"}
             if (mgConfig.dPrecision <= 6) {cT = mgConfig.dPrecision}
             if (cIn.i == 0) {return roundDecTo(cIn.r)}
             if (mgConfig.cplxFmt == "Polar") {
