@@ -2905,8 +2905,7 @@ var mgCalc = function() {
 
     //Numerical Math Functions
     function fmtResult(xIn) { //format numerical output
-        if (getType(xIn) == "real") {return roundDecTo(xIn)}
-        if (getType(xIn) == "complex") {
+        if (getType(xIn) == "complex" || getType(xIn) == "real") {
             var cIn = toCplx(xIn),cT = 7;
             if (cIn.i != 0 && mgConfig.Domain == "Real") {return "undefined"}
             if (cIn.r == "NaN" || cIn.i == "NaN") {return "undefined"}
