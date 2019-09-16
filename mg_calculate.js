@@ -82,7 +82,7 @@ var mgCalc = function() {
     sbr: function (xU) {return "sbr("+xU+")"},
     cbr: function (xU) {return "cbr("+xU+")"},
     con: function (xU) {return "con("+xU+")"},
-    vec: function (xU) {return "vec("+xU+")"},
+    vec: function ()   {return "vec("+Array.prototype.slice.call(arguments)+")"},
     hat: function (xU) {return "hat("+xU+")"},
     und: function (xU) {return "und("+xU+")"},
     udt: function (xU) {return "udt("+xU+")"},
@@ -439,7 +439,7 @@ var mgCalc = function() {
             if (typeof passthruFunc[funcKey] == "undefined") {funcKey = expReturn.substr(bSym-5,4)} //extract operators cXxx()
             if (typeof funcObj[funcKey] == "undefined") {fReturn = passthruFunc[funcKey](mgTrans.oParens(paramS[0]),mgTrans.oParens(paramS[1]),paramS[2],paramS[3])} //execute passthru
             else {fReturn = funcObj[funcKey](mgTrans.oParens(paramS[0]),mgTrans.oParens(paramS[1]),paramS[2],paramS[3])}//execute operation
-            if (funcKey == "mat") {fReturn = passthruFunc[funcKey](paramS)} //matrix parameters
+            if (funcKey == "mat" || funcKey == "vec") {fReturn = passthruFunc[funcKey](paramS)} //matrix/vector parameters
             expReturn = expReturn.substr(0,(expReturn.lastIndexOf("@")+1)-(funcKey.length+1))+fReturn+expReturn.substr(iXf+1); //assemble output
         }
         return expReturn

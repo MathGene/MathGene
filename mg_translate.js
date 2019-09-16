@@ -1195,17 +1195,17 @@ var mgTrans = function() {
         latexR2:'',
         mg: function (parm) {return 'cap('+parm[0]+','+parm[1]+')'},
         },
-    vec:{  //vector
-        htmlL1: function (parm) {return htmlFuncs['fAccentU']("<i>&#8594;</i>")+parm[0]},
-        htmlR1: function () {return htmlFuncs['fAccentL']("<span style='line-height:50%'>&nbsp;</span>")},
-        htmlL2: function (parm) {return htmlFuncs['fAccentU']("<i>&#8594;</i>")+parm[0]},
-        htmlR2: function () {return htmlFuncs['fAccentL']("<span style='line-height:50%'>&nbsp;</span>")},
+    vec:{  //arrow vector vec(a,b,...)
+        htmlL1: function (parm) {return htmlFuncs['vecL'](parm)},
+        htmlR1: '',
+        htmlL2: function (parm) {return htmlFuncs['vecL'](parm)},
+        htmlR2: '',
         texfunc:['\\vec'],
-        latexL1: function (parm) {return '\\vec{'+parm[0]},
+        latexL1: function (parm) {return '\\vec{'+parm},
         latexR1:'}',
-        latexL2: function (parm) {return '\\vec{'+parm[0]},
+        latexL2: function (parm) {return '\\vec{'+parm},
         latexR2:'}',
-        mg: function (parm) {return 'vec('+parm[0]+')'},
+        mg: function (parm) {return 'vec('+parm+')'},
         },
     hat:{ //hat
         htmlL1: function (parm) {return htmlFuncs['fAccentU']("<i>&#8963;</i>")+parm[0]},
@@ -1714,6 +1714,12 @@ var mgTrans = function() {
             return "<Xrow>" + mReturn + "<Xrwe>"
         }
         },
+	vecL: function (xA) {
+			var vOver = "";
+			for (var xI=1;xI<xA.length;xI++) {vOver = vOver+"&#8212;"}
+			vOver = vOver+"&#8594;";
+			return htmlFuncs['fAccentU'](vOver) + xA + htmlFuncs['fAccentL']("<span style='line-height:50%'>&nbsp;</span>")
+		},
     }
     //latex handlers
     const latexFuncs = {
