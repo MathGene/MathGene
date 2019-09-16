@@ -1195,18 +1195,6 @@ var mgTrans = function() {
         latexR2:'',
         mg: function (parm) {return 'cap('+parm[0]+','+parm[1]+')'},
         },
-    vec:{  //arrow vector vec(a,b,...)
-        htmlL1: function (parm) {return htmlFuncs['vecL'](parm)},
-        htmlR1: '',
-        htmlL2: function (parm) {return htmlFuncs['vecL'](parm)},
-        htmlR2: '',
-        texfunc:['\\vec'],
-        latexL1: function (parm) {return '\\vec{'+parm},
-        latexR1:'}',
-        latexL2: function (parm) {return '\\vec{'+parm},
-        latexR2:'}',
-        mg: function (parm) {return 'vec('+parm+')'},
-        },
     hat:{ //hat
         htmlL1: function (parm) {return htmlFuncs['fAccentU']("<i>&#8963;</i>")+parm[0]},
         htmlR1: function () {return htmlFuncs['fAccentL']("<span style='line-height:50%'>&nbsp;</span>")},
@@ -1570,6 +1558,30 @@ var mgTrans = function() {
         latexR2:'',
         mg: function (parm) {return mgFuncs['cPowE'](parm[0],parm[1])},
         },
+    vec:{  //arrow vector vec(a,b,...)
+        htmlL1: function (parm) {return htmlFuncs['vecL'](parm)},
+        htmlR1: '',
+        htmlL2: function (parm) {return htmlFuncs['vecL'](parm)},
+        htmlR2: '',
+        texfunc:['\\vec'],
+        latexL1: function (parm) {return '\\vec{'+parm},
+        latexR1:'}',
+        latexL2: function (parm) {return '\\vec{'+parm},
+        latexR2:'}',
+        mg: function (parm) {return 'vec('+parm+')'},
+        },
+    cpx:{ //complex number
+        htmlL1: function (parm) {return htmlFuncs['cpxL'](parm[0],parm[1])},
+        htmlR1: '',
+        htmlL2: function (parm) {return htmlFuncs['cpxL'](parm[0],parm[1])},
+        htmlR2: '',
+        texfunc:[],
+        latexL1: function (parm) {return latexFuncs['cpxX'](parm[0],parm[1])},
+        latexR1:'',
+        latexL2: function (parm) {return latexFuncs['cpxX'](parm[0],parm[1])},
+        latexR2:'',
+        mg: function (parm) {return mgFuncs['cpxE'](parm[0],parm[1])},
+    },
     }
     //mg handlers
     const mgFuncs = {
@@ -1603,6 +1615,16 @@ var mgTrans = function() {
         if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "cMul" || xTractU.func == "cDiv" || xTractU.func == "cNeg" || xTractU.func == "fac") {xU  = xParens(xU)}
         if (xTractL.func == "cAdd" || xTractL.func == "cSub" || xTractL.func == "cMul" || xTractL.func == "cDiv" || xTractL.func == "cNeg") {xL  = xParens(xL)}
         return xU + "^" + xL
+        },
+    cpxE: function (xU,xL) {
+        if (xU == 0 && xL == 1) {return "Cv[46]"}
+        if (xU == 0 && xL == -1) {return "-Cv[46]"}
+        if (xU == 0 && xL != 0) {return xL + "Cv[46]"}
+        if (xU != 0 && xL == 0) {return xU}
+        if (xU != 0 && xL == 1) {return xU + "+Cv[46]"}
+        if (xU != 0 && xL == -1) {return xU + "-Cv[46]"}
+        if (xU != 0 && xL > 0) {return xU + "+" + xL + "Cv[46]"}
+        if (xU != 0 && xL < 0) {return xU + "-" + (-xL) + "Cv[46]"}
         },
     }
 
@@ -1714,12 +1736,22 @@ var mgTrans = function() {
             return "<Xrow>" + mReturn + "<Xrwe>"
         }
         },
-	vecL: function (xA) {
-			var vOver = "";
-			for (var xI=1;xI<xA.length;xI++) {vOver = vOver+"&#8212;"}
-			vOver = vOver+"&#8594;";
-			return htmlFuncs['fAccentU'](vOver) + xA + htmlFuncs['fAccentL']("<span style='line-height:50%'>&nbsp;</span>")
-		},
+    vecL: function (xA) {
+            var vOver = "";
+            for (var xI=1;xI<xA.length;xI++) {vOver = vOver+"&#8212;"}
+            vOver = vOver+"&#8594;";
+            return htmlFuncs['fAccentU'](vOver) + xA + htmlFuncs['fAccentL']("<span style='line-height:50%'>&nbsp;</span>")
+        },
+    cpxL: function (xU,xL) {
+        if (xU == 0 && xL == 1) {return "<i>i</i>"}
+        if (xU == 0 && xL == -1) {return "&minus;<i>i</i>"}
+        if (xU == 0 && xL != 0) {return xL + "<i>i</i>"}
+        if (xU != 0 && xL == 0) {return xU}
+        if (xU != 0 && xL == 1) {return xU + "+<i>i</i>"}
+        if (xU != 0 && xL == -1) {return xU + "&minus;<i>i</i>"}
+        if (xU != 0 && xL > 0) {return xU + "+" + xL + "<i>i</i>"}
+        if (xU != 0 && xL < 0) {return xU + "&minus;" + (-xL) + "<i>i</i>"}
+        },
     }
     //latex handlers
     const latexFuncs = {
@@ -1763,6 +1795,16 @@ var mgTrans = function() {
             mReturn = mReturn + "\\end{bmatrix}"
         }
         return mReturn
+        },
+    cpxX: function (xU,xL) {
+        if (xU == 0 && xL == 1) {return "\\imath"}
+        if (xU == 0 && xL == -1) {return "-\\imath"}
+        if (xU == 0 && xL != 0) {return xL + "\\imath"}
+        if (xU != 0 && xL == 0) {return xU}
+        if (xU != 0 && xL == 1) {return xU + "+<i>i</i>"}
+        if (xU != 0 && xL == -1) {return xU + "-\\imath"}
+        if (xU != 0 && xL > 0) {return xU + "+" + xL + "\\imath"}
+        if (xU != 0 && xL < 0) {return xU + "-" + (-xL) + "\\imath"}
         },
     }
     //parsing delimiters

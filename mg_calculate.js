@@ -124,8 +124,9 @@ var mgCalc = function() {
     vAdd: function (xU,xL) {return "vAdd("+xU+","+xL+")"},
     vSub: function (xU,xL) {return "vSub("+xU+","+xL+")"},
     vNeg: function (xU) {return "vNeg("+xU+")"},
-    det:  function (xU) {return "det("+xU+")"},
-    trc:  function (xU) {return "trc("+xU+")"},
+    det: function (xU) {return "det("+xU+")"},
+    trc: function (xU) {return "trc("+xU+")"},
+    cpx: function (xU,xL) {return "cpx("+xU+","+xL+")"},
     mat: function () {return "mat(" + Array.prototype.slice.call(arguments) + ")"},
     ntg: function (nXpr,deeVar,iU,iL) {
         if (typeof iU != "undefined" && typeof iL != "undefined") {return "ntg("+nXpr+","+deeVar+","+iU+","+iL+")"}
@@ -2902,25 +2903,22 @@ var mgCalc = function() {
 
     //Numerical Math Functions
     function fmtResult(xIn) { //format numerical output
-        var cIn = toCplx(xIn),cT = 7,tCmpx = "";
-        if (getType(xIn) == "real" || getType(xIn) == "complex") {
+        if (getType(xIn) == "real") {return roundDecTo(xIn)}
+        if (getType(xIn) == "complex") {
+            var cIn = toCplx(xIn),cT = 7;
             if (cIn.i != 0 && mgConfig.Domain == "Real") {return "undefined"}
+            if (cIn.r == "NaN" || cIn.i == "NaN") {return "undefined"}
+            if (cIn.r == "Infinity" || cIn.i == "Infinity") {return "Cv[8734]"}
+            if (cIn.r == "-Infinity" || cIn.i == "-Infinity") {return "-Cv[8734]"}
             if (mgConfig.dPrecision <= 6) {cT = mgConfig.dPrecision}
+            if (cIn.i == 0) {return roundDecTo(cIn.r)}
             if (mgConfig.cplxFmt == "Polar") {
-                if (cIn.i == 0) {return roundDecTo(cIn.r)}
-                else {return mgTrans.cFunc(roundDecTo(abs(cIn),cT)+"~"+roundDecTo(cDiv(arg(cMul(cIn,mgConfig.trigBase)),mgConfig.trigBase),cT))}
+                return "cAng("+roundDecTo(abs(cIn),cT)+","+roundDecTo(cDiv(arg(cMul(cIn,mgConfig.trigBase)),mgConfig.trigBase),cT)+")"
             }
             else {
-                if (cIn.r == "NaN" || cIn.i == "NaN") {return "undefined"}
-                if (cIn.r == "Infinity" || cIn.i == "Infinity") {return "Cv[8734]"}
-                if (cIn.r == "-Infinity" || cIn.i == "-Infinity") {return "-Cv[8734]"}
                 if (abs(cIn.i*1e6) < abs(cIn.r)) {cIn.i = 0}
                 if (abs(cIn.r*1e6) < abs(cIn.i)) {cIn.r = 0}
-                if (+cIn.i == 0) {return roundDecTo(cIn.r)}
-                if (+cIn.i == 1 && +cIn.r == 0) {return "Cv[46]"}
-                if (+cIn.r == 0) {tCmpx = roundDecTo(cIn.i,cT)+"Cv[46]"}
-                else {tCmpx = roundDecTo(cIn.r,cT)+"+"+roundDecTo(cIn.i,cT)+"Cv[46]"}
-                return mgTrans.cFunc(tCmpx.replace(/\+\-/g,"-").replace(/\-1Cv\[46\]/g,"-Cv[46]").replace(/\+1Cv\[46\]/g,"+Cv[46]"))
+                return "cpx("+roundDecTo(cIn.r,cT)+","+roundDecTo(cIn.i,cT)+")"
             }
         }
         if (getType(xIn) == "matrix" || getType(xIn) == "array") {
