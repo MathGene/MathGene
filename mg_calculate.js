@@ -2954,14 +2954,27 @@ var mgCalc = function() {
         else {return +(xD.replace(/\.\d+/,uD))}
     }
     function mat() {return Array.prototype.slice.call(arguments)} //matrix parsing
-	function cpx(xU,xL) {return "cpx(" + xU +"," + xL +")"}
-    function toCplx(xTo) {if (getType(xTo) == "complex") {return xTo} else {return {r:(+xTo),i:0}}}
-    function toReal(xTo) {if (getType(xTo) == "complex") {return +xTo.r} else {return +xTo}}
+    function cpx(xU,xL) {return "cpx(" + xU +"," + xL +")"}
+    function toCplx(xTo) {
+        if (getType(xTo) == "complex") {
+            if (typeof xTo == "object") {return xTo}
+            var xTractU = opExtract(xTo);
+            return {r:xTractU.upper,i:xTractU.lower}
+        } 
+        return {r:xTo,i:0}
+    }
+    function toReal(xTo) {
+        if (getType(xTo) == "complex") {
+            if (typeof xTo == "object") {return xTo.r}
+            return opExtract(xTo).upper
+        } 
+        return xTo
+    }
     function getType(xT) { //return numerical object type
-		var xTractU = opExtract(xT);
+        var xTractU = opExtract(xT);
         if (typeof xT == "undefined") {return "undefined"}
         if (nbrTest(xT)) {return "real"}
-		if (xTractU.func =="cpx" && mgConfig.Domain == "Complex") {return "complex"}
+        if (xTractU.func =="cpx" && mgConfig.Domain == "Complex") {return "complex"}
         if (nbrTest(xT.r) && mgConfig.Domain == "Complex") {return "complex"}
         if (typeof xT == "object" && typeof xT[0] == "object") {return "matrix"}
         if (typeof xT == "object" && typeof xT[0] != "object") {return "array"}
@@ -3190,23 +3203,23 @@ var mgCalc = function() {
         return "undefined"
     }
     function rex(xU) { //real part of complex number
-        if (getType(xU) == "complex") {return xU.r}
+        if (getType(xU) == "complex") {return toCplx(xU).r}
         if (getType(xU) == "real") {return xU}
         return "undefined"
     }
     function imx(xU) { //imaginary part of complex number
-        if (getType(xU) == "complex") {return {r:0,i:xU.i}}
+        if (getType(xU) == "complex") {xU = toCplx(xU);return {r:0,i:xU.i}}
         if (getType(xU) == "real") {return 0}
         return "undefined"
     }
     function con(xU) { //complex conjugate
-        if (getType(xU) == "complex") {return {r:xU.r, i:(cNeg(xU.i))}}
+        if (getType(xU) == "complex") {xU = toCplx(xU);return {r:xU.r, i:(cNeg(xU.i))}}
         if (getType(xU) == "real" && mgConfig.Domain == "Complex") {return {r:xU, i:0}}
         return "undefined"
     }
     function exp(xU) { //exp(x)
-        if (getType(xU) == "complex") {return {r:cMul(cPow(Cv[8],xU.r),cos(xU.i)), i:cMul(cPow(Cv[8],xU.r),sin(xU.i))}}
-        if (getType(xU) == "real")  {return cPow(Cv[8],xU)}
+        if (getType(xU) == "complex") {xU = toCplx(xU);return {r:cMul(cPow(Cv[8],xU.r),cos(xU.i)), i:cMul(cPow(Cv[8],xU.r),sin(xU.i))}}
+        if (getType(xU) == "real") {return cPow(Cv[8],xU)}
         return "undefined"
     }
     function lne(xU) {//natural log
@@ -3245,7 +3258,7 @@ var mgCalc = function() {
         return cPow(toCplx(xL),cDiv(1,toCplx(xU)))
     }
     function abs(xU) {//absolute value
-        if (getType(xU) == "complex") {return sqt(cAdd((cMul(xU.r,xU.r)),(cMul(xU.i,xU.i))))}
+        if (getType(xU) == "complex") {xU = toCplx(xU);return sqt(cAdd((cMul(xU.r,xU.r)),(cMul(xU.i,xU.i))))}
         if (getType(xU) == "real") {
             if (xU < 0) {return cNeg(xU)}
             return xU
@@ -3253,7 +3266,7 @@ var mgCalc = function() {
         return "undefined"
     }
     function int(xU) { //floor
-        if (getType(xU) == "complex") {return {r:int(xU.r), i:int(xU.i)}}
+        if (getType(xU) == "complex") {xU = toCplx(xU);return {r:int(xU.r), i:int(xU.i)}}
         if (getType(xU) == "real") {
             if (xU == rou(xU)) {return xU}
             else if (xU < rou(xU)) {return cSub(rou(xU),1)}
@@ -3262,7 +3275,7 @@ var mgCalc = function() {
         return "undefined"
     }
     function cei(xU) { //ceiling
-        if (getType(xU) == "complex") {return {r:cei(xU.r), i:cei(xU.i)}}
+        if (getType(xU) == "complex") {xU = toCplx(xU);return {r:cei(xU.r), i:cei(xU.i)}}
         if (getType(xU) == "real") {
             if (xU == rou(xU)) {return xU}
             else if (xU > rou(xU)) {return cAdd(rou(xU),1)}
@@ -3271,7 +3284,7 @@ var mgCalc = function() {
         return "undefined"
     }
     function rou(xU) { //round
-        if (getType(xU) == "complex") {return {r:rou(xU.r), i:rou(xU.i)}}
+        if (getType(xU) == "complex") {xU = toCplx(xU);return {r:rou(xU.r), i:rou(xU.i)}}
         if (getType(xU) == "real") {return Math.round(+xU)}
         return "undefined"
     }

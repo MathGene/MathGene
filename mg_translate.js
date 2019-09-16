@@ -1530,11 +1530,11 @@ var mgTrans = function() {
         if (xU == 0 && xL == 1) {return "Cv[46]"}
         if (xU == 0 && xL == -1) {return "-Cv[46]"}
         if (xU == 0 && xL != 0) {return xL + "Cv[46]"}
-        if (xU != 0 && xL == 0) {return xU}
         if (xU != 0 && xL == 1) {return xU + "+Cv[46]"}
         if (xU != 0 && xL == -1) {return xU + "-Cv[46]"}
         if (xU != 0 && xL > 0) {return xU + "+" + xL + "Cv[46]"}
         if (xU != 0 && xL < 0) {return xU + "-" + (-xL) + "Cv[46]"}
+        return xU
         },
     }
 
