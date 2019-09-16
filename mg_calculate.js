@@ -2954,11 +2954,14 @@ var mgCalc = function() {
         else {return +(xD.replace(/\.\d+/,uD))}
     }
     function mat() {return Array.prototype.slice.call(arguments)} //matrix parsing
+	function cpx(xU,xL) {return "cpx(" + xU +"," + xL +")"}
     function toCplx(xTo) {if (getType(xTo) == "complex") {return xTo} else {return {r:(+xTo),i:0}}}
     function toReal(xTo) {if (getType(xTo) == "complex") {return +xTo.r} else {return +xTo}}
     function getType(xT) { //return numerical object type
+		var xTractU = opExtract(xT);
         if (typeof xT == "undefined") {return "undefined"}
         if (nbrTest(xT)) {return "real"}
+		if (xTractU.func =="cpx" && mgConfig.Domain == "Complex") {return "complex"}
         if (nbrTest(xT.r) && mgConfig.Domain == "Complex") {return "complex"}
         if (typeof xT == "object" && typeof xT[0] == "object") {return "matrix"}
         if (typeof xT == "object" && typeof xT[0] != "object") {return "array"}

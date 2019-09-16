@@ -1022,16 +1022,7 @@ var mgTrans = function() {
         latexR2:'\\right\\}',
         mg: function (parm) {return 'cbr('+parm[0]+')'},
         },
-    fac:{ //factorial
-        htmlL1:'',
-        htmlR1:'',
-        htmlL2:'',
-        htmlR2:'',
-        texfunc:[],
-        latexL1:'',
-        latexR1:'',
-        latexL2:'',
-        latexR2:'',
+    fac:{ //factorial from FUNC
         mg: function (parm) {if (!numTest(parm[0]) && mgTrans.cFunc(parm[0]) != oParens(parm[0])) {return xParens(parm[0])+"Cv[45]"};return parm[0]+"Cv[45]"},
         },
     sum:{ //summation
@@ -1048,15 +1039,6 @@ var mgTrans = function() {
         mg: function (parm) {return 'sum('+parm[0]+','+parm[1]+')'},
         },
     smm:{ //summation from FUNC
-        htmlL1:'',
-        htmlR1:'',
-        htmlL2:'',
-        htmlR2:'',
-        texfunc:[],
-        latexL1:'',
-        latexR1:'',
-        latexL2:'',
-        latexR2:'',
         mg: function (parm) {return  'sum('+parm[1]+','+parm[2]+'Cv[61]'+parm[3]+')'+parm[0]},
         },
     prd:{ //product
@@ -1072,16 +1054,7 @@ var mgTrans = function() {
         latexR2:' ',
         mg: function (parm) {return 'prd('+parm[0]+','+parm[1]+')'},
         },
-    pmm:{ //product from FUN
-        htmlL1:'',
-        htmlR1:'',
-        htmlL2:'',
-        htmlR2:'',
-        texfunc:[],
-        latexL1:'',
-        latexR1:'',
-        latexL2:'',
-        latexR2:'',
+    pmm:{ //product from FUNC
         mg: function (parm) {return  'prd('+parm[1]+','+parm[2]+'Cv[61]'+parm[3]+')'+parm[0]},
         },
     itg:{ //definite integral
@@ -1097,28 +1070,10 @@ var mgTrans = function() {
         latexR2:' ',
         mg: function (parm) {return 'itg('+parm[0]+','+parm[1]+')'},
         },
-    drv:{ //partial derivative from func
-        htmlL1:'',
-        htmlR1:'',
-        htmlL2:'',
-        htmlR2:'',
-        texfunc:[],
-        latexL1:'',
-        latexR1:'',
-        latexL2:'',
-        latexR2:'',
+    drv:{ //partial derivative from FUNC
         mg: function (parm) {if (typeof parm[2] == "undefined") {return "(idr("+parm[1]+")"+parm[0]+")"};return "(idr("+parm[1]+","+parm[2]+")"+parm[0]+")"},
         },
-    tdv:{ //total derivative from func
-        htmlL1:'',
-        htmlR1:'',
-        htmlL2:'',
-        htmlR2:'',
-        texfunc:[],
-        latexL1:'',
-        latexR1:'',
-        latexL2:'',
-        latexR2:'',
+    tdv:{ //total derivative from FUNC
         mg: function (parm) {if (typeof parm[2] == "undefined") {return "(tdr("+parm[1]+")"+parm[0]+")"};return "(tdr("+parm[1]+","+parm[2]+")"+parm[0]+")"},
         },
     tdr:{ //derivative
@@ -1255,16 +1210,7 @@ var mgTrans = function() {
         latexR2:'',
         mg: function (parm) {return parm[0]},
         },
-    dif:{ //differential
-        htmlL1:'',
-        htmlR1:'',
-        htmlL2:'',
-        htmlR2:'',
-        texfunc:[],
-        latexL1:'',
-        latexR1:'',
-        latexL2:'',
-        latexR2:'',
+    dif:{ //differential from FUNC
         mg: function (parm) {return 'Cv[8748]'+parm[0]},
         },
     mat:{ //matrix
@@ -1477,28 +1423,10 @@ var mgTrans = function() {
         latexR2:'',
         mg: function (parm) {return parm[0]+'Cv[8800]'+parm[1]},
         },
-    ntg:{  //integral from func
-        htmlL1:'',
-        htmlR1:'',
-        htmlL2:'',
-        htmlR2:'',
-        texfunc:[],
-        latexL1:'',
-        latexR1:'',
-        latexL2:'',
-        latexR2:'',
+    ntg:{  //integral from FUNC
         mg: function (parm) {if (typeof parm[2]=="undefined" && typeof parm[3]=="undefined") {return "Cv[8747]"+parm[0]+"Cv[8748]"+parm[1]};return "itg("+parm[2]+","+parm[3]+")"+parm[0]+"Cv[8748]"+parm[1]}
     },
-    ntp:{  //integral container from func
-        htmlL1:'',
-        htmlR1:'',
-        htmlL2:'',
-        htmlR2:'',
-        texfunc:[],
-        latexL1:'',
-        latexR1:'',
-        latexL2:'',
-        latexR2:'',
+    ntp:{  //integral container from FUNC
         mg: function (parm) {return funcMap['ntg']['mg'](parm)},
     },
     lim:{ //limit
@@ -1523,15 +1451,6 @@ var mgTrans = function() {
         mg: function (parm) {return 'lim('+parm[0]+','+parm[1]+')'},
         },
     lmt:{ //limit from FUNC
-        htmlL1:'',
-        htmlR1:'',
-        htmlL2:'',
-        htmlR2:'',
-        texfunc:[],
-        latexL1:'',
-        latexR1:'',
-        latexL2:'',
-        latexR2:'',
         mg: function (parm) {return 'lim('+parm[1]+','+parm[2]+')'+parm[0]},
         },
     sbt:{ //subscript
@@ -1570,16 +1489,7 @@ var mgTrans = function() {
         latexR2:'}',
         mg: function (parm) {return 'vec('+parm+')'},
         },
-    cpx:{ //complex number
-        htmlL1: function (parm) {return htmlFuncs['cpxL'](parm[0],parm[1])},
-        htmlR1: '',
-        htmlL2: function (parm) {return htmlFuncs['cpxL'](parm[0],parm[1])},
-        htmlR2: '',
-        texfunc:[],
-        latexL1: function (parm) {return latexFuncs['cpxX'](parm[0],parm[1])},
-        latexR1:'',
-        latexL2: function (parm) {return latexFuncs['cpxX'](parm[0],parm[1])},
-        latexR2:'',
+    cpx:{ //complex number from FUNC
         mg: function (parm) {return mgFuncs['cpxE'](parm[0],parm[1])},
     },
     }
@@ -1742,16 +1652,6 @@ var mgTrans = function() {
             vOver = vOver+"&#8594;";
             return htmlFuncs['fAccentU'](vOver) + xA + htmlFuncs['fAccentL']("<span style='line-height:50%'>&nbsp;</span>")
         },
-    cpxL: function (xU,xL) {
-        if (xU == 0 && xL == 1) {return "<i>i</i>"}
-        if (xU == 0 && xL == -1) {return "&minus;<i>i</i>"}
-        if (xU == 0 && xL != 0) {return xL + "<i>i</i>"}
-        if (xU != 0 && xL == 0) {return xU}
-        if (xU != 0 && xL == 1) {return xU + "+<i>i</i>"}
-        if (xU != 0 && xL == -1) {return xU + "&minus;<i>i</i>"}
-        if (xU != 0 && xL > 0) {return xU + "+" + xL + "<i>i</i>"}
-        if (xU != 0 && xL < 0) {return xU + "&minus;" + (-xL) + "<i>i</i>"}
-        },
     }
     //latex handlers
     const latexFuncs = {
@@ -1795,16 +1695,6 @@ var mgTrans = function() {
             mReturn = mReturn + "\\end{bmatrix}"
         }
         return mReturn
-        },
-    cpxX: function (xU,xL) {
-        if (xU == 0 && xL == 1) {return "\\imath"}
-        if (xU == 0 && xL == -1) {return "-\\imath"}
-        if (xU == 0 && xL != 0) {return xL + "\\imath"}
-        if (xU != 0 && xL == 0) {return xU}
-        if (xU != 0 && xL == 1) {return xU + "+<i>i</i>"}
-        if (xU != 0 && xL == -1) {return xU + "-\\imath"}
-        if (xU != 0 && xL > 0) {return xU + "+" + xL + "\\imath"}
-        if (xU != 0 && xL < 0) {return xU + "-" + (-xL) + "\\imath"}
         },
     }
     //parsing delimiters
