@@ -1023,7 +1023,7 @@ var mgCalc = function() {
         if (xL < 0)  {return cDivS(cNegS(xU),cNegS(xL))}
         if (!factorFlag && !pxpFlag && nbrTest(xU) && xU != int(xU)) {return cDivS(decToFrac(xU),xL)}
         if (!factorFlag && !pxpFlag && nbrTest(xL) && xL != int(xL)) {return cDivS(xU,decToFrac(xL))}
-        if (nbrTest(xU) && nbrTest(xL) && cDiv(xU,xL) == int(cDiv(xU,xL))) {return cDiv(xU,xL)}
+        if (nbrTest(xU) && nbrTest(xL) && cDiv(xU,xL) == int(cDiv(xU,xL))) {return fmtResult(cDiv(xU,xL))}
         if (nbrTest(xU) && nbrTest(xL)) {gTmp = cGcf(xU,xL);if (gTmp > 1) {return cDivS(cDiv(xU,gTmp),cDiv(xL,gTmp))}}
         if (xTractU.func == "cMul" && nbrTest(xTractU.upper) && nbrTest(xL)) {
             gTmp = cGcf(xTractU.upper,xL);
@@ -1103,7 +1103,7 @@ var mgCalc = function() {
         if (!factorFlag && !pxpFlag && nbrTest(xU) && xU != int(xU)) {return cAddS(decToFrac(xU),xL)}
         if (!factorFlag && !pxpFlag && nbrTest(xL) && xL != int(xL)) {return cAddS(xU,decToFrac(xL))}
         if (nbrTest(xL) && xL < 0) {return cSubS(xU,cNegS(xL))}
-        if (nbrTest(xU) && nbrTest(xL)) {return cAdd(xU,xL)}
+        if (nbrTest(xU) && nbrTest(xL)) {return fmtResult(cAdd(xU,xL))}
         if (xTractL.func == "cNeg") {return cSubS(xU,xTractL.upper)}
         if (xTractL.func == "cMul" && xTractL.upper < 0) {return cSubS(xU,cMulS(cNegS(xTractL.upper),xTractL.lower))}
         if (xTractU.func == "cMul" && xTractU.upper < 0) {return cSubS(xL,cMulS(cNegS(xTractU.upper),xTractU.lower))}
@@ -1172,7 +1172,7 @@ var mgCalc = function() {
         if (!factorFlag && !pxpFlag && nbrTest(xU) && xU != int(xU)) {return cSubS(decToFrac(xU),xL)}
         if (!factorFlag && !pxpFlag && nbrTest(xL) && xL != int(xL)) {return cSubS(xU,decToFrac(xL))}
         if (nbrTest(xL) && xL < 0) {return cAddS(xU,cNegS(xL))}
-        if (nbrTest(xU) && nbrTest(xL)) {return cSub(xU,xL)}
+        if (nbrTest(xU) && nbrTest(xL)) {return fmtResult(cSub(xU,xL))}
         if (xTractL.func == "cNeg") {return cAddS(xU,xTractL.upper)}
         if (nbrTest(xU) && xTractL.func == "cDiv" && nbrTest(xTractL.upper) && nbrTest(xTractL.lower)) {return cDivS(cSubS(cMulS(xU,xTractL.lower),xTractL.upper),xTractL.lower)}
         if (nbrTest(xL) && xTractU.func == "cDiv" && nbrTest(xTractU.upper) && nbrTest(xTractU.lower)) {return cDivS(cSubS(xTractU.upper,cMulS(xL,xTractU.lower)),xTractU.lower)}
