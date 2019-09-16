@@ -507,6 +507,7 @@ var mgCalc = function() {
     vAdd: function (xU,xL) {return vAddS(xU,xL)},
     vSub: function (xU,xL) {return vSubS(xU,xL)},
     vNeg: function (xU) {return vNegS(xU)},
+    cpx: function (xU,xL) {return cpxS(xU,xL)},
     cbr: function (xU) {return "("+xU+")"},
     sbr: function (xU) {return "("+xU+")"},
     det: function (xU) {return detS(xU)},
@@ -974,7 +975,7 @@ var mgCalc = function() {
         if (xL == 0 || xU == 0) {return 0}
         if (!factorFlag && !pxpFlag && nbrTest(xU) && xU != int(xU)) {return cMulS(decToFrac(xU),xL)}
         if (!factorFlag && !pxpFlag && nbrTest(xL) && xL != int(xL)) {return cMulS(xU,decToFrac(xL))}
-        if (nbrTest(xU) && nbrTest(xL)) {return cMul(xU,xL)}
+        if (nbrTest(xU) && nbrTest(xL)) {return fmtResult(cMul(xU,xL))}
         if (nbrTest(xU) && xTractL.func == "cPow" && nbrTest(xTractL.upper)) {xL = "("+xL+")"}
         if (xL == 1)  {return xU}
         if (xU == 1)  {return xL}
@@ -984,7 +985,7 @@ var mgCalc = function() {
         if (!pxpFlag && xTractU.func == "sqt" && xTractL.func == "sqt") {return "sqt(cMul("+xTractU.upper+","+xTractL.upper+"))"}
         if (xTractU.func == "cPow" && xTractL.func == "cPow" && xTractU.upper == xTractL.upper)  {return cPowS(xTractU.upper,cAddS(xTractU.lower,xTractL.lower))}
         if (xTractL.func == "cPow" && xTractU.func == "cPow" && xTractL.lower == xTractU.lower && !nbrTest(xTractL.lower)) {return cPowS(cMulS(xTractL.upper,xTractU.upper),xTractU.lower)} // reduce
-        if (!factorFlag && xTractL.func == "cMul" && nbrTest(xU) && nbrTest(xTractL.upper)) {return cMulS(cMul(xU,xTractL.upper),xTractL.lower)}
+        if (!factorFlag && xTractL.func == "cMul" && nbrTest(xU) && nbrTest(xTractL.upper)) {return cMulS(fmtResult(cMul(xU,xTractL.upper)),xTractL.lower)}
         if (xTractU.func == "cNeg") {return cNegS(cMulS(xTractU.upper,xL))}
         if (xTractL.func == "cNeg") {return cNegS(cMulS(xU,xTractL.upper))}
         if (xU == "Cv[8734]" || xL == "Cv[8734]") { //infinity handlers for limits
@@ -1594,6 +1595,7 @@ var mgCalc = function() {
         if (typeof xN == "undefined") {return "drv("+xU+","+xL+")"}
         return "drv("+xU+","+xL+","+xN+")"
     }
+    function cpxS(xU,xL) {return cAddS(xU,cMulS(xL,"Cv[46]"))}
     //passthru
     function cEqlS(xU,xL) {return "cEql("+xU+","+xL+")"}
     function cNqlS(xU,xL) {return "cNql("+xU+","+xL+")"}
