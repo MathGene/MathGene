@@ -1668,9 +1668,9 @@ var mgTrans = function() {
             return htmlFuncs['fAccentU'](vOver) + xA + htmlFuncs['fAccentL']("<span style='line-height:50%'>&nbsp;</span>")
         },
     vctL: function (xA) {
-        var mReturn = "",iM = 0;
-        for (iM in xA) {mReturn = mReturn + "<tr><td>" + xA[iM] + "</tr></td>"}
-        return xParenL + "<table>" + mReturn + "</table>" + xParenR
+			var mReturn = "",iM = 0;
+			for (iM in xA) {mReturn = mReturn + "<tr><td>" + xA[iM] + "</tr></td>"}
+			return xParenL + "<table>" + mReturn + "</table>" + xParenR
         },
     }
     //latex handlers
