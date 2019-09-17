@@ -1322,7 +1322,7 @@ var mgTrans = function() {
         latexR1:'',
         latexL2: function (parm) {return '-'+parm[0]},
         latexR2:'',
-        mg: function (parm) {xTractU = oprExtract(mgTrans.cFunc(parm[0]));if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "cDiv") {return "-" + xParens(parm[0])};return "-" + parm[0]},
+        mg: function (parm) {xTractU = oprExtract(mgTrans.cFunc(parm[0]));if (["cAdd","cSub","cDiv"].includes(xTractU.func)) {return "-" + xParens(parm[0])};return "-" + parm[0]},
         },
     cAng:{ //angle (polar form)
         htmlL1: function (parm) {return parm[0]+'&#8736;'+parm[1]},
@@ -1530,15 +1530,15 @@ var mgTrans = function() {
     cDivE: function (xU,xL) { //division
         xTractU = oprExtract(mgTrans.cFunc(xU));
         xTractL = oprExtract(mgTrans.cFunc(xL));
-        if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "cMul" || xTractU.func == "cDiv" || xTractU.func == "cNeg" || xU.indexOf("Cv[8747]") > -1) {xU  = xParens(xU)}
-        if (xTractL.func == "cAdd" || xTractL.func == "cSub" || xTractL.func == "cMul" || xTractL.func == "cDiv" || xTractL.func == "cNeg" || xL.indexOf("Cv[8747]") > -1) {xL  = xParens(xL)}
+        if (["cAdd","cSub","cDiv","cMul","cNeg"].includes(xTractU.func) || xU.indexOf("Cv[8747]") > -1) {xU  = xParens(xU)}
+        if (["cAdd","cSub","cDiv","cMul","cNeg"].includes(xTractL.func) || xL.indexOf("Cv[8747]") > -1) {xL  = xParens(xL)}
         return xU + "/" + xL
         },
     cPowE: function (xU,xL) { //powers
         xTractU = oprExtract(mgTrans.cFunc(xU));
         xTractL = oprExtract(mgTrans.cFunc(xL));
-        if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "cMul" || xTractU.func == "cDiv" || xTractU.func == "cNeg" || xTractU.func == "fac") {xU  = xParens(xU)}
-        if (xTractL.func == "cAdd" || xTractL.func == "cSub" || xTractL.func == "cMul" || xTractL.func == "cDiv" || xTractL.func == "cNeg") {xL  = xParens(xL)}
+        if (["cAdd","cSub","cDiv","cMul","cNeg","fac"].includes(xTractU.func)) {xU  = xParens(xU)}
+        if (["cAdd","cSub","cDiv","cMul","cNeg"].includes(xTractL.func)) {xL  = xParens(xL)}
         return xU + "^" + xL
         },
     cpxE: function (xU,xL) {
