@@ -307,7 +307,10 @@ var mgTrans = function() {
     Ct[9476] = "\\ldots ";
     Ct[11100]="C";//constants of integration
     for (iAl=11101;iAl<=11110;iAl++) {Ct[iAl]="C_{"+(iAl-11100)+"}"}//constants of integration
-
+    // expanded parens
+    var xParenL = "<table style='text-align:center;display:inline-table;vertical-align:middle;'><tr><td style='border-left:2px solid black;border-top:2px solid black;border-bottom:2px solid black;border-radius: 10px 0 0 10px;'>&nbsp;<td><table><tr><td style='line-height: 70%'>";
+    var xParenR = "</tr></td></table></td><td style='border-right:2px solid black;border-top:2px solid black;border-bottom:2px solid black;border-radius: 0 10px 10px 0;'>&nbsp;</td></tr></table>";
+    
     //HTML/LaTex Translation map for functions
     const funcMap =
     {
@@ -1477,7 +1480,7 @@ var mgTrans = function() {
         latexR2:'',
         mg: function (parm) {return mgFuncs['cPowE'](parm[0],parm[1])},
         },
-    vec:{  //arrow vector vec(a,b,...)
+    vec:{  //arrow (row) vector vec(a,b,...)
         htmlL1: function (parm) {return htmlFuncs['vecL'](parm)},
         htmlR1: '',
         htmlL2: function (parm) {return htmlFuncs['vecL'](parm)},
@@ -1489,9 +1492,21 @@ var mgTrans = function() {
         latexR2:'}',
         mg: function (parm) {return 'vec('+parm+')'},
         },
+    vct:{ //column vector vct(a,b,...)
+        htmlL1: function (parm) {return htmlFuncs['vctL'](parm)},
+        htmlR1: '',
+        htmlL2: function (parm) {return htmlFuncs['vctL'](parm)},
+        htmlR2: '',
+        texfunc:[],
+        latexL1: '',
+        latexR1:'}',
+        latexL2: '',
+        latexR2:'}',
+        mg: function (parm) {return 'vct('+parm+')'},
+        },
     cpx:{ //complex number from FUNC
         mg: function (parm) {return mgFuncs['cpxE'](parm[0],parm[1])},
-    },
+        },
     }
     //mg handlers
     const mgFuncs = {
@@ -1651,6 +1666,11 @@ var mgTrans = function() {
             for (var xI=1;xI<xA.length;xI++) {vOver = vOver+"&#8212;"}
             vOver = vOver+"&#8594;";
             return htmlFuncs['fAccentU'](vOver) + xA + htmlFuncs['fAccentL']("<span style='line-height:50%'>&nbsp;</span>")
+        },
+    vctL: function (xA) {
+        var mReturn = "",iM = 0;
+        for (iM in xA) {mReturn = mReturn + "<tr><td>" + xA[iM] + "</tr></td>"}
+        return xParenL + "<table>" + mReturn + "</table>" + xParenR
         },
     }
     //latex handlers
@@ -1858,21 +1878,19 @@ var mgTrans = function() {
                 htmlReturn = htmlReturn.substr(0,bSym)+strg+htmlReturn.substr(iXs.end+1);
             }
             else if (dNest(strg) == 1) { //expanded parens
-                if (strCount(htmlReturn.substr(0,bSym+1),"{") > strCount(htmlReturn.substr(iXs.end),"}")) {htmlReturn = htmlReturn.substr(0,bSym)+htmlFuncs['brkt']("(",strg)+strg+htmlReturn.substr(iXs.end);}
+                if (strCount(htmlReturn.substr(0,bSym+1),"{") > strCount(htmlReturn.substr(iXs.end),"}")) {htmlReturn = htmlReturn.substr(0,bSym)+htmlFuncs['brkt']("(",strg)+strg+htmlReturn.substr(iXs.end);} //left paren only
                 else {htmlReturn = htmlReturn.substr(0,bSym)+htmlFuncs['brkt']("(",strg)+strg+htmlFuncs['brkt'](")",strg)+htmlReturn.substr(iXs.end+1)}
             }
             else if (dNest(strg) > 1) { //extra tall parens
-                if (strCount(htmlReturn.substr(0,bSym+1),"{") > strCount(htmlReturn.substr(iXs.end),"}")) {
-                    htmlReturn = htmlReturn.substr(0,bSym)+"<table style='text-align:center;display:inline-table;vertical-align:middle;'><tr><td style='border-left:1px solid black;border-top:1px solid black;border-bottom:1px solid black;border-radius: 10px 0 0 10px;'>&nbsp;<td><table><tr><td style='line-height: 70%'>"
-                    +strg+"</tr></td></table></td></tr></table>"+htmlReturn.substr(iXs.end+1)
+                if (strCount(htmlReturn.substr(0,bSym+1),"{") > strCount(htmlReturn.substr(iXs.end),"}")) { //left paren only
+                    htmlReturn = htmlReturn.substr(0,bSym)+xParenL+strg+"</tr></td></table></td></tr></table>"+htmlReturn.substr(iXs.end+1)
                 }
-                else {
-                    htmlReturn = htmlReturn.substr(0,bSym)+"<table style='text-align:center;display:inline-table;vertical-align:middle;'><tr><td style='border-left:2px solid black;border-top:2px solid black;border-bottom:2px solid black;border-radius: 10px 0 0 10px;'>&nbsp;<td><table><tr><td style='line-height: 70%'>"
-                    +strg+"</tr></td></table></td><td style='border-right:2px solid black;border-top:2px solid black;border-bottom:2px solid black;border-radius: 0 10px 10px 0;'>&nbsp;</td></tr></table>"+htmlReturn.substr(iXs.end+1)
+                else { //both parens
+                    htmlReturn = htmlReturn.substr(0,bSym)+xParenL+strg+xParenR+htmlReturn.substr(iXs.end+1)
                 }               
             }
             else { //normal parens
-                if (strCount(htmlReturn.substr(0,bSym+1),"{") > strCount(htmlReturn.substr(iXs.end),"}"))  {htmlReturn = htmlReturn.substr(0,bSym)+"("+strg+htmlReturn.substr(iXs.end);}
+                if (strCount(htmlReturn.substr(0,bSym+1),"{") > strCount(htmlReturn.substr(iXs.end),"}"))  {htmlReturn = htmlReturn.substr(0,bSym)+"("+strg+htmlReturn.substr(iXs.end);} //left paren only
                 else {htmlReturn = htmlReturn.substr(0,bSym)+"("+strg+")"+htmlReturn.substr(iXs.end+1)}
             }
         }

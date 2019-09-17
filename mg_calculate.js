@@ -128,6 +128,7 @@ var mgCalc = function() {
     trc: function (xU) {return "trc("+xU+")"},
     cpx: function (xU,xL) {return "cpx("+xU+","+xL+")"},
     mat: function () {return "mat(" + Array.prototype.slice.call(arguments) + ")"},
+    vct: function () {return "vct(" + Array.prototype.slice.call(arguments) + ")"},
     ntg: function (nXpr,deeVar,iU,iL) {
         if (typeof iU != "undefined" && typeof iL != "undefined") {return "ntg("+nXpr+","+deeVar+","+iU+","+iL+")"}
         return "ntg("+nXpr+","+deeVar+")"
@@ -406,6 +407,11 @@ var mgCalc = function() {
         for (var iM in mReturn) {if (String(mReturn[iM]).substr(0,3) == "mat") {mReturn[iM] = matArray(mReturn[iM])}}
         return mReturn
     }
+    function vecArray(xA) { //vector FUNC to array conversion
+        if (typeof xA == "object") {return xA}
+        var mReturn = mgTrans.parseArgs(mgTrans.oParens(String(xA).substr(3)));
+        return mReturn
+    }
     function sortTerms(aS,bS){ //sort terms array alpha with powers in descending polynomial order
         if (strTest(aS,"cPow") || strTest(bS,"cPow")) {
             if (!strTest(bS,"cPow") && strTest(aS,"cPow")) {return 1}
@@ -440,7 +446,7 @@ var mgCalc = function() {
             if (typeof passthruFunc[funcKey] == "undefined") {funcKey = expReturn.substr(bSym-5,4)} //extract operators cXxx()
             if (typeof funcObj[funcKey] == "undefined") {fReturn = passthruFunc[funcKey](mgTrans.oParens(paramS[0]),mgTrans.oParens(paramS[1]),paramS[2],paramS[3])} //execute passthru
             else {fReturn = funcObj[funcKey](mgTrans.oParens(paramS[0]),mgTrans.oParens(paramS[1]),paramS[2],paramS[3])}//execute operation
-            if (funcKey == "mat" || funcKey == "vec") {fReturn = passthruFunc[funcKey](paramS)} //matrix/vector parameters
+            if (["mat","vec","vct"].includes(funcKey)) {fReturn = passthruFunc[funcKey](paramS)} //matrix/vector parameters
             expReturn = expReturn.substr(0,(expReturn.lastIndexOf("@")+1)-(funcKey.length+1))+fReturn+expReturn.substr(iXf+1); //assemble output
         }
         return expReturn
@@ -2927,6 +2933,11 @@ var mgCalc = function() {
             for (var iR in mReturn) {mReturn[iR] = fmtResult(mReturn[iR])}
             return matFunc(mReturn)
         }
+        if (getType(xIn) == "vector") {
+            var mReturn = matArray(xIn);
+            for (var iR in mReturn) {mReturn[iR] = fmtResult(mReturn[iR])}
+            return "vct("+mReturn+")"
+        }
         return "undefined"
     }
     function roundDecTo(xD,xT) { //round decimal to xT digits
@@ -2954,6 +2965,7 @@ var mgCalc = function() {
         else {return +(xD.replace(/\.\d+/,uD))}
     }
     function mat() {return Array.prototype.slice.call(arguments)} //matrix parsing
+    function vct(xA) {return "vct(" + Array.prototype.slice.call(arguments) + ")"}
     function cpx(xU,xL) {return "cpx(" + xU +"," + xL +")"}
     function toCplx(xTo) {
         if (getType(xTo) == "complex") {
@@ -2975,6 +2987,7 @@ var mgCalc = function() {
         if (typeof xT == "undefined") {return "undefined"}
         if (nbrTest(xT)) {return "real"}
         if (xTractU.func =="cpx" && mgConfig.Domain == "Complex") {return "complex"}
+        if (xTractU.func =="vct" || xTractU.func =="vec") {return "vector"}
         if (nbrTest(xT.r) && mgConfig.Domain == "Complex") {return "complex"}
         if (typeof xT == "object" && typeof xT[0] == "object") {return "matrix"}
         if (typeof xT == "object" && typeof xT[0] != "object") {return "array"}
@@ -2997,12 +3010,19 @@ var mgCalc = function() {
             var cA = toCplx(xU),cB = toCplx(xL);
             return {r:(+cA.r)+(+cB.r), i:(+cA.i)+(+cB.i)}
         }
-        if ((getType(xU) == "matrix" || getType(xU) == "array") && (getType(xL) == "matrix" || getType(xL) == "array")) {
-            var mReturn = xU;
+        if (["matrix","array"].includes(getType(xU)) && ["matrix","array"].includes(getType(xL))) {
             xU = matArray(xU);xL = matArray(xL);
+            var mReturn = xU;
             if (xU.length != xL.length) {return "undefined"}
             for (var iR in xU) {mReturn[iR] = cAdd(xU[iR],xL[iR])}
             return mReturn
+        }
+        if (getType(xU) == "vector" && getType(xL) == "vector") {
+            xU = vecArray(xU);xL = vecArray(xL);
+            var vReturn = xU;
+            if (xU.length != xL.length) {return "undefined"}
+            for (var iR in xU) {vReturn[iR] = cAdd(xU[iR],xL[iR])}
+            return "vct(" + vReturn + ")"           
         }
         return "undefined"
     }
@@ -3022,8 +3042,10 @@ var mgCalc = function() {
             var cA = toCplx(xU),cB = toCplx(xL);
             return {r:cA.r*cB.r-cA.i*cB.i, i:cA.i*cB.r+cA.r*cB.i}
         }
-        if ((getType(xU) == "matrix" || getType(xU) == "array") && getType(xL) != "matrix" && getType(xL) != "array") {return scalarMult(xU,xL)}
-        if ((getType(xL) == "matrix" || getType(xL) == "array") && getType(xU) != "matrix" && getType(xU) != "array") {return scalarMult(xL,xU)}
+        if ((getType(xU) == "matrix" || getType(xU) == "array") && ["complcx","real"].includes(getType(xL))) {return scalarMult(xU,xL)}
+        if ((getType(xL) == "matrix" || getType(xL) == "array") && ["complcx","real"].includes(getType(xU))) {return scalarMult(xL,xU)}
+        if (getType(xU) == "vector" && ["complcx","real"].includes(getType(xL))) {return "vct(" + scalarMult(xU,xL)+ ")"}
+        if (getType(xL) == "vector" && ["complcx","real"].includes(getType(xU))) {return "vct(" + scalarMult(xL,xU)+ ")"}
         if (getType(xU) == "matrix" && getType(xL) == "matrix") { //matrix multiply
             xU = matArray(xU);xL = matArray(xL);
             if (xL.length != xU[0].length) {return "undefined"}
@@ -3041,10 +3063,25 @@ var mgCalc = function() {
         }
         return "undefined"
     }
-    function cTms(xU,xL) { //multiply by *
+    function cTms(xU,xL) { //multiply by * (cross product)
+        if (getType(xU) == "vector" && getType(xL) == "vector") {
+            xU = vecArray(xU);xL = vecArray(xL);
+            if (xL.length != xU.length) {return "undefined"}
+            var vReturn = [];
+            var vL = xU.length-1;
+            //for (var cU in xU) {vReturn[cU] = cSub(cMul(xU[cU],xL[]),cMul(xU[cU],xL[vL]))}
+            return vReturn          
+        }
         return cMul(xU,xL)
     }
-    function cDot(xU,xL) { //multiply by dot
+    function cDot(xU,xL) { //dot product (Cv[8226] operator)
+        if (getType(xU) == "vector" && getType(xL) == "vector") {
+            xU = vecArray(xU);xL = vecArray(xL);
+            if (xL.length != xU.length) {return "undefined"}
+            var vReturn = 0;
+            for (var cU in xU) {vReturn = cAdd(vReturn,cMul(xU[cU],xL[cU]))}
+            return vReturn
+        }
         return cMul(xU,xL)
     }
     function cDiv(xU,xL) { //divide
@@ -3478,10 +3515,10 @@ var mgCalc = function() {
         return lognPDF(1,toReal(xU),0)
     }
     function erf(xU) {//error function
-		xU = toReal(xU);
-		var fE=0;
-		if (xU > 3.2) {return 1-cPow(3.14,cNeg(xU)*xU)}
-		else {for (var fn=0;fn<50;fn++){fE = fE+cPow(-1,fn)*(cPow(xU,2*fn+1)/(fac(fn)*(2*fn+1)))};return 1.1283796*fE}
+        xU = toReal(xU);
+        var fE=0;
+        if (xU > 3.2) {return 1-cPow(3.14,cNeg(xU)*xU)}
+        else {for (var fn=0;fn<50;fn++){fE = fE+cPow(-1,fn)*(cPow(xU,2*fn+1)/(fac(fn)*(2*fn+1)))};return 1.1283796*fE}
     }
     function efc(xU) {//inverse error function
         return iSolve(function(a){return erf(a)},toReal(xU),0,7)

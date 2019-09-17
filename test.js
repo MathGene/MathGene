@@ -191,12 +191,12 @@ var numerical =
 "snh(csh(tnh(sch(cch(cth(mat(mat(1,2),mat(3,4))))))))","undefined",
 "ash(ach(ath(axh(ayh(azh(mat(mat(1,2),mat(3,4))))))))","undefined",
 "arg(rex(imx(exp(cei(con(mat(mat(1,2),mat(3,4))))))))","undefined",
+"gam((mat(mat(1,2),mat(3,4))))!","undefined",
 
 "1/0","Cv[8734]",
 "lne(0)","-Cv[8734]",
 "cch(0)","Cv[8734]",
 
-"gam((mat(mat(1,2),mat(3,4))))!","undefined",
 "mat(mat(1,2,3),mat(4,5,6))","mat(mat(1,2,3),mat(4,5,6))",
 "mat(mat(3,4,2))*mat(mat(13,9,7,15),mat(8,7,4,6),mat(6,4,0,3))","mat(mat(83,63,37,75))",
 "mat(mat(1,2),mat(3,4),mat(5,6))*mat(mat(1,2,3),mat(4,5,6))","mat(mat(9,12,15),mat(19,26,33),mat(29,40,51))",
@@ -231,6 +231,14 @@ var numerical =
 "mat(1,2,3,4)*2","mat(2,4,6,8)",
 "mat(1,2,3,4)+mat(1,2,3,4)","mat(2,4,6,8)",
 "mat(1,2,3,4)+mat(1)","undefined",
+
+// vectors
+"vct(1,2,3,4)+vct(1)","undefined",
+"vct(1,2,3)+vct(2,3,4)","vct(3,5,7)",
+"2vct(1,2,3)","vct(2,4,6)",
+"vct(9,2,7)Cv[8226]vct(4,8,10)","122",
+//"vct(9,2,7)*vct(4,8,10)","vct(−3,6,−3)",
+
 ];
 
 var range =
