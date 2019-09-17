@@ -1011,8 +1011,18 @@ var mgCalc = function() {
         if (nbrTest(xTractL.upper) && xTractU.func == "cPow" && nbrTest(xTractU.lower)) {return "cMul("+xL+","+xU+")"}
         return "cMul("+xU+","+xL+")"
     }
-    function cTmsS(xU,xL) {return cMulS(xU,xL)} //multiply xU * xL
-    function cDotS(xU,xL) {return cMulS(xU,xL)} //multiply xU . xL
+    function cTmsS(xU,xL) { //multiply xU * xL
+        var xTractU = opExtract(xU);
+        var xTractL = opExtract(xL);
+        if (["vec","vct"].includes(xTractU.func) || ["vec","vct"].includes(xTractL.func)) {return "cTms("+xU+","+xL+")"}
+        return cMulS(xU,xL)
+    }
+    function cDotS(xU,xL) { //multiply xU . xL
+        var xTractU = opExtract(xU);
+        var xTractL = opExtract(xL);
+        if (["vec","vct"].includes(xTractU.func) || ["vec","vct"].includes(xTractL.func)) {return "cDot("+xU+","+xL+")"}
+        return cMulS(xU,xL)
+    }
     function cDivS(xU,xL) { //divide xU/xL
         var xTractU = opExtract(xU);
         var xTractL = opExtract(xL);
@@ -3068,9 +3078,13 @@ var mgCalc = function() {
             xU = vecArray(xU);xL = vecArray(xL);
             if (xL.length != xU.length) {return "undefined"}
             var vReturn = [];
-            var vL = xU.length-1;
-            //for (var cU in xU) {vReturn[cU] = cSub(cMul(xU[cU],xL[]),cMul(xU[cU],xL[vL]))}
-            return vReturn          
+            if (xL.length == 3) {
+                vReturn[0] = cSub(cMul(xU[1],xL[2]),cMul(xU[2],xL[1]));
+                vReturn[1] = cSub(cMul(xU[2],xL[0]),cMul(xU[0],xL[2]));
+                vReturn[2] = cSub(cMul(xU[0],xL[1]),cMul(xU[1],xL[0]));
+                return "vct("+vReturn+")"
+            }
+            else {return "undefined"}      
         }
         return cMul(xU,xL)
     }
