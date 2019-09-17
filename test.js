@@ -227,6 +227,7 @@ var numerical =
 "mat(mat(mat(mat(1,2),mat(11,12)),mat(mat(3,4),mat(11,12))),mat(mat(mat(1,2),mat(11,12)),mat(mat(3,4),mat(11,12))))^0","mat(mat(mat(mat(1,0),mat(0,1)),mat(mat(0,0),mat(0,0))),mat(mat(mat(0,0),mat(0,0)),mat(mat(1,0),mat(0,1))))",
 "mat(mat(mat(mat(1,2),mat(11,12)),mat(mat(3,4),mat(11,12))),mat(mat(mat(1,2),mat(11,12)),mat(mat(3,4),mat(11,12))))^2","mat(mat(mat(mat(70,80),mat(286,332)),mat(mat(78,88),mat(330,376))),mat(mat(mat(70,80),mat(286,332)),mat(mat(78,88),mat(330,376))))",
 "mat(mat(mat(mat(1)),mat(mat(3))),mat(mat(mat(5)),mat(mat(7))))^-1*mat(mat(mat(mat(1)),mat(mat(3))),mat(mat(mat(5)),mat(mat(7))))","mat(mat(1,0),mat(0,1))",
+
 //arrays
 "mat(1,2,3,4)*2","mat(2,4,6,8)",
 "mat(1,2,3,4)+mat(1,2,3,4)","mat(2,4,6,8)",
@@ -237,8 +238,10 @@ var numerical =
 "vct(1,2,3)+vct(2,3,4)","vct(3,5,7)",
 "2vct(1,2,3)","vct(2,4,6)",
 "vct(9,2,7)Cv[8226]vct(4,8,10)","122",
+"abs(vct(6,8))","10",
+"abs(vct(1,-2,3))","3.74165739",
+"vct(3,3,3,3)-vct(1,2,3,4)","vct(2,1,0,-1)",
 //"vct(9,2,7)*vct(4,8,10)","vct(−3,6,−3)",
-
 ];
 
 var range =

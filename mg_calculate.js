@@ -3042,8 +3042,8 @@ var mgCalc = function() {
             var cA = toCplx(xU),cB = toCplx(xL);
             return {r:cA.r*cB.r-cA.i*cB.i, i:cA.i*cB.r+cA.r*cB.i}
         }
-        if ((getType(xU) == "matrix" || getType(xU) == "array") && ["complcx","real"].includes(getType(xL))) {return scalarMult(xU,xL)}
-        if ((getType(xL) == "matrix" || getType(xL) == "array") && ["complcx","real"].includes(getType(xU))) {return scalarMult(xL,xU)}
+        if (["matrix","array"].includes(getType(xU)) && ["complcx","real"].includes(getType(xL))) {return scalarMult(xU,xL)}
+        if (["matrix","array"].includes(getType(xL)) && ["complcx","real"].includes(getType(xU))) {return scalarMult(xL,xU)}
         if (getType(xU) == "vector" && ["complcx","real"].includes(getType(xL))) {return "vct(" + scalarMult(xU,xL)+ ")"}
         if (getType(xL) == "vector" && ["complcx","real"].includes(getType(xU))) {return "vct(" + scalarMult(xL,xU)+ ")"}
         if (getType(xU) == "matrix" && getType(xL) == "matrix") { //matrix multiply
@@ -3311,6 +3311,12 @@ var mgCalc = function() {
         if (getType(xU) == "real") {
             if (xU < 0) {return cNeg(xU)}
             return xU
+        }
+        if (getType(xU) == "vector") {
+            xU = vecArray(xU);
+            var vReturn = 0;
+            for (var xI in xU) {vReturn = cAdd(vReturn,cPow(xU[xI],2))}
+            return sqt(vReturn)
         }
         return "undefined"
     }
