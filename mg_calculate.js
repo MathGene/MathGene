@@ -797,10 +797,10 @@ var mgCalc = function() {
         }
         var nTerms = [];
         var xTractU = opExtract(xP);
-        if (xTractU.func == "cMul" || xTractU.func == "cDiv" || xTractU.func == "cNeg" || xTractU.func == "cPow") {
+        if (["cMul","cDiv","cNeg","cPow"].includes(xTractU.func)) {
             if (!strTest(xP,"cAdd") && !strTest(xP,"cSub")) {nTerms.push(xP)}
             else {return [xP]}
-        }   
+        }
         execFunc(xP,polyFuncs);
         return nTerms.sort(function(aS,bS){return sortTerms(aS,bS)})
     }
