@@ -1322,7 +1322,7 @@ var mgTrans = function() {
         latexR1:'',
         latexL2: function (parm) {return '-'+parm[0]},
         latexR2:'',
-        mg: function (parm) {xTractU = oprExtract(mgTrans.cFunc(parm[0]));if (["cAdd","cSub","cDiv"].includes(xTractU.func)) {return "-" + xParens(parm[0])};return "-" + parm[0]},
+        mg: function (parm) {xTractU = oprExtract(mgTrans.cFunc(parm[0]));if (["cAdd","cSub","cDiv"].indexOf(xTractU.func)+1) {return "-" + xParens(parm[0])};return "-" + parm[0]},
         },
     cAng:{ //angle (polar form)
         htmlL1: function (parm) {return parm[0]+'&#8736;'+parm[1]},
@@ -1519,8 +1519,8 @@ var mgTrans = function() {
         xTractU = oprExtract(mgTrans.cFunc(xU));
         xTractL = oprExtract(mgTrans.cFunc(xL));
         xL = oParens(xL);xU = oParens(xU);
-        if (["cAdd","cSub","fac"].includes(xTractU.func)) {xU  = xParens(xU)}
-        if (["cAdd","cSub","fac"].includes(xTractL.func)) {xL  = xParens(xL)}
+        if (["cAdd","cSub","fac"].indexOf(xTractU.func)+1) {xU  = xParens(xU)}
+        if (["cAdd","cSub","fac"].indexOf(xTractL.func)+1) {xL  = xParens(xL)}
         if (xTractL.func == "cDiv" && xTractU.func == "cDiv") {xU  = xParens(xU);xL  = xParens(xL)}
         if (xU.indexOf("Cv[45]") > -1 && xU.lastIndexOf("Cv[45]") == xU.length-6) {xU  = xParens(xU)}
         if (xL.indexOf("Cv[45]") > -1 && xL.lastIndexOf("Cv[45]") == xL.length-6) {xL  = xParens(xL)}
@@ -1530,15 +1530,15 @@ var mgTrans = function() {
     cDivE: function (xU,xL) { //division
         xTractU = oprExtract(mgTrans.cFunc(xU));
         xTractL = oprExtract(mgTrans.cFunc(xL));
-        if (["cAdd","cSub","cDiv","cMul","cNeg"].includes(xTractU.func) || xU.indexOf("Cv[8747]") > -1) {xU  = xParens(xU)}
-        if (["cAdd","cSub","cDiv","cMul","cNeg"].includes(xTractL.func) || xL.indexOf("Cv[8747]") > -1) {xL  = xParens(xL)}
+        if (["cAdd","cSub","cDiv","cMul","cNeg"].indexOf(xTractU.func)+1 || xU.indexOf("Cv[8747]") > -1) {xU  = xParens(xU)}
+        if (["cAdd","cSub","cDiv","cMul","cNeg"].indexOf(xTractL.func)+1 || xL.indexOf("Cv[8747]") > -1) {xL  = xParens(xL)}
         return xU + "/" + xL
         },
     cPowE: function (xU,xL) { //powers
         xTractU = oprExtract(mgTrans.cFunc(xU));
         xTractL = oprExtract(mgTrans.cFunc(xL));
-        if (["cAdd","cSub","cDiv","cMul","cNeg","fac"].includes(xTractU.func)) {xU  = xParens(xU)}
-        if (["cAdd","cSub","cDiv","cMul","cNeg"].includes(xTractL.func)) {xL  = xParens(xL)}
+        if (["cAdd","cSub","cDiv","cMul","cNeg","fac"].indexOf(xTractU.func)+1) {xU  = xParens(xU)}
+        if (["cAdd","cSub","cDiv","cMul","cNeg"].indexOf(xTractL.func)+1) {xL  = xParens(xL)}
         return xU + "^" + xL
         },
     cpxE: function (xU,xL) {
