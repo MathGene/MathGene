@@ -2944,7 +2944,7 @@ var mgCalc = function() {
             return matFunc(mReturn)
         }
         if (getType(xIn) == "vector") {
-            var mReturn = matArray(xIn);
+            var mReturn = vecArray(xIn);
             for (var iR in mReturn) {mReturn[iR] = fmtResult(mReturn[iR])}
             return "vct("+mReturn+")"
         }
@@ -2999,6 +2999,8 @@ var mgCalc = function() {
         if (nbrTest(xT)) {return "real"}
         if (xTractU.func =="cpx" && mgConfig.Domain == "Complex") {return "complex"}
         if (xTractU.func =="vct" || xTractU.func =="vec") {return "vector"}
+        if (xTractU.func =="mat" && opExtract(xTractU.upper).func == "mat") {return "matrix"}
+        if (xTractU.func =="mat") {return "array"}
         if (nbrTest(xT.r) && mgConfig.Domain == "Complex") {return "complex"}
         if (typeof xT == "object" && typeof xT[0] == "object") {return "matrix"}
         if (typeof xT == "object" && typeof xT[0] != "object") {return "array"}
@@ -3055,8 +3057,8 @@ var mgCalc = function() {
         }
         if (["matrix","array"].includes(getType(xU)) && ["complex","real"].includes(getType(xL))) {return scalarMult(xU,xL)}
         if (["matrix","array"].includes(getType(xL)) && ["complex","real"].includes(getType(xU))) {return scalarMult(xL,xU)}
-        if (getType(xU) == "vector" && ["complex","real"].includes(getType(xL))) {return "vct(" + scalarMult(xU,xL)+ ")"}
-        if (getType(xL) == "vector" && ["complex","real"].includes(getType(xU))) {return "vct(" + scalarMult(xL,xU)+ ")"}
+        if (getType(xU) == "vector" && ["complex","real"].includes(getType(xL))) {return "vct(" + scalarMult(xU,xL) + ")"}
+        if (getType(xL) == "vector" && ["complex","real"].includes(getType(xU))) {return "vct(" + scalarMult(xL,xU) + ")"}
         if (getType(xU) == "matrix" && getType(xL) == "matrix") { //matrix multiply
             xU = matArray(xU);xL = matArray(xL);
             if (xL.length != xU[0].length) {return "undefined"}
@@ -3259,7 +3261,7 @@ var mgCalc = function() {
             var cA = toCplx(xU);
             if (cA.r > 0) {return atn(cDiv(cA.i,cA.r))}
             if (cA.r < 0 && cA.i >= 0) {return cAdd(Cv[29],atn(cDiv(cA.i,cA.r)))}
-            if (cA.r < 0 && cA.i < 0) {return cAdd(cNeg(Cv[29]),atn(cDiv(cA.i,cA.r)))}
+            if (cA.r < 0 && cA.i < 0)  {return cAdd(cNeg(Cv[29]),atn(cDiv(cA.i,cA.r)))}
             if (cA.r == 0 && cA.i > 0) {return cDiv(Cv[29],2)}
             if (cA.r == 0 && cA.i < 0) {return cNeg(cDiv(Cv[29],2))}
             return 0
