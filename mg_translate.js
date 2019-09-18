@@ -1498,10 +1498,10 @@ var mgTrans = function() {
         htmlL2: function (parm) {return htmlFuncs['vctL'](parm)},
         htmlR2: '',
         texfunc:[],
-        latexL1: '',
-        latexR1:'}',
-        latexL2: '',
-        latexR2:'}',
+        latexL1: function (parm) {return latexFuncs['vctX'](parm)},
+        latexR1:'',
+        latexL2: function (parm) {return latexFuncs['vctX'](parm)},
+        latexR2:'',
         mg: function (parm) {return 'vct('+parm+')'},
         },
     cpx:{ //complex number from FUNC
@@ -1668,9 +1668,9 @@ var mgTrans = function() {
             return htmlFuncs['fAccentU'](vOver) + xA + htmlFuncs['fAccentL']("<span style='line-height:50%'>&nbsp;</span>")
         },
     vctL: function (xA) {
-			var mReturn = "",iM = 0;
-			for (iM in xA) {mReturn = mReturn + "<tr><td>" + xA[iM] + "</tr></td>"}
-			return xParenL + "<table>" + mReturn + "</table>" + xParenR
+            var mReturn = "",iM = 0;
+            for (iM in xA) {mReturn = mReturn + "<tr><td>" + xA[iM] + "</tr></td>"}
+            return xParenL + "<table>" + mReturn + "</table>" + xParenR
         },
     }
     //latex handlers
@@ -1714,6 +1714,16 @@ var mgTrans = function() {
             }
             mReturn = mReturn + "\\end{bmatrix}"
         }
+        return mReturn
+        },
+    vctX: function (xA) {
+        var mReturn = "";
+            mReturn = mReturn + "\\begin{pmatrix}";
+            for (var iR=0;iR<xA.length;iR++) {
+                if (iR < xA.length-1) {mReturn = mReturn + xA[iR] + "\\\\"}
+                else {mReturn = mReturn + xA[iR]}
+            }
+            mReturn = mReturn + "\\end{pmatrix}"
         return mReturn
         },
     }

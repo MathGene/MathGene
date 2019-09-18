@@ -2011,6 +2011,8 @@ var xport =
 "mat(mat(Cv[10120],Cv[10121],Cv[10122]),mat(12,13,14))*mat(mat(Cv[10097],Cv[10098],Cv[10099]),mat((Cv[29]/2),Cv[10100],Cv[8]))^2+sin(Cv[10120])","\\begin{bmatrix}x&y&z\\\\12&13&14\\end{bmatrix}\\times \\begin{bmatrix}a&b&c \\\\ \\frac{\\pi}{2}&d&e  \\end{bmatrix}^{2}+\\sin\\left(x\\right)",
 "mat(mat(Cv[29]/2,2Cv[46],3,4),mat(Cv[10097],Cv[10098],Cv[10099],Cv[10100]/2))","\\begin{bmatrix} \\frac{ \\pi }{2}&2 \\imath &3&4 \\\\a&b&c& \\frac{d}{2} \\end{bmatrix}",
 "mat(mat(1,2,3),mat(4,5,6),mat(11,12,13),mat(14,15,16))","\\begin{bmatrix}1&2&3 \\\\4&5&6 \\\\11&12&13 \\\\14&15&16 \\end{bmatrix}",
+"vct(2,3,4)","\\begin{pmatrix}2\\\\3\\\\4\\end{pmatrix}",
+"vct(2,3,4)*vct(5,6,7)","\\begin{pmatrix}2\\\\3\\\\4\\end{pmatrix}\\times\\begin{pmatrix}5\\\\6\\\\7\\end{pmatrix}",
 "1/2+1/5","\\frac{1}{2}+\\frac{1}{5}",
 "(2(3-2Cv[46])/Cv[29])","\\frac{2 \\left(3-2 \\imath\\right)}{\\pi}",
 "(8/Cv[29])","\\frac{8}{\\pi}",

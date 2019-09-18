@@ -82,7 +82,6 @@ var mgCalc = function() {
     sbr: function (xU) {return "sbr("+xU+")"},
     cbr: function (xU) {return "cbr("+xU+")"},
     con: function (xU) {return "con("+xU+")"},
-    vec: function ()   {return "vec("+Array.prototype.slice.call(arguments)+")"},
     hat: function (xU) {return "hat("+xU+")"},
     und: function (xU) {return "und("+xU+")"},
     udt: function (xU) {return "udt("+xU+")"},
@@ -129,6 +128,7 @@ var mgCalc = function() {
     cpx: function (xU,xL) {return "cpx("+xU+","+xL+")"},
     mat: function () {return "mat(" + Array.prototype.slice.call(arguments) + ")"},
     vct: function () {return "vct(" + Array.prototype.slice.call(arguments) + ")"},
+    vec: function () {return "vec(" + Array.prototype.slice.call(arguments) + ")"},
     ntg: function (nXpr,deeVar,iU,iL) {
         if (typeof iU != "undefined" && typeof iL != "undefined") {return "ntg("+nXpr+","+deeVar+","+iU+","+iL+")"}
         return "ntg("+nXpr+","+deeVar+")"
@@ -194,6 +194,7 @@ var mgCalc = function() {
     cup:{solverU:"cup(rExpr)",ineqU:1},
     cap:{solverU:"cap(rExpr)",ineqU:1},
     vec:{solverU:"vec(rExpr)",ineqU:1},
+    vct:{solverU:"vct(rExpr)",ineqU:1},
     hat:{solverU:"hat(rExpr)",ineqU:1},
     und:{solverU:"und(rExpr)",ineqU:1},
     udt:{solverU:"udt(rExpr)",ineqU:1},
