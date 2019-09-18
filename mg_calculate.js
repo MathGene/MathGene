@@ -2944,9 +2944,9 @@ var mgCalc = function() {
             return matFunc(mReturn)
         }
         if (getType(xIn) == "vector") {
-            var mReturn = vecArray(xIn);
-            for (var iR in mReturn) {mReturn[iR] = fmtResult(mReturn[iR])}
-            return "vct("+mReturn+")"
+            var vReturn = vecArray(xIn);
+            for (var iR in vReturn) {vReturn[iR] = fmtResult(vReturn[iR])}
+            return "vct("+vReturn+")"
         }
         return "undefined"
     }
