@@ -1519,8 +1519,8 @@ var mgTrans = function() {
         xTractU = oprExtract(mgTrans.cFunc(xU));
         xTractL = oprExtract(mgTrans.cFunc(xL));
         xL = oParens(xL);xU = oParens(xU);
-        if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "fac") {xU  = xParens(xU)}
-        if (xTractL.func == "cAdd" || xTractL.func == "cSub" || xTractL.func == "fac") {xL  = xParens(xL)}
+        if (["cAdd","cSub","fac"].includes(xTractU.func)) {xU  = xParens(xU)}
+        if (["cAdd","cSub","fac"].includes(xTractL.func)) {xL  = xParens(xL)}
         if (xTractL.func == "cDiv" && xTractU.func == "cDiv") {xU  = xParens(xU);xL  = xParens(xL)}
         if (xU.indexOf("Cv[45]") > -1 && xU.lastIndexOf("Cv[45]") == xU.length-6) {xU  = xParens(xU)}
         if (xL.indexOf("Cv[45]") > -1 && xL.lastIndexOf("Cv[45]") == xL.length-6) {xL  = xParens(xL)}
