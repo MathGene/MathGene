@@ -1567,8 +1567,8 @@ var mgTrans = function() {
                 +xA+"</span><span style='line-height:80%;display:table-row;font-size:"+xFsize+"%'>"+xS+"</span><span style='line-height:150%;display:table-row;font-size:50%'>"
                 +xB+"</span></span></span><Xdve>"
         },
-    fAccentU: function (xA) {return "<Xfnc><span style='display:inline-block;'><span style='text-align:center;vertical-align:middle;display:inline-table;'><span style='display:table-row;line-height:20%;font-size:60%'>"+xA+"</span><span style='line-height:90%;display:table-row;'>"},
-    fAccentL: function (xB) {return "<Xfnc></span><span style='display:table-row;line-height:20%;font-size:60%'>"+xB+"</span></span></span>"},
+    fAccentU: function (xA) {return "<span style='display:inline-block;'><span style='text-align:center;vertical-align:middle;display:inline-table;'><span style='display:table-row;line-height:20%;font-size:60%'>"+xA+"</span><span style='line-height:90%;display:table-row;'>"},
+    fAccentL: function (xB) {return "</span><span style='display:table-row;line-height:20%;font-size:60%'>"+xB+"</span></span></span>"},
     cMulL: function (xU,xL) {
         if (xL.indexOf("<Xfnc>") == 0) {return xU+" "+xL}
         return xU + "" + xL
