@@ -2924,6 +2924,77 @@ var mgCalc = function() {
     }
 
     //Numerical Math Functions
+    const numFunc = {
+    cPow: function (xU,xL) {return cPow(xU,xL)},
+    cMul: function (xU,xL) {return cMul(xU,xL)},
+    cTms: function (xU,xL) {return cTms(xU,xL)},
+    cDot: function (xU,xL) {return cDot(xU,xL)},
+    cDiv: function (xU,xL) {return cDiv(xU,xL)},
+    cAdd: function (xU,xL) {return cAdd(xU,xL)},
+    cSub: function (xU,xL) {return cSub(xU,xL)},
+    cAng: function (xU,xL) {return cAng(xU,xL)},
+    cNeg: function (xU)    {return cNeg(xU)},
+    nrt: function (xU,xL)  {return nrt(xU,xL)},
+    lgn: function (xU,xL)  {return lgn(xU,xL)},
+    lne: function (xU) {return lne(xU)},
+    log: function (xU) {return log(xU)},
+    sqt: function (xU) {return sqt(xU)},
+    cbt: function (xU) {return cbt(xU)},
+    sin: function (xU) {return sin(xU)},
+    cos: function (xU) {return cos(xU)},
+    tan: function (xU) {return tan(xU)},
+    cot: function (xU) {return cot(xU)},
+    csc: function (xU) {return csc(xU)},
+    sec: function (xU) {return sec(xU)},
+    snh: function (xU) {return snh(xU)},
+    csh: function (xU) {return csh(xU)},
+    tnh: function (xU) {return tnh(xU)},
+    sch: function (xU) {return sch(xU)},
+    cch: function (xU) {return cch(xU)},
+    cth: function (xU) {return cth(xU)},
+    asn: function (xU) {return asn(xU)},
+    acs: function (xU) {return acs(xU)},
+    atn: function (xU) {return atn(xU)},
+    act: function (xU) {return act(xU)},
+    asc: function (xU) {return asc(xU)},
+    acc: function (xU) {return acc(xU)},
+    ash: function (xU) {return ash(xU)},
+    ach: function (xU) {return ach(xU)},
+    ath: function (xU) {return ath(xU)},
+    axh: function (xU) {return axh(xU)},
+    ayh: function (xU) {return ayh(xU)},
+    azh: function (xU) {return azh(xU)},
+    exp: function (xU) {return exp(xU)},
+    abs: function (xU) {return abs(xU)},
+    erf: function (xU) {return erf(xU)},
+    efc: function (xU) {return efc(xU)},
+    fac: function (xU) {return fac(xU)},
+    gam: function (xU) {return gam(xU)},
+    det: function (xU) {return det(xU)},
+    trc: function (xU) {return trc(xU)},
+    inv: function (xU) {return inv(xU)},
+    cdf: function (xU) {return cdf(xU)},
+    pdf: function (xU) {return pdf(xU)},
+    lcf: function (xU) {return lcf(xU)},
+    lpf: function (xU) {return lpf(xU)},
+    rou: function (xU) {return rou(xU)},
+    rnd: function (xU) {return rnd(xU)},
+    rex: function (xU) {return rex(xU)},
+    imx: function (xU) {return imx(xU)},
+    frc: function (xU) {return frc(xU)},
+    int: function (xU) {return int(xU)},
+    cei: function (xU) {return cei(xU)},
+    arg: function (xU) {return arg(xU)},
+    con: function (xU) {return con(xU)},
+    }
+    function xprNumeric(xNum) { //execute numeric expression
+        xNum = String(xNum);
+        var nVars = cInventory(xNum);
+        xNum = xNum.replace(/Cv\[46\]/g,"cpx(0,1)"); //substitute imaginary constant
+        for (var xC=0;xC<46;xC++) {xNum = xNum.replace("Cv["+xC+"]",String(Cv[xC]))} //substitute constants
+        for (var xV in nVars) {xNum = xNum.replace("Cv["+xV+"]",String(Cv[xV]))} //substitute variables
+        return execFunc(xNum,numFunc)
+    }
     function getType(xT) { //return numerical object type
         if (typeof xT == "undefined") {return "undefined"}
         if (nbrTest(xT)) {return "real"}
@@ -2991,7 +3062,6 @@ var mgCalc = function() {
         if (xD >= 1e12) {return xD.replace(/\.\d+/,uD)}
         else {return +(xD.replace(/\.\d+/,uD))}
     }
-    function mat() {return "mat(" + Array.prototype.slice.call(arguments) + ")"} //matrix parsing
     function vct() {return "vct(" + Array.prototype.slice.call(arguments) + ")"}
     function cpx(xU,xL) {
         if (+xL == 0) {return xU}
@@ -3721,7 +3791,7 @@ var mgCalc = function() {
     if (mgConfig.trigBase == Cv[29]/200) {invMult = "200"}
 
     return {
-        Numeric:    function(xprA) {mgTrans.configCheck();return mgTrans.Output(mgTrans.mgExport(fmtResult(eval(mgTrans.cFunc(mgTrans.texImport(xprA))))))},
+        Numeric:    function(xprA) {mgTrans.configCheck();return mgTrans.Output(mgTrans.mgExport(fmtResult(xprNumeric(mgTrans.cFunc(mgTrans.texImport(xprA))))))},
         Simplify:   function(xprA) {mgTrans.configCheck();return mgTrans.Output(mgTrans.mgExport(cReduce(mgTrans.cFunc(parseCalculus(mgTrans.texImport(xprA))))))},
         Solve:      function(xprA,xprB) {mgTrans.configCheck();return mgTrans.Output(mgTrans.mgExport(xprSolve(mgTrans.cFunc(parseCalculus(mgTrans.texImport(xprA))),mgTrans.texImport(xprB))))},
         Substitute: function(xprA,xprB,xprC) {mgTrans.configCheck();return mgTrans.Output(cSubst(mgTrans.texImport(xprA),mgTrans.texImport(xprB),mgTrans.texImport(xprC)))},

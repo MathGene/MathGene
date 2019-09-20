@@ -96,7 +96,7 @@ var mgTrans = function() {
     Cv[43] = 376.730313461;     Cu[43]="&#937;";        Cs[43]="<i>Z<span style='font-size:50%'>0</span></i>";  Cd[43]="vacuum impedance";
     Cv[44] = 0;                 Cu[44]="";              Cs[44]="0";                                             Cd[44]="Null";
 
-    Cv[45] = {r:1, i:0};        Cs[45]="!";
+    Cv[45] = "Cv[45]";          Cs[45]="!";
     Cv[46] = {r:0, i:1};        Cs[46] = "<i>i</i>"; //imaginary constant
     Cv[8230] = 0;
 
