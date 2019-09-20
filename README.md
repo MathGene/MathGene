@@ -6,6 +6,8 @@
 
 The JavaScript Open Source symbolic math calculation and rendering engine!
 
+Version 2.0
+
 MathGene is a comprehensive JavaScript mathematics engine that delivers the power to perform advanced numerical 
 and symbolic mathematics processing of LaTeX expressions and send the output to pure HTML for rendering publishing quality 
 mathematics on a conventional web browser. 
@@ -389,11 +391,9 @@ Over several years the project evolved into a full-function mathematics engine w
 The following is a prioritized list of desired enhancements.
 
 - Statistical functions
-- Deeper LaTeX support
 - Arbitrary precision arithmetic
 - Differential equations
 - Real and complex roots
-- Vectors
 - Tensors
 - Line and contour integrals
 

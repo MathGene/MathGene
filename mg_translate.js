@@ -96,7 +96,7 @@ var mgTrans = function() {
     Cv[43] = 376.730313461;     Cu[43]="&#937;";        Cs[43]="<i>Z<span style='font-size:50%'>0</span></i>";  Cd[43]="vacuum impedance";
     Cv[44] = 0;                 Cu[44]="";              Cs[44]="0";                                             Cd[44]="Null";
 
-    Cv[45] = {r:1, i:0};        Cs[45]="!";
+    Cv[45] = "Cv[45]";          Cs[45]="!";
     Cv[46] = {r:0, i:1};        Cs[46] = "<i>i</i>"; //imaginary constant
     Cv[8230] = 0;
 
@@ -307,7 +307,10 @@ var mgTrans = function() {
     Ct[9476] = "\\ldots ";
     Ct[11100]="C";//constants of integration
     for (iAl=11101;iAl<=11110;iAl++) {Ct[iAl]="C_{"+(iAl-11100)+"}"}//constants of integration
-
+    // expanded parens
+    var xParenL = "<table style='text-align:center;display:inline-table;vertical-align:middle;'><tr><td style='border-left:2px solid black;border-top:2px solid black;border-bottom:2px solid black;border-radius: 10px 0 0 10px;'>&nbsp;<td><table><tr><td style='line-height: 70%'>";
+    var xParenR = "</tr></td></table></td><td style='border-right:2px solid black;border-top:2px solid black;border-bottom:2px solid black;border-radius: 0 10px 10px 0;'>&nbsp;</td></tr></table>";
+    
     //HTML/LaTex Translation map for functions
     const funcMap =
     {
@@ -986,18 +989,6 @@ var mgTrans = function() {
         latexR2:')',
         mg: function (parm) {return 'imx('+parm[0]+')'},
         },
-    frc:{  //decimal component
-        htmlL1: function (parm) {return '<Xfnc>frac<Xfnx>('+parm[0]},
-        htmlR1:')',
-        htmlL2: function (parm) {return '<Xfnc>frac<Xfnx>('+parm[0]},
-        htmlR2:')',
-        texfunc:[],
-        latexL1: function (parm) {return '\\frc(<Xfnx>'+parm[0]},
-        latexR1:')',
-        latexL2: function (parm) {return '\\frc(<Xfnx>'+parm[0]},
-        latexR2:')',
-        mg: function (parm) {return 'frc('+parm[0]+')'},
-        },
     sbr:{ //straight bracket
         htmlL1: function (parm,strg) {return "<table style='text-align:center;display:inline-table;vertical-align:middle;'><tr><td style='border-left:3px solid black;border-top:1px solid black;border-bottom:1px solid black;'>&nbsp;<td><table><tr><td style='line-height: 50%'>"+parm[0]},
         htmlR1: function (parm,strg) {return "</tr></td></table></td><td style='border-right:3px solid black;border-top:1px solid black;border-bottom:1px solid black;'>&nbsp;</td></tr></table>"},
@@ -1022,16 +1013,7 @@ var mgTrans = function() {
         latexR2:'\\right\\}',
         mg: function (parm) {return 'cbr('+parm[0]+')'},
         },
-    fac:{ //factorial
-        htmlL1:'',
-        htmlR1:'',
-        htmlL2:'',
-        htmlR2:'',
-        texfunc:[],
-        latexL1:'',
-        latexR1:'',
-        latexL2:'',
-        latexR2:'',
+    fac:{ //factorial from FUNC
         mg: function (parm) {if (!numTest(parm[0]) && mgTrans.cFunc(parm[0]) != oParens(parm[0])) {return xParens(parm[0])+"Cv[45]"};return parm[0]+"Cv[45]"},
         },
     sum:{ //summation
@@ -1048,15 +1030,6 @@ var mgTrans = function() {
         mg: function (parm) {return 'sum('+parm[0]+','+parm[1]+')'},
         },
     smm:{ //summation from FUNC
-        htmlL1:'',
-        htmlR1:'',
-        htmlL2:'',
-        htmlR2:'',
-        texfunc:[],
-        latexL1:'',
-        latexR1:'',
-        latexL2:'',
-        latexR2:'',
         mg: function (parm) {return  'sum('+parm[1]+','+parm[2]+'Cv[61]'+parm[3]+')'+parm[0]},
         },
     prd:{ //product
@@ -1072,16 +1045,7 @@ var mgTrans = function() {
         latexR2:' ',
         mg: function (parm) {return 'prd('+parm[0]+','+parm[1]+')'},
         },
-    pmm:{ //product from FUN
-        htmlL1:'',
-        htmlR1:'',
-        htmlL2:'',
-        htmlR2:'',
-        texfunc:[],
-        latexL1:'',
-        latexR1:'',
-        latexL2:'',
-        latexR2:'',
+    pmm:{ //product from FUNC
         mg: function (parm) {return  'prd('+parm[1]+','+parm[2]+'Cv[61]'+parm[3]+')'+parm[0]},
         },
     itg:{ //definite integral
@@ -1097,28 +1061,10 @@ var mgTrans = function() {
         latexR2:' ',
         mg: function (parm) {return 'itg('+parm[0]+','+parm[1]+')'},
         },
-    drv:{ //partial derivative from func
-        htmlL1:'',
-        htmlR1:'',
-        htmlL2:'',
-        htmlR2:'',
-        texfunc:[],
-        latexL1:'',
-        latexR1:'',
-        latexL2:'',
-        latexR2:'',
+    drv:{ //partial derivative from FUNC
         mg: function (parm) {if (typeof parm[2] == "undefined") {return "(idr("+parm[1]+")"+parm[0]+")"};return "(idr("+parm[1]+","+parm[2]+")"+parm[0]+")"},
         },
-    tdv:{ //total derivative from func
-        htmlL1:'',
-        htmlR1:'',
-        htmlL2:'',
-        htmlR2:'',
-        texfunc:[],
-        latexL1:'',
-        latexR1:'',
-        latexL2:'',
-        latexR2:'',
+    tdv:{ //total derivative from FUNC
         mg: function (parm) {if (typeof parm[2] == "undefined") {return "(tdr("+parm[1]+")"+parm[0]+")"};return "(tdr("+parm[1]+","+parm[2]+")"+parm[0]+")"},
         },
     tdr:{ //derivative
@@ -1195,18 +1141,6 @@ var mgTrans = function() {
         latexR2:'',
         mg: function (parm) {return 'cap('+parm[0]+','+parm[1]+')'},
         },
-    vec:{  //vector
-        htmlL1: function (parm) {return htmlFuncs['fAccentU']("<i>&#8594;</i>")+parm[0]},
-        htmlR1: function () {return htmlFuncs['fAccentL']("<span style='line-height:50%'>&nbsp;</span>")},
-        htmlL2: function (parm) {return htmlFuncs['fAccentU']("<i>&#8594;</i>")+parm[0]},
-        htmlR2: function () {return htmlFuncs['fAccentL']("<span style='line-height:50%'>&nbsp;</span>")},
-        texfunc:['\\vec'],
-        latexL1: function (parm) {return '\\vec{'+parm[0]},
-        latexR1:'}',
-        latexL2: function (parm) {return '\\vec{'+parm[0]},
-        latexR2:'}',
-        mg: function (parm) {return 'vec('+parm[0]+')'},
-        },
     hat:{ //hat
         htmlL1: function (parm) {return htmlFuncs['fAccentU']("<i>&#8963;</i>")+parm[0]},
         htmlR1: function () {return htmlFuncs['fAccentL']("<span style='line-height:50%'>&nbsp;</span>")},
@@ -1267,16 +1201,7 @@ var mgTrans = function() {
         latexR2:'',
         mg: function (parm) {return parm[0]},
         },
-    dif:{ //differential
-        htmlL1:'',
-        htmlR1:'',
-        htmlL2:'',
-        htmlR2:'',
-        texfunc:[],
-        latexL1:'',
-        latexR1:'',
-        latexL2:'',
-        latexR2:'',
+    dif:{ //differential from FUNC
         mg: function (parm) {return 'Cv[8748]'+parm[0]},
         },
     mat:{ //matrix
@@ -1385,7 +1310,7 @@ var mgTrans = function() {
         latexR1:'',
         latexL2: function (parm) {return '-'+parm[0]},
         latexR2:'',
-        mg: function (parm) {xTractU = oprExtract(mgTrans.cFunc(parm[0]));if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "cDiv") {return "-" + xParens(parm[0])};return "-" + parm[0]},
+        mg: function (parm) {xTractU = oprExtract(mgTrans.cFunc(parm[0]));if (["cAdd","cSub","cDiv"].indexOf(xTractU.func)+1) {return "-" + xParens(parm[0])};return "-" + parm[0]},
         },
     cAng:{ //angle (polar form)
         htmlL1: function (parm) {return parm[0]+'&#8736;'+parm[1]},
@@ -1489,28 +1414,10 @@ var mgTrans = function() {
         latexR2:'',
         mg: function (parm) {return parm[0]+'Cv[8800]'+parm[1]},
         },
-    ntg:{  //integral from func
-        htmlL1:'',
-        htmlR1:'',
-        htmlL2:'',
-        htmlR2:'',
-        texfunc:[],
-        latexL1:'',
-        latexR1:'',
-        latexL2:'',
-        latexR2:'',
+    ntg:{  //integral from FUNC
         mg: function (parm) {if (typeof parm[2]=="undefined" && typeof parm[3]=="undefined") {return "Cv[8747]"+parm[0]+"Cv[8748]"+parm[1]};return "itg("+parm[2]+","+parm[3]+")"+parm[0]+"Cv[8748]"+parm[1]}
     },
-    ntp:{  //integral container from func
-        htmlL1:'',
-        htmlR1:'',
-        htmlL2:'',
-        htmlR2:'',
-        texfunc:[],
-        latexL1:'',
-        latexR1:'',
-        latexL2:'',
-        latexR2:'',
+    ntp:{  //integral container from FUNC
         mg: function (parm) {return funcMap['ntg']['mg'](parm)},
     },
     lim:{ //limit
@@ -1535,15 +1442,6 @@ var mgTrans = function() {
         mg: function (parm) {return 'lim('+parm[0]+','+parm[1]+')'},
         },
     lmt:{ //limit from FUNC
-        htmlL1:'',
-        htmlR1:'',
-        htmlL2:'',
-        htmlR2:'',
-        texfunc:[],
-        latexL1:'',
-        latexR1:'',
-        latexL2:'',
-        latexR2:'',
         mg: function (parm) {return 'lim('+parm[1]+','+parm[2]+')'+parm[0]},
         },
     sbt:{ //subscript
@@ -1570,6 +1468,33 @@ var mgTrans = function() {
         latexR2:'',
         mg: function (parm) {return mgFuncs['cPowE'](parm[0],parm[1])},
         },
+    vec:{  //arrow (row) vector vec(a,b,...)
+        htmlL1: function (parm) {return htmlFuncs['vecL'](parm)},
+        htmlR1: '',
+        htmlL2: function (parm) {return htmlFuncs['vecL'](parm)},
+        htmlR2: '',
+        texfunc:['\\vec'],
+        latexL1: function (parm) {return '\\vec{'+parm},
+        latexR1:'}',
+        latexL2: function (parm) {return '\\vec{'+parm},
+        latexR2:'}',
+        mg: function (parm) {return 'vec('+parm+')'},
+        },
+    vct:{ //column vector vct(a,b,...)
+        htmlL1: function (parm) {return htmlFuncs['vctL'](parm)},
+        htmlR1: '',
+        htmlL2: function (parm) {return htmlFuncs['vctL'](parm)},
+        htmlR2: '',
+        texfunc:[],
+        latexL1: function (parm) {return latexFuncs['vctX'](parm)},
+        latexR1:'',
+        latexL2: function (parm) {return latexFuncs['vctX'](parm)},
+        latexR2:'',
+        mg: function (parm) {return 'vct('+parm+')'},
+        },
+    cpx:{ //complex number from FUNC
+        mg: function (parm) {return mgFuncs['cpxE'](parm[0],parm[1])},
+        },
     }
     //mg handlers
     const mgFuncs = {
@@ -1582,8 +1507,8 @@ var mgTrans = function() {
         xTractU = oprExtract(mgTrans.cFunc(xU));
         xTractL = oprExtract(mgTrans.cFunc(xL));
         xL = oParens(xL);xU = oParens(xU);
-        if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "fac") {xU  = xParens(xU)}
-        if (xTractL.func == "cAdd" || xTractL.func == "cSub" || xTractL.func == "fac") {xL  = xParens(xL)}
+        if (["cAdd","cSub","fac"].indexOf(xTractU.func)+1) {xU  = xParens(xU)}
+        if (["cAdd","cSub","fac"].indexOf(xTractL.func)+1) {xL  = xParens(xL)}
         if (xTractL.func == "cDiv" && xTractU.func == "cDiv") {xU  = xParens(xU);xL  = xParens(xL)}
         if (xU.indexOf("Cv[45]") > -1 && xU.lastIndexOf("Cv[45]") == xU.length-6) {xU  = xParens(xU)}
         if (xL.indexOf("Cv[45]") > -1 && xL.lastIndexOf("Cv[45]") == xL.length-6) {xL  = xParens(xL)}
@@ -1593,16 +1518,26 @@ var mgTrans = function() {
     cDivE: function (xU,xL) { //division
         xTractU = oprExtract(mgTrans.cFunc(xU));
         xTractL = oprExtract(mgTrans.cFunc(xL));
-        if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "cMul" || xTractU.func == "cDiv" || xTractU.func == "cNeg" || xU.indexOf("Cv[8747]") > -1) {xU  = xParens(xU)}
-        if (xTractL.func == "cAdd" || xTractL.func == "cSub" || xTractL.func == "cMul" || xTractL.func == "cDiv" || xTractL.func == "cNeg" || xL.indexOf("Cv[8747]") > -1) {xL  = xParens(xL)}
+        if (["cAdd","cSub","cDiv","cMul","cNeg"].indexOf(xTractU.func)+1 || xU.indexOf("Cv[8747]") > -1) {xU  = xParens(xU)}
+        if (["cAdd","cSub","cDiv","cMul","cNeg"].indexOf(xTractL.func)+1 || xL.indexOf("Cv[8747]") > -1) {xL  = xParens(xL)}
         return xU + "/" + xL
         },
     cPowE: function (xU,xL) { //powers
         xTractU = oprExtract(mgTrans.cFunc(xU));
         xTractL = oprExtract(mgTrans.cFunc(xL));
-        if (xTractU.func == "cAdd" || xTractU.func == "cSub" || xTractU.func == "cMul" || xTractU.func == "cDiv" || xTractU.func == "cNeg" || xTractU.func == "fac") {xU  = xParens(xU)}
-        if (xTractL.func == "cAdd" || xTractL.func == "cSub" || xTractL.func == "cMul" || xTractL.func == "cDiv" || xTractL.func == "cNeg") {xL  = xParens(xL)}
+        if (["cAdd","cSub","cDiv","cMul","cNeg","fac"].indexOf(xTractU.func)+1) {xU  = xParens(xU)}
+        if (["cAdd","cSub","cDiv","cMul","cNeg"].indexOf(xTractL.func)+1) {xL  = xParens(xL)}
         return xU + "^" + xL
+        },
+    cpxE: function (xU,xL) {
+        if (xU == 0 && xL == 1) {return "Cv[46]"}
+        if (xU == 0 && xL == -1) {return "-Cv[46]"}
+        if (xU == 0 && xL != 0) {return xL + "Cv[46]"}
+        if (xU != 0 && xL == 1) {return xU + "+Cv[46]"}
+        if (xU != 0 && xL == -1) {return xU + "-Cv[46]"}
+        if (xU != 0 && xL > 0) {return xU + "+" + xL + "Cv[46]"}
+        if (xU != 0 && xL < 0) {return xU + "-" + (-xL) + "Cv[46]"}
+        return xU
         },
     }
 
@@ -1620,8 +1555,8 @@ var mgTrans = function() {
                 +xA+"</span><span style='line-height:80%;display:table-row;font-size:"+xFsize+"%'>"+xS+"</span><span style='line-height:150%;display:table-row;font-size:50%'>"
                 +xB+"</span></span></span><Xdve>"
         },
-    fAccentU: function (xA) {return "<Xfnc><span style='display:inline-block;'><span style='text-align:center;vertical-align:middle;display:inline-table;'><span style='display:table-row;line-height:20%;font-size:60%'>"+xA+"</span><span style='line-height:90%;display:table-row;'>"},
-    fAccentL: function (xB) {return "<Xfnc></span><span style='display:table-row;line-height:20%;font-size:60%'>"+xB+"</span></span></span>"},
+    fAccentU: function (xA) {return "<span style='display:inline-block;'><span style='text-align:center;vertical-align:middle;display:inline-table;'><span style='display:table-row;line-height:20%;font-size:60%'>"+xA+"</span><span style='line-height:90%;display:table-row;'>"},
+    fAccentL: function (xB) {return "</span><span style='display:table-row;line-height:20%;font-size:60%'>"+xB+"</span></span></span>"},
     cMulL: function (xU,xL) {
         if (xL.indexOf("<Xfnc>") == 0) {return xU+" "+xL}
         return xU + "" + xL
@@ -1714,6 +1649,17 @@ var mgTrans = function() {
             return "<Xrow>" + mReturn + "<Xrwe>"
         }
         },
+    vecL: function (xA) {
+            var vOver = "";
+            for (var xI=1;xI<xA.length;xI++) {vOver = vOver+"&#8212;"}
+            vOver = vOver+"&#8594;";
+            return htmlFuncs['fAccentU'](vOver) + xA + htmlFuncs['fAccentL']("<span style='line-height:50%'>&nbsp;</span>")
+        },
+    vctL: function (xA) {
+            var mReturn = "",iM = 0;
+            for (iM in xA) {mReturn = mReturn + "<tr><td>" + xA[iM] + "</tr></td>"}
+            return xParenL + "<table>" + mReturn + "</table>" + xParenR
+        },
     }
     //latex handlers
     const latexFuncs = {
@@ -1756,6 +1702,16 @@ var mgTrans = function() {
             }
             mReturn = mReturn + "\\end{bmatrix}"
         }
+        return mReturn
+        },
+    vctX: function (xA) {
+        var mReturn = "";
+            mReturn = mReturn + "\\begin{pmatrix}";
+            for (var iR=0;iR<xA.length;iR++) {
+                if (iR < xA.length-1) {mReturn = mReturn + xA[iR] + "\\\\"}
+                else {mReturn = mReturn + xA[iR]}
+            }
+            mReturn = mReturn + "\\end{pmatrix}"
         return mReturn
         },
     }
@@ -1920,21 +1876,19 @@ var mgTrans = function() {
                 htmlReturn = htmlReturn.substr(0,bSym)+strg+htmlReturn.substr(iXs.end+1);
             }
             else if (dNest(strg) == 1) { //expanded parens
-                if (strCount(htmlReturn.substr(0,bSym+1),"{") > strCount(htmlReturn.substr(iXs.end),"}")) {htmlReturn = htmlReturn.substr(0,bSym)+htmlFuncs['brkt']("(",strg)+strg+htmlReturn.substr(iXs.end);}
+                if (strCount(htmlReturn.substr(0,bSym+1),"{") > strCount(htmlReturn.substr(iXs.end),"}")) {htmlReturn = htmlReturn.substr(0,bSym)+htmlFuncs['brkt']("(",strg)+strg+htmlReturn.substr(iXs.end);} //left paren only
                 else {htmlReturn = htmlReturn.substr(0,bSym)+htmlFuncs['brkt']("(",strg)+strg+htmlFuncs['brkt'](")",strg)+htmlReturn.substr(iXs.end+1)}
             }
             else if (dNest(strg) > 1) { //extra tall parens
-                if (strCount(htmlReturn.substr(0,bSym+1),"{") > strCount(htmlReturn.substr(iXs.end),"}")) {
-                    htmlReturn = htmlReturn.substr(0,bSym)+"<table style='text-align:center;display:inline-table;vertical-align:middle;'><tr><td style='border-left:1px solid black;border-top:1px solid black;border-bottom:1px solid black;border-radius: 10px 0 0 10px;'>&nbsp;<td><table><tr><td style='line-height: 70%'>"
-                    +strg+"</tr></td></table></td></tr></table>"+htmlReturn.substr(iXs.end+1)
+                if (strCount(htmlReturn.substr(0,bSym+1),"{") > strCount(htmlReturn.substr(iXs.end),"}")) { //left paren only
+                    htmlReturn = htmlReturn.substr(0,bSym)+xParenL+strg+"</tr></td></table></td></tr></table>"+htmlReturn.substr(iXs.end+1)
                 }
-                else {
-                    htmlReturn = htmlReturn.substr(0,bSym)+"<table style='text-align:center;display:inline-table;vertical-align:middle;'><tr><td style='border-left:2px solid black;border-top:2px solid black;border-bottom:2px solid black;border-radius: 10px 0 0 10px;'>&nbsp;<td><table><tr><td style='line-height: 70%'>"
-                    +strg+"</tr></td></table></td><td style='border-right:2px solid black;border-top:2px solid black;border-bottom:2px solid black;border-radius: 0 10px 10px 0;'>&nbsp;</td></tr></table>"+htmlReturn.substr(iXs.end+1)
+                else { //both parens
+                    htmlReturn = htmlReturn.substr(0,bSym)+xParenL+strg+xParenR+htmlReturn.substr(iXs.end+1)
                 }               
             }
             else { //normal parens
-                if (strCount(htmlReturn.substr(0,bSym+1),"{") > strCount(htmlReturn.substr(iXs.end),"}"))  {htmlReturn = htmlReturn.substr(0,bSym)+"("+strg+htmlReturn.substr(iXs.end);}
+                if (strCount(htmlReturn.substr(0,bSym+1),"{") > strCount(htmlReturn.substr(iXs.end),"}"))  {htmlReturn = htmlReturn.substr(0,bSym)+"("+strg+htmlReturn.substr(iXs.end);} //left paren only
                 else {htmlReturn = htmlReturn.substr(0,bSym)+"("+strg+")"+htmlReturn.substr(iXs.end+1)}
             }
         }

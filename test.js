@@ -191,12 +191,12 @@ var numerical =
 "snh(csh(tnh(sch(cch(cth(mat(mat(1,2),mat(3,4))))))))","undefined",
 "ash(ach(ath(axh(ayh(azh(mat(mat(1,2),mat(3,4))))))))","undefined",
 "arg(rex(imx(exp(cei(con(mat(mat(1,2),mat(3,4))))))))","undefined",
+"gam((mat(mat(1,2),mat(3,4))))!","undefined",
 
 "1/0","Cv[8734]",
 "lne(0)","-Cv[8734]",
 "cch(0)","Cv[8734]",
 
-"gam((mat(mat(1,2),mat(3,4))))!","undefined",
 "mat(mat(1,2,3),mat(4,5,6))","mat(mat(1,2,3),mat(4,5,6))",
 "mat(mat(3,4,2))*mat(mat(13,9,7,15),mat(8,7,4,6),mat(6,4,0,3))","mat(mat(83,63,37,75))",
 "mat(mat(1,2),mat(3,4),mat(5,6))*mat(mat(1,2,3),mat(4,5,6))","mat(mat(9,12,15),mat(19,26,33),mat(29,40,51))",
@@ -227,10 +227,22 @@ var numerical =
 "mat(mat(mat(mat(1,2),mat(11,12)),mat(mat(3,4),mat(11,12))),mat(mat(mat(1,2),mat(11,12)),mat(mat(3,4),mat(11,12))))^0","mat(mat(mat(mat(1,0),mat(0,1)),mat(mat(0,0),mat(0,0))),mat(mat(mat(0,0),mat(0,0)),mat(mat(1,0),mat(0,1))))",
 "mat(mat(mat(mat(1,2),mat(11,12)),mat(mat(3,4),mat(11,12))),mat(mat(mat(1,2),mat(11,12)),mat(mat(3,4),mat(11,12))))^2","mat(mat(mat(mat(70,80),mat(286,332)),mat(mat(78,88),mat(330,376))),mat(mat(mat(70,80),mat(286,332)),mat(mat(78,88),mat(330,376))))",
 "mat(mat(mat(mat(1)),mat(mat(3))),mat(mat(mat(5)),mat(mat(7))))^-1*mat(mat(mat(mat(1)),mat(mat(3))),mat(mat(mat(5)),mat(mat(7))))","mat(mat(1,0),mat(0,1))",
+
 //arrays
 "mat(1,2,3,4)*2","mat(2,4,6,8)",
 "mat(1,2,3,4)+mat(1,2,3,4)","mat(2,4,6,8)",
 "mat(1,2,3,4)+mat(1)","undefined",
+
+// vectors
+"vct(1,2,3,4)+vct(1)","undefined",
+"vct(1,2,3)+vct(2,3,4)","vct(3,5,7)",
+"2vct(1,2,3)","vct(2,4,6)",
+"vct(9,2,7)Cv[8226]vct(4,8,10)","122",
+"abs(vct(6,8))","10",
+"abs(vct(1,-2,3))","3.74165739",
+"vct(3,3,3,3)-vct(1,2,3,4)","vct(2,1,0,-1)",
+"vct(2,3,4)*vct(5,6,7)","vct(-3,6,-3)",
+
 ];
 
 var range =
@@ -261,8 +273,8 @@ var range =
 "Cv[10120](Cv[10121]+1)/(Cv[10121]+1)","Cv[10120]Cv[10044]Cv[10121]Cv[8712]Cv[8450]Cv[59]Cv[10121]Cv[8800]-1",
 "2cos(Cv[10120]Cv[10121])/Cv[10121]^3+2Cv[10120]sin(Cv[10120]Cv[10121])/Cv[10121]^2-Cv[10120]^2cos(Cv[10120]Cv[10121])/Cv[10121]+Cv[11100]","Cv[10120]Cv[10044]Cv[10121]Cv[8712]Cv[8450]Cv[59]Cv[10121]Cv[8800]0",
 "tan(Cv[10120]Cv[10121])+tan(Cv[10120]/Cv[10121])","Cv[10120]Cv[10044]Cv[10121]Cv[8712]Cv[8450]Cv[59]Cv[10120]Cv[8800]Cv[10121]Cv[29]/2Cv[10044]Cv[10121]Cv[8800]2Cv[10120]/Cv[29]Cv[10044]Cv[10120]Cv[8800]Cv[29]/2Cv[10121]Cv[10044]Cv[10121]Cv[8800]Cv[29]/2Cv[10120]Cv[10044]Cv[10121]Cv[8800]0",
-"atn(Cv[10120])Cv[10120]^2-2Cv[10120](Cv[10120]atn(Cv[10120])-lne(Cv[10120]^2+1)/2)+Cv[11100]","Cv[10120]Cv[8712]Cv[8450]Cv[59]-(Cv[29]/2)Cv[8804]Cv[10120]Cv[8804]Cv[29]/2Cv[10044]Cv[10120]Cv[8800]sqt(-1)",
-"Cv[10120]lne(Cv[10120]^2+1)-atn(Cv[10120])Cv[10120]^2+Cv[11100]","Cv[10120]Cv[8712]Cv[8450]Cv[59]-(Cv[29]/2)Cv[8804]Cv[10120]Cv[8804]Cv[29]/2Cv[10044]Cv[10120]Cv[8800]sqt(-1)",
+"atn(Cv[10120])Cv[10120]^2-2Cv[10120](Cv[10120]atn(Cv[10120])-lne(Cv[10120]^2+1)/2)+Cv[11100]","Cv[10120]Cv[8712]Cv[8450]Cv[59]-(Cv[29]/2)Cv[8804]Cv[10120]Cv[8804]Cv[29]/2Cv[10044]Cv[10120]Cv[8800]Cv[46]",
+"Cv[10120]lne(Cv[10120]^2+1)-atn(Cv[10120])Cv[10120]^2+Cv[11100]","Cv[10120]Cv[8712]Cv[8450]Cv[59]-(Cv[29]/2)Cv[8804]Cv[10120]Cv[8804]Cv[29]/2Cv[10044]Cv[10120]Cv[8800]Cv[46]",
 "(Cv[8]^Cv[10120]sin(Cv[10120]))/2+Cv[8]^Cv[10120]cos(Cv[10120])-(Cv[8]^Cv[10120]sin(Cv[10120]))/2","Cv[10120]Cv[8712]Cv[8450]",
 "Cv[10109]-lne(Cv[10120])/lne(Cv[10121])","Cv[10109]Cv[10044]Cv[10120]Cv[10044]Cv[10121]Cv[8712]Cv[8450]Cv[59]Cv[10120]Cv[8800]0Cv[10044]Cv[10121]Cv[8800]0Cv[10044]Cv[10121]Cv[8800]1",
 "(Cv[10120]^2+2Cv[10120]^2Cv[10121]-2Cv[10120]Cv[10121]+2Cv[10120]Cv[10121]^2-3Cv[10121]^2)/(2Cv[10120]-3Cv[10121]^2)","Cv[10120]Cv[10044]Cv[10121]Cv[8712]Cv[8450]Cv[59]Cv[10120]Cv[8800]3Cv[10121]^2/2Cv[10044]Cv[10121]Cv[8800]sqt(2Cv[10120])/sqt(3)",
@@ -794,7 +806,7 @@ var reduce =
 "abs(-2)","2",
 "abs(abs(Cv[10120]))","abs(Cv[10120])",
 "abs(-Cv[10120])","abs(Cv[10120])",
-"cdf(pdf(lcf(lpf(rou(rnd(rex(frc(cei(Cv[10118])))))))))","cdf(pdf(lcf(lpf(rou(rnd(rex(frc(cei(Cv[10118])))))))))",
+"cdf(pdf(lcf(lpf(rou(rnd(rex(cei(Cv[10118]))))))))","cdf(pdf(lcf(lpf(rou(rnd(rex(cei(Cv[10118]))))))))",
 
 // SV dups
 "(3Cv[10120]+Cv[10120]^3-5Cv[10120]^2-15)/(Cv[10120]^2+3)","Cv[10120]-5",
@@ -1999,6 +2011,8 @@ var xport =
 "mat(mat(Cv[10120],Cv[10121],Cv[10122]),mat(12,13,14))*mat(mat(Cv[10097],Cv[10098],Cv[10099]),mat((Cv[29]/2),Cv[10100],Cv[8]))^2+sin(Cv[10120])","\\begin{bmatrix}x&y&z\\\\12&13&14\\end{bmatrix}\\times \\begin{bmatrix}a&b&c \\\\ \\frac{\\pi}{2}&d&e  \\end{bmatrix}^{2}+\\sin\\left(x\\right)",
 "mat(mat(Cv[29]/2,2Cv[46],3,4),mat(Cv[10097],Cv[10098],Cv[10099],Cv[10100]/2))","\\begin{bmatrix} \\frac{ \\pi }{2}&2 \\imath &3&4 \\\\a&b&c& \\frac{d}{2} \\end{bmatrix}",
 "mat(mat(1,2,3),mat(4,5,6),mat(11,12,13),mat(14,15,16))","\\begin{bmatrix}1&2&3 \\\\4&5&6 \\\\11&12&13 \\\\14&15&16 \\end{bmatrix}",
+"vct(2,3,4)","\\begin{pmatrix}2\\\\3\\\\4\\end{pmatrix}",
+"vct(2,3,4)*vct(5,6,7)","\\begin{pmatrix}2\\\\3\\\\4\\end{pmatrix}\\times\\begin{pmatrix}5\\\\6\\\\7\\end{pmatrix}",
 "1/2+1/5","\\frac{1}{2}+\\frac{1}{5}",
 "(2(3-2Cv[46])/Cv[29])","\\frac{2 \\left(3-2 \\imath\\right)}{\\pi}",
 "(8/Cv[29])","\\frac{8}{\\pi}",
@@ -2233,7 +2247,6 @@ var internal =
 "mgTrans.mgExport('cMul(pdf(Cv[10120]),lcf(Cv[10120]))')","pdf(Cv[10120])lcf(Cv[10120])",
 "mgTrans.mgExport('cMul(lpf(Cv[10120]),rou(Cv[10120]))')","lpf(Cv[10120])rou(Cv[10120])",
 "mgTrans.mgExport('cMul(rnd(Cv[10120]),rex(Cv[10120]))')","rnd(Cv[10120])rex(Cv[10120])",
-"mgTrans.mgExport('cMul(imx(Cv[10120]),frc(Cv[10120]))')","imx(Cv[10120])frc(Cv[10120])",
 "mgTrans.mgExport('cMul(sbr(Cv[10120]),cbr(Cv[10120]))')","sbr(Cv[10120])cbr(Cv[10120])",
 "mgTrans.mgExport('cMul(udt(Cv[10120]),tld(Cv[10120]))')","udt(Cv[10120])tld(Cv[10120])",
 "mgTrans.mgExport('cMul(cup(Cv[10120],Cv[10121]),cap(Cv[10120],Cv[10121]))')","cup(Cv[10120],Cv[10121])cap(Cv[10120],Cv[10121])",
