@@ -2993,8 +2993,8 @@ var mgCalc = function() {
             xNum = xNum.replace(rgx,String(Cv[xC]))
         }
         for (var xV in nVars) { //substitute variables
-            var rgx = new RegExp("Cv\\["+xV+"\\]","g");
-            xNum = xNum.replace(rgx,String(Cv[xV]))
+            var rgy = new RegExp("Cv\\["+xV+"\\]","g");
+            xNum = xNum.replace(rgy,String(Cv[xV]))
         }
         return execFunc(xNum,numFunc)
     }
