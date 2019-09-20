@@ -3115,7 +3115,7 @@ var mgCalc = function() {
             var vReturn = xU;
             if (xU.length != xL.length) {return "undefined"}
             for (var iR in xU) {vReturn[iR] = cAdd(xU[iR],xL[iR])}
-            return "vct(" + vReturn + ")"           
+            return vct(vReturn)           
         }
         return "undefined"
     }
