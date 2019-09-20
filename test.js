@@ -806,7 +806,7 @@ var reduce =
 "abs(-2)","2",
 "abs(abs(Cv[10120]))","abs(Cv[10120])",
 "abs(-Cv[10120])","abs(Cv[10120])",
-"cdf(pdf(lcf(lpf(rou(rnd(rex(frc(cei(Cv[10118])))))))))","cdf(pdf(lcf(lpf(rou(rnd(rex(frc(cei(Cv[10118])))))))))",
+"cdf(pdf(lcf(lpf(rou(rnd(rex(cei(Cv[10118]))))))))","cdf(pdf(lcf(lpf(rou(rnd(rex(cei(Cv[10118]))))))))",
 
 // SV dups
 "(3Cv[10120]+Cv[10120]^3-5Cv[10120]^2-15)/(Cv[10120]^2+3)","Cv[10120]-5",
@@ -2247,7 +2247,6 @@ var internal =
 "mgTrans.mgExport('cMul(pdf(Cv[10120]),lcf(Cv[10120]))')","pdf(Cv[10120])lcf(Cv[10120])",
 "mgTrans.mgExport('cMul(lpf(Cv[10120]),rou(Cv[10120]))')","lpf(Cv[10120])rou(Cv[10120])",
 "mgTrans.mgExport('cMul(rnd(Cv[10120]),rex(Cv[10120]))')","rnd(Cv[10120])rex(Cv[10120])",
-"mgTrans.mgExport('cMul(imx(Cv[10120]),frc(Cv[10120]))')","imx(Cv[10120])frc(Cv[10120])",
 "mgTrans.mgExport('cMul(sbr(Cv[10120]),cbr(Cv[10120]))')","sbr(Cv[10120])cbr(Cv[10120])",
 "mgTrans.mgExport('cMul(udt(Cv[10120]),tld(Cv[10120]))')","udt(Cv[10120])tld(Cv[10120])",
 "mgTrans.mgExport('cMul(cup(Cv[10120],Cv[10121]),cap(Cv[10120],Cv[10121]))')","cup(Cv[10120],Cv[10121])cap(Cv[10120],Cv[10121])",

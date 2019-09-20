@@ -98,7 +98,6 @@ var mgCalc = function() {
     rnd: function (xU) {return "rnd("+xU+")"},
     rex: function (xU) {return "rex("+xU+")"},
     imx: function (xU) {return "imx("+xU+")"},
-    frc: function (xU) {return "frc("+xU+")"},
     int: function (xU) {return "int("+xU+")"},
     cei: function (xU) {return "cei("+xU+")"},
     arg: function (xU) {return "arg("+xU+")"},
@@ -2989,8 +2988,14 @@ var mgCalc = function() {
         xNum = String(xNum);
         var nVars = cInventory(xNum);
         xNum = xNum.replace(/Cv\[46\]/g,"cpx(0,1)"); //substitute imaginary constant
-        for (var xC=0;xC<46;xC++) {xNum = xNum.replace("Cv["+xC+"]",String(Cv[xC]))} //substitute constants
-        for (var xV in nVars) {xNum = xNum.replace("Cv["+xV+"]",String(Cv[xV]))} //substitute variables
+        for (var xC=0;xC<46;xC++) { //substitute constants
+            var rgx = new RegExp("Cv\\["+xC+"\\]","g");
+            xNum = xNum.replace(rgx,String(Cv[xC]))
+        }
+        for (var xV in nVars) { //substitute variables
+            var rgx = new RegExp("Cv\\["+xV+"\\]","g");
+            xNum = xNum.replace(rgx,String(Cv[xV]))
+        }
         return execFunc(xNum,numFunc)
     }
     function getType(xT) { //return numerical object type

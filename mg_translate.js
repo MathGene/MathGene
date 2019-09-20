@@ -989,18 +989,6 @@ var mgTrans = function() {
         latexR2:')',
         mg: function (parm) {return 'imx('+parm[0]+')'},
         },
-    frc:{  //decimal component
-        htmlL1: function (parm) {return '<Xfnc>frac<Xfnx>('+parm[0]},
-        htmlR1:')',
-        htmlL2: function (parm) {return '<Xfnc>frac<Xfnx>('+parm[0]},
-        htmlR2:')',
-        texfunc:[],
-        latexL1: function (parm) {return '\\frc(<Xfnx>'+parm[0]},
-        latexR1:')',
-        latexL2: function (parm) {return '\\frc(<Xfnx>'+parm[0]},
-        latexR2:')',
-        mg: function (parm) {return 'frc('+parm[0]+')'},
-        },
     sbr:{ //straight bracket
         htmlL1: function (parm,strg) {return "<table style='text-align:center;display:inline-table;vertical-align:middle;'><tr><td style='border-left:3px solid black;border-top:1px solid black;border-bottom:1px solid black;'>&nbsp;<td><table><tr><td style='line-height: 50%'>"+parm[0]},
         htmlR1: function (parm,strg) {return "</tr></td></table></td><td style='border-right:3px solid black;border-top:1px solid black;border-bottom:1px solid black;'>&nbsp;</td></tr></table>"},
