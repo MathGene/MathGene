@@ -1717,7 +1717,6 @@ var mgTrans = function() {
     }
     //parsing delimiters
     const tDelimiter = ["_",",","!","=","<",">","|","+","-","*","^","/","{","}","(",")","\\"," "];
-    //cFunc arrays
     //non-multiplying cBnd symbols
     const nBind = ["(Cv\\[8773\\])","(Cv\\[8750\\])","(Cv\\[8751\\])","(Cv\\[8752\\])",
                 "(Cv\\[8592\\])","(Cv\\[8747\\])","(Cv\\[8748\\])","(Cv\\[59\\])",
@@ -1893,7 +1892,7 @@ var mgTrans = function() {
             }
         }
         // format arrays
-        htmlReturn = htmlReturn.replace(/\<Xcel\>/g,"").replace(/\<Xrow\>/g,"{").replace(/\<Xrwe\>/g,"}");
+        htmlReturn = htmlReturn.replace(/\<Xcel\>/g,"").replace(/\<Xrow\>/g,xParenL).replace(/\<Xrwe\>/g,xParenR);
         //format matrices
         sCount = strCount(htmlReturn,"<Xcle>");
         for (nXs=0;nXs<sCount;nXs++) {
@@ -2075,7 +2074,7 @@ var mgTrans = function() {
                 lxReturn = lxReturn.substr(0,bSym-1)+"("+strg+")"+lxReturn.substr(iXs+1);
             }
         }
-        lxReturn = lxReturn.replace(/\<Xcel\>/g,",&").replace(/\<Xrow\>/g,"\\left\\{\\begin{array}{1}").replace(/\<Xrwe\>/g,"\\end{array}\\right\\}"); //resolve arrays
+        lxReturn = lxReturn.replace(/\<Xcel\>/g,",&").replace(/\<Xrow\>/g,"\\begin{pmatrix}").replace(/\<Xrwe\>/g,"\\end{pmatrix}"); //resolve arrays
         lxReturn = lxReturn.replace(/\<X\w\w\w\>/g,"").replace(/\%/g,"("); //clean up tags
         //resolve symbols
         sCount = strCount(lxReturn,"Cv[");
