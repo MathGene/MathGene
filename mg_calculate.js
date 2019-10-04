@@ -899,18 +899,18 @@ var mgCalc = function() {
         }
         //infinity handlers for limits
         if (xU == "Cv[8734]") {
-            if (xL <= -1) {return 0}
+            if (rou(xL) <= -1) {return 0}
             else if (!strTest(xL,"Cv[8734]")) {return "Cv[8734]"}
         }
         if (xU == "cNeg(Cv[8734])") {
-            if (xL <= -1) {return 0}
+            if (rou(xL) <= -1) {return 0}
             else if (!nbrEven(xL)) {return "cNeg(Cv[8734])"}
             else if (nbrEven(xL)) {return "Cv[8734]"}
         }
         if (xL == "Cv[8734]") {
             if (abs(xU) > -1 && abs(xU) < 1) {return 0}
             else if (!nbrEven(xU) && xU < -1) {return "cNeg(Cv[8734])"}
-            else if (rou(xU) >= 1) {return "Cv[8734]"}
+            else if (rou(xU) > 1) {return "Cv[8734]"}
             else {return "Cv[8734]"}
         }
         if (xL == "cNeg(Cv[8734])") {
@@ -997,6 +997,8 @@ var mgCalc = function() {
         if (xU == "Cv[8734]" || xL == "Cv[8734]") { //infinity handlers for limits
             if (xU < 0) {return "cNeg(Cv[8734])"}
             else if (xL < 0) {return "cNeg(Cv[8734])"}
+			else if (xU == "cNeg(Cv[8734])")  {return "cNeg(Cv[8734])"}
+			else if (xL == "cNeg(Cv[8734])")  {return "cNeg(Cv[8734])"}
             else {return "Cv[8734]"}
         }
         if (xTractU.func == "abs" && xTractL.func == "abs") {return absS(cMulS(xTractU.upper,xTractL.upper))}
@@ -1034,9 +1036,9 @@ var mgCalc = function() {
         if (xL == 0) {return "undefined"}
         if (xL == 1) {return xU}
         if (xU == 0) {return 0}
-        if (xU == xL && !strTest(xU,"Cv[8734]")) {return 1}
-        if (xL == "Cv[8734]" || xL == "cNeg(Cv[8734])") {return 0}
         if (xL < 0)  {return cDivS(cNegS(xU),cNegS(xL))}
+        if (xU == xL && !strTest(xU,"Cv[8734]")) {return 1}
+        if ((xL == "Cv[8734]" || xL == "cNeg(Cv[8734])") && !strTest(xU,"Cv[8734]")) {return 0}
         if (!factorFlag && !pxpFlag && nbrTest(xU) && xU != int(xU)) {return cDivS(decToFrac(xU),xL)}
         if (!factorFlag && !pxpFlag && nbrTest(xL) && xL != int(xL)) {return cDivS(xU,decToFrac(xL))}
         if (nbrTest(xU) && nbrTest(xL) && cDiv(xU,xL) == int(cDiv(xU,xL))) {return fmtResult(cDiv(xU,xL))}
