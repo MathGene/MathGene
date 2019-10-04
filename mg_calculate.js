@@ -997,8 +997,7 @@ var mgCalc = function() {
         if (xU == "Cv[8734]" || xL == "Cv[8734]") { //infinity handlers for limits
             if (xU < 0) {return "cNeg(Cv[8734])"}
             else if (xL < 0) {return "cNeg(Cv[8734])"}
-			else if (xU == "cNeg(Cv[8734])")  {return "cNeg(Cv[8734])"}
-			else if (xL == "cNeg(Cv[8734])")  {return "cNeg(Cv[8734])"}
+            else if (xL == 0 || xU == 0) {return "undefined"}
             else {return "Cv[8734]"}
         }
         if (xTractU.func == "abs" && xTractL.func == "abs") {return absS(cMulS(xTractU.upper,xTractL.upper))}
