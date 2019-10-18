@@ -1273,7 +1273,7 @@ var mgCalc = function() {
         var xTractU = opExtract(xU);
         if (xU == "Cv[8734]") {return "Cv[8734]"}
         if (xU == "cNeg(Cv[8734])") {return "cNeg(Cv[8734])"}
-        if (nbrTest(xU) && cbt(xU) == int(cbt(xU)) ) {return (fmtResult(cbt(xU)))} //calculate integer roots
+        if (nbrTest(xU) && cbt(xU) == int(cbt(xU))) {return (fmtResult(cbt(xU)))} //calculate integer roots
         if (xTractU.func == "cPow") {return cPowS(xTractU.upper,cDivS(xTractU.lower,3))}
         if (pxpFlag) {return "cPow("+xU+",cDiv(1,3))"}
         return "cbt("+xU+")"
@@ -2578,6 +2578,8 @@ var mgCalc = function() {
     cMulL: function(xU,xL,lVar,xLim) {
         if (lmtS(xU,lVar,xLim) == 0 && lmtS(xL,lVar,xLim) == "Cv[8734]") {return lmtFunc["cDivL"](xU,cDivS(1,xL),lVar,xLim)} //0*inf
         if (lmtS(xL,lVar,xLim) == 0 && lmtS(xU,lVar,xLim) == "Cv[8734]") {return lmtFunc["cDivL"](xL,cDivS(1,xU),lVar,xLim)} //inf*0
+        if (lmtS(xU,lVar,xLim) == 0 && lmtS(xL,lVar,xLim) == "cNeg(Cv[8734])") {return lmtFunc["cDivL"](xL,cDivS(1,xU),lVar,xLim)} //0*-inf
+        if (lmtS(xL,lVar,xLim) == 0 && lmtS(xU,lVar,xLim) == "cNeg(Cv[8734])") {return lmtFunc["cDivL"](xU,cDivS(1,xL),lVar,xLim)} //-inf*0
         if (!strTest(xU,lVar)) {return cMulS(xU,lmtS(xL,lVar,xLim))} //constant rule
         if (!strTest(xL,lVar)) {return cMulS(xL,lmtS(xU,lVar,xLim))} //constant rule
         return cMulS(lmtS(xU,lVar,xLim),lmtS(xL,lVar,xLim)) //product rule
@@ -2589,7 +2591,7 @@ var mgCalc = function() {
         if (xTractL.func != "sqt" && xTractU.func == "sqt") {return sqtS(lmtS(cDivS(xTractU.upper,xprExpand(cPowS(xL,2))),lVar,xLim))}
         if (xTractL.func == "cPow" && xTractU.func == "cPow") {return cDivS(lmtFunc["cPowL"](xU,lVar,xLim),lmtFunc["cPowL"](xL,lVar,xLim))}
         if ((strTest(lmtS(xU,lVar,xLim),"Cv[8734]") && strTest(lmtS(xL,lVar,xLim),"Cv[8734]")) || lmtS(xL,lVar,xLim) == 0) {return lmtS(cDivS(drvS(xU,lVar),drvS(xL,lVar)),lVar,xLim)} // l'Hopital
-        return cDivS(lmtS(xU,lVar,xLim),lmtS(xL,lVar,xLim)) //quotient rule   
+        return cDivS(lmtS(xU,lVar,xLim),lmtS(xL,lVar,xLim)) //quotient rule
     },
     cPowL: function(xU,xL,lVar,xLim) {
         var xTractU = opExtract(xU);
@@ -2604,7 +2606,7 @@ var mgCalc = function() {
         }
         if (lmtS(xL,lVar,xLim) == 0 && lmtS(xU,lVar,xLim) == 0) {return cPowS("Cv[8]",lmtFunc["cDivL"](lne(xU),cDivS(1,xL),lVar,xLim))} //0^0
         if (lmtS(xL,lVar,xLim) == "Cv[8734]" && lmtS(xU,lVar,xLim) == 0) {return cPowS("Cv[8]",lmtFunc["cDivL"](lne(xU),cDivS(1,xL),lVar,xLim))} //inf^0
-        if (lmtS(xL,lVar,xLim) == 1 && lmtS(xU,lVar,xLim) == "Cv[8734]") {return cPowS("Cv[8]",lmtFunc["cDivL"](xL,cDivS(1,lne(xU)),lVar,xLim))} //1^inf
+        if (lmtS(xL,lVar,xLim) == 1 && strTest(lmtS(xU,lVar,xLim),"Cv[8734]")) {return cPowS("Cv[8]",lmtFunc["cDivL"](xL,cDivS(1,lne(xU)),lVar,xLim))} //1^inf
         if (strTest(xLim,xU) && !strTest(xLim,xL)) {return cPowS(lmtS(xU,lVar,xLim),xL)} //power rule
         return cPowS(xU,lmtS(xL,lVar,xLim))
     },
