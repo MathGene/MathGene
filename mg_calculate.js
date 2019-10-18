@@ -2605,8 +2605,8 @@ var mgCalc = function() {
             if (xTractU.func == "cSub" && xReduce("cAdd("+lVar+","+xU+")") == 1) {return cDivS(1,cPowS("Cv[8]",xTractL.upper))}
         }
         if (lmtS(xL,lVar,xLim) == 0 && lmtS(xU,lVar,xLim) == 0) {return cPowS("Cv[8]",lmtFunc["cDivL"](lne(xU),cDivS(1,xL),lVar,xLim))} //0^0
-        if (lmtS(xL,lVar,xLim) == "Cv[8734]" && lmtS(xU,lVar,xLim) == 0) {return cPowS("Cv[8]",lmtFunc["cDivL"](lne(xU),cDivS(1,xL),lVar,xLim))} //inf^0
-        if (lmtS(xL,lVar,xLim) == 1 && strTest(lmtS(xU,lVar,xLim),"Cv[8734]")) {return cPowS("Cv[8]",lmtFunc["cDivL"](xL,cDivS(1,lne(xU)),lVar,xLim))} //1^inf
+        if (strTest(lmtS(xU,lVar,xLim),"Cv[8734]") && lmtS(xL,lVar,xLim) == 0) {return cPowS("Cv[8]",lmtFunc["cDivL"](lne(xU),cDivS(1,xL),lVar,xLim))} //inf^0
+        if (lmtS(xU,lVar,xLim) == 1 && strTest(lmtS(xL,lVar,xLim),"Cv[8734]")) {return cPowS("Cv[8]",lmtFunc["cDivL"](xL,cDivS(1,lne(xU)),lVar,xLim))} //1^inf
         if (strTest(xLim,xU) && !strTest(xLim,xL)) {return cPowS(lmtS(xU,lVar,xLim),xL)} //power rule
         return cPowS(xU,lmtS(xL,lVar,xLim))
     },
