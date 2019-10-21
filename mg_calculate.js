@@ -115,13 +115,6 @@ var mgCalc = function() {
     pmm: function (xU,xL,xY,xZ) {return "pmm("+xU+","+xL+","+xY+","+xZ+")"},
     tdv: function (dXpr,deeVar,nTh) {return "tdv("+dXpr+","+deeVar+","+nTh+")"},
     drv: function (dXpr,deeVar,nTh) {return "drv("+dXpr+","+deeVar+","+nTh+")"},
-    smx: function (xU) {return "smx("+xU+")"},
-    pxp: function (xU) {return "pxp("+xU+")"},
-    vMul: function (xU,xL) {return "vMul("+xU+","+xL+")"},
-    vDiv: function (xU,xL) {return "vDiv("+xU+","+xL+")"},
-    vAdd: function (xU,xL) {return "vAdd("+xU+","+xL+")"},
-    vSub: function (xU,xL) {return "vSub("+xU+","+xL+")"},
-    vNeg: function (xU) {return "vNeg("+xU+")"},
     det: function (xU) {return "det("+xU+")"},
     trc: function (xU) {return "trc("+xU+")"},
     cpx: function (xU,xL) {return "cpx("+xU+","+xL+")"},
@@ -136,6 +129,13 @@ var mgCalc = function() {
         if (typeof iU != "undefined" && typeof iL != "undefined") {return "ntp("+nXpr+","+deeVar+","+iU+","+iL+")"}
         return "ntp("+nXpr+","+deeVar+")"
     },
+    smx: function (xU) {return smxS(xU)},
+    pxp: function (xU) {return pxpS(xU)},
+    vMul: function (xU,xL) {return vMulS(xU,xL)},
+    vDiv: function (xU,xL) {return vDivS(xU,xL)},
+    vAdd: function (xU,xL) {return vAddS(xU,xL)},
+    vSub: function (xU,xL) {return vSubS(xU,xL)},
+    vNeg: function (xU) {return vNegS(xU)},
     }
     const solverMap = { //map inverse functions for solver
     sin:{solverU:"asn(lExpr)",ineqU:0},
@@ -445,7 +445,7 @@ var mgCalc = function() {
             if (typeof passthruFunc[funcKey] == "undefined") {funcKey = expReturn.substr(bSym-5,4)} //extract operators cXxx()
             if (typeof funcObj[funcKey] == "undefined") {fReturn = passthruFunc[funcKey](mgTrans.oParens(paramS[0]),mgTrans.oParens(paramS[1]),paramS[2],paramS[3])} //execute passthru
             else {fReturn = funcObj[funcKey](mgTrans.oParens(paramS[0]),mgTrans.oParens(paramS[1]),paramS[2],paramS[3])}//execute operation
-            if (["mat","vec","vct"].indexOf(funcKey)+1) {fReturn = passthruFunc[funcKey](paramS)} //matrix/vector parameters
+            if (["mat","vec","vct"].indexOf(funcKey)+1) {fReturn = passthruFunc[funcKey](paramS)} //matrix/array/vector parameters
             expReturn = expReturn.substr(0,(expReturn.lastIndexOf("@")+1)-(funcKey.length+1))+fReturn+expReturn.substr(iXf+1); //assemble output
         }
         return expReturn
@@ -505,13 +505,6 @@ var mgCalc = function() {
     smm: function (xU,xL,xY,xZ) {return smmS(xU,xL,xY,xZ)},
     pmm: function (xU,xL,xY,xZ) {return pmmS(xU,xL,xY,xZ)},
     lmt: function (xU,xL,xR) {return lmtS(xU,xL,xR)},
-    smx: function (xU) {return smxS(xU)},
-    pxp: function (xU) {return pxpS(xU)},
-    vMul: function (xU,xL) {return vMulS(xU,xL)},
-    vDiv: function (xU,xL) {return vDivS(xU,xL)},
-    vAdd: function (xU,xL) {return vAddS(xU,xL)},
-    vSub: function (xU,xL) {return vSubS(xU,xL)},
-    vNeg: function (xU) {return vNegS(xU)},
     cpx: function (xU,xL) {return cpxS(xU,xL)},
     cbr: function (xU) {return "("+xU+")"},
     sbr: function (xU) {return "("+xU+")"},
@@ -2572,7 +2565,7 @@ var mgCalc = function() {
     cAddL: function(xU,xL,lVar,xLim) {return cAddS(lmtS(xU,lVar,xLim),lmtS(xL,lVar,xLim))},
     cSubL: function(xU,xL,lVar,xLim) {
         if (lmtS(xU,lVar,xLim) == "Cv[8734]" && lmtS(xL,lVar,xLim) == "Cv[8734]") {return lneS(lmtFunc["cDivL"](cPowS("Cv[8]",xU),cPowS("Cv[8]",xL),lVar,xLim))} //inf-inf
-        if (lmtS(xU,lVar,xLim) == "cNeg(Cv[8734])" && lmtS(xL,lVar,xLim) == "cNeg(Cv[8734])") {return lneS(lmtFunc["cDivL"](cPowS("Cv[8]",xU),cPowS("Cv[8]",xL),lVar,xLim))} //inf-inf
+        if (lmtS(xU,lVar,xLim) == "cNeg(Cv[8734])" && lmtS(xL,lVar,xLim) == "cNeg(Cv[8734])") {return lneS(lmtFunc["cDivL"](cPowS("Cv[8]",xU),cPowS("Cv[8]",xL),lVar,xLim))} //(-inf)-(-inf)
         return cSubS(lmtS(xU,lVar,xLim),lmtS(xL,lVar,xLim))
     },
     cMulL: function(xU,xL,lVar,xLim) {
@@ -2596,11 +2589,11 @@ var mgCalc = function() {
     cPowL: function(xU,xL,lVar,xLim) {
         var xTractU = opExtract(xU);
         var xTractL = opExtract(xL);
-        if (strTest(xLim,"Cv[8734]")) {//limit definition for e^n as x>inf
+        if (strTest(xLim,"Cv[8734]")) {//limit definition for e^n as x->inf
             var lTemp = xReduce("cMul(cSub("+xU+",1),"+lVar+")");
             if (xL == lVar && !strTest(lTemp,lVar)) {return cPowS("Cv[8]",lTemp)} 
         }
-        if (xLim == 0 && xTractL.func == "cDiv" && xTractL.lower == lVar) { //limit definitions for e^n as x>0
+        if (xLim == 0 && xTractL.func == "cDiv" && xTractL.lower == lVar) { //limit definitions for e^n as x->0
             if (xTractU.func == "cAdd" && xReduce("cSub("+xU+",1)") == lVar) {return cPowS("Cv[8]",xTractL.upper)}
             if (xTractU.func == "cSub" && xReduce("cAdd("+lVar+","+xU+")") == 1) {return cDivS(1,cPowS("Cv[8]",xTractL.upper))}
         }
@@ -2970,7 +2963,6 @@ var mgCalc = function() {
     abs: function (xU) {return abs(xU)},
     erf: function (xU) {return erf(xU)},
     efc: function (xU) {return efc(xU)},
-    fac: function (xU) {return fac(xU)},
     gam: function (xU) {return gam(xU)},
     det: function (xU) {return det(xU)},
     trc: function (xU) {return trc(xU)},
