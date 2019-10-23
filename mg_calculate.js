@@ -348,7 +348,7 @@ var mgCalc = function() {
     function conTest(iDv) { //test if string is a MG constant (Cv[xxx])
         iDv = String(iDv);
         iDv = iDv.replace(/Cv\[(\d+)\]/,"$1");
-        if (iDv >= 0 && iDv <= 46) {return true}
+        if (iDv >= 0 && iDv <= 44) {return true}
         return false
     }
     function xprMatch(Xpression,Pattern) { //match exact pattern template to expression Cv[9999] = wildcard
@@ -904,6 +904,7 @@ var mgCalc = function() {
             if (abs(xU) > -1 && abs(xU) < 1) {return 0}
             if (!nbrEven(xU) && xU <= -1) {return "cNeg(Cv[8734])"}
             if (rou(xU) > 1) {return "Cv[8734]"}
+            if (conTest(xU)) {return "Cv[8734]"}
             return "Cv[8734]"
         }
         if (xL == "cNeg(Cv[8734])") {
@@ -970,6 +971,14 @@ var mgCalc = function() {
         if (xL == "Cv[46]" && !nbrTest(xU)) {return cMulS(xL,xU)}
         if (xU == "Cv[46]" && nbrTest(xL))  {return cMulS(xL,xU)}
         if (xTractU.func == "fac" && xTractL.func == "fac" && nbrTest(xTractU.upper) && nbrTest(xTractL.upper)) {return cMulS(fac(xTractU.upper),fac(xTractL.upper))}
+        if (xTractU.func == "cNeg") {return cNegS(cMulS(xTractU.upper,xL))}
+        if (xTractL.func == "cNeg") {return cNegS(cMulS(xU,xTractL.upper))}
+        if (xU == "Cv[8734]" && xL > 0) {return "Cv[8734]"} //infinity handlers for limits
+        if (xU == "Cv[8734]" && xL < 0) {return "cNeg(Cv[8734])"}
+        if (xL == "Cv[8734]" && xU > 0) {return "Cv[8734]"}
+        if (xL == "Cv[8734]" && xU < 0) {return "cNeg(Cv[8734])"}
+        if (xU == "Cv[8734]" && conTest(xL)) {return "Cv[8734]"}
+        //if (xL == "Cv[8734]" && conTest(xU)) {return "Cv[8734]"}
         if (xL == 0 || xU == 0) {return 0}
         if (!factorFlag && !pxpFlag && nbrTest(xU) && xU != int(xU)) {return cMulS(decToFrac(xU),xL)}
         if (!factorFlag && !pxpFlag && nbrTest(xL) && xL != int(xL)) {return cMulS(xU,decToFrac(xL))}
@@ -984,14 +993,6 @@ var mgCalc = function() {
         if (xTractU.func == "cPow" && xTractL.func == "cPow" && xTractU.upper == xTractL.upper)  {return cPowS(xTractU.upper,cAddS(xTractU.lower,xTractL.lower))}
         if (xTractL.func == "cPow" && xTractU.func == "cPow" && xTractL.lower == xTractU.lower && !nbrTest(xTractL.lower)) {return cPowS(cMulS(xTractL.upper,xTractU.upper),xTractU.lower)} // reduce
         if (!factorFlag && xTractL.func == "cMul" && nbrTest(xU) && nbrTest(xTractL.upper)) {return cMulS(fmtResult(cMul(xU,xTractL.upper)),xTractL.lower)}
-        if (xTractU.func == "cNeg") {return cNegS(cMulS(xTractU.upper,xL))}
-        if (xTractL.func == "cNeg") {return cNegS(cMulS(xU,xTractL.upper))}
-        if (xU == "Cv[8734]" || xL == "Cv[8734]") { //infinity handlers for limits
-            if (xU < 0) {return "cNeg(Cv[8734])"}
-            else if (xL < 0) {return "cNeg(Cv[8734])"}
-            else if (xL == 0 || xU == 0) {return "undefined"}
-            else {return "Cv[8734]"}
-        }
         if (xTractU.func == "abs" && xTractL.func == "abs") {return absS(cMulS(xTractU.upper,xTractL.upper))}
         if (!pxpFlag && xTractU.func == "cDiv" && xTractL.func == "cDiv") {return cDivS(cMulS(xTractU.upper,xTractL.upper),cMulS(xTractU.lower,xTractL.lower))}
         if (!pxpFlag && xTractU.func == "cDiv" && xTractL.func != "cDiv") {return cDivS(cMulS(xL,xTractU.upper),xTractU.lower)}
@@ -1030,6 +1031,9 @@ var mgCalc = function() {
         if (xL < 0)  {return cDivS(cNegS(xU),cNegS(xL))}
         if (xU == xL && !strTest(xU,"Cv[8734]")) {return 1} //infinity handlers for limits
         if ((xL == "Cv[8734]" || xL == "cNeg(Cv[8734])") && !strTest(xU,"Cv[8734]")) {return 0}
+        if (xU == "Cv[8734]" && xL > 0) {return "Cv[8734]"}
+        if (xU == "Cv[8734]" && conTest(xL)) {return "Cv[8734]"}
+        if (xU == "Cv[8734]" && xL < 0) {return "cNeg(Cv[8734])"}
         if (!factorFlag && !pxpFlag && nbrTest(xU) && xU != int(xU)) {return cDivS(decToFrac(xU),xL)}
         if (!factorFlag && !pxpFlag && nbrTest(xL) && xL != int(xL)) {return cDivS(xU,decToFrac(xL))}
         if (nbrTest(xU) && nbrTest(xL) && cDiv(xU,xL) == int(cDiv(xU,xL))) {return fmtResult(cDiv(xU,xL))}
@@ -1107,8 +1111,8 @@ var mgCalc = function() {
         if (nbrTest(xL) && xL < 0) {return cSubS(xU,cNegS(xL))}
         if (nbrTest(xU) && nbrTest(xL)) {return fmtResult(cAdd(xU,xL))}
         if (xTractL.func == "cNeg") {return cSubS(xU,xTractL.upper)}
-        if (!strTest(xU,"Cv[8734]") && xL == "Cv[8734]") {return "Cv[8734]"} //infinity handlers for limits
-        if (!strTest(xL,"Cv[8734]") && xU == "Cv[8734]") {return "Cv[8734]"}
+        if ((nbrTest(xU) || conTest(xU)) && xL == "Cv[8734]") {return "Cv[8734]"} //infinity handlers for limits
+        if ((nbrTest(xL) || conTest(xL)) && xU == "Cv[8734]") {return "Cv[8734]"}
         if (xL == 0) {return xU}
         if (xU == 0) {return xL}
         if (xU == "Cv[8230]") {return "cAdd("+xL+","+xU+")"}
@@ -1178,9 +1182,9 @@ var mgCalc = function() {
         if (nbrTest(xU) && nbrTest(xL)) {return fmtResult(cSub(xU,xL))}
         if (xTractL.func == "cNeg") {return cAddS(xU,xTractL.upper)}
         if (xU == "cNeg(Cv[8734])" && xL == "Cv[8734]") {return "cNeg(Cv[8734])"} //infinity handlers for limits
-        if (!strTest(xU,"Cv[8734]") && xL == "Cv[8734]") {return "cNeg(Cv[8734])"}
-        if (!strTest(xL,"Cv[8734]") && xU == "Cv[8734]") {return "Cv[8734]"}
-        if (!strTest(xL,"Cv[8734]") && xU == "cNeg(Cv[8734])") {return "cNeg(Cv[8734])"}
+        if ((nbrTest(xU) || conTest(xU)) && xL == "Cv[8734]") {return "cNeg(Cv[8734])"}
+        if ((nbrTest(xL) || conTest(xL)) && xU == "Cv[8734]") {return "Cv[8734]"}
+        if ((nbrTest(xL) || conTest(xL)) && xU == "cNeg(Cv[8734])") {return "cNeg(Cv[8734])"}
         if (nbrTest(xU) && xTractL.func == "cDiv" && nbrTest(xTractL.upper) && nbrTest(xTractL.lower)) {return cDivS(cSubS(cMulS(xU,xTractL.lower),xTractL.upper),xTractL.lower)}
         if (nbrTest(xL) && xTractU.func == "cDiv" && nbrTest(xTractU.upper) && nbrTest(xTractU.lower)) {return cDivS(cSubS(xTractU.upper,cMulS(xL,xTractU.lower)),xTractU.lower)}
         if (!pxpFlag && xTractU.func == "cDiv" && xTractL.func == "cDiv" && xTractU.lower == xTractL.lower) {return "cDiv(cSub("+xTractU.upper+","+xTractL.upper+"),"+xTractU.lower+")"}
