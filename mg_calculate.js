@@ -896,23 +896,21 @@ var mgCalc = function() {
         }
         //infinity handlers for limits
         if (xU == "Cv[8734]") {
-            if (rou(xL) <= -1) {return 0}
-            if (!strTest(xL,"Cv[8734]")) {return "Cv[8734]"}
+            if (xL <= -1) {return 0}
+            if (xL != "cNeg(Cv[8734])") {return "Cv[8734]"}
         }
         if (xU == "cNeg(Cv[8734])") {
-            if (rou(xL) <= -1) {return 0}
+            if (xL <= -1) {return 0}
             if (!nbrEven(xL)) {return "cNeg(Cv[8734])"}
             if (nbrEven(xL)) {return "Cv[8734]"}
         }
         if (xL == "Cv[8734]") {
-            if (abs(xU) > -1 && abs(xU) < 1) {return 0}
+            if (xU > -1 && xU < 1) {return 0}
             if (!nbrEven(xU) && xU <= -1) {return "cNeg(Cv[8734])"}
-            if (rou(xU) > 1) {return "Cv[8734]"}
-            if (conTest(xU)) {return "Cv[8734]"}
             return "Cv[8734]"
         }
         if (xL == "cNeg(Cv[8734])") {
-            if (abs(xU) > -1 && abs(xU) < 1) {return "Cv[8734]"}
+            if (xU > -1 && xU < 1) {return "Cv[8734]"}
             return 0
         }
         if (["cAdd","cSub","cTms","cDiv","cMul","cPow"].indexOf(xTractU.func)+1) {xU = "("+xU+")"}
@@ -1035,9 +1033,9 @@ var mgCalc = function() {
         if (xL < 0)  {return cDivS(cNegS(xU),cNegS(xL))}
         if (xU == xL && !strTest(xU,"Cv[8734]")) {return 1} //infinity handlers for limits
         if ((xL == "Cv[8734]" || xL == "cNeg(Cv[8734])") && !strTest(xU,"Cv[8734]")) {return 0}
-        if (xU == "Cv[8734]" && xL > 0) {return "Cv[8734]"}
+        if (xU == "cNeg(Cv[8734])" && (xL > 0 || conTest(xL))) {return "cNeg(Cv[8734])"}
+        if (xU == "Cv[8734]" && (xL > 0 || conTest(xL))) {return "Cv[8734]"}
         if (xU == "Cv[8734]" && conTest(xL)) {return "Cv[8734]"}
-        if (xU == "Cv[8734]" && xL < 0) {return "cNeg(Cv[8734])"}
         if (!factorFlag && !pxpFlag && nbrTest(xU) && xU != int(xU)) {return cDivS(decToFrac(xU),xL)}
         if (!factorFlag && !pxpFlag && nbrTest(xL) && xL != int(xL)) {return cDivS(xU,decToFrac(xL))}
         if (nbrTest(xU) && nbrTest(xL) && cDiv(xU,xL) == int(cDiv(xU,xL))) {return fmtResult(cDiv(xU,xL))}
