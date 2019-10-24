@@ -308,7 +308,7 @@ var mgCalc = function() {
             vTmp = String(xDsect.match(/Cv\[\d+\]/));
             vTmp = vTmp.replace(/Cv\[(\d+)\]/,"$1");
             xDsect = xDsect.replace(/Cv\[\d+\]/,"");
-            if (varTest(vTmp) || conTest(vTmp)) {if (!strTest(tDsect,"Cv["+vTmp+"]")) {tDsect.push("Cv["+vTmp+"]")}}
+            if (varTest("Cv["+vTmp+"]") || conTest("Cv["+vTmp+"]")) {if (!strTest(tDsect,"Cv["+vTmp+"]")) {tDsect.push("Cv["+vTmp+"]")}}
         }
         vCount = xDsect.length-1;
         for (xV=0;xV<vCount;xV++) { //decimals
@@ -335,20 +335,24 @@ var mgCalc = function() {
             vTmp = String(xInv.match(/Cv\[\d+\]/));
             vTmp = vTmp.replace(/Cv\[(\d+)\]/,"$1");
             xInv = xInv.replace(/Cv\[\d+\]/,"");
-            if (varTest(vTmp)) {if (!strTest(xVars,"Cv["+vTmp+"]")) {xVars.push("Cv["+vTmp+"]")}}
+            if (varTest("Cv["+vTmp+"]")) {if (!strTest(xVars,"Cv["+vTmp+"]")) {xVars.push("Cv["+vTmp+"]")}}
         }
         return xVars.sort();
     }
     function varTest(iDv) { //test if string is a MG variable (Cv[xxx])
         iDv = String(iDv);
-        iDv = iDv.replace(/Cv\[(\d+)\]/,"$1");
-        if ((iDv > 64 && iDv < 91) || (iDv > 96 && iDv < 123) || (iDv > 10064 && iDv < 10091) || (iDv > 10096 && iDv < 10123) || (iDv > 912 && iDv < 970) || (iDv > 11100 && iDv < 11109)) {return true}
+        if (iDv.substr(0,3) == "Cv[") {
+            iDv = iDv.replace(/Cv\[(\d+)\]/,"$1");
+            if ((iDv > 64 && iDv < 91) || (iDv > 96 && iDv < 123) || (iDv > 10064 && iDv < 10091) || (iDv > 10096 && iDv < 10123) || (iDv > 912 && iDv < 970) || (iDv > 11100 && iDv < 11109)) {return true}
+        }
         return false
     }
     function conTest(iDv) { //test if string is a MG constant (Cv[xxx])
         iDv = String(iDv);
-        iDv = iDv.replace(/Cv\[(\d+)\]/,"$1");
-        if (iDv >= 0 && iDv <= 44) {return true}
+        if (iDv.substr(0,3) == "Cv[") {
+            iDv = iDv.replace(/Cv\[(\d+)\]/,"$1");
+            if (iDv >= 0 && iDv <= 44) {return true}
+        }
         return false
     }
     function xprMatch(Xpression,Pattern) { //match exact pattern template to expression Cv[9999] = wildcard
@@ -975,10 +979,10 @@ var mgCalc = function() {
         if (xTractL.func == "cNeg") {return cNegS(cMulS(xU,xTractL.upper))}
         if (xU == "Cv[8734]" && xL > 0) {return "Cv[8734]"} //infinity handlers for limits
         if (xU == "Cv[8734]" && xL < 0) {return "cNeg(Cv[8734])"}
+        if (xU == "Cv[8734]" && conTest(xL)) {return "Cv[8734]"}
         if (xL == "Cv[8734]" && xU > 0) {return "Cv[8734]"}
         if (xL == "Cv[8734]" && xU < 0) {return "cNeg(Cv[8734])"}
-        if (xU == "Cv[8734]" && conTest(xL)) {return "Cv[8734]"}
-        //if (xL == "Cv[8734]" && conTest(xU)) {return "Cv[8734]"}
+        if (xL == "Cv[8734]" && conTest(xU)) {return "Cv[8734]"}
         if (xL == 0 || xU == 0) {return 0}
         if (!factorFlag && !pxpFlag && nbrTest(xU) && xU != int(xU)) {return cMulS(decToFrac(xU),xL)}
         if (!factorFlag && !pxpFlag && nbrTest(xL) && xL != int(xL)) {return cMulS(xU,decToFrac(xL))}
