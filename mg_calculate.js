@@ -1027,7 +1027,6 @@ var mgCalc = function() {
         if (["cAdd","cSub"].indexOf(xTractL.func)+1) {xL = "("+xL+")"}
         if (!pxpFlag && xU < 0) {return cNegS(cDivS(cNegS(xU),xL))}
         if (!pxpFlag && xTractU.func == "cNeg") {return cNegS(cDivS(xTractU.upper,xL))}
-        if (xL == 0) {return "undefined"}
         if (xL == 1) {return xU}
         if (xU == 0) {return 0}
         if (xL < 0)  {return cDivS(cNegS(xU),cNegS(xL))}
@@ -1036,6 +1035,7 @@ var mgCalc = function() {
         if (xU == "cNeg(Cv[8734])" && (xL > 0 || conTest(xL))) {return "cNeg(Cv[8734])"}
         if (xU == "Cv[8734]" && (xL > 0 || conTest(xL))) {return "Cv[8734]"}
         if (xU == "Cv[8734]" && conTest(xL)) {return "Cv[8734]"}
+		if (xL == 0) {return "undefined"}
         if (!factorFlag && !pxpFlag && nbrTest(xU) && xU != int(xU)) {return cDivS(decToFrac(xU),xL)}
         if (!factorFlag && !pxpFlag && nbrTest(xL) && xL != int(xL)) {return cDivS(xU,decToFrac(xL))}
         if (nbrTest(xU) && nbrTest(xL) && cDiv(xU,xL) == int(cDiv(xU,xL))) {return fmtResult(cDiv(xU,xL))}
@@ -2589,13 +2589,14 @@ var mgCalc = function() {
         if (xTractL.func == "sqt" && xTractU.func != "sqt") {return sqtS(lmtS(cDivS(xprExpand(cPowS(xU,2)),xTractL.upper),lVar,xLim))}
         if (xTractL.func != "sqt" && xTractU.func == "sqt") {return sqtS(lmtS(cDivS(xTractU.upper,xprExpand(cPowS(xL,2))),lVar,xLim))}
         if (xTractL.func == "cPow" && xTractU.func == "cPow") {return cDivS(lmtFunc["cPowL"](xU,lVar,xLim),lmtFunc["cPowL"](xL,lVar,xLim))}
-        if ((strTest(lmtS(xU,lVar,xLim),"Cv[8734]") && strTest(lmtS(xL,lVar,xLim),"Cv[8734]")) || lmtS(xL,lVar,xLim) == 0) {return lmtS(cDivS(drvS(xU,lVar),drvS(xL,lVar)),lVar,xLim)} // l'Hopital
+        if (lmtS(xU,lVar,xLim) == "Cv[8734]" && lmtS(xL,lVar,xLim) == "Cv[8734]" && drvS(xL,lVar) != 0) {return lmtS(cDivS(drvS(xU,lVar),drvS(xL,lVar)),lVar,xLim)} // l'Hopital inf/inf
+		if (lmtS(drvS(xU,lVar),lVar,xLim) != "undefined" && lmtS(xL,lVar,xLim) == 0 && drvS(xL,lVar) != 0) {return lmtS(cDivS(drvS(xU,lVar),drvS(xL,lVar)),lVar,xLim)} // l'Hopital n/0
         return cDivS(lmtS(xU,lVar,xLim),lmtS(xL,lVar,xLim)) //quotient rule
     },
     cPowL: function(xU,xL,lVar,xLim) {
         var xTractU = opExtract(xU);
         var xTractL = opExtract(xL);
-        if (strTest(xLim,"Cv[8734]")) {//limit definition for e^n as x->inf
+        if (xLim == "Cv[8734]") {//limit definition for e^n as x->inf
             var lTemp = xReduce("cMul(cSub("+xU+",1),"+lVar+")");
             if (xL == lVar && !strTest(lTemp,lVar)) {return cPowS("Cv[8]",lTemp)} 
         }
