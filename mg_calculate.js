@@ -897,12 +897,19 @@ var mgCalc = function() {
         //infinity handlers for limits
         if (xU == "Cv[8734]") {
             if (xL <= -1) {return 0}
-            if (xL != "cNeg(Cv[8734])") {return "Cv[8734]"}
+            if (xL > 1) {return "Cv[8734]"}
+            if (xL == "Cv[8734]") {return "Cv[8734]"}
+            if (xL == "cNeg(Cv[8734])") {return 0}
         }
         if (xU == "cNeg(Cv[8734])") {
             if (xL <= -1) {return 0}
             if (!nbrEven(xL)) {return "cNeg(Cv[8734])"}
             if (nbrEven(xL)) {return "Cv[8734]"}
+        }
+        if (xU == 0) {
+            if (xL == "Cv[8734]") {return 0}
+            if (xL == "cNeg(Cv[8734])") {return "Cv[8734]"}
+            if (xL == 0) {return 1}         
         }
         if (xL == "Cv[8734]") {
             if (xU > -1 && xU < 1) {return 0}
@@ -918,8 +925,8 @@ var mgCalc = function() {
         if (xTractU.func == "cPow") {return "cPow("+xTractU.upper+","+cMulS(xTractU.lower,xL)+")"}
         if (xU == 1) {return 1}
         if (xL == 1) {return xU}
-        if (xU == 0) {return 0}
         if (xL == 0) {return 1}
+        if (xU == 0) {return 0}
         if (xTractL.func == "cDiv" && xTractL.upper == 1 && xTractL.lower == 2) {return sqtS(xU)}
         if (xL == .5) {return sqtS(xU)}
         if (nbrTest(xU) && nbrTest(xL) && cPow(xU,xL) < 1e6 && cPow(xU,xL) == int(cPow(xU,xL))) {return (fmtResult(cPow(xU,xL)))}
@@ -1032,10 +1039,10 @@ var mgCalc = function() {
         if (xL < 0)  {return cDivS(cNegS(xU),cNegS(xL))}
         if (xU == xL && !strTest(xU,"Cv[8734]")) {return 1} //infinity handlers for limits
         if ((xL == "Cv[8734]" || xL == "cNeg(Cv[8734])") && !strTest(xU,"Cv[8734]")) {return 0}
-        if (xU == "cNeg(Cv[8734])" && (xL > 0 || conTest(xL))) {return "cNeg(Cv[8734])"}
-        if (xU == "Cv[8734]" && (xL > 0 || conTest(xL))) {return "Cv[8734]"}
+        if (xU == "cNeg(Cv[8734])" && (xL >= 0 || conTest(xL))) {return "cNeg(Cv[8734])"}
+        if (xU == "Cv[8734]" && (xL >= 0 || conTest(xL))) {return "Cv[8734]"}
         if (xU == "Cv[8734]" && conTest(xL)) {return "Cv[8734]"}
-		if (xL == 0) {return "undefined"}
+        if (xL == 0) {return "undefined"}
         if (!factorFlag && !pxpFlag && nbrTest(xU) && xU != int(xU)) {return cDivS(decToFrac(xU),xL)}
         if (!factorFlag && !pxpFlag && nbrTest(xL) && xL != int(xL)) {return cDivS(xU,decToFrac(xL))}
         if (nbrTest(xU) && nbrTest(xL) && cDiv(xU,xL) == int(cDiv(xU,xL))) {return fmtResult(cDiv(xU,xL))}
@@ -2589,8 +2596,8 @@ var mgCalc = function() {
         if (xTractL.func == "sqt" && xTractU.func != "sqt") {return sqtS(lmtS(cDivS(xprExpand(cPowS(xU,2)),xTractL.upper),lVar,xLim))}
         if (xTractL.func != "sqt" && xTractU.func == "sqt") {return sqtS(lmtS(cDivS(xTractU.upper,xprExpand(cPowS(xL,2))),lVar,xLim))}
         if (xTractL.func == "cPow" && xTractU.func == "cPow") {return cDivS(lmtFunc["cPowL"](xU,lVar,xLim),lmtFunc["cPowL"](xL,lVar,xLim))}
-        if (lmtS(xU,lVar,xLim) == "Cv[8734]" && lmtS(xL,lVar,xLim) == "Cv[8734]" && drvS(xL,lVar) != 0) {return lmtS(cDivS(drvS(xU,lVar),drvS(xL,lVar)),lVar,xLim)} // l'Hopital inf/inf
-		if (lmtS(drvS(xU,lVar),lVar,xLim) != "undefined" && lmtS(xL,lVar,xLim) == 0 && drvS(xL,lVar) != 0) {return lmtS(cDivS(drvS(xU,lVar),drvS(xL,lVar)),lVar,xLim)} // l'Hopital n/0
+        if (strTest(lmtS(xU,lVar,xLim),"Cv[8734]") && strTest(lmtS(xL,lVar,xLim),"Cv[8734]") && drvS(xL,lVar) != 0) {return lmtS(cDivS(drvS(xU,lVar),drvS(xL,lVar)),lVar,xLim)} // l'Hopital inf/inf
+        if (lmtS(drvS(xU,lVar),lVar,xLim) != "undefined" && lmtS(xL,lVar,xLim) == 0 && drvS(xL,lVar) != 0) {return lmtS(cDivS(drvS(xU,lVar),drvS(xL,lVar)),lVar,xLim)} // l'Hopital n/0
         return cDivS(lmtS(xU,lVar,xLim),lmtS(xL,lVar,xLim)) //quotient rule
     },
     cPowL: function(xU,xL,lVar,xLim) {
