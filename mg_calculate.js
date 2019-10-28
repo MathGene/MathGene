@@ -906,26 +906,23 @@ var mgCalc = function() {
             if (!nbrEven(xL)) {return "cNeg(Cv[8734])"}
             if (nbrEven(xL)) {return "Cv[8734]"}
         }
-        if (xU == 0) {
-            if (xL == "Cv[8734]") {return 0}
-            if (xL == "cNeg(Cv[8734])") {return "Cv[8734]"}
-            if (xL == 0) {return 1}         
-        }
         if (xL == "Cv[8734]") {
             if (xU > -1 && xU < 1) {return 0}
+            if (xU == 0) {return "Cv[8734]"}
             if (!nbrEven(xU) && xU <= -1) {return "cNeg(Cv[8734])"}
             return "Cv[8734]"
         }
         if (xL == "cNeg(Cv[8734])") {
             if (xU > -1 && xU < 1) {return "Cv[8734]"}
+            if (xU == 0) {return "cNeg(Cv[8734])"}
             return 0
         }
         if (["cAdd","cSub","cTms","cDiv","cMul","cPow"].indexOf(xTractU.func)+1) {xU = "("+xU+")"}
         if (["cAdd","cSub","cTms","cDiv","cMul","cNeg"].indexOf(xTractL.func)+1) {xL = "("+xL+")"}
         if (xTractU.func == "cPow") {return "cPow("+xTractU.upper+","+cMulS(xTractU.lower,xL)+")"}
-        if (xU == 1) {return 1}
-        if (xL == 1) {return xU}
         if (xL == 0) {return 1}
+        if (xL == 1) {return xU}
+        if (xU == 1) {return 1}
         if (xU == 0) {return 0}
         if (xTractL.func == "cDiv" && xTractL.upper == 1 && xTractL.lower == 2) {return sqtS(xU)}
         if (xL == .5) {return sqtS(xU)}
