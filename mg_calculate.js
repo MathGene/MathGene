@@ -908,13 +908,11 @@ var mgCalc = function() {
         }
         if (xL == "Cv[8734]") {
             if (xU > -1 && xU < 1) {return 0}
-            if (xU == 0) {return "Cv[8734]"}
             if (!nbrEven(xU) && xU <= -1) {return "cNeg(Cv[8734])"}
             return "Cv[8734]"
         }
         if (xL == "cNeg(Cv[8734])") {
             if (xU > -1 && xU < 1) {return "Cv[8734]"}
-            if (xU == 0) {return "cNeg(Cv[8734])"}
             return 0
         }
         if (["cAdd","cSub","cTms","cDiv","cMul","cPow"].indexOf(xTractU.func)+1) {xU = "("+xU+")"}
