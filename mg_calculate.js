@@ -1711,7 +1711,7 @@ var mgCalc = function() {
         iIterations = 0;
         sIterations = 0;
         pIterations = 0;
-        lIterations = 0;
+        xIterations = 0;
         const calcOpsIn  = ["idr(","tdr(","lim(","sum(","prd("];
         const calcOpsOut = ["drv(","tdv(","lmt(","smm(","pmm("];
         var dV = "",invTemp = [],nC = 0;
@@ -2591,6 +2591,14 @@ var mgCalc = function() {
     cDivL: function(xU,xL,lVar,xLim) {
         var xTractU = opExtract(xU);
         var xTractL = opExtract(xL);
+        var polyU = pCoeff(pNomial(xU,lVar));
+        var polyL = pCoeff(pNomial(xL,lVar));
+        if (xLim == "Cv[8734]" && polyU.length > 2 && polyU.length < polyL.length) {return 0}
+        if (xLim == "cNeg(Cv[8734])" && polyU.length > 2 && polyU.length < polyL.length) {return 0}
+        if (xLim == "Cv[8734]" && polyU.length > 2 && polyU.length > polyL.length) {return "Cv[8734]"}
+        if (xLim == "cNeg(Cv[8734])" && polyU.length > 2 && polyU.length > polyL.length) {return "cNeg(Cv[8734])"}
+        if (xLim == "Cv[8734]" && polyU.length > 2 && polyU.length == polyL.length) {return cDivS(polyU[polyU.length-1],polyL[polyL.length-1])} //polynomial coefficients
+        if (xLim == "cNeg(Cv[8734])" && polyU.length > 2 && polyU.length == polyL.length) {return cNegS(cDivS(polyU[polyU.length-1],polyL[polyL.length-1]))} //polynomial coefficients
         if (xTractL.func == "sqt" && xTractU.func != "sqt") {return sqtS(lmtS(cDivS(xprExpand(cPowS(xU,2)),xTractL.upper),lVar,xLim))}
         if (xTractL.func != "sqt" && xTractU.func == "sqt") {return sqtS(lmtS(cDivS(xTractU.upper,xprExpand(cPowS(xL,2))),lVar,xLim))}
         if (xTractL.func == "cPow" && xTractU.func == "cPow") {return cDivS(lmtFunc["cPowL"](xU,lVar,xLim),lmtFunc["cPowL"](xL,lVar,xLim))}
@@ -2655,15 +2663,15 @@ var mgCalc = function() {
     function lmtS(lXpr,lVar,xLim) {
         xLim = String(xLim);
         var sReturn = xReduce(lXpr);
-        if (sReturn == lVar) {return xLim}
         var args = opExtract(sReturn);
+        var polyX = pNomial(sReturn,lVar);
+        if (sReturn == lVar) {return xLim}
         if (!strTest(sReturn,lVar) || args.func == "") {return sReturn}
-        lIterations++;
-        if (lIterations < 60) {
-            var polyU = pNomial(lXpr,lVar);
-            if (polyU.length > 2 && nbrEven(polyU.length-1) && (xLim == "Cv[8734]" || xLim == "cNeg(Cv[8734])")) {return "Cv[8734]"} //even polynomial
-            //if (polyU.length > 2 && nbrEven(polyU.length) && xLim == "Cv[8734]") {return "Cv[8734]"} //odd polynomial
-            //if (polyU.length > 2 && nbrEven(polyU.length) && xLim == "cNeg(Cv[8734])") {return "cNeg(Cv[8734])"} //odd polynomial
+        xIterations++;
+        if (xIterations < 60) {
+            if (polyX.length > 2 && nbrEven(polyX.length-1) && (xLim == "Cv[8734]" || xLim == "cNeg(Cv[8734])")) {return "Cv[8734]"} //even polynomial
+            if (polyX.length > 2 && nbrEven(polyX.length) && xLim == "Cv[8734]") {return "Cv[8734]"} //odd polynomial
+            if (polyX.length > 2 && nbrEven(polyX.length) && xLim == "cNeg(Cv[8734])") {return "cNeg(Cv[8734])"} //odd polynomial
             if (typeof lmtFunc[args.func+"L"] != "undefined") {sReturn = cReduce(cSubst(lmtFunc[args.func+"L"](args.upper,args.lower,lVar,xLim),lVar,xLim))}
             else {sReturn = passthruFunc[args.func](args.upper,args.lower)}
         }
@@ -3805,7 +3813,7 @@ var mgCalc = function() {
     var iIterations = 0; //iteration count for integration
     var sIterations = 0; //iteration count for summation
     var pIterations = 0; //iteration count for products
-    var lIterations = 0; //iteration count for limits
+    var xIterations = 0; //iteration count for limits
     var invMult = "Cv[29]";
     if (mgConfig.trigBase == Cv[29]/180) {invMult = "180"}
     if (mgConfig.trigBase == Cv[29]/200) {invMult = "200"}
