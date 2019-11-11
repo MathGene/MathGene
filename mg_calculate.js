@@ -2597,11 +2597,11 @@ var mgCalc = function() {
         if (xLim == "cNeg(Cv[8734])" && polyU.length > 2 && polyU.length < polyL.length) {return 0}
         if (xLim == "Cv[8734]" && polyU.length > 2 && polyU.length > polyL.length) {return "Cv[8734]"}
         if (xLim == "cNeg(Cv[8734])" && polyU.length > 2 && polyU.length > polyL.length) {
-            if (nbrEven(polyX.length)) {return "cNeg(Cv[8734])"}
-            return "Cv[8734]"
+            if (nbrEven(polyX.length)) {return "cNeg(Cv[8734])"} //odd exponent
+            return "Cv[8734]" //even exponent
         }
-        if (xLim == "Cv[8734]" && polyU.length > 2 && polyU.length == polyL.length) {return cDivS(polyU[polyU.length-1],polyL[polyL.length-1])} //polynomial coefficients
-        if (xLim == "cNeg(Cv[8734])" && polyU.length > 2 && polyU.length == polyL.length) {return cDivS(polyU[polyU.length-1],polyL[polyL.length-1])} //polynomial coefficients
+        if (xLim == "Cv[8734]" && polyU.length > 2 && polyU.length == polyL.length) {return cDivS(polyU[polyU.length-1],polyL[polyL.length-1])} //return coefficient ratio
+        if (xLim == "cNeg(Cv[8734])" && polyU.length > 2 && polyU.length == polyL.length) {return cDivS(polyU[polyU.length-1],polyL[polyL.length-1])} //return coefficient ratio
         if (xTractL.func == "sqt" && xTractU.func != "sqt") {return sqtS(lmtS(cDivS(xprExpand(cPowS(xU,2)),xTractL.upper),lVar,xLim))}
         if (xTractL.func != "sqt" && xTractU.func == "sqt") {return sqtS(lmtS(cDivS(xTractU.upper,xprExpand(cPowS(xL,2))),lVar,xLim))}
         if (xTractL.func == "cPow" && xTractU.func == "cPow") {return cDivS(lmtFunc["cPowL"](xU,lVar,xLim),lmtFunc["cPowL"](xL,lVar,xLim))}
