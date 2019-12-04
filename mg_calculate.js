@@ -2596,7 +2596,7 @@ var mgCalc = function() {
         if (xLim == "cNeg(Cv[8734])" && polyU.length > 2 && polyU.length < polyL.length) {return 0}
         if (xLim == "Cv[8734]" && polyU.length > 2 && polyU.length > polyL.length) {return "Cv[8734]"}
         if (xLim == "cNeg(Cv[8734])" && polyU.length > 2 && polyU.length > polyL.length) {
-            if (nbrEven(polyX.length)) {return "cNeg(Cv[8734])"} //odd exponent
+            if (nbrEven(polyU.length)) {return "cNeg(Cv[8734])"} //odd exponent
             return "Cv[8734]" //even exponent
         }
         if (xLim == "Cv[8734]" && polyU.length > 2 && polyU.length == polyL.length) {return cDivS(polyU[polyU.length-1],polyL[polyL.length-1])} //return coefficient ratio
