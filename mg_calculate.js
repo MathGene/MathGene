@@ -2660,7 +2660,6 @@ var mgCalc = function() {
     erfL: function(xU,xL,lVar,xLim) {return erfS(lmtS(xU,lVar,xLim))},
     efcL: function(xU,xL,lVar,xLim) {return efcS(lmtS(xU,lVar,xLim))},
     }
-    
     //
     function lmtS(lXpr,lVar,xLim) {
         var sReturn = xReduce(lXpr);
@@ -2669,7 +2668,7 @@ var mgCalc = function() {
         if (sReturn == lVar) {return xLim}
         if (args.func == "") {return sReturn}
         xIterations++;
-        if (xIterations < 60) {
+        if (xIterations < 100) {
             if (polyX.length > 2 && nbrEven(polyX.length-1) && (xLim == "Cv[8734]" || xLim == "cNeg(Cv[8734])")) {return "Cv[8734]"} //even polynomial
             if (polyX.length > 2 && nbrEven(polyX.length) && xLim == "Cv[8734]") {return "Cv[8734]"} //odd polynomial
             if (polyX.length > 2 && nbrEven(polyX.length) && xLim == "cNeg(Cv[8734])") {return "cNeg(Cv[8734])"} //odd polynomial
