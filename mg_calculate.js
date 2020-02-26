@@ -3220,35 +3220,40 @@ var mgCalc = function() {
 
     //matrix operations
     function det(xU) { //matrix determinant
+        var mReturn = xU;
         if (getType(xU) == "matrix") {
             xU = matArray(xU);
-            var determinant = 0;
+            mReturn = "undefined";
             var rowsU = xU.length;
-            if (rowsU != xU[0].length) {return "undefined"}
-            if (rowsU == 2) {return cSubS(cMulS(det(xU[0][0]),det(xU[1][1])),cMulS(det(xU[0][1]),det(xU[1][0])))}
-            for (var rU in xU) {determinant = cAddS(determinant,cMulS(det(matMinor(xU,0,rU)),matInvSign(xU)[0][rU]))}
-            return determinant
+            if (rowsU == xU[0].length) {
+                mReturn = 0;
+                if (rowsU == 2) {mReturn = cSubS(cMulS(det(xU[0][0]),det(xU[1][1])),cMulS(det(xU[0][1]),det(xU[1][0])))}
+                else {for (var rU in xU) {mReturn = cAddS(mReturn,cMulS(det(matMinor(xU,0,rU)),matInvSign(xU)[0][rU]))}}
+            }
         }
-        return xU
+        return mReturn
     }
     function trc(xU) { //matrix trace
+        var mReturn = "undefined";
         if (getType(xU) == "matrix") {
             xU = matArray(xU);
-            if (xU.length != xU[0].length) {return "undefined"}
-            var mReturn = 0;
-            for (var rU in xU) {mReturn = cAddS(mReturn,xU[rU][rU])}
-            return matFunc(mReturn)
+            if (xU.length == xU[0].length) {
+                var mReturn = 0;
+                for (var rU in xU) {mReturn = cAddS(mReturn,xU[rU][rU])}
+                mReturn = matFunc(mReturn)
+            }
         }
-        return "undefined"
+        return mReturn
     }
     function trn(xU) { //matrix transpose
+        var mReturn = xU;
         if (getType(xU) == "matrix") {
             xU = matArray(xU);
             var mReturn = matCreate(xU[0].length,xU.length);
             for (var iR in xU) {for (var iC in xU[0]) {mReturn[iC][iR] = trn(xU[iR][iC])}}
-            return matFunc(mReturn)
+            mReturn = matFunc(mReturn)
         }
-        return xU
+        return mReturn
     }
     function inv(xU) { //matrix inverse
         if (getType(xU[0][0]) == "matrix") {
@@ -3267,33 +3272,36 @@ var mgCalc = function() {
         return mReturn
     }
     function matIdentity(xU) { //matrix identity
+        var mReturn = 1;
         if (getType(xU) == "matrix") {
             xU = matArray(xU);
             var rowsU = xU.length;
-            if (rowsU != xU[0].length) {return "undefined"}
-            var mReturn = matCreate(rowsU,rowsU);
-            for (var iR in xU) {
-                for (var iC in xU[0]) {
-                    if (iR == iC) {
-                        if (getType(xU[iR][iC]) == "matrix") {mReturn[iR][iC] = matIdentity(xU[iR][iC])}
-                        else {mReturn[iR][iC] = 1}
-                    }
-                    else {
-                        if (getType(xU[iR][iC]) == "matrix") {mReturn[iR][iC] = matCreate(xU[iR][iC].length,xU[iR][iC][0].length)}
-                        else {mReturn[iR][iC] = 0}
+            mReturn = "undefined";
+            if (rowsU == xU[0].length) {
+                mReturn = matCreate(rowsU,rowsU);
+                for (var iR in xU) {
+                    for (var iC in xU[0]) {
+                        if (iR == iC) {
+                            if (getType(xU[iR][iC]) == "matrix") {mReturn[iR][iC] = matIdentity(xU[iR][iC])}
+                            else {mReturn[iR][iC] = 1}
+                        }
+                        else {
+                            if (getType(xU[iR][iC]) == "matrix") {mReturn[iR][iC] = matCreate(xU[iR][iC].length,xU[iR][iC][0].length)}
+                            else {mReturn[iR][iC] = 0}
+                        }
                     }
                 }
             }
-            return mReturn
         }
-        return 1
+        return mReturn
     }
     function matInvSign(xU) { //alternate cell invert sign matrix
+        var mReturn = xU;
         if (getType(xU) == "matrix") {
             xU = matArray(xU);
             var rowsU = xU.length;
             var rowFac = 1;
-            var mReturn = matCreate(rowsU,rowsU);
+            mReturn = matCreate(rowsU,rowsU);
             for (var iR in xU) {
                 var colFac = rowFac;
                 for (var iC in xU) {
@@ -3302,9 +3310,8 @@ var mgCalc = function() {
                 }
                 rowFac = cNeg(rowFac);
             }
-            return mReturn
         }
-        return xU
+        return mReturn
     }
     function matCofac(xU) { //matrix cofactor
         if (getType(xU) == "matrix") {
