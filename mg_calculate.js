@@ -3101,29 +3101,32 @@ var mgCalc = function() {
         return cAdd(xU,cNeg(xL))
     }
     function cAdd(xU,xL) { //add
+        var nReturn = "undefined";
         if (getType(xU) == "real" && getType(xL) == "real") {
-            if (xU == rou(xU) && xL == rou(xL)) {return rou((+xU)+(+xL))} //preserve integers
-            return (+xU)+(+xL)
+            if (xU == rou(xU) && xL == rou(xL)) {nReturn = rou((+xU)+(+xL))} //preserve integers
+            else {nReturn = (+xU)+(+xL)}
         }
-        if (getType(xU) == "complex" || getType(xL) == "complex") {
+        else if (getType(xU) == "complex" || getType(xL) == "complex") {
             var cA = toCplx(xU),cB = toCplx(xL);
-            return cpx(((+cA.r)+(+cB.r)),((+cA.i)+(+cB.i)))
+            nReturn = cpx(((+cA.r)+(+cB.r)),((+cA.i)+(+cB.i)))
         }
-        if (["matrix","array"].indexOf(getType(xU))+1 && ["matrix","array"].indexOf(getType(xL))+1) {
+        else if (["matrix","array"].indexOf(getType(xU))+1 && ["matrix","array"].indexOf(getType(xL))+1) {
             xU = matArray(xU);xL = matArray(xL);
             var mReturn = xU;
-            if (xU.length != xL.length) {return "undefined"}
-            for (var iR in xU) {mReturn[iR] = cAdd(xU[iR],xL[iR])}
-            return matFunc(mReturn)
+            if (xU.length == xL.length) {
+                for (var iR in xU) {mReturn[iR] = cAdd(xU[iR],xL[iR])}
+                nReturn = matFunc(mReturn);
+            }
         }
-        if (getType(xU) == "vector" && getType(xL) == "vector") {
+        else if (getType(xU) == "vector" && getType(xL) == "vector") {
             xU = vecArray(xU);xL = vecArray(xL);
             var vReturn = xU;
-            if (xU.length != xL.length) {return "undefined"}
-            for (var iR in xU) {vReturn[iR] = cAdd(xU[iR],xL[iR])}
-            return vct(vReturn)           
+            if (xU.length == xL.length) {
+                for (var iR in xU) {vReturn[iR] = cAdd(xU[iR],xL[iR])}
+                nReturn = vct(vReturn)
+            }           
         }
-        return "undefined"
+        return nReturn
     }
     function cMul(xU,xL) { //multiply by term
         function scalarMult(xM,xC) { //matrix scalar multiply
@@ -3132,78 +3135,87 @@ var mgCalc = function() {
             for (var iR in xM) {mReturn[iR] = cMul(xM[iR],xC)}
             return mReturn
         }
-        if (xL == Cv[45]) {return fac(xU)} //factorial
-        if (getType(xU) == "real" && getType(xL) == "real") {
-            if (xU == rou(xU) && xL == rou(xL)) {return rou((+xU)*(+xL))} //preserve integers
-            return (+xU)*(+xL)
+        var nReturn = "undefined";
+        if (xL == Cv[45]) {nReturn = fac(xU)} //factorial
+        else if (getType(xU) == "real" && getType(xL) == "real") {
+            if (xU == rou(xU) && xL == rou(xL)) {nReturn = rou((+xU)*(+xL))} //preserve integers
+            else {nReturn = (+xU)*(+xL)}
         }
-        if (["matrix","array"].indexOf(getType(xU))+1 && ["complex","real"].indexOf(getType(xL))+1) {return matFunc(scalarMult(xU,xL))}
-        if (["matrix","array"].indexOf(getType(xL))+1 && ["complex","real"].indexOf(getType(xU))+1) {return matFunc(scalarMult(xL,xU))}
-        if (getType(xU) == "vector" && ["complex","real"].indexOf(getType(xL))+1) {return vct(scalarMult(xU,xL))}
-        if (getType(xL) == "vector" && ["complex","real"].indexOf(getType(xU))+1) {return vct(scalarMult(xL,xU))}
-        if (getType(xU) == "matrix" && getType(xL) == "matrix") { //matrix multiply
+        else if (["matrix","array"].indexOf(getType(xU))+1 && ["complex","real"].indexOf(getType(xL))+1) {nReturn = matFunc(scalarMult(xU,xL))}
+        else if (["matrix","array"].indexOf(getType(xL))+1 && ["complex","real"].indexOf(getType(xU))+1) {nReturn = matFunc(scalarMult(xL,xU))}
+        else if (getType(xU) == "vector" && ["complex","real"].indexOf(getType(xL))+1) {nReturn = vct(scalarMult(xU,xL))}
+        else if (getType(xL) == "vector" && ["complex","real"].indexOf(getType(xU))+1) {nReturn = vct(scalarMult(xL,xU))}
+        else if (getType(xU) == "matrix" && getType(xL) == "matrix") { //matrix multiply
             xU = matArray(xU);xL = matArray(xL);
-            if (xL.length != xU[0].length) {return "undefined"}
+            if (xL.length == xU[0].length) {
             var mReturn = matCreate(xU.length,xL[0].length);
-            for (var rU in xU) {
-                for (var cL in xL[0]) {
-                    for (var cU in xU[0]) {
-                        var mTemp = cMul(xU[rU][cU],xL[cU][cL]);
-                        if (mReturn[rU][cL] == 0) {mReturn[rU][cL] = mTemp}
-                        else {mReturn[rU][cL] = cAdd(mReturn[rU][cL],mTemp)}
+                for (var rU in xU) {
+                    for (var cL in xL[0]) {
+                        for (var cU in xU[0]) {
+                            var mTemp = cMul(xU[rU][cU],xL[cU][cL]);
+                            if (mReturn[rU][cL] == 0) {mReturn[rU][cL] = mTemp}
+                            else {mReturn[rU][cL] = cAdd(mReturn[rU][cL],mTemp)}
+                        }
                     }
                 }
             }
-            return matFunc(mReturn)
+            nReturn = matFunc(mReturn)
         }
-        if (getType(xU) == "complex" || getType(xL) == "complex") {
+        else if (getType(xU) == "complex" || getType(xL) == "complex") {
             var cA = toCplx(xU),cB = toCplx(xL);
-            return cpx((cA.r*cB.r-cA.i*cB.i), (cA.i*cB.r+cA.r*cB.i))
+            nReturn = cpx((cA.r*cB.r-cA.i*cB.i), (cA.i*cB.r+cA.r*cB.i))
         }
-        return "undefined"
+        return nReturn
     }
     function cTms(xU,xL) { //multiply by * (cross product)
+        var nReturn = "undefined";
         if (getType(xU) == "vector" && getType(xL) == "vector") {
             xU = vecArray(xU);xL = vecArray(xL);
-            if (xL.length != xU.length) {return "undefined"}
-            var vReturn = [];
-            if (xL.length == 3) {
-                vReturn[0] = cSub(cMul(xU[1],xL[2]),cMul(xU[2],xL[1]));
-                vReturn[1] = cSub(cMul(xU[2],xL[0]),cMul(xU[0],xL[2]));
-                vReturn[2] = cSub(cMul(xU[0],xL[1]),cMul(xU[1],xL[0]));
-                return vct(vReturn)
-            }
-            else {return "undefined"}      
+            if (xL.length == xU.length) {
+                var vReturn = [];
+                if (xL.length == 3) {
+                    vReturn[0] = cSub(cMul(xU[1],xL[2]),cMul(xU[2],xL[1]));
+                    vReturn[1] = cSub(cMul(xU[2],xL[0]),cMul(xU[0],xL[2]));
+                    vReturn[2] = cSub(cMul(xU[0],xL[1]),cMul(xU[1],xL[0]));
+                    nReturn = vct(vReturn)
+                }
+            }     
         }
-        return cMul(xU,xL)
+        else {nReturn = cMul(xU,xL)}
+        return nReturn
     }
     function cDot(xU,xL) { //dot product (Cv[8226] operator)
+		var nReturn = "undefined";
         if (getType(xU) == "vector" && getType(xL) == "vector") {
             xU = vecArray(xU);xL = vecArray(xL);
-            if (xL.length != xU.length) {return "undefined"}
-            var vReturn = 0;
-            for (var cU in xU) {vReturn = cAdd(vReturn,cMul(xU[cU],xL[cU]))}
-            return vReturn
+            if (xL.length == xU.length) {
+				var vReturn = 0;
+				for (var cU in xU) {vReturn = cAdd(vReturn,cMul(xU[cU],xL[cU]))}
+				nReturn = vReturn
+			}
         }
-        return cMul(xU,xL)
+        else {nReturn = cMul(xU,xL)}
+		return nReturn
     }
     function cDiv(xU,xL) { //divide
-        if (getType(xU) == "real" && getType(xL) == "real") {return (+xU)/(+xL)}
-        if (getType(xU) == "complex" || getType(xL) == "complex") {
+        var nReturn = "undefined";
+		if (getType(xU) == "real" && getType(xL) == "real") {nReturn = (+xU)/(+xL)}
+        else if (getType(xU) == "complex" || getType(xL) == "complex") {
             var cA = toCplx(xU),cB = toCplx(xL);
             if (abs(cB.r) >= abs(cB.i)) {
                 var rX=cB.i/cB.r, sX=+cB.r+rX*cB.i;
-                return cpx((+cA.r+cA.i*rX)/sX, (cA.i-cA.r*rX)/sX)
+                nReturn = cpx((+cA.r+cA.i*rX)/sX, (cA.i-cA.r*rX)/sX)
             }
             else {
                 var rX=cB.r/cB.i, sX=+cB.i+rX*cB.r;
-                return cpx((cA.r*rX+cA.i)/sX, (cA.i*rX-cA.r)/sX)
+                nReturn = cpx((cA.r*rX+cA.i)/sX, (cA.i*rX-cA.r)/sX)
             }
         }
-        return "undefined"
+        return nReturn
     }
     function cPow(xU,xL) { //powers xU^xL
-        if (getType(xU) == "matrix" && getType(xL) == "real") {
+        var nReturn = "undefined";
+		if (getType(xU) == "matrix" && getType(xL) == "real") {
             xU = matArray(xU);
             if (xL != int(xL)) {return "undefined"}
             if (xL <= -1) {return cPow(inv(xU),cNeg(xL))} //inverse matrix powers
