@@ -775,7 +775,7 @@ var mgCalc = function() {
         var nTerms = [];
         var xTractU = opExtract(xP);
         if (xTractU.func == "cMul") {pMulS(xTractU.upper,xTractU.lower)}
-        else {return [xP]}
+        else {nTerms = [xP]}
         return nTerms.sort()
     }
     function parsePoly(xP) { //parse polynomials into terms array
@@ -1774,32 +1774,27 @@ var mgCalc = function() {
     cPowD: function(xU,xL,deeVar) {
         if (strTest(xU,deeVar) && strTest(xL,deeVar)) {return cMulS(cAddS(cMulS(lneS(deeVar),drvS(xL,deeVar)),cDivS(xL,deeVar)),cPowS(xU,xL))}
         if (strTest(xU,deeVar)) {return cMulS(cMulS(xL,(cPowS(xU,cSubS(xL,1)))),drvS(xU,deeVar))}
-        if (strTest(xL,deeVar)) {return cMulS(cMulS(cPowS(xU,xL),lneS(xU)),drvS(xL,deeVar))}
-        return 0
+        return cMulS(cMulS(cPowS(xU,xL),lneS(xU)),drvS(xL,deeVar))
     },
     cMulD: function(xU,xL,deeVar) {
         if (strTest(xU,deeVar) && strTest(xL,deeVar)) {return cAddS(cMulS(drvS(xU,deeVar),xL),cMulS(drvS(xL,deeVar),xU))}
         if (strTest(xU,deeVar)) {return cMulS(drvS(xU,deeVar),xL)}
-        if (strTest(xL,deeVar)) {return cMulS(drvS(xL,deeVar),xU)}
-        return 0
+        return cMulS(drvS(xL,deeVar),xU)
     },
     cDivD: function(xU,xL,deeVar) {
         if (strTest(xU,deeVar) && strTest(xL,deeVar)) {return cDivS(cSubS(cMulS(drvS(xU,deeVar),xL),cMulS(drvS(xL,deeVar),xU)),cPowS(xL,2))}
         if (strTest(xU,deeVar)) {return drvFunc["cMulD"](xU,cDivS(1,xL),deeVar)}
-        if (strTest(xL,deeVar)) {return cMulS(xU,drvFunc["cPowD"](xL,-1,deeVar))}
-        return 0
+        return cMulS(xU,drvFunc["cPowD"](xL,-1,deeVar))
     },
     cAddD: function(xU,xL,deeVar) {
         if (strTest(xU,deeVar) && strTest(xL,deeVar)) {return cAddS(drvS(xU,deeVar),drvS(xL,deeVar))}
         if (strTest(xU,deeVar)) {return drvS(xU,deeVar)}
-        if (strTest(xL,deeVar)) {return drvS(xL,deeVar)}
-        return 0
+        return drvS(xL,deeVar)
     },
     cSubD: function(xU,xL,deeVar) {
         if (strTest(xU,deeVar) && strTest(xL,deeVar)) {return cSubS(drvS(xU,deeVar),drvS(xL,deeVar))}
         if (strTest(xU,deeVar)) {return drvS(xU,deeVar)}
-        if (strTest(xL,deeVar)) {return cNegS(drvS(xL,deeVar))}
-        return 0
+        return cNegS(drvS(xL,deeVar))
     },
     cNegD: function(xU,xL,deeVar) {return cNegS(drvS(xU,deeVar)) },
     lneD: function(xU,xL,deeVar) {return cMulS(cDivS(1,xU),drvS(xU,deeVar)) },
@@ -2242,26 +2237,13 @@ var mgCalc = function() {
             iReturn = xReduce(cDivS("cMul("+xU+","+xL+")",drvS(ntgTemp,deeVar)));
             if (ntgFunc.ntgTest(ntgTemp) && !strTest(iReturn,deeVar)) {return cMulS(iReturn,ntgTemp)}
         }
-        if (xTractL.func == "cPow" && xTractU.func && !xTractU.lower && strTest(xTractL.lower,deeVar)) {
-            ntgTemp = xReduce(cDivS(xL,xTractU.upper));
-            iReturn = pIntegrate(ntgTemp,ntgS("cMul("+ntgTemp+","+xU+")",deeVar));
-            if (ntgFunc.ntgTest(iReturn)) {return iReturn}
-        }
         if (xTractU.func == "cPow" && xTractL.func && !xTractL.lower && strTest(xTractU.lower,deeVar)) {
             ntgTemp = xReduce(cDivS(xU,xTractL.upper));
             iReturn = pIntegrate(ntgTemp,ntgS("cMul("+ntgTemp+","+xL+")",deeVar));
             if (ntgFunc.ntgTest(iReturn)) {return iReturn}
         }
-        if (xTractL.func == "cPow" && xTractU.func && !xTractU.lower && uuDegree > 0) {
-            iReturn = pIntegrate(xReduce(cDivS(xL,cPowS(deeVar,uuDegree))),ntgS("cMul(cPow("+deeVar+","+uuDegree+"),"+xU+")",deeVar));
-            if (ntgFunc.ntgTest(iReturn)) {return iReturn}
-        }
         if (xTractU.func == "cPow" && xTractL.func && !xTractL.lower && luDegree > 0) {
             iReturn = pIntegrate(xReduce(cDivS(xU,cPowS(deeVar,luDegree))),ntgS("cMul(cPow("+deeVar+","+luDegree+"),"+xL+")",deeVar));
-            if (ntgFunc.ntgTest(iReturn)) {return iReturn}
-        }
-        if (xTractL.func == "cPow" && xTractU.func && xTractU.lower && ulDegree > 0) {
-            iReturn = pIntegrate(xReduce(cDivS(xL,cPowS(deeVar,ulDegree))),ntgS("cMul(cPow("+deeVar+","+ulDegree+"),"+xU+")",deeVar));
             if (ntgFunc.ntgTest(iReturn)) {return iReturn}
         }
         if (xTractU.func == "cPow" && xTractL.func && xTractL.lower && llDegree > 0) {
