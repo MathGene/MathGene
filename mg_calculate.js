@@ -3088,7 +3088,7 @@ var mgCalc = function() {
         if (+xL != 0) {nReturn = "cpx(" + xU + "," + xL + ")"}
         return nReturn
     }
-    function toCplx(xU) {
+    function toCplx(xU) { //change type to complex
         var nReturn = xU;
         if (getType(xU) == "complex" && typeof xU != "object") {
             var xTractU = opExtract(xU);
@@ -3097,7 +3097,7 @@ var mgCalc = function() {
         if (getType(xU) == "real") {nReturn = {r:(+xU),i:0}}
         return nReturn
     }
-    function toReal(xU) {
+    function toReal(xU) { //change type to real, dropping any imaginary components
         var nReturn = xU;
         if (getType(xU) == "complex") {
             if (typeof xU == "object") {nReturn = +xU.r}
@@ -3383,112 +3383,126 @@ var mgCalc = function() {
 
     //numerical functions
     function cAng(xU,xL) { //complex polar form
-        if (getType(xU) == "real" && getType(xL) == "real") {return cMul(xU,cAdd(cos(xL),cMul(Cv[46],sin(xL))))}
-        return "undefined"
+        var nReturn = "undefined";
+        if (getType(xU) == "real" && getType(xL) == "real") {nReturn = cMul(xU,cAdd(cos(xL),cMul(Cv[46],sin(xL))))}
+        return nReturn
     }
     function arg(xU) { //arg(x)
+        var nReturn = "undefined";
         if (getType(xU) == "complex" || getType(xU) == "real" ) {
             var cA = toCplx(xU);
-            if (cA.r > 0) {return atn(cDiv(cA.i,cA.r))}
-            if (cA.r < 0 && cA.i >= 0) {return cAdd(Cv[29],atn(cDiv(cA.i,cA.r)))}
-            if (cA.r < 0 && cA.i < 0)  {return cAdd(cNeg(Cv[29]),atn(cDiv(cA.i,cA.r)))}
-            if (cA.r == 0 && cA.i > 0) {return cDiv(Cv[29],2)}
-            if (cA.r == 0 && cA.i < 0) {return cNeg(cDiv(Cv[29],2))}
-            return 0
+            if (cA.r > 0) {nReturn = atn(cDiv(cA.i,cA.r))}
+            else if (cA.r < 0 && cA.i >= 0) {nReturn = cAdd(Cv[29],atn(cDiv(cA.i,cA.r)))}
+            else if (cA.r < 0 && cA.i < 0)  {nReturn = cAdd(cNeg(Cv[29]),atn(cDiv(cA.i,cA.r)))}
+            else if (cA.r == 0 && cA.i > 0) {nReturn = cDiv(Cv[29],2)}
+            else if (cA.r == 0 && cA.i < 0) {nReturn = cNeg(cDiv(Cv[29],2))}
+            else {nReturn = 0}
         }
-        return "undefined"
+        return nReturn
     }
     function rex(xU) { //real part of complex number
-        if (getType(xU) == "complex") {return toCplx(xU).r}
-        if (getType(xU) == "real") {return xU}
-        return "undefined"
+        var nReturn = "undefined";
+        if (getType(xU) == "complex") {nReturn = toCplx(xU).r}
+        if (getType(xU) == "real") {nReturn = xU}
+        return nReturn
     }
     function imx(xU) { //imaginary part of complex number
-        if (getType(xU) == "complex") {return cpx(0,toCplx(xU).i)}
-        if (getType(xU) == "real") {return 0}
-        return "undefined"
+        var nReturn = "undefined";
+        if (getType(xU) == "complex") {nReturn = cpx(0,toCplx(xU).i)}
+        if (getType(xU) == "real") {nReturn = 0}
+        return nReturn
     }
     function con(xU) { //complex conjugate
-        if (getType(xU) == "complex") {xU = toCplx(xU);return cpx(xU.r, (cNeg(xU.i)))}
-        if (getType(xU) == "real" && mgConfig.Domain == "Complex") {return cpx(xU, 0)}
-        return "undefined"
+        var nReturn = "undefined";
+        if (getType(xU) == "complex") {xU = toCplx(xU);nReturn = cpx(xU.r, (cNeg(xU.i)))}
+        if (getType(xU) == "real" && mgConfig.Domain == "Complex") {nReturn = cpx(xU, 0)}
+        return nReturn
     }
     function exp(xU) { //exp(x)
-        if (getType(xU) == "complex") {xU = toCplx(xU);return cpx(cMul(cPow(Cv[8],xU.r),cos(xU.i)), cMul(cPow(Cv[8],xU.r),sin(xU.i)))}
-        if (getType(xU) == "real") {return cPow(Cv[8],xU)}
-        return "undefined"
+        var nReturn = "undefined";
+        if (getType(xU) == "complex") {xU = toCplx(xU);nReturn = cpx(cMul(cPow(Cv[8],xU.r),cos(xU.i)), cMul(cPow(Cv[8],xU.r),sin(xU.i)))}
+        if (getType(xU) == "real") {nReturn = cPow(Cv[8],xU)}
+        return nReturn
     }
     function lne(xU) {//natural log
         function cAbs(xA) {
             if (abs(xA.r) > abs(xA.i)) {return cMul(abs(xA.r),sqt(cAdd(1,cMul(cDiv(xA.i,xA.r),(xA.i/xA.r)))))}
             else {return cMul(abs(xA.i),sqt(cAdd(1,cMul(cDiv(xA.r,xA.i),cDiv(xA.r,xA.i)))))}
         }
-        if (getType(xU) == "complex" || xU < 0) {
-            var cA = toCplx(xU);
-            return cpx(Math.log(cAbs(cA)), arg(cA))
-        }
-        if (getType(xU) == "real")  {return Math.log(xU)}
-        return "undefined"
+        var nReturn = "undefined";
+        if (getType(xU) == "complex" || xU < 0) {var cA = toCplx(xU);nReturn = cpx(Math.log(cAbs(cA)), arg(cA))}
+        else if (getType(xU) == "real")  {nReturn = Math.log(xU)}
+        return nReturn
     }
     function log(xU) {return lne(xU)} //natural log
     function lgn(xU,xL) {return cDiv(lne(xL),lne(xU))} //log base n
     function sqt(xU) {//square root
+        var nReturn = "undefined";
         if (nbrTest(cPow(xU,0.5))) {
-            if (xU == cPow(rou(cPow(xU,0.5)),2)) {return rou(cPow(xU,0.5))} //preserve integers
-            return cPow(xU,0.5)
+            if (xU == cPow(rou(cPow(xU,0.5)),2)) {nReturn = rou(cPow(xU,0.5))} //preserve integers
+            else {nReturn = cPow(xU,0.5)}
         }
-        return cPow(xU,0.5)
+        else {nReturn = cPow(xU,0.5)}
+        return nReturn
     }
     function cbt(xU) { //cube root
+        var nReturn = "undefined";
         if (getType(cPow(xU,cDiv(1,3))) == "real") {
-            if (xU == cPow(rou(cPow(xU,cDiv(1,3))),3)) {return rou(cPow(xU,cDiv(1,3)))} //preserve integers
-            return cPow(xU,cDiv(1,3))
+            if (xU == cPow(rou(cPow(xU,cDiv(1,3))),3)) {nReturn = rou(cPow(xU,cDiv(1,3)))} //preserve integers
+            else {nReturn = cPow(xU,cDiv(1,3))}
         }
-        return cPow(xU,cDiv(1,3))
+        else {nReturn = cPow(xU,cDiv(1,3))}
+        return nReturn
     }
     function nrt(xU,xL) { //n'th root
+        var nReturn = "undefined";
         if (getType(xU) == "real" && getType(xL) == "real") {
-            if (xL == cPow(rou(cPow(xL,cDiv(1,xU))),xU)) {return rou(cPow(xL,cDiv(1,xU)))} //preserve integers
-            return cPow(xL,cDiv(1,xU))
+            if (xL == cPow(rou(cPow(xL,cDiv(1,xU))),xU)) {nReturn = rou(cPow(xL,cDiv(1,xU)))} //preserve integers
+            else {nReturn = cPow(xL,cDiv(1,xU))}
         }
-        return cPow(xL,cDiv(1,xU))
+        else {nReturn = cPow(xL,cDiv(1,xU))}
+        return nReturn
     }
     function abs(xU) {//absolute value
-        if (getType(xU) == "complex") {xU = toCplx(xU);return sqt(cAdd((cMul(xU.r,xU.r)),(cMul(xU.i,xU.i))))}
+        var nReturn = "undefined";
+        if (getType(xU) == "complex") {xU = toCplx(xU);nReturn = sqt(cAdd((cMul(xU.r,xU.r)),(cMul(xU.i,xU.i))))}
         if (getType(xU) == "real") {
-            if (xU < 0) {return cNeg(xU)}
-            return xU
+            if (xU < 0) {nReturn = cNeg(xU)}
+            else {nReturn = xU}
         }
         if (getType(xU) == "vector") {
             xU = vecArray(xU);
             var vReturn = 0;
             for (var xI in xU) {vReturn = cAdd(vReturn,cPow(xU[xI],2))}
-            return sqt(vReturn)
+            nReturn = sqt(vReturn)
         }
-        return "undefined"
+        return nReturn
     }
     function int(xU) { //floor
-        if (getType(xU) == "complex") {xU = toCplx(xU);return cpx(int(xU.r), int(xU.i))}
+        var nReturn = "undefined";
+        if (getType(xU) == "complex") {xU = toCplx(xU);nReturn = cpx(int(xU.r), int(xU.i))}
         if (getType(xU) == "real") {
-            if (xU == rou(xU)) {return xU}
-            else if (xU < rou(xU)) {return cSub(rou(xU),1)}
-            else {return rou(xU)}
+            if (xU == rou(xU)) {nReturn = xU}
+            else if (xU < rou(xU)) {nReturn = cSub(rou(xU),1)}
+            else {nReturn = rou(xU)}
         }
-        return "undefined"
+        return nReturn
     }
     function cei(xU) { //ceiling
-        if (getType(xU) == "complex") {xU = toCplx(xU);return cpx(cei(xU.r), cei(xU.i))}
+        var nReturn = "undefined";
+        if (getType(xU) == "complex") {xU = toCplx(xU);nReturn = cpx(cei(xU.r), cei(xU.i))}
         if (getType(xU) == "real") {
-            if (xU == rou(xU)) {return xU}
-            else if (xU > rou(xU)) {return cAdd(rou(xU),1)}
-            else {return rou(xU)}
+            if (xU == rou(xU)) {nReturn = xU}
+            else if (xU > rou(xU)) {nReturn = cAdd(rou(xU),1)}
+            else {nReturn = rou(xU)}
         }
-        return "undefined"
+        return nReturn
     }
     function rou(xU) { //round
-        if (getType(xU) == "complex") {xU = toCplx(xU);return cpx(rou(xU.r), rou(xU.i))}
-        if (getType(xU) == "real") {return Math.round(+xU)}
-        return "undefined"
+        var nReturn = "undefined";
+        if (getType(xU) == "complex") {xU = toCplx(xU);nReturn = cpx(rou(xU.r), rou(xU.i))}
+        if (getType(xU) == "real") {nReturn = Math.round(+xU)}
+        return nReturn
     }
 
     //trig functions
