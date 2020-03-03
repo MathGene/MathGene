@@ -250,48 +250,50 @@ var mgCalc = function() {
         }
         //
         var sXtract = relExtract(xSol);
-        var cRet = "";
-        if (!sXtract.lower || !sXtract.upper) {return xReduce(xSol)}
-        if (sXtract.lower.split(cVar).length > 2) {sXtract.lower = xprFactor(sXtract.lower)}
-        if (sXtract.upper.split(cVar).length > 2) {sXtract.upper = xprFactor(sXtract.upper)}
-        solverFlag = true;
-        if (strTest(sXtract.lower,cVar)) {
-            cRet = xprCrawl("0",cSubS(sXtract.upper,sXtract.lower),cVar);
-        }
+        var cRet = "", sReturn = "";
+        if (!sXtract.lower || !sXtract.upper) {sReturn = xReduce(xSol)}
         else {
-            cRet = xprCrawl("0",cSubS(sXtract.lower,sXtract.upper),cVar);
-            cRet.ineqSwap = cNegS(cRet.ineqSwap);
+            if (sXtract.lower.split(cVar).length > 2) {sXtract.lower = xprFactor(sXtract.lower)}
+            if (sXtract.upper.split(cVar).length > 2) {sXtract.upper = xprFactor(sXtract.upper)}
+            solverFlag = true;
+            if (strTest(sXtract.lower,cVar)) {
+                cRet = xprCrawl("0",cSubS(sXtract.upper,sXtract.lower),cVar);
+            }
+            else {
+                cRet = xprCrawl("0",cSubS(sXtract.lower,sXtract.upper),cVar);
+                cRet.ineqSwap = cNegS(cRet.ineqSwap);
+            }
+            solverFlag = false;
+            if (!nbrTest(cRet.ineqSwap)) {cRet.ineqSwap = 0}
+            if (sXtract.func == "cEql") {sReturn = cEqlS(cRet.rExpr,xReduce(cRet.lExpr))}
+            else if (sXtract.func == "cNql") {sReturn = cNqlS(cRet.rExpr,xReduce(cRet.lExpr))}
+            else if (sXtract.func == "cGth" && cRet.ineqSwap > 0) {sReturn = cGthS(cRet.rExpr,xReduce(cRet.lExpr))}
+            else if (sXtract.func == "cGth" && cRet.ineqSwap < 0) {sReturn = cLthS(cRet.rExpr,xReduce(cRet.lExpr))}
+            else if (sXtract.func == "cLth" && cRet.ineqSwap > 0) {sReturn = cLthS(cRet.rExpr,xReduce(cRet.lExpr))}
+            else if (sXtract.func == "cLth" && cRet.ineqSwap < 0) {sReturn = cGthS(cRet.rExpr,xReduce(cRet.lExpr))}
+            else if (sXtract.func == "cGeq" && cRet.ineqSwap > 0) {sReturn = cGeqS(cRet.rExpr,xReduce(cRet.lExpr))}
+            else if (sXtract.func == "cGeq" && cRet.ineqSwap < 0) {sReturn = cLeqS(cRet.rExpr,xReduce(cRet.lExpr))}
+            else if (sXtract.func == "cLeq" && cRet.ineqSwap > 0) {sReturn = cLeqS(cRet.rExpr,xReduce(cRet.lExpr))}
+            else if (sXtract.func == "cLeq" && cRet.ineqSwap < 0) {sReturn = cGeqS(cRet.rExpr,xReduce(cRet.lExpr))}
+            else {sReturn = "undefined"}
+            if (strTest(sReturn,"Cv[9998]")) {sReturn = "Cv[9998]"}
         }
-        solverFlag = false;
-        if (!nbrTest(cRet.ineqSwap)) {cRet.ineqSwap = 0}
-        var sReturn = "";
-        if (sXtract.func == "cEql") {sReturn = cEqlS(cRet.rExpr,xReduce(cRet.lExpr))}
-        else if (sXtract.func == "cNql") {sReturn = cNqlS(cRet.rExpr,xReduce(cRet.lExpr))}
-        else if (sXtract.func == "cGth" && cRet.ineqSwap > 0) {sReturn = cGthS(cRet.rExpr,xReduce(cRet.lExpr))}
-        else if (sXtract.func == "cGth" && cRet.ineqSwap < 0) {sReturn = cLthS(cRet.rExpr,xReduce(cRet.lExpr))}
-        else if (sXtract.func == "cLth" && cRet.ineqSwap > 0) {sReturn = cLthS(cRet.rExpr,xReduce(cRet.lExpr))}
-        else if (sXtract.func == "cLth" && cRet.ineqSwap < 0) {sReturn = cGthS(cRet.rExpr,xReduce(cRet.lExpr))}
-        else if (sXtract.func == "cGeq" && cRet.ineqSwap > 0) {sReturn = cGeqS(cRet.rExpr,xReduce(cRet.lExpr))}
-        else if (sXtract.func == "cGeq" && cRet.ineqSwap < 0) {sReturn = cLeqS(cRet.rExpr,xReduce(cRet.lExpr))}
-        else if (sXtract.func == "cLeq" && cRet.ineqSwap > 0) {sReturn = cLeqS(cRet.rExpr,xReduce(cRet.lExpr))}
-        else if (sXtract.func == "cLeq" && cRet.ineqSwap < 0) {sReturn = cGeqS(cRet.rExpr,xReduce(cRet.lExpr))}
-        else {sReturn = "undefined"}
-        if (strTest(sReturn,"Cv[9998]")) {sReturn = "Cv[9998]"}
         return sReturn
     }
     function relExtract(fExt) { //extract relational operators in FUNC format, returns func,upper,lower
         fExt = String(fExt);
+        var opReturn = {func:"",upper:"",lower:""}
         for (var cI in mgTrans.funcMap) {
                 if (mgTrans.funcMap[cI].relop && fExt.indexOf(cI) == 0 ) {
                 var strg = mgTrans.parseParens(fExt,fExt.indexOf("("));
-                return {func:cI,upper:strg.upper,lower:strg.lower}
+                opReturn = {func:cI,upper:strg.upper,lower:strg.lower}
             }
         }
-        return {func:"",upper:"",lower:""}
+        return opReturn
     }
     function opExtract(fExt) {//extract inside function in FUNC format, returns func,upper,lower
         fExt = String(fExt);
-        var opReturn = {func:"",upper:"",lower:"",third:"",fourth:""}
+        var opReturn = {func:"",upper:"",lower:""}
         var funcKey = fExt.substr(0,fExt.indexOf("("))
         if (funcKey != "" && typeof passthruFunc[funcKey] != "undefined") {
             var strg = mgTrans.parseParens(fExt,fExt.indexOf("("));
@@ -340,20 +342,22 @@ var mgCalc = function() {
         return xVars.sort();
     }
     function varTest(iDv) { //test if string is a MG variable (Cv[xxx])
+        var bReturn = false;
         iDv = String(iDv);
         if (iDv.substr(0,3) == "Cv[") {
             iDv = iDv.replace(/Cv\[(\d+)\]/,"$1");
-            if ((iDv > 64 && iDv < 91) || (iDv > 96 && iDv < 123) || (iDv > 10064 && iDv < 10091) || (iDv > 10096 && iDv < 10123) || (iDv > 912 && iDv < 970) || (iDv > 11100 && iDv < 11109)) {return true}
+            if ((iDv > 64 && iDv < 91) || (iDv > 96 && iDv < 123) || (iDv > 10064 && iDv < 10091) || (iDv > 10096 && iDv < 10123) || (iDv > 912 && iDv < 970) || (iDv > 11100 && iDv < 11109)) {bReturn = true}
         }
-        return false
+        return bReturn
     }
     function conTest(iDv) { //test if string is a MG constant (Cv[xxx])
+        var bReturn = false;
         iDv = String(iDv);
         if (iDv.substr(0,3) == "Cv[") {
             iDv = iDv.replace(/Cv\[(\d+)\]/,"$1");
-            if (iDv >= 0 && iDv <= 44) {return true}
+            if (iDv >= 0 && iDv <= 44) {bReturn = true}
         }
-        return false
+        return bReturn
     }
     function xprMatch(Xpression,Pattern) { //match exact pattern template to expression Cv[9999] = wildcard
         Xpression = xprIterate(Xpression);
@@ -371,10 +375,10 @@ var mgCalc = function() {
                 xTractU = opExtract(xTractU.lower);
                 xTractL = opExtract(xTractL.lower);
             }
-            else {return ""}
+            else {pOutput = ""; break}
         }
-        if (Xpression == xprIterate(Pattern.split("Cv[9999]").join(pOutput))) {return pOutput}
-        return ""
+        if (Xpression != xprIterate(Pattern.split("Cv[9999]").join(pOutput))) {pOutput = ""}
+        return pOutput
     }
     function xprSearch(Xpression,Pattern) { //search for pattern template inside expression Cv[9999] = wildcard
         var sTest = xprMatch(Xpression,Pattern)
@@ -801,36 +805,38 @@ var mgCalc = function() {
         return nTerms.sort(function(aS,bS){return sortTerms(aS,bS)})
     }
     function pNomial(pN,pVar) { //parse polynomial into ranked array
-        var pnTerms = [],pReturn = [],pDegree = 0,pD = 0;
+        var pnTerms = [],pReturn = [pN],pDegree = 0,pD = 0;
         if (typeof pVar == "undefined") {pVar = pVariable(pN)}
-        if (!pVar) {return [pN]}
-        pnTerms = parsePoly(pN);
-        for (pD in pnTerms) {
-            if (!strTest(pnTerms[pD],pVar) && !pReturn[0]) {pReturn[0] = pnTerms[pD]}
-            else if (pnTerms[pD] == pVar) {pReturn[1] = pnTerms[pD]}
-            else {
-                var xTractD = opExtract(pnTerms[pD]);
-                for (var iXf=0;iXf<6;iXf++) {
-                    if (xTractD.func == "cPow" && xTractD.upper == pVar) {break}
-                    else if (xTractD.func == "cPow" && strTest(xTractD.upper,pVar)) {return [pN]}
-                    else if (xTractD.func == "cPow" && strTest(xTractD.lower,pVar)) {return [pN]}
-                    else if (xTractD.upper == pVar || xTractD.lower == pVar)  {xTractD = pVar;break}
-                    else if (xTractD.func == "cMul" && strTest(xTractD.upper,pVar)) {xTractD = opExtract(xTractD.upper)}
-                    else if (xTractD.func == "cMul" && strTest(xTractD.lower,pVar)) {xTractD = opExtract(xTractD.lower)}
-                    else if (xTractD.func == "cDiv" && strTest(xTractD.upper,pVar)) {xTractD = opExtract(xTractD.upper)}
-                    else if (xTractD.func == "cDiv" && strTest(xTractD.lower,pVar)) {return [pN]}
-                    else if (xTractD.func == "cNeg" && strTest(xTractD.upper,pVar)) {xTractD = opExtract(xTractD.upper)}
+        if (pVar) {
+            pReturn = [];
+            pnTerms = parsePoly(pN);
+            for (pD in pnTerms) {
+                if (!strTest(pnTerms[pD],pVar) && !pReturn[0]) {pReturn[0] = pnTerms[pD]}
+                else if (pnTerms[pD] == pVar) {pReturn[1] = pnTerms[pD]}
+                else {
+                    var xTractD = opExtract(pnTerms[pD]);
+                    for (var iXf=0;iXf<6;iXf++) {
+                        if (xTractD.func == "cPow" && xTractD.upper == pVar) {break}
+                        else if (xTractD.func == "cPow" && strTest(xTractD.upper,pVar)) {pReturn = [];break}
+                        else if (xTractD.func == "cPow" && strTest(xTractD.lower,pVar)) {pReturn = [];break}
+                        else if (xTractD.upper == pVar || xTractD.lower == pVar)  {xTractD = pVar;break}
+                        else if (xTractD.func == "cMul" && strTest(xTractD.upper,pVar)) {xTractD = opExtract(xTractD.upper)}
+                        else if (xTractD.func == "cMul" && strTest(xTractD.lower,pVar)) {xTractD = opExtract(xTractD.lower)}
+                        else if (xTractD.func == "cDiv" && strTest(xTractD.upper,pVar)) {xTractD = opExtract(xTractD.upper)}
+                        else if (xTractD.func == "cDiv" && strTest(xTractD.lower,pVar)) {pReturn = [];break}
+                        else if (xTractD.func == "cNeg" && strTest(xTractD.upper,pVar)) {xTractD = opExtract(xTractD.upper)}
+                        else {pReturn = [];break}
+                    }
+                    if (xTractD == pVar) {pReturn[1] = pnTerms[pD];pDegree = 1}
+                    else if (xTractD.func == "cPow" && xTractD.upper == pVar && nbrTest(xTractD.lower) && xTractD.lower > 0 && xTractD.lower == int(xTractD.lower)) {
+                        pReturn[+xTractD.lower] = pnTerms[pD];
+                        if (+xTractD.lower > pDegree) {pDegree = xTractD.lower}
+                    }
                     else {return [pN]}
                 }
-                if (xTractD == pVar) {pReturn[1] = pnTerms[pD];pDegree = 1}
-                else if (xTractD.func == "cPow" && xTractD.upper == pVar && nbrTest(xTractD.lower) && xTractD.lower > 0 && xTractD.lower == int(xTractD.lower)) {
-                    pReturn[+xTractD.lower] = pnTerms[pD];
-                    if (+xTractD.lower > pDegree) {pDegree = xTractD.lower}
-                }
-                else {return [pN]}
             }
+            for (pD=0;pD<=pDegree;pD++) {if (!pReturn[pD] || typeof pReturn[pD] == "undefined") {pReturn[pD] = 0} }
         }
-        for (pD=0;pD<=pDegree;pD++) {if (!pReturn[pD] || typeof pReturn[pD] == "undefined") {pReturn[pD] = 0} }
         return pReturn
     }
     function pExpand(pE) { //recreate polynomial from pNomial array
