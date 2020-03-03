@@ -762,7 +762,7 @@ var mgCalc = function() {
         for (xI in xG) {tGcf[xI]= xG[xI]}
         tGcf = tGcf.sort(function(aS,bS){return abs(aS) > abs(bS) ? -1 : abs(aS) < abs(bS) ? 1 : 0;})[0];//find largest coeff
         for (xI in xG) {
-            if (!nbrTest(xG[xI]) || xG[xI] != int(xG[xI]) || typeof xG[xI] == "undefined") {return 1}
+            if (!nbrTest(xG[xI]) || xG[xI] != int(xG[xI]) || typeof xG[xI] == "undefined") {tGcf = 1;break}
             if (xG[xI] != 0) {tGcf = cGcf(tGcf,xG[xI])}
         }
         return tGcf
@@ -866,25 +866,29 @@ var mgCalc = function() {
         return xCoeff
     }
     function pDivide(xU,xL) { //polynomial division
+        var sReturn = "";
         var fGcf = cGcf(aGcf(pCoeff(pNomial(xU))),aGcf(pCoeff(pNomial(xL)))); //calculate GCF
         if (fGcf != 0 && fGcf != 1) {xU = cDivS(xU,fGcf); xL = cDivS(xL,fGcf)} //apply GCF
         var pVar = pVariable(xU);
         var polyU = pNomial(xU,pVar);
         var polyL = pNomial(xL,pVar);
         if (!strTest(xL,pVar)) {pVar = pVariable(xL)} //select primary variable
-        if (!strTest(xU,pVar) || pVar == "") {return "cDiv("+xU+","+xL+")"}
-        if (!strTest(xU,pVariable(xL)) || polyU.length < polyL.length || polyU.length < 2 || polyL.length < 2 || strTest(xU,xL)) {return "cDiv("+xU+","+xL+")"}
-        if (polyU.length > 1 && polyL.length > 1 && cInventory(polyU[polyU.length-1]).length > 2) {return "cDiv("+xU+","+xL+")"} //fix for compound terms in numerator
-        var dReturn = "0",tTemp = "";
-        var uTemp = xU;
-        for (var pT in polyU) {
-            tTemp = xReduce(cDivS(polyU[polyU.length-1],polyL[polyL.length-1]));
-            uTemp = xReduce(cSubS(uTemp,xprExpand(cMulS(tTemp,xL))));
-            dReturn = xReduce(cAddS(dReturn,tTemp));
-            polyU = pNomial(uTemp,pVar);
-            if (+uTemp == 0 || !strTest(uTemp,pVar) || strTest(uTemp,"cDiv(")) {break}
+        if (!strTest(xU,pVar) || pVar == "") {sReturn = "cDiv("+xU+","+xL+")"}
+        else if (!strTest(xU,pVariable(xL)) || polyU.length < polyL.length || polyU.length < 2 || polyL.length < 2 || strTest(xU,xL)) {sReturn = "cDiv("+xU+","+xL+")"}
+        else if (polyU.length > 1 && polyL.length > 1 && cInventory(polyU[polyU.length-1]).length > 2) {sReturn = "cDiv("+xU+","+xL+")"} //fix for compound terms in numerator
+        else {
+            var dReturn = "0",tTemp = "";
+            var uTemp = xU;
+            for (var pT in polyU) {
+                tTemp = xReduce(cDivS(polyU[polyU.length-1],polyL[polyL.length-1]));
+                uTemp = xReduce(cSubS(uTemp,xprExpand(cMulS(tTemp,xL))));
+                dReturn = xReduce(cAddS(dReturn,tTemp));
+                polyU = pNomial(uTemp,pVar);
+                if (+uTemp == 0 || !strTest(uTemp,pVar) || strTest(uTemp,"cDiv(")) {break}
+            }
+            sReturn = xReduce(cAddS(dReturn,cDivS(uTemp,xL)));
         }
-        return xReduce(cAddS(dReturn,cDivS(uTemp,xL)))
+        return sReturn
     }
 
     //Algebra
