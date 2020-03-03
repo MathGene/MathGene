@@ -395,29 +395,35 @@ var mgCalc = function() {
     function nbrTest(xT) {if (+xT == +xT*1) {return true}; return false} //test for numerical string
     function nbrEven(xE) {if (cDiv(xE,2) == int(cDiv(xE,2))) {return true};return false} //test for even number
     function strTest(xTarget,xSearch) { //test if xSearch string is in xTarget
-        if (typeof xTarget == "undefined") {return false}
-        else if (xTarget == xSearch) {return true}
-        else if (!nbrTest(xTarget) && xTarget.indexOf(xSearch) > -1) {return true}
-        else {return false}
+        var bReturn = false;
+        if (typeof xTarget == "undefined") {bReturn = false}
+        else if (xTarget == xSearch) {bReturn = true}
+        else if (!nbrTest(xTarget) && xTarget.indexOf(xSearch) > -1) {bReturn = true}
+        else {bReturn = false}
+        return bReturn
     }
     function matFunc(xA) { //matrix array to FUNC conversion
+        var mReturn = xA;
         if (typeof xA[0] == "object") {
             var mReturn = [];
             for (var iR in xA) {mReturn[iR] = matFunc(xA[iR])}
-            return "mat(" + mReturn + ")"
+            mReturn = "mat(" + mReturn + ")"
         }
-        if (typeof xA == "object") {return "mat(" + xA + ")"}
-        return xA
+        else if (typeof xA == "object") {mReturn = "mat(" + xA + ")"}
+        return mReturn
     }
     function matArray(xA) { //matrix FUNC to array conversion
-        if (typeof xA == "object") {return xA}
-        var mReturn = mgTrans.parseArgs(mgTrans.oParens(String(xA).substr(3)));
-        for (var iM in mReturn) {if (String(mReturn[iM]).substr(0,3) == "mat") {mReturn[iM] = matArray(mReturn[iM])}}
+        var mReturn = xA;
+        if (typeof xA != "object") {
+            mReturn = mgTrans.parseArgs(mgTrans.oParens(String(xA).substr(3)));
+            for (var iM in mReturn) {if (String(mReturn[iM]).substr(0,3) == "mat") {mReturn[iM] = matArray(mReturn[iM])}}
+        }
         return mReturn
     }
     function vecArray(xA) { //vector FUNC to array conversion
-        if (typeof xA == "object") {return xA}
-        return mgTrans.parseArgs(mgTrans.oParens(String(xA).substr(3)));
+        var vReturn = xA;
+        if (typeof xA != "object") {vReturn = mgTrans.parseArgs(mgTrans.oParens(String(xA).substr(3)))}
+        return vReturn
     }
     function sortTerms(aS,bS){ //sort terms array alpha with powers in descending polynomial order
         if (strTest(aS,"cPow") || strTest(bS,"cPow")) {
@@ -432,8 +438,9 @@ var mgCalc = function() {
     }
     function decToFrac(xU) { //convert decimal to fraction up to 10^5
         for (var xP=0;xP<=5;xP++) {if (abs(cMul(xU,cPow(10,xP))) == abs(int(cMul(xU,cPow(10,xP))))) {break}}
-        if (abs(cMul(xU,cPow(10,xP))) != abs(int(cMul(xU,cPow(10,xP))))) {return xU}
-        return cDivS(cMul(xU,cPow(10,xP)),cPow(10,xP))
+        var fReturn = cDivS(cMul(xU,cPow(10,xP)),cPow(10,xP))
+        if (abs(cMul(xU,cPow(10,xP))) != abs(int(cMul(xU,cPow(10,xP))))) {fReturn = xU}
+        return fReturn
     }
     function execFunc(expIn,funcObj) { //execute FUNC math
         expIn = mgTrans.oParens(expIn);
