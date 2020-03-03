@@ -2858,8 +2858,8 @@ var mgCalc = function() {
             for (var zI in sFac) {fReturn = cAddS(fReturn,xReduce(cDivS(sFac[zI],tFactor)))} //sum terms
             asReturn = xReduce(cMulS(tFactor,pFactor(fReturn)));
         }
-        if (xprExpand(asReturn) == xReduce(asFac)) {return asReturn} //test factored expression
-        return asFac
+        if (xprExpand(asReturn) != xReduce(asFac)) {asReturn = asFac} //test factored expression
+        return asReturn
     }
     //
     function xprFactor(xFac) { //factor expression
@@ -3060,13 +3060,17 @@ var mgCalc = function() {
     function roundDecTo(xD,xT) { //round decimal to xT digits
         function expNotation(xN) { //format number in N.NNe+-x
             xN = String(xN);
+            var eReturn = xN;
             var sgn = "",tmp = 0;
-            if (xN == "0") {return xN}
-            for (var iSc=-323;iSc<308;iSc++) {
-                tmp = cDiv(xN,cPow(10,iSc));
-                if (iSc >= 0) {sgn = "+"}
-                if ((abs(tmp) >= 1)&&(abs(tmp) < 10)) {return tmp + "e" + sgn + iSc}
+            if (xN != "0") {
+                for (var iSc=-323;iSc<308;iSc++) {
+                    tmp = cDiv(xN,cPow(10,iSc));
+                    if (iSc >= 0) {sgn = "+"}
+                    if ((abs(tmp) >= 1)&&(abs(tmp) < 10)) {break}
+                }
+                eReturn = tmp + "e" + sgn + iSc;
             }
+            return eReturn
         }
         var nReturn = xD;
         if (typeof xT == "undefined" ) {xT = mgConfig.dPrecision}
@@ -3783,61 +3787,61 @@ var mgCalc = function() {
     //JSON parameter: {PV:<present value>,FV:<future value<,PMT:<payment>,RATE:<rate>,TERM:<term>,IPY:<interest payments per year>}
     function finPV(parm){
         var FVx = toReal(parm.FV),PMTx = toReal(parm.PMT),RATEx = toReal(parm.RATE),TERMx = toReal(parm.TERM),IPYx = toReal(parm.IPY);
-        if (RATEx == 0) {return FVx+(IPYx*TERMx*PMTx)}
-        var Ux = (PMTx*(1-1/cPow(1+(RATEx/mgConfig.pctFactor)/IPYx,IPYx*TERMx))/((RATEx/mgConfig.pctFactor)/IPYx))+FVx*(1/cPow(1+((RATEx/mgConfig.pctFactor)/IPYx),IPYx*TERMx));
-        return rou(Ux*100)/100
+        var nReturn = FVx+(IPYx*TERMx*PMTx);
+        if (RATEx != 0) {nReturn = (PMTx*(1-1/cPow(1+(RATEx/mgConfig.pctFactor)/IPYx,IPYx*TERMx))/((RATEx/mgConfig.pctFactor)/IPYx))+FVx*(1/cPow(1+((RATEx/mgConfig.pctFactor)/IPYx),IPYx*TERMx))}
+        return rou(nReturn*100)/100
     }
     function finFV(parm){
         var PVx = toReal(parm.PV),PMTx = toReal(parm.PMT),RATEx = toReal(parm.RATE),TERMx = toReal(parm.TERM),IPYx = toReal(parm.IPY);
-        if (RATEx == 0) {return PVx-(IPYx*TERMx*PMTx)}
-        var Ux = (PVx-(PMTx*(1-1/cPow(1+(RATEx/mgConfig.pctFactor)/IPYx,IPYx*TERMx))/((RATEx/mgConfig.pctFactor)/IPYx)))/(1/cPow(1+((RATEx/mgConfig.pctFactor)/IPYx),IPYx*TERMx));
-        return rou(Ux*100)/100
+        var nReturn = PVx-(IPYx*TERMx*PMTx);
+        if (RATEx != 0) {nReturn = (PVx-(PMTx*(1-1/cPow(1+(RATEx/mgConfig.pctFactor)/IPYx,IPYx*TERMx))/((RATEx/mgConfig.pctFactor)/IPYx)))/(1/cPow(1+((RATEx/mgConfig.pctFactor)/IPYx),IPYx*TERMx))}
+        return rou(nReturn*100)/100
     }
     function finPMT(parm) {
         var PVx = toReal(parm.PV),FVx = toReal(parm.FV),RATEx = toReal(parm.RATE),TERMx = toReal(parm.TERM),IPYx = toReal(parm.IPY);
-        if (RATEx == 0) {return (PVx-FVx)/(IPYx*TERMx)}
-        var Ux = (PVx-FVx*(1/cPow(1+((RATEx/mgConfig.pctFactor)/IPYx),IPYx*TERMx)))/((1-1/cPow(1+(RATEx/mgConfig.pctFactor)/IPYx,IPYx*TERMx))/((RATEx/mgConfig.pctFactor)/IPYx));
-        return rou(Ux*100)/100
+        var nReturn = (PVx-FVx)/(IPYx*TERMx);
+        if (RATEx != 0) {nReturn = (PVx-FVx*(1/cPow(1+((RATEx/mgConfig.pctFactor)/IPYx),IPYx*TERMx)))/((1-1/cPow(1+(RATEx/mgConfig.pctFactor)/IPYx,IPYx*TERMx))/((RATEx/mgConfig.pctFactor)/IPYx))}
+        return rou(nReturn*100)/100
     }
     function finRATE(parm) {
         var PVx = toReal(parm.PV),FVx = toReal(parm.FV),PMTx = toReal(parm.PMT),TERMx = toReal(parm.TERM),IPYx = toReal(parm.IPY);
-        var Ux = 0,nH = 100,nL = 0,t1 = 0;
+        var nReturn = 0,nH = 100,nL = 0,t1 = 0;
         for (var kI=1; kI<=100;kI++) {
-            Ux = (nH+nL)/2;
-            t1 = (PMTx*(1-1/cPow(1+Ux/IPYx,IPYx*TERMx))/(Ux/IPYx))+FVx*(1/cPow(1+(Ux/IPYx),IPYx*TERMx));
+            nReturn = (nH+nL)/2;
+            t1 = (PMTx*(1-1/cPow(1+nReturn/IPYx,IPYx*TERMx))/(nReturn/IPYx))+FVx*(1/cPow(1+(nReturn/IPYx),IPYx*TERMx));
             if (t1 < PVx) {nH = (nH+nL)/2;} 
             else {nL = (nH+nL)/2;}
         }
-        return Ux.toPrecision(4)*mgConfig.pctFactor
+        return nReturn.toPrecision(4)*mgConfig.pctFactor
     }
     function finTERM(parm) {
         var PVx = toReal(parm.PV),FVx = toReal(parm.FV),PMTx = toReal(parm.PMT),RATEx = toReal(parm.RATE),IPYx = toReal(parm.IPY);
-        if (RATEx == 0) {return (PVx-FVx)/(IPYx*PMTx)}
-        var Ux = 0,nH = 500,nL = 1,t1 = 0, kI = 0;
-        if (PMTx == 0) {
+        var nReturn = 0,nH = 500,nL = 1,t1 = 0, kI = 0;
+        if (RATEx == 0) {nReturn = (PVx-FVx)/(IPYx*PMTx)}
+        else if (PMTx == 0) {
             for (kI=1; kI<100;kI++) {
-                Ux=(nH+nL)/2;
-                t1 = (PVx-FVx*(1/cPow(1+((RATEx/mgConfig.pctFactor)/IPYx),IPYx*Ux)))/((1-1/cPow(1+(RATEx/mgConfig.pctFactor)/IPYx,IPYx*Ux))/((RATEx/mgConfig.pctFactor)/IPYx));
+                nReturn=(nH+nL)/2;
+                t1 = (PVx-FVx*(1/cPow(1+((RATEx/mgConfig.pctFactor)/IPYx),IPYx*nReturn)))/((1-1/cPow(1+(RATEx/mgConfig.pctFactor)/IPYx,IPYx*nReturn))/((RATEx/mgConfig.pctFactor)/IPYx));
                 if (t1 > PMTx) {nH = (nH+nL)/2} else {nL = (nH+nL)/2}
             }
         }
         else if (FVx > PVx) {
             for (kI=1; kI<100;kI++) {
-                Ux=(nH+nL)/2;
-                t1 = (PVx-FVx*(1/cPow(1+((RATEx/mgConfig.pctFactor)/IPYx),IPYx*Ux)))/((1-1/cPow(1+(RATEx/mgConfig.pctFactor)/IPYx,IPYx*Ux))/((RATEx/mgConfig.pctFactor)/IPYx));
+                nReturn=(nH+nL)/2;
+                t1 = (PVx-FVx*(1/cPow(1+((RATEx/mgConfig.pctFactor)/IPYx),IPYx*nReturn)))/((1-1/cPow(1+(RATEx/mgConfig.pctFactor)/IPYx,IPYx*nReturn))/((RATEx/mgConfig.pctFactor)/IPYx));
                 if (t1 > PMTx) {nH = (nH+nL)/2} else {nL = (nH+nL)/2}
             }
         }
         else if (FVx < PVx) {
             for (kI=1; kI<100;kI++) {
-            Ux=(nH+nL)/2;
-            t1 = (PMTx*(1-1/cPow(1+(RATEx/mgConfig.pctFactor)/IPYx,IPYx*Ux))/((RATEx/mgConfig.pctFactor)/IPYx))+FVx*(1/cPow(1+((RATEx/mgConfig.pctFactor)/IPYx),IPYx*Ux));
+            nReturn=(nH+nL)/2;
+            t1 = (PMTx*(1-1/cPow(1+(RATEx/mgConfig.pctFactor)/IPYx,IPYx*nReturn))/((RATEx/mgConfig.pctFactor)/IPYx))+FVx*(1/cPow(1+((RATEx/mgConfig.pctFactor)/IPYx),IPYx*nReturn));
             if (t1 > PVx) {nH = (nH+nL)/2} else {nL = (nH+nL)/2}
             }
         }
-        else {return "Cv[8734]"}
-        if (Ux == 500) {return "Cv[8734]"}
-        return rou(Ux*100)/100
+        else if (nReturn == 500) {nReturn =  "Cv[8734]"}
+        else {nReturn = "Cv[8734]"}
+        return rou(nReturn*100)/100
     }
     //inverse functions iSolve Example: iSolve(function(a){return fn(a)},100,0,10) nL=low limit, nH=high limit
     function iSolve(expr,result,nL,nH) {//iterative solver
@@ -3856,7 +3860,7 @@ var mgCalc = function() {
         return nReturn
     }
     function cGcf(xU,xL) {//greatest common factor
-		var nReturn = "undefined";
+        var nReturn = "undefined";
         var xMod = 1,Cbr = 0, xTmpL = 0, xTmpH = 0;
         if (getType(xU) == "real" && getType(xL) == "real" ) {
             xU = abs(xU);xL = abs(xL);
