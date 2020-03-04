@@ -214,7 +214,6 @@ var mgCalc = function() {
     }
     function xprSolve(xSol,cVar) {//solve equation/inequality xSol in FUNC format for variable cVar
         function xprCrawl(lExpr,rExpr,xVar) {
-            if (rExpr.split(")").length-1 != rExpr.split("(").length-1) {return cError("Unmatched parentheses/brackets")}
             rExpr = xReduce(rExpr);
             var strgI = "";
             var ineqSwap = 1; //-1 swap inequality, 1 no change, 0 or other undefined
@@ -375,15 +374,14 @@ var mgCalc = function() {
                 xTractU = opExtract(xTractU.lower);
                 xTractL = opExtract(xTractL.lower);
             }
-            else {pOutput = ""; break}
         }
         if (Xpression != xprIterate(Pattern.split("Cv[9999]").join(pOutput))) {pOutput = ""}
         return pOutput
     }
     function xprSearch(Xpression,Pattern) { //search for pattern template inside expression Cv[9999] = wildcard
         var sTest = xprMatch(Xpression,Pattern)
-        if (sTest) {return sTest}
         var xTract = opExtract(Xpression);
+        if (sTest) {return sTest}
         if (xTract.upper) {sTest = xprSearch(xTract.upper,Pattern)}
         if (sTest) {return sTest}
         if (xTract.lower) {sTest = xprSearch(xTract.lower,Pattern)}
@@ -903,12 +901,12 @@ var mgCalc = function() {
         var xTractU = opExtract(xU);
         var xTractL = opExtract(xL);
         if (xTractU.func == "mat") {
-            if (xL == "Cv[84]" || xL == "Cv[10084]") {return matFunc(trn(matArray(xU)))} //transpose matrix M^T
-            if (xL != int(xL)) {return "undefined"}
-            if (xL <= -1) {return cPowS(invS(xU),cNegS(xL))} //inverse matrix M^-n
-            if (xL == 0)  {return matFunc(matIdentity(matArray(xU)))} //identity matrix M^0
             var mReturn = xU
-            for (var iM=1;iM<xL;iM++) {mReturn = cMulS(mReturn,xU)}
+            if (xL == "Cv[84]" || xL == "Cv[10084]") {mReturn = matFunc(trn(matArray(xU)))} //transpose matrix M^T
+            else if (xL != int(xL)) {mReturn = "undefined"}
+            else if (xL <= -1) {mReturn = cPowS(invS(xU),cNegS(xL))} //inverse matrix M^-n
+            else if (xL == 0)  {mReturn = matFunc(matIdentity(matArray(xU)))} //identity matrix M^0
+            else {for (var iM=1;iM<xL;iM++) {mReturn = cMulS(mReturn,xU)}}
             return mReturn
         }
         //infinity handlers for limits
@@ -976,14 +974,16 @@ var mgCalc = function() {
         if (xTractU.func == "mat" && xTractL.func == "mat") { //matrix multiply
             xU = matArray(xU);
             xL = matArray(xL);
-            if (xL.length != xU[0].length) {return "undefined"}
-            var mReturn = matCreate(xU.length,xL[0].length);
-            for (var rU in xU) {
-                for (var cL in xL[0]) {
-                    for (var cU in xU[0]) {
-                        var mTemp = cMulS(matFunc(xU[rU][cU]),matFunc(xL[cU][cL]));
-                        if (mReturn[rU][cL] == 0) {mReturn[rU][cL] = mTemp}
-                        else {mReturn[rU][cL] = cAddS(mReturn[rU][cL],mTemp)}
+            var mReturn = "undefined"
+            if (xL.length == xU[0].length) {
+                mReturn = matCreate(xU.length,xL[0].length);
+                for (var rU in xU) {
+                    for (var cL in xL[0]) {
+                        for (var cU in xU[0]) {
+                            var mTemp = cMulS(matFunc(xU[rU][cU]),matFunc(xL[cU][cL]));
+                            if (mReturn[rU][cL] == 0) {mReturn[rU][cL] = mTemp}
+                            else {mReturn[rU][cL] = cAddS(mReturn[rU][cL],mTemp)}
+                        }
                     }
                 }
             }
@@ -1123,9 +1123,11 @@ var mgCalc = function() {
         if (xTractU.func == "mat" && xTractL.func == "mat") { //matrix add
             xU = matArray(xU);
             xL = matArray(xL);
-            if (xU.length != xL.length) {return "undefined"}
-            var mReturn = xU;
-            for (var iR in xU) {mReturn[iR] = cAddS(matFunc(xU[iR]),matFunc(xL[iR]))}
+            var mReturn = "undefined";
+            if (xU.length == xL.length) {
+                mReturn = xU;
+                for (var iR in xU) {mReturn[iR] = cAddS(matFunc(xU[iR]),matFunc(xL[iR]))}
+            }
             return matFunc(mReturn)
         }
         if (xU == xL) {return cMulS(2,xU)}
@@ -2892,12 +2894,13 @@ var mgCalc = function() {
         function nEqual(nZ,nC) { //range not equal
             var zArray = [],zString = "",iZ = 0;
             var zVars = cInventory(nZ+"+"+nC);
-            if (zVars.length == 0) {return ""}
-            for (iZ in zVars) {zArray[iZ] = mgTrans.mgExport(xprSolve(mgTrans.cFunc(nZ+"Cv[8800]"+nC),zVars[iZ]))}
-            for (iZ in zVars) {
-                if (!strTest(zArray[iZ],"Cv[8734]")) {
-                    zString = zString+zArray[iZ];
-                    if (iZ < zArray.length-1) {zString = zString+"Cv[10044]"}
+            if (zVars.length > 0) {
+                for (iZ in zVars) {zArray[iZ] = mgTrans.mgExport(xprSolve(mgTrans.cFunc(nZ+"Cv[8800]"+nC),zVars[iZ]))}
+                for (iZ in zVars) {
+                    if (!strTest(zArray[iZ],"Cv[8734]")) {
+                        zString = zString+zArray[iZ];
+                        if (iZ < zArray.length-1) {zString = zString+"Cv[10044]"}
+                    }
                 }
             }
             return zString
@@ -3447,8 +3450,10 @@ var mgCalc = function() {
     }
     function lne(xU) {//natural log
         function cAbs(xA) {
-            if (abs(xA.r) > abs(xA.i)) {return cMul(abs(xA.r),sqt(cAdd(1,cMul(cDiv(xA.i,xA.r),(xA.i/xA.r)))))}
-            else {return cMul(abs(xA.i),sqt(cAdd(1,cMul(cDiv(xA.r,xA.i),cDiv(xA.r,xA.i)))))}
+            var cReturn = 0;
+            if (abs(xA.r) > abs(xA.i)) {cReturn = cMul(abs(xA.r),sqt(cAdd(1,cMul(cDiv(xA.i,xA.r),(xA.i/xA.r)))))}
+            else {cReturn = cMul(abs(xA.i),sqt(cAdd(1,cMul(cDiv(xA.r,xA.i),cDiv(xA.r,xA.i)))))}
+            return cReturn
         }
         var nReturn = "undefined";
         if (getType(xU) == "complex" || xU < 0) {var cA = toCplx(xU);nReturn = cpx(Math.log(cAbs(cA)), arg(cA))}
