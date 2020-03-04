@@ -527,13 +527,16 @@ var mgCalc = function() {
 
     function xprIterate(xIter) {
         xIter = String(xIter);
-        if (strTest(xIter,"undefined")) {return "undefined"}
-        if (xIter.search(/,,/) > -1 || xIter.search(/,\)/) > -1 || xIter.search(/\(,/) > -1 || xIter.search(/\(\)/) > -1) {return cError("Missing operand(s)")}
-        return execFunc(xIter,symFunc)
+        var sReturn = xIter;
+        if (strTest(xIter,"undefined")) {sReturn = "undefined"}
+        else if (xIter.search(/,,/) > -1 || xIter.search(/,\)/) > -1 || xIter.search(/\(,/) > -1 || xIter.search(/\(\)/) > -1) {sReturn = cError("Missing operand(s)")}
+        else {sReturn = execFunc(xIter,symFunc)}
+        return sReturn
     }
     function cReduce(cRdce) { //complete expression reduction
-        if (nbrTest(cRdce) && cRdce != int(cRdce)) {return decToFrac(cRdce)} //decimals to fractions
-        var sReturn = iReduce(xReduce(cRdce));
+        var sReturn = cRdce;
+        if (nbrTest(cRdce) && cRdce != int(cRdce)) {sReturn = decToFrac(cRdce)} //decimals to fractions
+        else {sReturn = iReduce(xReduce(cRdce))}
         return sReturn
     }
     function pxpExecute(xIn) {Pv = [];return xprIterate(xprIterate(xIn.replace(/cMul\(/g,"vMul(").replace(/cDiv\(/g,"vDiv(").replace(/cNeg\(/g,"vNeg(")).replace(/Pv\[(\d+)\]/g,"pxp($1)"))}
@@ -1248,103 +1251,120 @@ var mgCalc = function() {
     }
     function cNegS(xU) { //negate -xU
         var xTractU = opExtract(xU);
-        if (xU == 0) {return 0}
-        if (xTractU.func == "mat") {return cMulS(xU,-1)}
-        if (xTractU.func == "cAdd") {return cSubS(cNegS(xTractU.upper),xTractU.lower)}
-        if (xTractU.func == "cSub") {return cSubS(xTractU.lower,xTractU.upper)}
-        if (xTractU.func == "cMul" && nbrTest(xTractU.upper)) {return cMulS(cNeg(xTractU.upper),xTractU.lower)}
-        if (xTractU.func == "cMul" && nbrTest(xTractU.lower)) {return cMulS(cNeg(xTractU.lower),xTractU.upper)}
-        if (xTractU.func == "cNeg") {return xTractU.upper}
-        if (!factorFlag && !pxpFlag && nbrTest(xU) && xU != int(xU)) {return cNegS(decToFrac(xU))}
-        if (nbrTest(xU)) {return cMul(xU,-1)}
-        return "cNeg("+xU+")"
+        var sReturn = "cNeg("+xU+")";
+        if (xU == 0) {sReturn = 0}
+        else if (xTractU.func == "mat") {sReturn = cMulS(xU,-1)}
+        else if (xTractU.func == "cAdd") {sReturn = cSubS(cNegS(xTractU.upper),xTractU.lower)}
+        else if (xTractU.func == "cSub") {sReturn = cSubS(xTractU.lower,xTractU.upper)}
+        else if (xTractU.func == "cMul" && nbrTest(xTractU.upper)) {sReturn = cMulS(cNeg(xTractU.upper),xTractU.lower)}
+        else if (xTractU.func == "cMul" && nbrTest(xTractU.lower)) {sReturn = cMulS(cNeg(xTractU.lower),xTractU.upper)}
+        else if (xTractU.func == "cNeg") {sReturn = xTractU.upper}
+        else if (!factorFlag && !pxpFlag && nbrTest(xU) && xU != int(xU)) {sReturn = cNegS(decToFrac(xU))}
+        else if (nbrTest(xU)) {sReturn = cMul(xU,-1)}
+        return sReturn
     }
     function trcS(xU) { //matrix trace
-        if (typeof xU == "object") {return trc(xU)}
-        if (opExtract(xU).func == "mat") {return matFunc(trc(matArray(xU)))}
-        return "undefined"
+        var sReturn = "undefined";
+        if (typeof xU == "object") {sReturn = trc(xU)}
+        else if (opExtract(xU).func == "mat") {sReturn = matFunc(trc(matArray(xU)))}
+        return sReturn
     }
     function detS(xU) { //matrix determinant
-        if (typeof xU == "object") {return det(xU)}
-        if (opExtract(xU).func == "mat") {return matFunc(det(matArray(xU)))}
-        return "undefined"
+        var sReturn = "undefined";
+        if (typeof xU == "object") {sReturn = det(xU)}
+        else if (opExtract(xU).func == "mat") {sReturn = matFunc(det(matArray(xU)))}
+        return sReturn
     }
     function invS(xU) { //matrix inverse
         var mTemp = matArray(xU);
+        var sReturn = "undefined";
         if (getType(mTemp[0][0]) == "matrix") {
             var rowsU = mTemp.length;
-            if (rowsU != mTemp[0].length) {return "undefined"}
+            if (rowsU != mTemp[0].length) {sReturn = "undefined"}
             var mReturn = matCreate(rowsU,rowsU);
             for (var iR in mTemp) {for (var iC in mTemp) {mReturn[iR][iC] = invS(mTemp[iR][iC])}}
-            return matFunc(mReturn)
+            sReturn = matFunc(mReturn)
         }
-        return cMulS(cDivS(1,detS(mTemp)),matFunc(trn(matCofac(mTemp))))
+        else {sReturn = cMulS(cDivS(1,detS(mTemp)),matFunc(trn(matCofac(mTemp))))}
+        return sReturn
     }
     function sqtS(xU) { //square root
         var xTractU = opExtract(xU);
-        if (xU == "Cv[8734]") {return "Cv[8734]"}
-        if (nbrTest(xU) && sqt(xU) == int(sqt(xU))){return (fmtResult(sqt(xU)))} //calculate integer roots
-        if (pxpFlag && xTractU.func == "cDiv") {return cDivS(sqtS(xTractU.upper),sqtS(xTractU.lower))}
-        if (pxpFlag && xTractU.func == "cMul") {return cMulS(sqtS(xTractU.upper),sqtS(xTractU.lower))}
-        if (pxpFlag) {return "cPow("+xU+",0.5)"}
-        if (xTractU.func == "cPow" && xTractU.lower == 2 && mgConfig.Domain == "Real") {return absS(xTractU.upper)}
-        if (xTractU.func == "cPow") {return cPowS(xTractU.upper,cDivS(xTractU.lower,2))}
-        return "sqt("+xU+")"
+        var sReturn = "sqt("+xU+")";
+        if (xU == "Cv[8734]") {sReturn = "Cv[8734]"}
+        else if (nbrTest(xU) && sqt(xU) == int(sqt(xU))){sReturn = (fmtResult(sqt(xU)))} //calculate integer roots
+        else if (pxpFlag && xTractU.func == "cDiv") {sReturn = cDivS(sqtS(xTractU.upper),sqtS(xTractU.lower))}
+        else if (pxpFlag && xTractU.func == "cMul") {sReturn = cMulS(sqtS(xTractU.upper),sqtS(xTractU.lower))}
+        else if (pxpFlag) {sReturn = "cPow("+xU+",0.5)"}
+        else if (xTractU.func == "cPow" && xTractU.lower == 2 && mgConfig.Domain == "Real") {sReturn = absS(xTractU.upper)}
+        else if (xTractU.func == "cPow") {sReturn = cPowS(xTractU.upper,cDivS(xTractU.lower,2))}
+        return sReturn
     }
     function cbtS(xU) { //cube root
         var xTractU = opExtract(xU);
-        if (xU == "Cv[8734]") {return "Cv[8734]"}
-        if (xU == "cNeg(Cv[8734])") {return "cNeg(Cv[8734])"}
-        if (nbrTest(xU) && cbt(xU) == int(cbt(xU))) {return (fmtResult(cbt(xU)))} //calculate integer roots
-        if (xTractU.func == "cPow") {return cPowS(xTractU.upper,cDivS(xTractU.lower,3))}
-        if (pxpFlag) {return "cPow("+xU+",cDiv(1,3))"}
-        return "cbt("+xU+")"
+        var sReturn = "cbt("+xU+")";
+        if (xU == "Cv[8734]") {sReturn = "Cv[8734]"}
+        else if (xU == "cNeg(Cv[8734])") {sReturn = "cNeg(Cv[8734])"}
+        else if (nbrTest(xU) && cbt(xU) == int(cbt(xU))) {sReturn = (fmtResult(cbt(xU)))} //calculate integer roots
+        else if (xTractU.func == "cPow") {sReturn = cPowS(xTractU.upper,cDivS(xTractU.lower,3))}
+        else if (pxpFlag) {sReturn = "cPow("+xU+",cDiv(1,3))"}
+        return sReturn
     }
     function nrtS(xU,xL)  { //xU'th root of xL
-        if (nbrTest(xU) && nbrTest(xL) && nrt(xU,xL) == int(nrt(xU,xL))) {return (fmtResult(nrt(xU,xL)))} //calculate integer roots
-        return cPowS(xL,cDivS(1,xU))
+        var sReturn = "undefined";
+        if (nbrTest(xU) && nbrTest(xL) && nrt(xU,xL) == int(nrt(xU,xL))) {sReturn = (fmtResult(nrt(xU,xL)))} //calculate integer roots
+        else {sReturn = cPowS(xL,cDivS(1,xU))}
+        return sReturn
     }
     function lndS(xU) { //log with domain for calculus
-        if (mgConfig.Domain == "Real") {return lneS(absS(xU))}
-        return lneS(xU)
+        var sReturn = "undefined";
+        if (mgConfig.Domain == "Real") {sReturn = lneS(absS(xU))}
+        else {sReturn = lneS(xU)}
+        return sReturn
     }
     function lneS(xU) { //natural log
         var xTractU = opExtract(xU);
-        if (xU == 0) {return "cNeg(Cv[8734])"}
-        if (xU == "Cv[8]") {return 1}
-        if (xU == "Cv[8734]") {return "Cv[8734]"}
-        if (xTractU.func == "cNeg" && xTractU.upper == "Cv[8]" && mgConfig.Domain == "Complex") {return "cAdd(1,cMul(Cv[29],Cv[46]))"}
-        if (xU == -1 && mgConfig.Domain == "Complex") {return "cMul(Cv[29],Cv[46])"}
-        if (nbrTest(xU) && lne(xU) == int(lne(xU)) ) {return (fmtResult(lne(xU)))} //calculate integer logs
-        if (xTractU.func == "cPow" && xTractU.upper == "Cv[8]") {return xTractU.lower}
-        if (xTractU.func == "cDiv" && xTractU.upper == 1) {return cNegS(lneS(xTractU.lower))}
-        if (xTractU.func == "cPow") {return cMulS(xTractU.lower,lneS(xTractU.upper))}
-        return "lne("+xU+")"
+        var sReturn = "lne("+xU+")";
+        if (xU == 0) {sReturn = "cNeg(Cv[8734])"}
+        else if (xU == "Cv[8]") {sReturn = 1}
+        else if (xU == "Cv[8734]") {sReturn = "Cv[8734]"}
+        else if (xTractU.func == "cNeg" && xTractU.upper == "Cv[8]" && mgConfig.Domain == "Complex") {sReturn = "cAdd(1,cMul(Cv[29],Cv[46]))"}
+        else if (xU == -1 && mgConfig.Domain == "Complex") {sReturn = "cMul(Cv[29],Cv[46])"}
+        else if (nbrTest(xU) && lne(xU) == int(lne(xU)) ) {sReturn = (fmtResult(lne(xU)))} //calculate integer logs
+        else if (xTractU.func == "cPow" && xTractU.upper == "Cv[8]") {sReturn = xTractU.lower}
+        else if (xTractU.func == "cDiv" && xTractU.upper == 1) {sReturn = cNegS(lneS(xTractU.lower))}
+        else if (xTractU.func == "cPow") {sReturn = cMulS(xTractU.lower,lneS(xTractU.upper))}
+        return sReturn
     }
     function logS(xU) {return "lne("+xU+")"} //natural log
     function lgnS(xU,xL)  { //log xU to base xL
-        if (xU == "Cv[8]") {return lneS(xL)}
-        if (nbrTest(xU)  && nbrTest(xL) && lgn(xU,xL) == int(lgn(xU,xL))) {return (fmtResult(lgn(xU,xL)))} //calculate integer logs
-        return cDivS(lneS(xL),lneS(xU))
+        var sReturn = "";   
+        if (xU == "Cv[8]") {sReturn =  lneS(xL)}
+        else if (nbrTest(xU)  && nbrTest(xL) && lgn(xU,xL) == int(lgn(xU,xL))) {sReturn = (fmtResult(lgn(xU,xL)))} //calculate integer logs
+        else {sReturn =  cDivS(lneS(xL),lneS(xU))}
+        return sReturn
     }
     function efcS(xU) { //inverse erf
         var xTractU = opExtract(xU);
-        if (nbrTest(xU)) {return (fmtResult(efc(xU)))}
-        if (xTractU.func == "erf") {return xTractU.upper}
-        return "efc("+xU+")"
+        var sReturn = "efc("+xU+")";
+        if (nbrTest(xU)) {sReturn =  (fmtResult(efc(xU)))}
+        else if (xTractU.func == "erf") {sReturn =  xTractU.upper}
+        return sReturn
     }
     function erfS(xU) { //erf
         var xTractU = opExtract(xU);
-        if (nbrTest(xU)) {return (fmtResult(erf(xU)))}
-        if (xTractU.func == "efc") {return xTractU.upper}
-        return "erf("+xU+")"
+        var sReturn = "erf("+xU+")";
+        if (nbrTest(xU)) {sReturn = (fmtResult(erf(xU)))}
+        else if (xTractU.func == "efc") {sReturn = xTractU.upper}
+        return sReturn
     }
     function expS(xU) { //e^xU
         var xTractU = opExtract(xU);
-        if (xU == 0) {return 1}
-        if (xU == 1) {return "Cv[8]"}
-        if (xTractU.func == "lne") {return xTractU.upper}
-        return "exp("+xU+")"
+        var sReturn = "exp("+xU+")";
+        if (xU == 0) {sReturn =  1}
+        else if (xU == 1) {sReturn = "Cv[8]"}
+        else if (xTractU.func == "lne") {sReturn = xTractU.upper}
+        return sReturn
     }
     //trig exact values
     const iAngle = [
@@ -1605,7 +1625,7 @@ var mgCalc = function() {
         if (xTractU.func == "cth") {return xTractU.upper}
         return "azh("+xU+")"
     }
-
+    //misc functions
     function absS(xU) {//absolute value
         var xTractU = opExtract(xU);
         if (conTest(xU)) {return xU}
