@@ -1798,52 +1798,54 @@ var mgCalc = function() {
             dExp = dExp.replace(/Cv\[8748\]Cv\[(\d+)\]\/Cv\[8748\]Cv\[(\d+)\]/,"sdr(Cv[$1],Cv[$2])")
             dExp = dExp.replace(/Cv\[8748\]Cv\[(\d+)\]/,"dif(Cv[$1])")
         }
-        if (strTest(dExp,"Cv[8748]")) {return cError("Illegal differential")}
-        sCount = dExp.split("Cv[8747]").length-1; //indefinite integral
-        iConstant = 11100;
-        for (nC=0;nC<sCount;nC++) {
-            if (!strTest(dExp,"dif(")) {
-                invTemp = cInventory(dExp);
-                if (invTemp.length == 1) {dExp = dExp + "dif(" + invTemp[0] +")"}
-                else {return cError("Missing dx")}
+        if (strTest(dExp,"Cv[8748]")) {dExp = cError("Illegal differential")}
+        else {
+            sCount = dExp.split("Cv[8747]").length-1; //indefinite integral
+            iConstant = 11100;
+            for (nC=0;nC<sCount;nC++) {
+                if (!strTest(dExp,"dif(")) {
+                    invTemp = cInventory(dExp);
+                    if (invTemp.length == 1) {dExp = dExp + "dif(" + invTemp[0] +")"}
+                    else {dExp = cError("Missing dx");break}
+                }
+                dExp = dExp.replace(/Cv\[8747\]/,"tmp(");
+                var lPar = 1,rPar = 0;
+                for (var iXs=dExp.indexOf("tmp(")+4;iXs<dExp.length;iXs++) {
+                    if (dExp.substr(iXs,4) == "ntg(") {lPar++}
+                    if (dExp.substr(iXs,4) == "dif(") {rPar++}
+                    if (lPar == rPar) {break;}
+                }
+                dExp = dExp.substr(0,iXs)+"Cv[9999]"+dExp.substr(iXs+4,dExp.length);
+                dExp = dExp.replace(/Cv\[9999\]Cv\[(\d+)\]\)/,",Cv[$1])+Cv["+iConstant+"]");
+                dExp = dExp.replace(/tmp/,"ntg").replace(/ntg\(,/,"ntg(1,");
+                iConstant++;
             }
-            dExp = dExp.replace(/Cv\[8747\]/,"tmp(");
-            var lPar = 1,rPar = 0;
-            for (var iXs=dExp.indexOf("tmp(")+4;iXs<dExp.length;iXs++) {
-                if (dExp.substr(iXs,4) == "ntg(") {lPar++}
-                if (dExp.substr(iXs,4) == "dif(") {rPar++}
-                if (lPar == rPar) {break;}
+            sCount = dExp.split("itg(").length-1; //definite integral
+            for (nC=0;nC<sCount;nC++) {
+                if (!strTest(dExp,"dif(")) {
+                    invTemp = cInventory(dExp);
+                    if (invTemp.length == 1) {dExp = dExp + "dif(" + invTemp[0] +")"}
+                    else {dExp = cError("Missing dx");break}
+                }
+                dV = mgTrans.parseParens(dExp,dExp.indexOf("itg(")+3)
+                if (strTest(dExp,"(,") || strTest(dExp,",)")) {dExp = cError("Missing integral limit(s)");break}
+                dExp = dExp.substr(0,dExp.indexOf("itg("))+"ntg("+dExp.substr(dV.end+1,dExp.length);
+                dExp = dExp.replace(/dif\(Cv\[(\d+)\]\)/,",Cv[$1],"+dV.inside+")");
             }
-            dExp = dExp.substr(0,iXs)+"Cv[9999]"+dExp.substr(iXs+4,dExp.length);
-            dExp = dExp.replace(/Cv\[9999\]Cv\[(\d+)\]\)/,",Cv[$1])+Cv["+iConstant+"]");
-            dExp = dExp.replace(/tmp/,"ntg").replace(/ntg\(,/,"ntg(1,");
-            iConstant++;
-        }
-        sCount = dExp.split("itg(").length-1; //definite integral
-        for (nC=0;nC<sCount;nC++) {
-            if (!strTest(dExp,"dif(")) {
-                invTemp = cInventory(dExp);
-                if (invTemp.length == 1) {dExp = dExp + "dif(" + invTemp[0] +")"}
-                else {return cError("Missing dx")}
+            sCount = dExp.split("(").length-1; //derivatives,limits,summation
+            for (nC=0;nC<sCount;nC++) {
+                var rIndex = -1,rFunc = -1;
+                for (var cOp in calcOpsIn) {if (dExp.lastIndexOf(calcOpsIn[cOp]) > rIndex) {rFunc = cOp;rIndex = dExp.lastIndexOf(calcOpsIn[cOp])}}
+                if (rFunc == -1) {break}
+                dExp = dExp.substr(0,rIndex)+"tmp("+dExp.substr(rIndex+4);
+                var lIndex = dExp.substr(dExp.lastIndexOf("tmp("),dExp.length);
+                dV = mgTrans.parseParens(lIndex,lIndex.indexOf("tmp(")+3).inside;
+                dExp = dExp.replace(lIndex,"tmp("+lIndex.replace("tmp("+dV+")",""));
+                var strg = mgTrans.parseParens(dExp,dExp.lastIndexOf("tmp(")+3);
+                if (strg.inside.charAt(strg.inside.length-1) == "," || !strg.inside) {dExp = cError("Missing operand(s)");break}
+                dExp = dExp.substr(0,dExp.lastIndexOf("tmp("))+calcOpsOut[rFunc]+strg.inside+","+dV+")"+dExp.substr(strg.end,dExp.length);
+                if (strTest(dExp,"smm(") || strTest(dExp,"pmm(")) {dExp = dExp.replace("Cv[61]",",")}
             }
-            dV = mgTrans.parseParens(dExp,dExp.indexOf("itg(")+3)
-            if (strTest(dExp,"(,") || strTest(dExp,",)")) {return cError("Missing integral limit(s)")}
-            dExp = dExp.substr(0,dExp.indexOf("itg("))+"ntg("+dExp.substr(dV.end+1,dExp.length);
-            dExp = dExp.replace(/dif\(Cv\[(\d+)\]\)/,",Cv[$1],"+dV.inside+")");
-        }
-        sCount = dExp.split("(").length-1; //derivatives,limits,summation
-        for (nC=0;nC<sCount;nC++) {
-            var rIndex = -1,rFunc = -1;
-            for (var cOp in calcOpsIn) {if (dExp.lastIndexOf(calcOpsIn[cOp]) > rIndex) {rFunc = cOp;rIndex = dExp.lastIndexOf(calcOpsIn[cOp])}}
-            if (rFunc == -1) {break}
-            dExp = dExp.substr(0,rIndex)+"tmp("+dExp.substr(rIndex+4);
-            var lIndex = dExp.substr(dExp.lastIndexOf("tmp("),dExp.length);
-            dV = mgTrans.parseParens(lIndex,lIndex.indexOf("tmp(")+3).inside;
-            dExp = dExp.replace(lIndex,"tmp("+lIndex.replace("tmp("+dV+")",""));
-            var strg = mgTrans.parseParens(dExp,dExp.lastIndexOf("tmp(")+3);
-            if (strg.inside.charAt(strg.inside.length-1) == "," || !strg.inside) {return cError("Missing operand(s)")}
-            dExp = dExp.substr(0,dExp.lastIndexOf("tmp("))+calcOpsOut[rFunc]+strg.inside+","+dV+")"+dExp.substr(strg.end,dExp.length);
-            if (strTest(dExp,"smm(") || strTest(dExp,"pmm(")) {dExp = dExp.replace("Cv[61]",",")}
         }
         return dExp
     }
@@ -1915,18 +1917,16 @@ var mgCalc = function() {
     ntpD: function(nXpr,deeVar)  {return nXpr},
     }
     function tdvS(dXpr,deeVar,nTh) { //nTh total derivative
-        if (!nbrTest(nTh)) {nTh = 1}
-        if (nTh == 0) {return dXpr}
-        if (solverFlag) {return tdvS("tdv("+dXpr+")",deeVar,nTh-1)} //return nested derivatives for solver
         var cInv = cInventory(dXpr);
-        if (cInv.length > 1) {
-            var totDeriv = "0";
-            for (var nTd in cInv) {
-                totDeriv = cAddS(totDeriv,cMulS(drvS(dXpr,cInv[nTd],nTh),difS(cInv[nTd])))
-            }
-            return totDeriv
+        var totDeriv = "0";
+        if (!nbrTest(nTh)) {nTh = 1}
+        if (nTh == 0) {totDeriv = dXpr}
+        else if (solverFlag) {totDeriv = tdvS("tdv("+dXpr+")",deeVar,nTh-1)} //return nested derivatives for solver
+        else if (cInv.length > 1) {
+            for (var nTd in cInv) {totDeriv = cAddS(totDeriv,cMulS(drvS(dXpr,cInv[nTd],nTh),difS(cInv[nTd])))}
         }
-        return drvS(dXpr,deeVar,nTh)
+        else {totDeriv = drvS(dXpr,deeVar,nTh)}
+        return totDeriv
     }
     function drvS(dXpr,deeVar,nTh) { //nTh partial derivative
         function drvExecute(xIn) {
@@ -2331,8 +2331,6 @@ var mgCalc = function() {
         //general cases
         iReturn = pIntegrate(xU,ntgS(xL,deeVar));
         if (ntgFunc.ntgTest(iReturn)) {return iReturn}
-        iReturn = pIntegrate(xL,ntgS(xU,deeVar));
-        if (ntgFunc.ntgTest(iReturn)) {return iReturn}
         return "undefined"
     },
     xSubst:function (xU,xL,deeVar) { //integration by cross substitution
@@ -2357,19 +2355,20 @@ var mgCalc = function() {
         return "undefined"
     },
     uSubst: function (xU,deeVar) { //integration of single operand functions
-        // integrate via derivative check
         var xTractU = opExtract(xU);
-        if (opExtract(xTractU.upper).lower) {
-            var iReturn = ntgS(xU,xTractU.upper);
-            var tTest = xReduce(cDivS(xU,drvS(iReturn,deeVar)));
-            if (ntgFunc.ntgTest(tTest) && !strTest(tTest,deeVar)) {return cMulS(tTest,iReturn)}
+        // integrate via derivative check
+        var iReturn = ntgS(xU,xTractU.upper);
+        var tTest = xReduce(cDivS(xU,drvS(iReturn,deeVar)));
+        if (ntgFunc.ntgTest(tTest) && !strTest(tTest,deeVar)) {iReturn = cMulS(tTest,iReturn)}
+        else {
+            // u substitution
+            var xVar = relExtract(xprSolve(cEqlS("Cv[9999]",xU),deeVar)).lower;
+            iReturn = cSubst(ntgS(cMulS("Cv[9999]",drvS(xVar,"Cv[9999]")),"Cv[9999]"),"Cv[9999]",xU);
+            tTest = xReduce(cDivS(xU,drvS(iReturn,deeVar)));
+            if (ntgFunc.ntgTest(tTest) && !strTest(tTest,deeVar)) {iReturn = cMulS(tTest,iReturn)}
+            else {iReturn = "undefined"}
         }
-        // u substitution
-        var xVar = relExtract(xprSolve(cEqlS("Cv[9999]",xU),deeVar)).lower;
-        iReturn = cSubst(ntgS(cMulS("Cv[9999]",drvS(xVar,"Cv[9999]")),"Cv[9999]"),"Cv[9999]",xU);
-        tTest = xReduce(cDivS(xU,drvS(iReturn,deeVar)));
-        if (ntgFunc.ntgTest(tTest) && !strTest(tTest,deeVar)) {return cMulS(tTest,iReturn)}
-        return "undefined"
+        return iReturn
     },
     iSearch: function (xU,xF,deeVar) { //integration by derivative search (shotgun approach)
         var tElements = cDissect(xU);
