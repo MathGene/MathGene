@@ -527,10 +527,11 @@ var mgCalc = function() {
 
     function xprIterate(xIter) {
         xIter = String(xIter);
-        var sReturn = xIter;
-        if (strTest(xIter,"undefined")) {sReturn = "undefined"}
-        else if (xIter.search(/,,/) > -1 || xIter.search(/,\)/) > -1 || xIter.search(/\(,/) > -1 || xIter.search(/\(\)/) > -1) {sReturn = cError("Missing operand(s)")}
-        else {sReturn = execFunc(xIter,symFunc)}
+        var sReturn = "undefined";
+        if (!strTest(xIter,"undefined")) {
+            if (xIter.search(/,,/) > -1 || xIter.search(/,\)/) > -1 || xIter.search(/\(,/) > -1 || xIter.search(/\(\)/) > -1) {sReturn = cError("Missing operand(s)")}
+            else {sReturn = execFunc(xIter,symFunc)}
+        }
         return sReturn
     }
     function cReduce(cRdce) { //complete expression reduction
@@ -1280,10 +1281,11 @@ var mgCalc = function() {
         var sReturn = "undefined";
         if (getType(mTemp[0][0]) == "matrix") {
             var rowsU = mTemp.length;
-            if (rowsU != mTemp[0].length) {sReturn = "undefined"}
-            var mReturn = matCreate(rowsU,rowsU);
-            for (var iR in mTemp) {for (var iC in mTemp) {mReturn[iR][iC] = invS(mTemp[iR][iC])}}
-            sReturn = matFunc(mReturn)
+            if (rowsU == mTemp[0].length) {
+                var mReturn = matCreate(rowsU,rowsU);
+                for (var iR in mTemp) {for (var iC in mTemp) {mReturn[iR][iC] = invS(mTemp[iR][iC])}}
+                sReturn = matFunc(mReturn);
+            }
         }
         else {sReturn = cMulS(cDivS(1,detS(mTemp)),matFunc(trn(matCofac(mTemp))))}
         return sReturn
@@ -1681,7 +1683,7 @@ var mgCalc = function() {
         return sReturn
     }
     function cpxS(xU,xL) {
-        var sReturn = "cpxS("+xU+")";
+        var sReturn;
         if (+xL == 0 ) {sReturn = xU}
         else if (+xU == 0 && +xL == 1) {sReturn = "Cv[46]"}
         else {sReturn = cAddS(xU,cMulS(xL,"Cv[46]"))}
@@ -3523,7 +3525,7 @@ var mgCalc = function() {
     function log(xU) {return lne(xU)} //natural log
     function lgn(xU,xL) {return cDiv(lne(xL),lne(xU))} //log base n
     function sqt(xU) {//square root
-        var nReturn = "undefined";
+        var nReturn;
         if (nbrTest(cPow(xU,0.5))) {
             if (xU == cPow(rou(cPow(xU,0.5)),2)) {nReturn = rou(cPow(xU,0.5))} //preserve integers
             else {nReturn = cPow(xU,0.5)}
@@ -3532,7 +3534,7 @@ var mgCalc = function() {
         return nReturn
     }
     function cbt(xU) { //cube root
-        var nReturn = "undefined";
+        var nReturn;
         if (getType(cPow(xU,cDiv(1,3))) == "real") {
             if (xU == cPow(rou(cPow(xU,cDiv(1,3))),3)) {nReturn = rou(cPow(xU,cDiv(1,3)))} //preserve integers
             else {nReturn = cPow(xU,cDiv(1,3))}
@@ -3541,7 +3543,7 @@ var mgCalc = function() {
         return nReturn
     }
     function nrt(xU,xL) { //n'th root
-        var nReturn = "undefined";
+        var nReturn;
         if (getType(xU) == "real" && getType(xL) == "real") {
             if (xL == cPow(rou(cPow(xL,cDiv(1,xU))),xU)) {nReturn = rou(cPow(xL,cDiv(1,xU)))} //preserve integers
             else {nReturn = cPow(xL,cDiv(1,xU))}
@@ -3795,9 +3797,8 @@ var mgCalc = function() {
         return lognPDF(1,toReal(xU),0)
     }
     function erf(xU) {//error function
-        var nReturn = "undefined";
-        xU = toReal(xU);
-        var fE=0;
+		xU = toReal(xU);
+        var nReturn,fE=0;
         if (xU > 3.2) {nReturn = 1-cPow(3.14,cNeg(xU)*xU)}
         else {for (var fn=0;fn<50;fn++){fE = fE+cPow(-1,fn)*(cPow(xU,2*fn+1)/(fac(fn)*(2*fn+1)))};nReturn = 1.1283796*fE}
         return nReturn
