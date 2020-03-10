@@ -535,7 +535,7 @@ var mgCalc = function() {
         return sReturn
     }
     function cReduce(cRdce) { //complete expression reduction
-        var sReturn = cRdce;
+        var sReturn;
         if (nbrTest(cRdce) && cRdce != int(cRdce)) {sReturn = decToFrac(cRdce)} //decimals to fractions
         else {sReturn = iReduce(xReduce(cRdce))}
         return sReturn
@@ -1313,7 +1313,7 @@ var mgCalc = function() {
         return sReturn
     }
     function nrtS(xU,xL)  { //xU'th root of xL
-        var sReturn = "undefined";
+        var sReturn;
         if (nbrTest(xU) && nbrTest(xL) && nrt(xU,xL) == int(nrt(xU,xL))) {sReturn = (fmtResult(nrt(xU,xL)))} //calculate integer roots
         else {sReturn = cPowS(xL,cDivS(1,xU))}
         return sReturn
@@ -2301,7 +2301,6 @@ var mgCalc = function() {
         function pIntegrate(xTmp,nTmp) {return cSubS(cMulS(xTmp,nTmp),ntgS(cMulS(drvS(xTmp,deeVar),nTmp),deeVar))}
         var xTractU = opExtract(xU);
         var xTractL = opExtract(xL);
-        var ulDegree = pNomial(xTractU.lower,deeVar).length-2;
         var luDegree = pNomial(xTractL.upper,deeVar).length-2;
         var llDegree = pNomial(xTractL.lower,deeVar).length-2;
         var iReturn = 0, ntgTemp = 0;
@@ -3154,7 +3153,7 @@ var mgCalc = function() {
             }
             return eReturn
         }
-        var nReturn = xD;
+        var nReturn;
         if (typeof xT == "undefined" ) {xT = mgConfig.dPrecision}
         if (+(xD) < 1 || xD >= 1e12) {xD = expNotation(xD)}
         xD = String(xD);
@@ -3797,7 +3796,7 @@ var mgCalc = function() {
         return lognPDF(1,toReal(xU),0)
     }
     function erf(xU) {//error function
-		xU = toReal(xU);
+        xU = toReal(xU);
         var nReturn,fE=0;
         if (xU > 3.2) {nReturn = 1-cPow(3.14,cNeg(xU)*xU)}
         else {for (var fn=0;fn<50;fn++){fE = fE+cPow(-1,fn)*(cPow(xU,2*fn+1)/(fac(fn)*(2*fn+1)))};nReturn = 1.1283796*fE}
