@@ -1319,7 +1319,7 @@ var mgCalc = function() {
         return sReturn
     }
     function lndS(xU) { //log with domain for calculus
-        var sReturn = "undefined";
+        var sReturn;
         if (mgConfig.Domain == "Real") {sReturn = lneS(absS(xU))}
         else {sReturn = lneS(xU)}
         return sReturn
