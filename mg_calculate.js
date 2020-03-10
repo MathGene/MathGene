@@ -403,7 +403,7 @@ var mgCalc = function() {
     function matFunc(xA) { //matrix array to FUNC conversion
         var mReturn = xA;
         if (typeof xA[0] == "object") {
-            var mReturn = [];
+            mReturn = [];
             for (var iR in xA) {mReturn[iR] = matFunc(xA[iR])}
             mReturn = "mat(" + mReturn + ")"
         }
@@ -2299,7 +2299,6 @@ var mgCalc = function() {
         function pIntegrate(xTmp,nTmp) {return cSubS(cMulS(xTmp,nTmp),ntgS(cMulS(drvS(xTmp,deeVar),nTmp),deeVar))}
         var xTractU = opExtract(xU);
         var xTractL = opExtract(xL);
-        var uuDegree = pNomial(xTractU.upper,deeVar).length-2;
         var ulDegree = pNomial(xTractU.lower,deeVar).length-2;
         var luDegree = pNomial(xTractL.upper,deeVar).length-2;
         var llDegree = pNomial(xTractL.lower,deeVar).length-2;
@@ -3365,7 +3364,7 @@ var mgCalc = function() {
         var mReturn = xU;
         if (getType(xU) == "matrix") {
             xU = matArray(xU);
-            var mReturn = matCreate(xU[0].length,xU.length);
+            mReturn = matCreate(xU[0].length,xU.length);
             for (var iR in xU) {for (var iC in xU[0]) {mReturn[iC][iR] = trn(xU[iR][iC])}}
             mReturn = matFunc(mReturn)
         }
@@ -3922,7 +3921,6 @@ var mgCalc = function() {
             if (t1 > PVx) {nH = (nH+nL)/2} else {nL = (nH+nL)/2}
             }
         }
-        else if (nReturn == 500) {nReturn =  "Cv[8734]"}
         else {nReturn = "Cv[8734]"}
         return rou(nReturn*100)/100
     }
