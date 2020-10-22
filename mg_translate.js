@@ -196,10 +196,10 @@ var mgTrans = function() {
     for (iAl=10097;iAl<=10122;iAl++) {Ct[iAl]=String.fromCharCode(iAl-10000)}//a-z italic
     for (iAl=10768;iAl<=10879;iAl++) {Ct[iAl]=""}//accents
     var Greeks =   ["A","B","\\Gamma ","\\Delta ","E","Z","H","\\Theta ","I","K","\\Lambda ","M",
-                    "N","\\Xi ","O","\\Pi ","","\\Rho ","\\Sigma ","T","\\Upsilon ","\\Phi ","X","\\Psi ","\\Omega ",
+                    "N","\\Xi ","O","\\Pi ","\\Rho ","","\\Sigma ","T","\\Upsilon ","\\Phi ","X","\\Psi ","\\Omega ",
                     "","","","","","","",
                     "\\alpha ","\\beta ","\\gamma ","\\delta ","\\epsilon ","\\zeta ","\\eta ","\\theta ","\\iota ","\\kappa ","\\lambda ","\\mu ",
-                    "\\nu ","\\xi ","o","\\pi ","","\\rho ","\\sigma ","\\tau ","\\upsilon ","\\phi ","\\chi ","\\psi ","\\omega "];
+                    "\\nu ","\\xi ","o","\\pi ","\\rho ","","\\sigma ","\\tau ","\\upsilon ","\\phi ","\\chi ","\\psi ","\\omega "];
     for (iAl=0;iAl<=Greeks.length;iAl++) {Ct[iAl+913] = Greeks[iAl]}
 
     Ct[10040] ="\\left(";

@@ -3245,8 +3245,9 @@ var mgCalc = function() {
         else if (getType(xL) == "vector" && ["complex","real"].indexOf(getType(xU))+1) {nReturn = vct(scalarMult(xL,xU))}
         else if (getType(xU) == "matrix" && getType(xL) == "matrix") { //matrix multiply
             xU = matArray(xU);xL = matArray(xL);
+            var mReturn = "";
             if (xL.length == xU[0].length) {
-            var mReturn = matCreate(xU.length,xL[0].length);
+            mReturn = matCreate(xU.length,xL[0].length);
                 for (var rU in xU) {
                     for (var cL in xL[0]) {
                         for (var cU in xU[0]) {

@@ -2060,7 +2060,7 @@ var xport =
 "sch(cch(cth(Cv[10120])))"," \\sech\\left(\\csch\\left(\\coth\\left(x\\right)\\right)\\right)",
 "axh(Cv[10120])ayh(Cv[10120])azh(Cv[10120])"," \\arcsech\\left(x\\right) \\arccsch\\left(x\\right) \\arccoth\\left(x\\right)",
 "Cv[913]Cv[914]Cv[915]Cv[916]Cv[917]Cv[945]Cv[946]Cv[947]Cv[948]Cv[949]Cv[918]Cv[919]Cv[920]Cv[921]Cv[922]Cv[950]Cv[951]Cv[952]Cv[953]Cv[954]Cv[923]Cv[924]Cv[925]Cv[926]Cv[927]Cv[955]Cv[956]Cv[957]Cv[958]","A B \\Gamma  \\Delta E \\alpha  \\beta  \\gamma  \\delta  \\epsilon Z H \\Theta I K \\zeta  \\eta  \\theta  \\iota  \\kappa  \\Lambda M N  \\Xi O \\lambda  \\mu  \\nu  \\xi ",
-"Cv[959]Cv[928]Cv[929]Cv[931]Cv[932]Cv[933]Cv[960]Cv[961]Cv[963]Cv[964]Cv[965]Cv[934]Cv[935]Cv[936]Cv[937]Cv[966]Cv[967]Cv[968]Cv[969]","o \\Pi  \\Sigma T \\Upsilon  \\pi  \\sigma  \\tau  \\upsilon  \\Phi X \\Psi  \\Omega  \\phi  \\chi  \\psi  \\omega ",
+"Cv[959]Cv[928]Cv[929]Cv[931]Cv[932]Cv[933]Cv[960]Cv[961]Cv[963]Cv[964]Cv[965]Cv[934]Cv[935]Cv[936]Cv[937]Cv[966]Cv[967]Cv[968]Cv[969]","o \\Pi \\Rho   \\Sigma T \\Upsilon  \\pi \\rho \\sigma  \\tau  \\upsilon  \\Phi X \\Psi  \\Omega  \\phi  \\chi  \\psi  \\omega ",
 "vec(Cv[10120])hat(Cv[10121])con(Cv[29])und(Cv[10122])","\\vec{x}\\hat{y}\\overline{\\pi}\\underline{z}",
 "vec(Cv[10120]sbt(1))hat(Cv[10121]sbt(2))con(Cv[29]sbt(3))und(Cv[10122]sbt(4))","\\vec{x_{1}}\\hat{y_{2}}\\overline{\\pi_{3}}\\underline{z_{4}}",
 "-(Cv[10098]/3Cv[10097])+((1-Cv[46]sqt(3))/6Cv[10097])nrt(3,(1/2)(2Cv[10098]^3-9Cv[10097]Cv[10098]Cv[10099]+27Cv[10097]^2Cv[10100]+sqt(Cv[916])))+((1+Cv[46]sqt(3))/6Cv[10097])nrt(3,(1/2)(2Cv[10098]^3-9Cv[10097]Cv[10098]Cv[10099]+27Cv[10097]^2Cv[10100]-sqt(Cv[916])))","- \\frac{b}{3 a}+ \\frac{1- \\imath \\sqrt{3}}{6 a} \\sqrt[3]{ \\frac{1}{2} \\left(2 b^{3}-9 a b c+27 a^{2} d+ \\sqrt{\\Delta} \\right)}+ \\frac{1+ \\imath \\sqrt{3}}{6 a} \\sqrt[3]{ \\frac{1}{2} \\left(2 b^{3}-9 a b c+27 a^{2} d- \\sqrt{ \\Delta } \\right)}","1/Cv[10120]^2","\\frac{1}{x^{2}}",
@@ -2751,5 +2751,6 @@ if (typeof module == "object") {//Node.js branch
     var nodejs = true;
     for (var testcase in testList) {execTest(testcase)}
 }
+
 
 //
