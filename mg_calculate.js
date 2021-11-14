@@ -3167,8 +3167,8 @@ var mgCalc = function() {
         else {nReturn = +(xD.replace(/\.\d+/,uD))}
         return nReturn
     }
-    function vct() {return "vct(" + Array.prototype.slice.call(arguments) + ")"}
-    function cpx(xU,xL) {
+    function vct() {return "vct(" + Array.prototype.slice.call(arguments) + ")"} //format vector object
+    function cpx(xU,xL) { //format cpx object
         var nReturn = xU;
         if (+xL != 0) {nReturn = "cpx(" + xU + "," + xL + ")"}
         return nReturn
@@ -3179,19 +3179,20 @@ var mgCalc = function() {
             var xTractU = opExtract(xU);
             nReturn = {r:(+xTractU.upper),i:(+xTractU.lower)};
         } 
-        if (getType(xU) == "real") {nReturn = {r:(+xU),i:0}}
+        if (getType(xU) == "real") {nReturn = {r:xU,i:0}}
         return nReturn
     }
     function toReal(xU) { //change type to real, dropping any imaginary components
         var nReturn = xU;
         if (getType(xU) == "complex") {
-            if (typeof xU == "object") {nReturn = +xU.r}
+            if (typeof xU == "object") {nReturn = xU.r}
             else {nReturn = +(opExtract(xU).upper)}
         } 
         return nReturn
     }
 
     // arithmetic operators
+
     function cNeg(xU) { //negative
         return cMul(-1,xU)
     }
@@ -3201,12 +3202,11 @@ var mgCalc = function() {
     function cAdd(xU,xL) { //add
         var nReturn = "undefined";
         if (getType(xU) == "real" && getType(xL) == "real") {
-            if (xU == rou(xU) && xL == rou(xL)) {nReturn = rou((+xU)+(+xL))} //preserve integers
-            else {nReturn = (+xU)+(+xL)}
+			return (+xU)+(+xL)
         }
         else if (getType(xU) == "complex" || getType(xL) == "complex") {
             var cA = toCplx(xU),cB = toCplx(xL);
-            nReturn = cpx(((+cA.r)+(+cB.r)),((+cA.i)+(+cB.i)))
+            nReturn = cpx((cAdd(+cA.r,+cB.r)),(cAdd(+cA.i,+cB.i)))
         }
         else if (["matrix","array"].indexOf(getType(xU))+1 && ["matrix","array"].indexOf(getType(xL))+1) {
             xU = matArray(xU);xL = matArray(xL);
@@ -3235,10 +3235,7 @@ var mgCalc = function() {
         }
         var nReturn = "undefined";
         if (xL == Cv[45]) {nReturn = fac(xU)} //factorial
-        else if (getType(xU) == "real" && getType(xL) == "real") {
-            if (xU == rou(xU) && xL == rou(xL)) {nReturn = rou((+xU)*(+xL))} //preserve integers
-            else {nReturn = (+xU)*(+xL)}
-        }
+        else if (getType(xU) == "real" && getType(xL) == "real") {nReturn = (+xU)*(+xL)}
         else if (["matrix","array"].indexOf(getType(xU))+1 && ["complex","real"].indexOf(getType(xL))+1) {nReturn = matFunc(scalarMult(xU,xL))}
         else if (["matrix","array"].indexOf(getType(xL))+1 && ["complex","real"].indexOf(getType(xU))+1) {nReturn = matFunc(scalarMult(xL,xU))}
         else if (getType(xU) == "vector" && ["complex","real"].indexOf(getType(xL))+1) {nReturn = vct(scalarMult(xU,xL))}
@@ -3262,7 +3259,7 @@ var mgCalc = function() {
         }
         else if (getType(xU) == "complex" || getType(xL) == "complex") {
             var cA = toCplx(xU),cB = toCplx(xL);
-            nReturn = cpx((cA.r*cB.r-cA.i*cB.i), (cA.i*cB.r+cA.r*cB.i))
+            nReturn = cpx(cSub(cMul(cA.r,cB.r),cMul(cA.i,cB.i)), cAdd(cMul(cA.i,cB.r),cMul(cA.r,cB.i)))
         }
         return nReturn
     }
@@ -3302,12 +3299,12 @@ var mgCalc = function() {
         else if (getType(xU) == "complex" || getType(xL) == "complex") {
             var cA = toCplx(xU),cB = toCplx(xL);
             if (abs(cB.r) >= abs(cB.i)) {
-                var rX=cB.i/cB.r, sX=+cB.r+rX*cB.i;
-                nReturn = cpx((+cA.r+cA.i*rX)/sX, (cA.i-cA.r*rX)/sX)
+                var rX=cDiv(cB.i,cB.r), sX=cAdd(cB.r,cMul(rX,cB.i));
+                nReturn = cpx(cDiv(cAdd(cA.r,cMul(cA.i,rX)),sX), cDiv(cSub(cA.i,cMul(cA.r,rX)),sX))
             }
             else {
-                var rX=cB.r/cB.i, sX=+cB.i+rX*cB.r;
-                nReturn = cpx((cA.r*rX+cA.i)/sX, (cA.i*rX-cA.r)/sX)
+                var rX=cDiv(cB.r,cB.i), sX=cAdd(cB.i,cMul(rX,cB.r));
+                nReturn = cpx(cDiv(cAdd(cMul(cA.r,rX),cA.i),sX), cDiv(cSub(cMul(cA.i,rX),cA.r),sX))
             }
         }
         return nReturn
@@ -3513,7 +3510,7 @@ var mgCalc = function() {
     function lne(xU) {//natural log
         function cAbs(xA) {
             var cReturn = 0;
-            if (abs(xA.r) > abs(xA.i)) {cReturn = cMul(abs(xA.r),sqt(cAdd(1,cMul(cDiv(xA.i,xA.r),(xA.i/xA.r)))))}
+            if (abs(xA.r) > abs(xA.i)) {cReturn = cMul(abs(xA.r),sqt(cAdd(1,cMul(cDiv(xA.i,xA.r),cDiv(xA.i,xA.r)))))}
             else {cReturn = cMul(abs(xA.i),sqt(cAdd(1,cMul(cDiv(xA.r,xA.i),cDiv(xA.r,xA.i)))))}
             return cReturn
         }
@@ -3773,7 +3770,7 @@ var mgCalc = function() {
         }
         if (getType(xU) == "real") {
             var acc =1;
-            if ((xU>22)||(xU != rou(xU))) {acc = cMul(sqt(cDiv(Cv[30],xU)),cPow(cMul(cDiv(xU,Cv[8]),sqt(cAdd(cMul(xU,snh(cDiv(1,xU))),cDiv(1,(810*cPow(xU,6)))))),xU))}
+            if ((xU>22)||(xU != rou(xU))) {acc = cMul(sqt(cDiv(Cv[30],xU)),cPow(cMul(cDiv(xU,Cv[8]),sqt(cAdd(cMul(xU,snh(cDiv(1,xU))),cDiv(1,(cMul(810,cPow(xU,6))))))),xU))}
             else {for (var g=1;g<=xU-1;g++) {acc = cMul(acc,g)}}
             nReturn = acc;
         }
@@ -3782,7 +3779,7 @@ var mgCalc = function() {
 
     //statistical functions
     function rnd(xU) { //random number
-        return Math.random()*toReal(xU)
+        return cMul(Math.random(),toReal(xU))
     }
     function cdf(xU) { //normalized cumulative density function
         return normCDF(1,toReal(xU),0)
@@ -3799,7 +3796,7 @@ var mgCalc = function() {
     function erf(xU) {//error function
         xU = toReal(xU);
         var nReturn,fE=0;
-        if (xU > 3.2) {nReturn = 1-cPow(3.14,cNeg(xU)*xU)}
+        if (xU > 3.2) {nReturn = 1-cPow(3.14,cMul(cNeg(xU),xU))}
         else {for (var fn=0;fn<50;fn++){fE = fE+cPow(-1,fn)*(cPow(xU,2*fn+1)/(fac(fn)*(2*fn+1)))};nReturn = 1.1283796*fE}
         return nReturn
     }
@@ -3935,7 +3932,7 @@ var mgCalc = function() {
             for (ix=1;ix<100;ix++) {
                 iSlv = (nH+nL)/2;
                 t1 = toReal(expr(iSlv));
-                if (t1 > result) {nH = (nH+nL)/2} else {nL = (nH+nL)/2}
+                if (t1 > result) {nH = cDiv(cAdd(nH,nL),2)} else {nL = cDiv(cAdd(nH,nL),2)}
             }
             nReturn = iSlv
         }
@@ -3950,14 +3947,14 @@ var mgCalc = function() {
                 if (xU > xL) {xTmpL = xL;xTmpH = xU}
                 else {xTmpL = xU;xTmpH = xL}
                 while (xMod > 0) {
-                    xMod = xTmpH-(int(xTmpH/xTmpL)*xTmpL);
+                    xMod = xTmpH-(cMul(int(cDiv(xTmpH,xTmpL)),xTmpL));
                     xTmpH = xTmpL;
                     xTmpL = xMod;
                     Cbr++;
                     if (Cbr > 1000) {break}
                 }
                 if (Cbr > 1000) {nReturn = 1}
-                else if ((xU/xTmpH) == int(xU/xTmpH) && (xL/xTmpH) == int(xL/xTmpH)) {nReturn = xTmpH}
+                else if (cDiv(xU,xTmpH) == int(cDiv(xU,xTmpH)) && cDiv(xL,xTmpH) == int(cDiv(xL,xTmpH))) {nReturn = xTmpH}
             }
             else {nReturn = 1}
         }
