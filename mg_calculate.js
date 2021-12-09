@@ -1392,6 +1392,7 @@ var mgCalc = function() {
         var sReturn = "sin("+xU+")";
         if (xTractU.func == "asn") {sReturn = xTractU.upper}
         else if (xTractU.func == "cNeg") {sReturn = "cNeg(sin("+xTractU.upper+"))"}
+        else if (rAngle == "0") {sReturn = 0}
         else if (rAngle == "1") {sReturn = 0}
         else if (strTest(iAngle,rAngle)) {sReturn = sinAngle[iAngle.indexOf(rAngle)]}
         else if (xU == 0) {sReturn = 0}
@@ -1412,6 +1413,7 @@ var mgCalc = function() {
         var sReturn = "cos("+xU+")";
         if (xTractU.func == "acs") {sReturn = xTractU.upper}
         else if (xTractU.func == "cNeg") {sReturn = "cos("+xTractU.upper+")"}
+        else if (rAngle == "0") {sReturn = 1}
         else if (rAngle == "1") {sReturn = -1}
         else if (strTest(iAngle,rAngle)) {sReturn = cosAngle[iAngle.indexOf(rAngle)]}
         else if (xU == 0) {sReturn = 1}
@@ -1432,6 +1434,7 @@ var mgCalc = function() {
         var sReturn = "tan("+xU+")";
         if (xTractU.func == "atn") {sReturn = xTractU.upper}
         else if (xTractU.func == "cNeg") {sReturn = "cNeg(tan("+xTractU.upper+"))"}
+        else if (rAngle == "0") {sReturn = 0}
         else if (rAngle == "1") {sReturn = 0}
         else if (strTest(iAngle,rAngle)) {sReturn = tanAngle[iAngle.indexOf(rAngle)]}
         else if (xU == 0) {sReturn = 0}
@@ -1452,6 +1455,7 @@ var mgCalc = function() {
         var sReturn = "sec("+xU+")";
         if (xTractU.func == "asc") {sReturn = xTractU.upper}
         else if (xTractU.func == "cNeg") {sReturn = "sec("+xTractU.upper+")"}
+        else if (rAngle == "0") {sReturn = 1}
         else if (rAngle == "1") {sReturn = -1}
         else if (strTest(iAngle,rAngle)) {sReturn = secAngle[iAngle.indexOf(rAngle)]}
         else if (xU == 0) {sReturn = 1}
@@ -1707,7 +1711,8 @@ var mgCalc = function() {
         if (mgConfig.trigBase == cDiv(Cv[29],200) && nbrTest(xAng)) {reducedAng = cSubS(cDivS(xAng,200),cMul(int(cDiv(xAng,400)),2))}
         if (mgConfig.trigBase == 1) {
             if (xAng == "Cv[29]") {reducedAng = "1"}
-            if (xTractD.func == "cMul" && xTractD.lower  == "Cv[29]" && nbrTest(xTractD.upper)) {reducedAng = cSub(xTractD.upper,cMul(int(cDiv(xTractD.upper,2)),2))}
+            if (xTractD.func == "cMul" && xTractD.lower  == "Cv[29]" && nbrEven(xTractD.upper)) {reducedAng = "0"}
+            if (xTractD.func == "cMul" && xTractD.lower  == "Cv[29]" && !nbrEven(xTractD.upper)) {reducedAng = "1"}
             if (xTractD.func == "cDiv" && xTractD.upper  == "Cv[29]" && nbrTest(xTractD.lower)) {reducedAng = "cDiv(1,"+xTractD.lower+")"}
             if (xTractD.func == "cDiv" && nbrTest(xTractD.lower) && xTractT.func == "cMul" && xTractT.lower  == "Cv[29]" && nbrTest(xTractT.upper)) {reducedAng = cSubS(cDivS(xTractT.upper,xTractD.lower),cMul(int(cDiv(xTractT.upper,cMul(xTractD.lower,2))),2))}
         }
@@ -3202,7 +3207,7 @@ var mgCalc = function() {
     function cAdd(xU,xL) { //add
         var nReturn = "undefined";
         if (getType(xU) == "real" && getType(xL) == "real") {
-			return (+xU)+(+xL)
+            return (+xU)+(+xL)
         }
         else if (getType(xU) == "complex" || getType(xL) == "complex") {
             var cA = toCplx(xU),cB = toCplx(xL);
