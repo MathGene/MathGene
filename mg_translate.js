@@ -22,7 +22,7 @@ var mgConfig =
     trigBase:   1,          //trig base 1=radians. Math.pi/180 for degrees, Math.pi/200 gradians
     divScale:   85,         //default scale factor for x/y division in percent
     divSymbol:  "Over",     //default HTML divide symbol "Slash" or "Over"
-    fnFmt:      "fn x",     //function format "fn(x)" or "fn x"
+    fnFmt:      "fn(x)",    //function format "fn(x)" or "fn x"
     invFmt:     "asin",     //inverse trig function format "asin" or "sin<sup>-1</sup>"
     cplxFmt:    "Rect",     //complex numbers "Rect" or "Polar"
     pctFactor:  100,        //percent factor 100 for percent, 1 for n.nn decimal
@@ -1356,7 +1356,7 @@ var mgTrans = function() {
         htmlL2: function (parm) {return parm[0]+' &gt; '+parm[1]},
         htmlR2:'',
         relop:true,
-        texfunc:['>'],
+        texfunc: function() {return ">"},
         latexL1: function (parm) {return parm[0]+'>'+parm[1]},
         latexR1:'',
         latexL2: function (parm) {return parm[0]+'>'+parm[1]},
@@ -1369,7 +1369,7 @@ var mgTrans = function() {
         htmlL2: function (parm) {return parm[0]+' &lt; '+parm[1]},
         htmlR2:'',
         relop:true,
-        texfunc:['<'],
+        texfunc: function() {return "<"},
         latexL1: function (parm) {return parm[0]+'<'+parm[1]},
         latexR1:'',
         latexL2: function (parm) {return parm[0]+'<'+parm[1]},
@@ -1382,7 +1382,7 @@ var mgTrans = function() {
         htmlL2: function (parm) {return parm[0]+' &#8805; '+parm[1]},
         htmlR2:'',
         relop:true,
-        texfunc:['\\geq'],
+        texfunc: function() {return "\\geq"},
         latexL1: function (parm) {return parm[0]+'\\geq '+parm[1]},
         latexR1:'',
         latexL2: function (parm) {return parm[0]+'\\geq '+parm[1]},
@@ -1395,7 +1395,7 @@ var mgTrans = function() {
         htmlL2: function (parm) {return parm[0]+' &#8804; '+parm[1]},
         htmlR2:'',
         relop:true,
-        texfunc:['\\leq'],
+        texfunc: function() {return "\\leq"},
         latexL1: function (parm) {return parm[0]+'\\leq '+parm[1]},
         latexR1:'',
         latexL2:function (parm) {return parm[0]+'\\leq '+parm[1]},
@@ -1408,7 +1408,7 @@ var mgTrans = function() {
         htmlL2: function (parm) {return parm[0]+' &#8800; '+parm[1]},
         htmlR2:'',
         relop:true,
-        texfunc:['\\neq'],
+        texfunc: function() {return "\\neq"},
         latexL1: function (parm) {return parm[0]+'\\neq '+parm[1]},
         latexR1:'',
         latexL2: function (parm) {return parm[0]+'\\neq '+parm[1]},
